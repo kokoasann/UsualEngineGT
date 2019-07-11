@@ -7,4 +7,17 @@
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Assets">
+      <UniqueIdentifier>{ed2ee149-d768-49d9-a4ce-ba7acf6a4566}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Shader">
+      <UniqueIdentifier>{73d0ccee-8c94-4ffb-af4f-abdd516853b8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Assets\shader\model.fx">
+      <Filter>Assets\Shader</Filter>
+    </FxCompile>
+  </ItemGroup>
 </Project>

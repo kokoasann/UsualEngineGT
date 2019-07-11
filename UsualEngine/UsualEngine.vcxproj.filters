@@ -113,6 +113,9 @@
     <ClCompile Include="GameObject\GameObject.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\SkinModelRender.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="character\CharacterController.h">
@@ -206,6 +209,9 @@
     </ClInclude>
     <ClInclude Include="GameObject\GameObjectManager.h">
       <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\SkinModelRender.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -26,6 +26,8 @@ namespace UsualEngine
 		//スタート関数でtrueが返ってきた次のフレームから毎フレーム呼ばれるようになる。
 		virtual void Update() {};
 
+		virtual void Render() {};
+
 		/*
 		ゲーム側では使わない
 		FindGOとかで識別するための名前をセットする

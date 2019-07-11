@@ -209,7 +209,7 @@ namespace UsualEngine
 			SShaderResourcePtr resource = std::make_unique<SShaderResource>();
 			resource->inputLayout = nullptr;
 			resource->type = shaderType;
-			ID3D11Device* pD3DDevice = g_graphicsEngine->GetD3DDevice();
+			ID3D11Device* pD3DDevice = usualEngine()->GetGraphicsEngine()->GetD3DDevice();
 			switch (shaderType) {
 			case Shader::EnType::VS: {
 				//頂点シェーダー。

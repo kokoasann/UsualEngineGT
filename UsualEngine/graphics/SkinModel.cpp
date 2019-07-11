@@ -68,7 +68,7 @@ namespace UsualEngine
 		bufferDesc.CPUAccessFlags = 0;								//CPU アクセスのフラグです。
 																	//CPUアクセスが不要な場合は0。
 		//作成。
-		g_graphicsEngine->GetD3DDevice()->CreateBuffer(&bufferDesc, NULL, &m_cb);
+		usualEngine()->GetGraphicsEngine()->GetD3DDevice()->CreateBuffer(&bufferDesc, NULL, &m_cb);
 	}
 	void SkinModel::InitSamplerState()
 	{
@@ -79,7 +79,7 @@ namespace UsualEngine
 		desc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
 		desc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
 		desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-		g_graphicsEngine->GetD3DDevice()->CreateSamplerState(&desc, &m_samplerState);
+		usualEngine()->GetGraphicsEngine()->GetD3DDevice()->CreateSamplerState(&desc, &m_samplerState);
 	}
 	void SkinModel::UpdateWorldMatrix(CVector3 position, CQuaternion rotation, CVector3 scale)
 	{
@@ -108,9 +108,9 @@ namespace UsualEngine
 	}
 	void SkinModel::Draw(CMatrix viewMatrix, CMatrix projMatrix)
 	{
-		DirectX::CommonStates state(g_graphicsEngine->GetD3DDevice());
+		DirectX::CommonStates state(usualEngine()->GetGraphicsEngine()->GetD3DDevice());
 
-		ID3D11DeviceContext* d3dDeviceContext = g_graphicsEngine->GetD3DDeviceContext();
+		ID3D11DeviceContext* d3dDeviceContext = usualEngine()->GetGraphicsEngine()->GetD3DDeviceContext();
 
 		//定数バッファの内容を更新。
 		SVSConstantBuffer vsCb;
