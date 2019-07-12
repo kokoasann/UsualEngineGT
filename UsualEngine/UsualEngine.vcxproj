@@ -187,6 +187,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="system\system.cpp" />
+    <ClCompile Include="Timer\GameTime.cpp" />
+    <ClCompile Include="Timer\Stopwatch.cpp" />
     <ClCompile Include="UsualEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -221,6 +223,8 @@
     <ClInclude Include="physics\RigidBody.h" />
     <ClInclude Include="PreCompile.h" />
     <ClInclude Include="system\system.h" />
+    <ClInclude Include="Timer\GameTime.h" />
+    <ClInclude Include="Timer\Stopwatch.h" />
     <ClInclude Include="UsualEngine.h" />
     <ClInclude Include="util\Util.h" />
   </ItemGroup>

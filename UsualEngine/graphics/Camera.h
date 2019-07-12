@@ -1,5 +1,7 @@
 #pragma once
 
+#include "math/Vector.h"
+#include "math/Matrix.h"
 namespace UsualEngine
 {
 	class Camera

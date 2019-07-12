@@ -78,6 +78,14 @@ namespace UsualEngine
 
 	void GameObjectManager::UpdateRender()
 	{
+		for (auto goList : mGameObjectList)
+		{
+			for (auto go : goList)
+			{
+				go->Render();
+			}
+		}
+
 	}
 
 	void GameObjectManager::UpdatePostRender()

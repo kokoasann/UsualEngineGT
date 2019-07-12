@@ -26,6 +26,8 @@
 
 #include "UsualEngine.h"
 
+#include "util/Util.h"
+
 #include "physics/Physics.h"
 #include "HID/Pad.h"
 
@@ -39,6 +41,14 @@
 #include "graphics/animation/Animation.h"
 #include "graphics/animation/AnimationClip.h"
 #include "graphics/Camera.h"
+
+#include "GameObject/GameObject.h"
+#include "GameObject/GameObjectManager.h"
+#include "Timer/GameTime.h"
+#include "Timer/Stopwatch.h"
+
+#include "graphics/SkinModelRender.h"
+
 
 const float FRAME_BUFFER_W = 1280.0f;				//フレームバッファの幅。
 const float FRAME_BUFFER_H = 720.0f;				//フレームバッファの高さ。

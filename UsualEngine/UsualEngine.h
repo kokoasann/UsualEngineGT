@@ -1,4 +1,5 @@
 #pragma once
+#include "graphics/Camera.h"
 namespace UsualEngine
 {
 	class GraphicsEngine;
@@ -45,10 +46,15 @@ namespace UsualEngine
 		{
 			return mGraphicsEngine;
 		}
+		Camera& GetMainCamera()
+		{
+			return mMainCamera;
+		}
 	private:
 		HWND mHwnd = 0;
 		GraphicsEngine* mGraphicsEngine = nullptr;
 		GameObjectManager* mGameObjectManager = nullptr;
+		Camera mMainCamera;
 	};
 
 	static UsualEngine* usualEngine()

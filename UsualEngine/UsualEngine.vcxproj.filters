@@ -31,6 +31,9 @@
     <Filter Include="GameObject">
       <UniqueIdentifier>{13ddab48-58c8-40ea-b7d7-03ca8abf01c1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Timer">
+      <UniqueIdentifier>{31dbd312-4633-4486-a26a-7cc8a07a9a3d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="character\CharacterController.cpp">
@@ -115,6 +118,12 @@
     </ClCompile>
     <ClCompile Include="graphics\SkinModelRender.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer\GameTime.cpp">
+      <Filter>Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer\Stopwatch.cpp">
+      <Filter>Timer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -212,6 +221,12 @@
     </ClInclude>
     <ClInclude Include="graphics\SkinModelRender.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer\GameTime.h">
+      <Filter>Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer\Stopwatch.h">
+      <Filter>Timer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

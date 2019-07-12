@@ -10,6 +10,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	IGS.nCmdShow = nCmdShow;
 	UsualEngine::UsualEngine* ue = UsualEngine::usualEngine();
 	ue->InitGame(IGS);
+
+
+	UsualEngine::SkinModelRender* smr = UsualEngine::NewGO<UsualEngine::SkinModelRender>(0,"");
+
 	ue->Run();
 	return 0;
 }

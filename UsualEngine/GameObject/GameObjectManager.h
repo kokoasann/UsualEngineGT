@@ -28,7 +28,7 @@ namespace UsualEngine
 		T* TakeTrash()
 		{
 			T* t = NULL;
-			for (auto tr : mTrashBox)
+			for (GameObject* tr : mTrashBox)
 			{
 				t = dynamic_cast<T>(tr);
 				if (t != NULL)
@@ -46,7 +46,7 @@ namespace UsualEngine
 		}
 
 		template<class T>
-		GameObject* NewGameObject(int prio, const char* name,bool isCheckIned)
+		T* NewGameObject(int prio, const char* name,bool isCheckIned)
 		{
 			if (prio >= mMaxSize)
 			{
@@ -55,7 +55,7 @@ namespace UsualEngine
 			}
 			int hash = Util::MakeHash(name);
 
-			T* go = TakeTrash();
+			T* go = TakeTrash<T>();
 			if (go == nullptr)
 			{
 				go = new T();
@@ -90,4 +90,10 @@ namespace UsualEngine
 		std::array<int, mMaxSize> mCheckInCountList;
 		std::vector<GameObject*> mTrashBox;
 	};
+
+	template<class T>
+	static T* NewGO(int prio, const char* name,bool isTakeTrush=true)
+	{
+		return GameObjectManager::Get()->NewGameObject<T>(prio, name, isTakeTrush);
+	}
 }

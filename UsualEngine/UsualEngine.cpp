@@ -100,9 +100,15 @@ namespace UsualEngine
 	{
 		while (DispatchWindowMessage() == true)
 		{
+			Stopwatch st;
+			st.Start();
+
 			mGraphicsEngine->BegineRender();
 			mGameObjectManager->Update();
 			mGraphicsEngine->EndRender();
+
+			float frameTime = st.Stop();
+			gameTime()->PushFrameDeltaTime(frameTime);
 		}
 	}
 	void UsualEngine::Release()
