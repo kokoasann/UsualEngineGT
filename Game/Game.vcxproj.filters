@@ -14,10 +14,18 @@
     <Filter Include="Assets\Shader">
       <UniqueIdentifier>{73d0ccee-8c94-4ffb-af4f-abdd516853b8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Model">
+      <UniqueIdentifier>{8de2d2b5-fd79-4acf-9188-6a06e567045a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\model.fx">
       <Filter>Assets\Shader</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <MeshContentTask Include="Assets\model\unityChan.fbx">
+      <Filter>Assets\Model</Filter>
+    </MeshContentTask>
   </ItemGroup>
 </Project>

@@ -32,7 +32,8 @@ namespace UsualEngine
 			//エフェクトファクトリ。
 			SkinModelEffectFactory effectFactory(usualEngine()->GetGraphicsEngine()->GetD3DDevice());
 			//テクスチャがあるフォルダを設定する。
-			effectFactory.SetDirectory(L"Assets/modelData");
+			//effectFactory.SetDirectory(L"Assets/modelData");
+			effectFactory.SetDirectory(L"Assets/model");
 			//CMOファイルのロード。
 			auto model = DirectX::Model::CreateFromCMO(	//CMOファイルからモデルを作成する関数の、CreateFromCMOを実行する。
 				usualEngine()->GetGraphicsEngine()->GetD3DDevice(),			//第一引数はD3Dデバイス。

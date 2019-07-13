@@ -11,8 +11,13 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	UsualEngine::UsualEngine* ue = UsualEngine::usualEngine();
 	ue->InitGame(IGS);
 
+	UsualEngine::Camera& MainCam = UsualEngine::usualEngine()->GetMainCamera();
+	MainCam.SetPosition({ 0,0,500 });
+	MainCam.Update();
+	
 
 	UsualEngine::SkinModelRender* smr = UsualEngine::NewGO<UsualEngine::SkinModelRender>(0,"");
+	smr->Init(L"Assets/model/unityChan.cmo");
 
 	ue->Run();
 	return 0;

@@ -55,6 +55,7 @@ namespace UsualEngine
 		GraphicsEngine* mGraphicsEngine = nullptr;
 		GameObjectManager* mGameObjectManager = nullptr;
 		Camera mMainCamera;
+		Camera mCamera2D;
 	};
 
 	static UsualEngine* usualEngine()

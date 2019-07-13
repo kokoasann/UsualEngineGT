@@ -63,4 +63,9 @@ namespace UsualEngine
 		ID3D11InputLayout* m_inputLayout = nullptr;			//!<入力レイアウト。
 		ID3DBlob* m_blobOut = nullptr;
 	};
+
+	/*!
+	 *@brief	頂点シェーダーから頂点レイアウトを生成。
+	 */
+	HRESULT CreateInputLayoutDescFromVertexShaderSignature(ID3DBlob* pShaderBlob, ID3D11Device* pD3DDevice, ID3D11InputLayout** pInputLayout);
 }

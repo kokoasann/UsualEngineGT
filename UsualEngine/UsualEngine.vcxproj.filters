@@ -34,22 +34,16 @@
     <Filter Include="Timer">
       <UniqueIdentifier>{31dbd312-4633-4486-a26a-7cc8a07a9a3d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\2D">
+      <UniqueIdentifier>{9c5f5f3f-42dc-4ba0-90d4-3ea67a0673b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\3D">
+      <UniqueIdentifier>{ff6db8a4-71ec-442f-b008-57e39075d4b6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="character\CharacterController.cpp">
       <Filter>Character</Filter>
-    </ClCompile>
-    <ClCompile Include="graphics\Skeleton.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="graphics\SkinModel.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="graphics\SkinModelDataManager.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="graphics\SkinModelEffect.cpp">
-      <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="graphics\Camera.cpp">
       <Filter>Graphics</Filter>
@@ -116,14 +110,26 @@
     <ClCompile Include="GameObject\GameObject.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="graphics\SkinModelRender.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Timer\GameTime.cpp">
       <Filter>Timer</Filter>
     </ClCompile>
     <ClCompile Include="Timer\Stopwatch.cpp">
       <Filter>Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\SkinModel.cpp">
+      <Filter>Graphics\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\SkinModelDataManager.cpp">
+      <Filter>Graphics\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\SkinModelEffect.cpp">
+      <Filter>Graphics\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\SkinModelRender.cpp">
+      <Filter>Graphics\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\Skeleton.cpp">
+      <Filter>Graphics\3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -131,21 +137,6 @@
       <Filter>Character</Filter>
     </ClInclude>
     <ClInclude Include="graphics\ShaderResources.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="graphics\Skeleton.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="graphics\SkinModel.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="graphics\SkinModelDataManager.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="graphics\SkinModelEffect.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="graphics\SkinModelShaderConst.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="graphics\Camera.h">
@@ -219,14 +210,29 @@
     <ClInclude Include="GameObject\GameObjectManager.h">
       <Filter>GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="graphics\SkinModelRender.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Timer\GameTime.h">
       <Filter>Timer</Filter>
     </ClInclude>
     <ClInclude Include="Timer\Stopwatch.h">
       <Filter>Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\SkinModelShaderConst.h">
+      <Filter>Graphics\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\SkinModel.h">
+      <Filter>Graphics\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\SkinModelDataManager.h">
+      <Filter>Graphics\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\SkinModelEffect.h">
+      <Filter>Graphics\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\SkinModelRender.h">
+      <Filter>Graphics\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Skeleton.h">
+      <Filter>Graphics\3D</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

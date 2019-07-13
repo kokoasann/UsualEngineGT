@@ -17,6 +17,7 @@ namespace UsualEngine
 	{
 		UpdateStart();
 		UpdateUpdate();
+		UpdateRender();
 	}
 
 	void GameObjectManager::UpdateStart()

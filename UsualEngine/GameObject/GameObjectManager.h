@@ -30,7 +30,7 @@ namespace UsualEngine
 			T* t = NULL;
 			for (GameObject* tr : mTrashBox)
 			{
-				t = dynamic_cast<T>(tr);
+				t = dynamic_cast<T*>(tr);
 				if (t != NULL)
 				{
 					break;
@@ -40,7 +40,8 @@ namespace UsualEngine
 			{
 				auto it = std::find(mTrashBox.begin(), mTrashBox.end(), t);
 				mTrashBox.erase(it);
-				t.Revive();
+				//ob = (GameObject*)(t);
+				t->Revive();
 			}
 			return t;
 		}
