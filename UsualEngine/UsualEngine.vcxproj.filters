@@ -40,6 +40,9 @@
     <Filter Include="Graphics\3D">
       <UniqueIdentifier>{ff6db8a4-71ec-442f-b008-57e39075d4b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\GPUBuffer">
+      <UniqueIdentifier>{471d8026-27fc-4149-ba79-e61bed6d9496}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="character\CharacterController.cpp">
@@ -130,6 +133,21 @@
     </ClCompile>
     <ClCompile Include="graphics\Skeleton.cpp">
       <Filter>Graphics\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\Sprite.cpp">
+      <Filter>Graphics\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\VertexBuffer.cpp">
+      <Filter>Graphics\GPUBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\IndexBuffer.cpp">
+      <Filter>Graphics\GPUBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\Primitive.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\SpriteDataManager.cpp">
+      <Filter>Graphics\2D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -233,6 +251,21 @@
     </ClInclude>
     <ClInclude Include="graphics\Skeleton.h">
       <Filter>Graphics\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Sprite.h">
+      <Filter>Graphics\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\VertexBuffer.h">
+      <Filter>Graphics\GPUBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\IndexBuffer.h">
+      <Filter>Graphics\GPUBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Primitive.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\SpriteDataManager.h">
+      <Filter>Graphics\2D</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

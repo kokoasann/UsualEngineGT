@@ -165,6 +165,8 @@
     <ClCompile Include="graphics\animation\AnimationPlayController.cpp" />
     <ClCompile Include="graphics\Camera.cpp" />
     <ClCompile Include="graphics\GraphicsEngine.cpp" />
+    <ClCompile Include="graphics\IndexBuffer.cpp" />
+    <ClCompile Include="graphics\Primitive.cpp" />
     <ClCompile Include="graphics\Shader.cpp" />
     <ClCompile Include="graphics\ShaderResources.cpp" />
     <ClCompile Include="graphics\Skeleton.cpp" />
@@ -172,6 +174,9 @@
     <ClCompile Include="graphics\SkinModelDataManager.cpp" />
     <ClCompile Include="graphics\SkinModelEffect.cpp" />
     <ClCompile Include="graphics\SkinModelRender.cpp" />
+    <ClCompile Include="graphics\Sprite.cpp" />
+    <ClCompile Include="graphics\SpriteDataManager.cpp" />
+    <ClCompile Include="graphics\VertexBuffer.cpp" />
     <ClCompile Include="HID\Pad.cpp" />
     <ClCompile Include="level\Level.cpp" />
     <ClCompile Include="level\MapChip.cpp" />
@@ -200,6 +205,8 @@
     <ClInclude Include="graphics\animation\AnimationPlayController.h" />
     <ClInclude Include="graphics\Camera.h" />
     <ClInclude Include="graphics\GraphicsEngine.h" />
+    <ClInclude Include="graphics\IndexBuffer.h" />
+    <ClInclude Include="graphics\Primitive.h" />
     <ClInclude Include="graphics\Shader.h" />
     <ClInclude Include="graphics\ShaderResources.h" />
     <ClInclude Include="graphics\Skeleton.h" />
@@ -208,6 +215,9 @@
     <ClInclude Include="graphics\SkinModelEffect.h" />
     <ClInclude Include="graphics\SkinModelRender.h" />
     <ClInclude Include="graphics\SkinModelShaderConst.h" />
+    <ClInclude Include="graphics\Sprite.h" />
+    <ClInclude Include="graphics\SpriteDataManager.h" />
+    <ClInclude Include="graphics\VertexBuffer.h" />
     <ClInclude Include="HID\Pad.h" />
     <ClInclude Include="level\Level.h" />
     <ClInclude Include="level\MapChip.h" />
