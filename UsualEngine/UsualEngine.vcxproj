@@ -164,6 +164,7 @@
     <ClCompile Include="graphics\animation\AnimationClip.cpp" />
     <ClCompile Include="graphics\animation\AnimationPlayController.cpp" />
     <ClCompile Include="graphics\Camera.cpp" />
+    <ClCompile Include="graphics\ConstantBuffer.cpp" />
     <ClCompile Include="graphics\GraphicsEngine.cpp" />
     <ClCompile Include="graphics\IndexBuffer.cpp" />
     <ClCompile Include="graphics\Primitive.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="graphics\animation\AnimationClip.h" />
     <ClInclude Include="graphics\animation\AnimationPlayController.h" />
     <ClInclude Include="graphics\Camera.h" />
+    <ClInclude Include="graphics\ConstantBuffer.h" />
     <ClInclude Include="graphics\GraphicsEngine.h" />
     <ClInclude Include="graphics\IndexBuffer.h" />
     <ClInclude Include="graphics\Primitive.h" />

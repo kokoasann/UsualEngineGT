@@ -222,6 +222,18 @@ namespace UsualEngine
 			);
 			mat = lm;
 		}
+
+		CMatrix operator *(CMatrix m)
+		{
+			DirectX::XMMATRIX mm = DirectX::XMLoadFloat4x4(&mat);
+			DirectX::XMFLOAT4X4 lm;
+			DirectX::XMStoreFloat4x4(
+				&lm,
+				DirectX::XMMatrixMultiply(mm, m)
+			);
+
+			return lm;
+		}
 		/*!
 		 *@brief	逆行列を計算。
 		 *@param[in]	m	元になる行列。

@@ -28,4 +28,9 @@
       <Filter>Assets\Model</Filter>
     </MeshContentTask>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\shader\sprite.fx">
+      <Filter>Assets\Shader</Filter>
+    </None>
+  </ItemGroup>
 </Project>

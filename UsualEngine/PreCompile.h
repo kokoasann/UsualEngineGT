@@ -35,6 +35,10 @@
 #include "math/Matrix.h"
 #include "graphics/GraphicsEngine.h"
 
+#include "graphics/ConstantBuffer.h"
+#include "graphics/Primitive.h"
+#include "graphics/Shader.h"
+
 #include "graphics/SkinModel.h"
 #include "graphics/Skeleton.h"
 

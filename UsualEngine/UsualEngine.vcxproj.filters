@@ -149,6 +149,9 @@
     <ClCompile Include="graphics\SpriteDataManager.cpp">
       <Filter>Graphics\2D</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\ConstantBuffer.cpp">
+      <Filter>Graphics\GPUBuffer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="character\CharacterController.h">
@@ -266,6 +269,9 @@
     </ClInclude>
     <ClInclude Include="graphics\SpriteDataManager.h">
       <Filter>Graphics\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\ConstantBuffer.h">
+      <Filter>Graphics\GPUBuffer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
