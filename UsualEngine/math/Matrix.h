@@ -234,6 +234,16 @@ namespace UsualEngine
 
 			return lm;
 		}
+
+		void operator *=(CMatrix m)
+		{
+			DirectX::XMFLOAT4X4 lm;
+			DirectX::XMStoreFloat4x4(
+				&lm,
+				DirectX::XMMatrixMultiply(*this, m)
+			);
+			mat = lm;
+		}
 		/*!
 		 *@brief	逆行列を計算。
 		 *@param[in]	m	元になる行列。

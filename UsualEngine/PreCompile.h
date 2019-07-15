@@ -39,6 +39,8 @@
 #include "graphics/Primitive.h"
 #include "graphics/Shader.h"
 
+#include "graphics/Sprite.h"
+
 #include "graphics/SkinModel.h"
 #include "graphics/Skeleton.h"
 
@@ -52,6 +54,7 @@
 #include "Timer/Stopwatch.h"
 
 #include "graphics/SkinModelRender.h"
+#include "graphics/SpriteRender.h"
 
 
 const float FRAME_BUFFER_W = 1280.0f;				//フレームバッファの幅。

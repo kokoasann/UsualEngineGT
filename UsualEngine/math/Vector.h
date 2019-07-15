@@ -29,6 +29,18 @@ namespace UsualEngine
 			struct { float x, y; };
 			float v[2];
 		};
+
+		void Scale(float v)
+		{
+			x *= v;
+			y *= v;
+		}
+
+		void Div(float v)
+		{
+			float sv = 1.f / v;
+			Scale(sv);
+		}
 		/*!
 		* @brief	ê¸å`ï‚ä‘ÅB
 		*@details

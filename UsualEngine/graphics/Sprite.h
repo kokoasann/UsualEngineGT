@@ -5,7 +5,7 @@ namespace UsualEngine
 	class Sprite
 	{
 	public:
-		Sprite() {}
+		Sprite();
 		~Sprite(){}
 
 		void Init(const wchar_t* path, CVector2 size);

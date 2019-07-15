@@ -10,28 +10,34 @@ namespace UsualEngine
 		CVector4 pos;
 		CVector2 tex;
 	};
+	Sprite::Sprite()
+	{
+		mVS.Load("Assets/shader/sprite.fx", "VSMain", Shader::EnType::VS);
+		mPS.Load("Assets/shader/sprite.fx", "PSMain", Shader::EnType::PS);
+	}
 	void Sprite::Init(const wchar_t* path, CVector2 size)
 	{
 		std::wstring st = path;
 		mTextuer = SpriteDataManager::Get()->Load(st);
 
 		mSize = size;
+		CVector2 hsize = size/2;
 		SimpleVertex topo[] =
 		{
 			{
-				CVector4{-size.x,-size.y,0,1},
-				CVector2{0,0}
+				CVector4(-hsize.x,-hsize.y,0.0f,1.0f),
+				CVector2(0.0f,1.0f)
 			},
 			{
-				CVector4(size.x, -size.y, 0.0f, 1.0f),
-				CVector2(1.0f, 1.0f),
+				CVector4(hsize.x, -hsize.y, 0.0f, 1.0f),
+				CVector2(1.0f, 1.0f)
 			},
 			{
-				CVector4(-size.x, size.y, 0.0f, 1.0f),
+				CVector4(-hsize.x, hsize.y, 0.0f, 1.0f),
 				CVector2(0.0f, 0.0f)
 			},
 			{
-				CVector4(size.x, size.y, 0.0f, 1.0f),
+				CVector4(hsize.x, hsize.y, 0.0f, 1.0f),
 				CVector2(1.0f, 0.0f)
 			}
 		};
@@ -67,5 +73,25 @@ namespace UsualEngine
 		mWorld = mPivotTrans * mScale;
 		mWorld = mWorld * mRot;
 		mWorld = mWorld * mTrans;
+	}
+	void Sprite::Draw(CMatrix viewMatrix, CMatrix projMatrix)
+	{
+
+		CBData cb;
+		cb.WVP = mWorld;
+		cb.WVP *= viewMatrix;
+		cb.WVP *= projMatrix;
+		cb.MulCol = mMulCol;
+
+		ID3D11DeviceContext* dev = usualEngine()->GetGraphicsEngine()->GetD3DDeviceContext();
+		dev->UpdateSubresource(mCB.GetBody(), 0, NULL, &cb, 0, 0);
+		dev->VSSetConstantBuffers(0, 1, &mCB.GetBody());
+		dev->PSSetConstantBuffers(0, 1, &mCB.GetBody());
+		dev->PSSetShaderResources(0, 1, &mTextuer);
+		dev->IASetInputLayout(mVS.GetInputLayout());
+		dev->VSSetShader((ID3D11VertexShader*)mVS.GetBody(), NULL, 0);
+		dev->PSSetShader((ID3D11PixelShader*)mPS.GetBody(), NULL, 0);
+
+		mPrimitive.Draw();
 	}
 }

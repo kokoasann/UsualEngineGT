@@ -93,7 +93,7 @@ namespace UsualEngine
 	};
 
 	template<class T>
-	static T* NewGO(int prio, const char* name,bool isTakeTrush=true)
+	static T* NewGO(int prio, const char* name="",bool isTakeTrush=true)
 	{
 		return GameObjectManager::Get()->NewGameObject<T>(prio, name, isTakeTrush);
 	}

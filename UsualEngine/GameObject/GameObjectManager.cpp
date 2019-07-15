@@ -18,6 +18,7 @@ namespace UsualEngine
 		UpdateStart();
 		UpdateUpdate();
 		UpdateRender();
+		UpdatePostRender();
 	}
 
 	void GameObjectManager::UpdateStart()
@@ -86,11 +87,17 @@ namespace UsualEngine
 				go->Render();
 			}
 		}
-
 	}
 
 	void GameObjectManager::UpdatePostRender()
 	{
+		for (auto goList : mGameObjectList)
+		{
+			for (auto go : goList)
+			{
+				go->PostRender();
+			}
+		}
 	}
 
 	void GameObjectManager::AddReserved(int prio, int add)

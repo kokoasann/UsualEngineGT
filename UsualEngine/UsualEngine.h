@@ -50,6 +50,10 @@ namespace UsualEngine
 		{
 			return mMainCamera;
 		}
+		Camera& Get2DCamera()
+		{
+			return mCamera2D;
+		}
 	private:
 		HWND mHwnd = 0;
 		GraphicsEngine* mGraphicsEngine = nullptr;

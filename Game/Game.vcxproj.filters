@@ -17,6 +17,9 @@
     <Filter Include="Assets\Model">
       <UniqueIdentifier>{8de2d2b5-fd79-4acf-9188-6a06e567045a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Sprite">
+      <UniqueIdentifier>{86dfc41e-9853-4e27-a2ae-58eed45d5028}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\model.fx">
@@ -32,5 +35,13 @@
     <None Include="Assets\shader\sprite.fx">
       <Filter>Assets\Shader</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ImageContentTask Include="Assets\sprite\GOKU.png">
+      <Filter>Assets\Sprite</Filter>
+    </ImageContentTask>
+    <ImageContentTask Include="Assets\sprite\daru.PNG">
+      <Filter>Assets\Sprite</Filter>
+    </ImageContentTask>
   </ItemGroup>
 </Project>

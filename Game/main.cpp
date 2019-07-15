@@ -16,9 +16,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	MainCam.Update();
 	
 
-	UsualEngine::SkinModelRender* smr = UsualEngine::NewGO<UsualEngine::SkinModelRender>(0,"");
-	smr->Init(L"Assets/model/unityChan.cmo");
+	//UsualEngine::SkinModelRender* smr = UsualEngine::NewGO<UsualEngine::SkinModelRender>(0,"");
+	//smr->Init(L"Assets/model/unityChan.cmo");
 
+	UsualEngine::SpriteRender* sr = UsualEngine::NewGO<UsualEngine::SpriteRender>(0);
+	sr->Init(L"Assets/sprite/daru.dds", {100,50});
+	
 	ue->Run();
 	return 0;
 }

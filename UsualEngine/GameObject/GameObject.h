@@ -27,6 +27,7 @@ namespace UsualEngine
 		virtual void Update() {};
 
 		virtual void Render() {};
+		virtual void PostRender() {};
 
 		/*
 		ƒQ[ƒ€‘¤‚Å‚Íg‚í‚È‚¢

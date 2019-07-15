@@ -9,6 +9,7 @@ namespace UsualEngine
 {
 	UsualEngine::UsualEngine()
 	{
+		
 	}
 
 
@@ -32,6 +33,10 @@ namespace UsualEngine
 		g_pad[1].Init(1);
 		g_pad[2].Init(2);
 		g_pad[3].Init(3);
+
+		//2DƒJƒƒ‰‚Ì‰Šú‰»
+		mCamera2D.SetPosition({ 0,0,-500 });
+		mCamera2D.Update();
 
 		g_physics.Init();
 	}

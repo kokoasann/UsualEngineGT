@@ -6,7 +6,10 @@ namespace UsualEngine
 {
 	void IndexBuffer::Release()
 	{
+		if (mBuffer == NULL)
+			return;
 		mBuffer->Release();
+		mBuffer = NULL;
 	}
 	bool IndexBuffer::Create(int indexNum, EIndexType indexType, const void* indexData)
 	{
@@ -34,7 +37,7 @@ namespace UsualEngine
 		ZeroMemory(&InitData, sizeof(InitData));
 		InitData.pSysMem = indexData;
 
-		HRESULT hr = GraphicsEngine().GetD3DDevice()->CreateBuffer(&bd, &InitData, &mBuffer);
+		HRESULT hr = usualEngine()->GetGraphicsEngine()->GetD3DDevice()->CreateBuffer(&bd, &InitData, &mBuffer);
 		if (FAILED(hr)) {
 			return false;
 		}

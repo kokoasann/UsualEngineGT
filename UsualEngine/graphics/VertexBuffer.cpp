@@ -5,7 +5,10 @@ namespace UsualEngine
 {
 	void VertexBuffer::Release()
 	{
+		if (mBuffer == NULL)
+			return;
 		mBuffer->Release();
+		mBuffer = NULL;
 	}
 	bool VertexBuffer::Create(int vertexNum, int stride, const void* vertexData)
 	{
@@ -20,7 +23,7 @@ namespace UsualEngine
 		ZeroMemory(&InitData, sizeof(InitData));
 		InitData.pSysMem = vertexData;
 
-		HRESULT hr = GraphicsEngine().GetD3DDevice()->CreateBuffer(&bd, &InitData, &mBuffer);
+		HRESULT hr = usualEngine()->GetGraphicsEngine()->GetD3DDevice()->CreateBuffer(&bd, &InitData, &mBuffer);
 		if (FAILED(hr)) {
 			return false;
 		}

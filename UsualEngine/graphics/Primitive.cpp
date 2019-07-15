@@ -12,6 +12,7 @@ namespace UsualEngine
 	}
 	bool Primitive::Cteate(D3D_PRIMITIVE_TOPOLOGY topo, int vertexNum, int stride, const void* vertexData, int indexNum, IndexBuffer::EIndexType indexType, const void* indexData)
 	{
+		mTopology = topo;
 		bool res = mVertexBuffer.Create(vertexNum, stride, vertexData);
 		if (!res)
 			return false;

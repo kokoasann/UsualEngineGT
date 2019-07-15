@@ -5,7 +5,7 @@ namespace UsualEngine
 {
 	class SpriteDataManager
 	{
-		SpriteDataManager();
+		SpriteDataManager() {};
 		~SpriteDataManager();
 	public:
 		static SpriteDataManager* Get()

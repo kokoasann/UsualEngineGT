@@ -177,6 +177,7 @@
     <ClCompile Include="graphics\SkinModelRender.cpp" />
     <ClCompile Include="graphics\Sprite.cpp" />
     <ClCompile Include="graphics\SpriteDataManager.cpp" />
+    <ClCompile Include="graphics\SpriteRender.cpp" />
     <ClCompile Include="graphics\VertexBuffer.cpp" />
     <ClCompile Include="HID\Pad.cpp" />
     <ClCompile Include="level\Level.cpp" />
@@ -219,6 +220,7 @@
     <ClInclude Include="graphics\SkinModelShaderConst.h" />
     <ClInclude Include="graphics\Sprite.h" />
     <ClInclude Include="graphics\SpriteDataManager.h" />
+    <ClInclude Include="graphics\SpriteRender.h" />
     <ClInclude Include="graphics\VertexBuffer.h" />
     <ClInclude Include="HID\Pad.h" />
     <ClInclude Include="level\Level.h" />
