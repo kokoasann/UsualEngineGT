@@ -37,9 +37,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ImageContentTask Include="Assets\sprite\GOKU.png">
-      <Filter>Assets\Sprite</Filter>
-    </ImageContentTask>
     <ImageContentTask Include="Assets\sprite\daru.PNG">
       <Filter>Assets\Sprite</Filter>
     </ImageContentTask>

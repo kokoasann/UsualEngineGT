@@ -7,6 +7,12 @@ namespace UsualEngine
 	class Camera
 	{
 	public:
+		enum ECameraMode
+		{
+			eParth,
+			eOrth,
+		};
+
 		/*!
 		 * @brief	カメラ行列、プロジェクション行列の更新。
 		 *@details
