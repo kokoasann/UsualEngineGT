@@ -36,6 +36,7 @@ namespace UsualEngine
 
 		//2DƒJƒƒ‰‚Ì‰Šú‰»
 		mCamera2D.SetPosition({ 0,0,-500 });
+		mCamera2D.CameraModeOrth();
 		mCamera2D.Update();
 
 		g_physics.Init();

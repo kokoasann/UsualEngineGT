@@ -9,9 +9,11 @@ namespace UsualEngine
 	public:
 		enum ECameraMode
 		{
-			eParth,
+			ePerth,
 			eOrth,
 		};
+
+		Camera();
 
 		/*!
 		 * @brief	カメラ行列、プロジェクション行列の更新。
@@ -98,6 +100,36 @@ namespace UsualEngine
 		{
 			m_viewAngle = angle;
 		}
+
+		//アス比を設定
+		void SetAspect(float as)
+		{
+			m_aspect = as;
+		}
+		//アス比を返す
+		float GetAspect()
+		{
+			return m_aspect;
+		}
+
+		//パースてぃぶモードにする
+		void CameraModePerth()
+		{
+			m_cameraMode = ECameraMode::ePerth;
+		}
+		//平行投影モードにする
+		void CameraModeOrth()
+		{
+			m_cameraMode = ECameraMode::eOrth;
+		}
+		//現在のカメラモードを返す
+		ECameraMode GetCameraMode()
+		{
+			return m_cameraMode;
+		}
+
+
+		
 	private:
 		CMatrix	m_viewMatrix = CMatrix::Identity();		//ビュー行列。
 		CMatrix m_projMatrix = CMatrix::Identity();		//プロジェクション行列。
@@ -105,9 +137,15 @@ namespace UsualEngine
 		CVector3 m_position = CVector3::Zero();			//視点。
 		CVector3 m_up = CVector3::Up();					//上方向。
 		float m_viewAngle = CMath::DegToRad(60.0f);		//画角。
+		float m_aspect = 1.f;							//アス比
 		float m_far = 10000.0f;							//遠い平面までの距離。
 		float m_near = 1.0f;							//近平面までの距離。
+
+		float m_width = 1280.0f;						//横
+		float m_height = 720.0f;						//縦
+
+		ECameraMode m_cameraMode = ECameraMode::ePerth;	//カメラモード
 	};
 
-	extern Camera g_camera3D;		//!<3Dカメラ。
+	//extern Camera g_camera3D;		//!<3Dカメラ。
 }

@@ -16,6 +16,7 @@ namespace UsualEngine
 
 	void MapChip::Draw()
 	{
-		m_model.Draw(g_camera3D.GetViewMatrix(), g_camera3D.GetProjectionMatrix());
+		Camera& cam = usualEngine()->GetMainCamera();
+		m_model.Draw(cam.GetViewMatrix(), cam.GetProjectionMatrix());
 	}
 }

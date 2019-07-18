@@ -20,7 +20,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//smr->Init(L"Assets/model/unityChan.cmo");
 
 	UsualEngine::SpriteRender* sr = UsualEngine::NewGO<UsualEngine::SpriteRender>(0);
-	sr->Init(L"Assets/sprite/daru.dds", {100,50});
+	sr->Init(L"Assets/sprite/daru.dds", {10,10});
+	sr->SetPos({ 0,0,500 });
+	//sr->SetSca(ue::CVector3::One() * 10);
 	
 	ue->Run();
 	return 0;
