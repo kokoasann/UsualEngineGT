@@ -43,6 +43,12 @@
     <Filter Include="Graphics\GPUBuffer">
       <UniqueIdentifier>{471d8026-27fc-4149-ba79-e61bed6d9496}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\Light">
+      <UniqueIdentifier>{ef029e33-be32-4e9b-b610-1c2ccd5e4d4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\GPUView">
+      <UniqueIdentifier>{7a7b842a-df32-4ccc-886e-63c0a13c5826}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="character\CharacterController.cpp">
@@ -154,6 +160,21 @@
     </ClCompile>
     <ClCompile Include="graphics\SpriteRender.cpp">
       <Filter>Graphics\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\LightDirection.cpp">
+      <Filter>Graphics\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\LightBase.cpp">
+      <Filter>Graphics\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\LightManager.cpp">
+      <Filter>Graphics\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\StructuredBuffer.cpp">
+      <Filter>Graphics\GPUBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\GPUViewer.cpp">
+      <Filter>Graphics\GPUView</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -278,6 +299,21 @@
     </ClInclude>
     <ClInclude Include="graphics\SpriteRender.h">
       <Filter>Graphics\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\LightBase.h">
+      <Filter>Graphics\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\LightDirection.h">
+      <Filter>Graphics\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\LightManager.h">
+      <Filter>Graphics\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\StructuredBuffer.h">
+      <Filter>Graphics\GPUBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\GPUViewer.h">
+      <Filter>Graphics\GPUView</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
