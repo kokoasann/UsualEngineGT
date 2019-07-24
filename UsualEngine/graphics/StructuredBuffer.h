@@ -9,6 +9,8 @@ namespace UsualEngine
 		StructuredBuffer();
 		~StructuredBuffer();
 
+		void Release();
+
 		bool Create(const void* pInitData, D3D11_BUFFER_DESC& bufferDesc);
 
 
@@ -21,6 +23,6 @@ namespace UsualEngine
 	private:
 		ID3D11Buffer* mBuffer = NULL;
 		ID3D11ShaderResourceView* mSRV = NULL;
-		ID3D11UnorderedAccessView* mUAV = NULL;
+		//ID3D11UnorderedAccessView* mUAV = NULL;
 	};
 }

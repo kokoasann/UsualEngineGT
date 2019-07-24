@@ -176,6 +176,9 @@
     <ClCompile Include="graphics\GPUViewer.cpp">
       <Filter>Graphics\GPUView</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\LightStruct.cpp">
+      <Filter>Graphics\Light</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="character\CharacterController.h">
@@ -314,6 +317,9 @@
     </ClInclude>
     <ClInclude Include="graphics\GPUViewer.h">
       <Filter>Graphics\GPUView</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\LightStruct.h">
+      <Filter>Graphics\Light</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

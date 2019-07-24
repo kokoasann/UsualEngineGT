@@ -171,6 +171,7 @@
     <ClCompile Include="graphics\LightBase.cpp" />
     <ClCompile Include="graphics\LightDirection.cpp" />
     <ClCompile Include="graphics\LightManager.cpp" />
+    <ClCompile Include="graphics\LightStruct.cpp" />
     <ClCompile Include="graphics\Primitive.cpp" />
     <ClCompile Include="graphics\Shader.cpp" />
     <ClCompile Include="graphics\ShaderResources.cpp" />
@@ -218,6 +219,7 @@
     <ClInclude Include="graphics\LightBase.h" />
     <ClInclude Include="graphics\LightDirection.h" />
     <ClInclude Include="graphics\LightManager.h" />
+    <ClInclude Include="graphics\LightStruct.h" />
     <ClInclude Include="graphics\Primitive.h" />
     <ClInclude Include="graphics\Shader.h" />
     <ClInclude Include="graphics\ShaderResources.h" />

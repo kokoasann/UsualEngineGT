@@ -1,6 +1,7 @@
 #pragma once
 
 #include "LightBase.h"
+#include "LightStruct.h"
 
 namespace UsualEngine
 {
@@ -15,7 +16,11 @@ namespace UsualEngine
 		//更新
 		void Update() override;
 
-
+		//本体をゲット
+		SDirectionLight& GetBody()
+		{
+			return mLight;
+		}
 
 		//光の指す方をセットする
 		void SetDir(CVector3 dir)

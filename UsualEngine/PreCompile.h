@@ -36,6 +36,8 @@
 #include "graphics/GraphicsEngine.h"
 
 #include "graphics/ConstantBuffer.h"
+#include "graphics/StructuredBuffer.h"
+
 #include "graphics/Primitive.h"
 #include "graphics/Shader.h"
 

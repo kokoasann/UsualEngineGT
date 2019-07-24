@@ -12,6 +12,7 @@ namespace UsualEngine
 		{
 			mIsStart = false;
 			mIsDead = false;
+			mIsActive = true;
 			mName = 0;
 			mPrio = 0;
 			mIsTrashTake = false;
@@ -73,6 +74,17 @@ namespace UsualEngine
 			mIsDead = true;
 		}
 
+		//アクティブ？
+		bool IsActive()
+		{
+			return mIsActive;
+		}
+		//アクティブフラグをセットする
+		void SetActive(bool b)
+		{
+			mIsActive = b;
+		}
+
 		//ゴミ拾いをする
 		void TrashTaking()
 		{
@@ -88,6 +100,7 @@ namespace UsualEngine
 	private:
 		bool mIsStart = false;			//スタート関数呼ばれた？
 		bool mIsDead = false;			//死んだ？
+		bool mIsActive = true;			//動ける？
 
 		int mName = 0;					//名前(hash値)
 		int mPrio = 0;						//プライオリティ
