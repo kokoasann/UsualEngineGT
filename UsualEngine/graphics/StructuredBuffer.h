@@ -19,6 +19,10 @@ namespace UsualEngine
 			return mBuffer;
 		}
 		
+		ID3D11ShaderResourceView*& GetSRV()
+		{
+			return mSRV;
+		}
 
 	private:
 		ID3D11Buffer* mBuffer = NULL;

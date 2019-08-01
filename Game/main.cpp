@@ -12,18 +12,26 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	ue->InitGame(IGS);
 
 	UsualEngine::Camera& MainCam = UsualEngine::usualEngine()->GetMainCamera();
-	MainCam.SetPosition({ 0,0,500 });
+	MainCam.SetPosition({ 0,80,120 });
+	MainCam.SetTarget({ 0,80,0 });
 	MainCam.Update();
 	
 
-	//UsualEngine::SkinModelRender* smr = UsualEngine::NewGO<UsualEngine::SkinModelRender>(0,"");
-	//smr->Init(L"Assets/model/unityChan.cmo");
+	UsualEngine::SkinModelRender* smr = UsualEngine::NewGO<UsualEngine::SkinModelRender>(0,"");
+	smr->Init(L"Assets/model/unityChan.cmo");
 
-	UsualEngine::SpriteRender* sr = UsualEngine::NewGO<UsualEngine::SpriteRender>(0);
-	sr->Init(L"Assets/sprite/daru.dds", {10,10});
-	sr->SetPos({ 0,0,500 });
+	//UsualEngine::SpriteRender* sr = UsualEngine::NewGO<UsualEngine::SpriteRender>(0);
+	//sr->Init(L"Assets/sprite/daru.dds", {1280,720});
+	//sr->SetPos({ 0,0,500 });
 	//sr->SetSca(ue::CVector3::One() * 10);
-	
+
+	ue::LightDirection* light = ue::NewGO<ue::LightDirection>(0);
+	/*light = ue::NewGO<ue::LightDirection>(0);
+	light->SetDir({ 0,-1,-0.707f });
+	light->SetCol(ue::CVector4{ 0.7f,0.2f,0.1f,1.f }/2.f);
+	light = ue::NewGO<ue::LightDirection>(0);
+	light->SetDir({ 0.3f,-1,-0.707f });
+	light->SetCol(ue::CVector4{ 0.2f,0.2f,0.8f,1.f } / 2.f);*/
 	ue->Run();
 	return 0;
 }

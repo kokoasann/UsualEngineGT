@@ -43,6 +43,9 @@
 
 #include "graphics/Sprite.h"
 
+
+#include "graphics/SkinModelShaderConst.h"
+
 #include "graphics/SkinModel.h"
 #include "graphics/Skeleton.h"
 
@@ -57,6 +60,8 @@
 
 #include "graphics/SkinModelRender.h"
 #include "graphics/SpriteRender.h"
+#include "graphics/LightBase.h"
+#include "graphics/LightDirection.h"
 
 
 const float FRAME_BUFFER_W = 1280.0f;				//フレームバッファの幅。

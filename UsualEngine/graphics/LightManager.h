@@ -1,5 +1,7 @@
 #pragma once
 
+#include "graphics/ConstantBuffer.h"
+#include "graphics/StructuredBuffer.h"
 #include "LightStruct.h"
 
 
@@ -14,10 +16,12 @@ namespace UsualEngine
 	*/
 	class LightManager
 	{
+	friend class GraphicsEngine;
 	private:
 		LightManager();
-	public:
 		~LightManager();
+	public:
+		
 
 		//こいつのインスタンスをゲット！！
 		LightManager* Get()
@@ -50,6 +54,10 @@ namespace UsualEngine
 
 		//描画
 		void Render();
+
+		//描画終了
+		void EndRender();
+
 
 		//ライトのパラメータの構造体
 		struct LightParam

@@ -6,6 +6,12 @@
 
 namespace UsualEngine
 {
+	LightManager::LightManager()
+	{
+	}
+	LightManager::~LightManager()
+	{
+	}
 	void LightManager::Init()
 	{
 		InitDirectionStructuredBuffet();
@@ -34,7 +40,7 @@ namespace UsualEngine
 			if (MAX_DIRLIGHT <= mCDirLight.size())
 				return;
 			auto it = std::find(mCDirLight.begin(), mCDirLight.end(), light);
-			if (it != mCDirLight.end())
+			if (it == mCDirLight.end())
 			{
 				mCDirLight.push_back(dynamic_cast<LightDirection*>(light));
 			}
@@ -68,6 +74,19 @@ namespace UsualEngine
 
 	void LightManager::Render()
 	{
+		ID3D11DeviceContext* dc = usualEngine()->GetGraphicsEngine()->GetD3DDeviceContext();
 
+		dc->UpdateSubresource(mDirLightSB.GetBody(), 0, NULL, mSDirLights, 0, 0);
+
+		dc->UpdateSubresource(mLightParamCB.GetBody(), 0, NULL, &mLightParam, 0, 0);
+
+		dc->PSSetShaderResources(enSkinModelSRVReg_DirectionLight, 1,&mDirLightSB.GetSRV());	//ディレクションライトをセット
+		dc->PSSetConstantBuffers(enSkinModelCBReg_Light, 1, &mLightParamCB.GetBody());		//ライトの情報を送る
+	}
+	void LightManager::EndRender()
+	{
+		ID3D11DeviceContext* dc = usualEngine()->GetGraphicsEngine()->GetD3DDeviceContext();
+		ID3D11ShaderResourceView* view[] = { NULL };
+		dc->PSSetShaderResources(enSkinModelSRVReg_DirectionLight, 1, view);//NULLで上書き
 	}
 }

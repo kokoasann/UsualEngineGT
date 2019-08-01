@@ -2,6 +2,8 @@
  * @brief	モデルシェーダー。
  */
 
+#include "modelData.h"
+
 
 /////////////////////////////////////////////////////////////
 // Shader Resource View
@@ -64,6 +66,9 @@ struct PSInput{
 	float3 Tangent		: TANGENT;
 	float2 TexCoord 	: TEXCOORD0;
 };
+
+
+
 /*!
  *@brief	スキン行列を計算。
  */
@@ -142,5 +147,14 @@ PSInput VSMainSkin( VSInputNmTxWeights In )
 //--------------------------------------------------------------------------------------
 float4 PSMain( PSInput In ) : SV_Target0
 {
-	return albedoTexture.Sample(Sampler, In.TexCoord);
+	float4 albe = albedoTexture.Sample(Sampler, In.TexCoord);
+	
+	float3 li = 0.f;
+	for (int i = 0; i < DLcount; i++)
+	{
+		li += max(dot(DirLights[i].dir*-1.f, In.Normal), 0) * DirLights[i].color;
+	}
+	float4 fcol = float4(0.f, 0.f, 0.f, 1.f);
+	fcol.xyz = albe.xyz *= li;
+	return fcol;
 }

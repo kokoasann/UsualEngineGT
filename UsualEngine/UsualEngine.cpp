@@ -110,7 +110,11 @@ namespace UsualEngine
 			st.Start();
 
 			mGraphicsEngine->BegineRender();
+			LightManager& lm = mGraphicsEngine->GetLightManager();
+			lm.Update();
+			lm.Render();
 			mGameObjectManager->Update();
+			lm.EndRender();
 			mGraphicsEngine->EndRender();
 
 			float frameTime = st.Stop();

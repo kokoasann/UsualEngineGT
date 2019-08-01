@@ -22,7 +22,7 @@ namespace UsualEngine
 			desc.Format = DXGI_FORMAT_UNKNOWN;
 			desc.BufferEx.NumElements = descBuf.ByteWidth / descBuf.StructureByteStride;
 
-			HRESULT hr = GraphicsEngine().GetD3DDevice()->CreateShaderResourceView(pBuf, &desc, &srv);
+			HRESULT hr = usualEngine()->GetGraphicsEngine()->GetD3DDevice()->CreateShaderResourceView(pBuf, &desc, &srv);
 			if (FAILED(hr)) {
 				return false;
 			}
@@ -41,7 +41,7 @@ namespace UsualEngine
 			SRVDesc.ViewDimension = D3D_SRV_DIMENSION_TEXTURE2D;
 			SRVDesc.Texture2D.MipLevels = texDesc.MipLevels;
 
-			HRESULT hr = GraphicsEngine().GetD3DDevice()->CreateShaderResourceView(texture, &SRVDesc, &srv);
+			HRESULT hr = usualEngine()->GetGraphicsEngine()->GetD3DDevice()->CreateShaderResourceView(texture, &SRVDesc, &srv);
 			if (FAILED(hr)) {
 				return NULL;
 			}

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "LightManager.h"
+
 namespace UsualEngine
 {
 	/*!
@@ -15,6 +17,7 @@ namespace UsualEngine
 		 *@param[in]	hWnd		ウィンドウハンドル。
 		 */
 		void Init(HWND hWnd);
+
 		/*!
 		 *@brief	解放。
 		 */
@@ -33,6 +36,11 @@ namespace UsualEngine
 		{
 			return m_pd3dDeviceContext;
 		}
+
+		LightManager& GetLightManager()
+		{
+			return mLightManager;
+		}
 		/*!
 		 *@brief	描画開始。
 		 */
@@ -50,6 +58,8 @@ namespace UsualEngine
 		ID3D11RasterizerState* m_rasterizerState = NULL;	//ラスタライザステート。
 		ID3D11Texture2D* m_depthStencil = NULL;		//デプスステンシル。
 		ID3D11DepthStencilView* m_depthStencilView = NULL;	//デプスステンシルビュー。
+
+		LightManager mLightManager;						//ライトのマネージャー
 
 	};
 

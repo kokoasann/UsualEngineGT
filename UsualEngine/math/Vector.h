@@ -436,6 +436,14 @@ namespace UsualEngine
 			DirectX::XMVECTOR xmvr = DirectX::XMVectorAdd(xmv0, xmv1);
 			DirectX::XMStoreFloat4(&vec, xmvr);
 		}
+
+		void Div(float v)
+		{
+			x /= v;
+			y /= v;
+			z /= v;
+			w /= v;
+		}
 		/*!
 		 *@brief	ベクトルを減算。
 		 */

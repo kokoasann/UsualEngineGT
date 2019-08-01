@@ -4,6 +4,12 @@
 
 namespace UsualEngine
 {
+	LightDirection::LightDirection()
+	{
+	}
+	LightDirection::~LightDirection()
+	{
+	}
 	void LightDirection::Update()
 	{
 	}

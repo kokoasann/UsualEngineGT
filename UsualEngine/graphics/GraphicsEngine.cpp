@@ -152,5 +152,7 @@ namespace UsualEngine
 		viewport.MaxDepth = 1.0f;
 		m_pd3dDeviceContext->RSSetViewports(1, &viewport);
 		m_pd3dDeviceContext->RSSetState(m_rasterizerState);
+
+		mLightManager.Init();
 	}
 }

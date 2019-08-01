@@ -25,6 +25,9 @@
     <FxCompile Include="Assets\shader\model.fx">
       <Filter>Assets\Shader</Filter>
     </FxCompile>
+    <FxCompile Include="Assets\shader\modelData.h">
+      <Filter>Assets\Shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Assets\model\unityChan.fbx">

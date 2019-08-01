@@ -4,6 +4,12 @@
 
 namespace UsualEngine
 {
+	StructuredBuffer::StructuredBuffer()
+	{
+	}
+	StructuredBuffer::~StructuredBuffer()
+	{
+	}
 	void StructuredBuffer::Release()
 	{
 		if (mBuffer)
