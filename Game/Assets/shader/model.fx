@@ -152,7 +152,7 @@ float4 PSMain( PSInput In ) : SV_Target0
 	float3 li = 0.f;
 	for (int i = 0; i < DLcount; i++)
 	{
-		li += max(dot(DirLights[i].dir*-1.f, In.Normal), 0) * DirLights[i].color;
+		li += max(dot(DirLights[i].dir*-1.f, In.Normal), 0.2f) * DirLights[i].color;
 	}
 	float4 fcol = float4(0.f, 0.f, 0.f, 1.f);
 	fcol.xyz = albe.xyz *= li;

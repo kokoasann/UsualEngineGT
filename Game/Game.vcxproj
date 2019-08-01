@@ -162,10 +162,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <MeshContentTask Include="Assets\model\unityChan.fbx" />
+    <MeshContentTask Include="Assets\model\unityChan.fbx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </MeshContentTask>
   </ItemGroup>
   <ItemGroup>
-    <ImageContentTask Include="Assets\sprite\daru.PNG" />
+    <ImageContentTask Include="Assets\sprite\daru.PNG">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ImageContentTask>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
