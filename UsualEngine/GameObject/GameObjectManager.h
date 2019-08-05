@@ -97,4 +97,11 @@ namespace UsualEngine
 	{
 		return GameObjectManager::Get()->NewGameObject<T>(prio, name, isTakeTrush);
 	}
+	
+	template<class T>
+	static void DeleteGO(T*& obj)
+	{
+		GameObjectManager::Get()->DeleteGameObject(obj);
+		obj = nullptr;
+	}
 }

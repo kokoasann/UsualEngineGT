@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Game.h"
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
@@ -16,9 +17,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	MainCam.SetTarget({ 0,80,0 });
 	MainCam.Update();
 	
-
-	UsualEngine::SkinModelRender* smr = UsualEngine::NewGO<UsualEngine::SkinModelRender>(0,"");
-	smr->Init(L"Assets/model/unityChan.cmo");
+	ue::NewGO<Game>(0);
+	//UsualEngine::SkinModelRender* smr = UsualEngine::NewGO<UsualEngine::SkinModelRender>(0,"");
+	//smr->Init(L"Assets/model/unityChan.cmo");
 
 	//UsualEngine::SpriteRender* sr = UsualEngine::NewGO<UsualEngine::SpriteRender>(0);
 	//sr->Init(L"Assets/sprite/daru.dds", {1280,720});

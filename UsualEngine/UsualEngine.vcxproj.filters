@@ -179,6 +179,9 @@
     <ClCompile Include="graphics\LightStruct.cpp">
       <Filter>Graphics\Light</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\RenderTarget.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="character\CharacterController.h">
@@ -320,6 +323,9 @@
     </ClInclude>
     <ClInclude Include="graphics\LightStruct.h">
       <Filter>Graphics\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\RenderTarget.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

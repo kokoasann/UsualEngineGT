@@ -34,7 +34,7 @@
 #include "math/Vector.h"
 #include "math/Matrix.h"
 #include "graphics/GraphicsEngine.h"
-
+#include "graphics/RenderTarget.h"
 #include "graphics/ConstantBuffer.h"
 #include "graphics/StructuredBuffer.h"
 
