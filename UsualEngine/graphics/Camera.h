@@ -100,6 +100,14 @@ namespace UsualEngine
 		{
 			m_viewAngle = angle;
 		}
+		/// <summary>
+		/// ビューアングルを返す
+		/// </summary>
+		/// <returns>ビューアングル(float)</returns>
+		float GetViewAngle()
+		{
+			return m_viewAngle;
+		}
 
 		//アス比を設定
 		void SetAspect(float as)
@@ -128,7 +136,22 @@ namespace UsualEngine
 			return m_cameraMode;
 		}
 
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		CVector3 GetForward()
+		{
+			return m_forward;
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		CVector3 GetRight()
+		{
+			return m_right;
+		}
 		
 	private:
 		CMatrix	m_viewMatrix = CMatrix::Identity();		//ビュー行列。
@@ -136,6 +159,8 @@ namespace UsualEngine
 		CVector3 m_target = CVector3::Zero();			//注視点。
 		CVector3 m_position = CVector3::Zero();			//視点。
 		CVector3 m_up = CVector3::Up();					//上方向。
+		CVector3 m_forward = CVector3::Front();		// 前方向。
+		CVector3 m_right = CVector3::Right();			// 右方向。
 		float m_viewAngle = CMath::DegToRad(60.0f);		//画角。
 		float m_aspect = 1.f;							//アス比
 		float m_far = 10000.0f;							//遠い平面までの距離。

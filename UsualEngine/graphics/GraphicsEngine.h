@@ -43,8 +43,19 @@ namespace UsualEngine
 			return mLightManager;
 		}
 
+		/// <summary>
+		/// レンダーターゲットをセットする
+		/// </summary>
+		/// <param name="targetCount">ターゲットの数</param>
+		/// <param name="rtlist">レンダーターゲット配列</param>
 		void OMSetRenderTarget(int targetCount, RenderTarget* rtlist[]);
 
+		/// <summary>
+		/// 現在のレンダーターゲットをゲットする
+		/// </summary>
+		/// <param name="targetCount">ターゲットの数が入る</param>
+		/// <param name="rtlist">レンダーターゲットが入る</param>
+		void OMGetRenderTargets(int& targetCount, RenderTarget* rtlist[]);
 		/*!
 		 *@brief	描画開始。
 		 */
@@ -66,7 +77,8 @@ namespace UsualEngine
 		
 
 		LightManager mLightManager;						//ライトのマネージャー
-
+		RenderTarget* m_nowRenderTargets[RTV_MAX];		//今のレンダーターゲット
+		int m_renderTargetCount = 1;									//今のレンダーターゲットの数
 	};
 
 	//extern GraphicsEngine* g_graphicsEngine;			//グラフィックスエンジン

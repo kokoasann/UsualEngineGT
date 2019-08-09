@@ -68,3 +68,5 @@ const float FRAME_BUFFER_W = 1280.0f;				//フレームバッファの幅。
 const float FRAME_BUFFER_H = 720.0f;				//フレームバッファの高さ。
 
 static const int MAX_BONE = 512;	//!<ボーンの最大数。
+static const int MAX_SHADOW_MAP = 1;
+static const int RTV_MAX = 8;

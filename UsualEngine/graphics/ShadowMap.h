@@ -1,0 +1,40 @@
+#pragma once
+
+
+namespace UsualEngine
+{
+	/// <summary>
+	/// シャドウマップ
+	/// </summary>
+	class ShadowMap
+	{
+	public:
+		ShadowMap();
+		~ShadowMap();
+		
+		void Init(float w, float h);
+
+		void Update();
+
+		void Send2GPU();
+
+		void Render();
+	private:
+		struct SShadowCB
+		{
+			CMatrix mLVP[MAX_SHADOW_MAP] = { CMatrix::Identity() };
+			CVector4 texoffset[MAX_SHADOW_MAP];
+			float depthoffset[MAX_SHADOW_MAP] = { 0.f };
+		};
+		CVector3 m_lightDirection = CVector3::Down();				//ライトの方向
+		float m_near = 0.1f;
+		float m_far = 100.f;
+		float m_lightHeight = 2000.f;
+		RenderTarget m_shadowMapRT[MAX_SHADOW_MAP];
+		ConstantBuffer m_shadowCB;
+		std::vector<SkinModel*> m_shadowChaster;
+		CMatrix m_mLVP[MAX_SHADOW_MAP] = {CMatrix::Identity()};
+		SShadowCB m_shadowCBEntity;
+		D3D11_VIEWPORT m_viewPort;
+	};
+}

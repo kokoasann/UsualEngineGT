@@ -36,6 +36,10 @@ namespace UsualEngine
 			m_projMatrix.MakeOrthoProjectionMatrix(m_width, m_height, m_near, m_far);
 		}
 
+		CMatrix mViewIN;
+		mViewIN.Inverse(m_viewMatrix);
 
+		m_forward.Set(mViewIN.m[2][0], mViewIN.m[2][1], mViewIN.m[2][2]);
+		m_right.Set(mViewIN.m[0][0], mViewIN.m[0][1], mViewIN.m[0][2]);
 	}
 }

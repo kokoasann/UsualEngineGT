@@ -23,7 +23,7 @@ namespace UsualEngine
 	enum EnSkinModelSRVReg {
 		enSkinModelSRVReg_AlbedoTexture,		//!<アルベドテクスチャ。
 		enSkinModelSRVReg_BoneMatrixArray,		//!<ボーン行列の配列。
-
+		enSkinModelSRVReg_ShadowMap,			//シャドウマップ
 		enSkinModelSRVReg_DirectionLight=100,		//ディレクションライト
 	};
 }

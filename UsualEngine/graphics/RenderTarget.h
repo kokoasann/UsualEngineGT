@@ -48,6 +48,32 @@ namespace UsualEngine
 			return m_depthStencilView;
 		}
 
+		/// <summary>
+		/// shaderResourceView‚ğ•Ô‚·
+		/// </summary>
+		/// <returns></returns>
+		ID3D11ShaderResourceView*& GetSRV()
+		{
+			return m_renderTargetSRV;
+		}
+
+		/// <summary>
+		/// ‰¡‚ğ•Ô‚·
+		/// </summary>
+		/// <returns></returns>
+		int GetWidth()
+		{
+			return m_width;
+		}
+
+		/// <summary>
+		/// c‚ğ•Ô‚·
+		/// </summary>
+		/// <returns></returns>
+		int GetHeight()
+		{
+			return m_height;
+		}
 	private:
 		ID3D11Texture2D* m_renderTarget = NULL;
 		ID3D11RenderTargetView* m_renderTargetView = NULL;

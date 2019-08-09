@@ -182,6 +182,9 @@
     <ClCompile Include="graphics\RenderTarget.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\ShadowMap.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="character\CharacterController.h">
@@ -325,6 +328,9 @@
       <Filter>Graphics\Light</Filter>
     </ClInclude>
     <ClInclude Include="graphics\RenderTarget.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\ShadowMap.h">
       <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
