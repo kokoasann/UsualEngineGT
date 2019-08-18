@@ -48,7 +48,7 @@ namespace UsualEngine
 			m_resolveTextureMSAA = nullptr;
 		}
 	}
-	bool RenderTarget::Create(int w, int h, int mipLevel, int arraySize, DXGI_FORMAT colformat, DXGI_FORMAT dsFormat, DXGI_SAMPLE_DESC msDesc, ID3D11Texture2D* renderTarget, ID3D11Texture2D* depthStencil)
+	bool RenderTarget::Create(int w, int h, int mipLevel, int arraySize, DXGI_FORMAT colformat, DXGI_FORMAT dsFormat, DXGI_SAMPLE_DESC msDesc, ID3D11Texture2D* renderTarget, ID3D11Texture2D* depthStencil, bool RTVDisNone)
 	{
 		Release();
 
@@ -57,6 +57,7 @@ namespace UsualEngine
 		m_colFormat = colformat;
 		m_dsFormat = dsFormat;
 
+		m_viewport.Set(w, h);
 		if (msDesc.Count > 1)
 			m_isMSAA = true;
 
@@ -106,7 +107,10 @@ namespace UsualEngine
 		else {
 			rtDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 		}
-		hr = pD3DDevice->CreateRenderTargetView(m_renderTarget, &rtDesc, &m_renderTargetView);
+		if(!RTVDisNone)
+			hr = pD3DDevice->CreateRenderTargetView(m_renderTarget, &rtDesc, &m_renderTargetView);
+		else
+			hr = pD3DDevice->CreateRenderTargetView(m_renderTarget, NULL, &m_renderTargetView);
 		if (FAILED(hr)) {
 			return false;
 		}

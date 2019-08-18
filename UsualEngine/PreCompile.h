@@ -1,5 +1,16 @@
 #pragma once
 
+namespace UsualEngine
+{
+	static constexpr int MAX_SHADOW_MAP = 1;
+}
+const float FRAME_BUFFER_W = 1280.0f;				//フレームバッファの幅。
+const float FRAME_BUFFER_H = 720.0f;				//フレームバッファの高さ。
+
+static const int MAX_BONE = 512;	//!<ボーンの最大数。
+
+static const int RTV_MAX = 8;
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <memory>
@@ -34,6 +45,7 @@
 #include "math/Vector.h"
 #include "math/Matrix.h"
 #include "graphics/GraphicsEngine.h"
+#include "graphics/Wraped/ViewPort.h"
 #include "graphics/RenderTarget.h"
 #include "graphics/ConstantBuffer.h"
 #include "graphics/StructuredBuffer.h"
@@ -43,11 +55,10 @@
 
 #include "graphics/Sprite.h"
 
-
 #include "graphics/SkinModelShaderConst.h"
-
 #include "graphics/SkinModel.h"
 #include "graphics/Skeleton.h"
+#include "graphics/ShadowMap.h"
 
 #include "graphics/animation/Animation.h"
 #include "graphics/animation/AnimationClip.h"
@@ -64,9 +75,5 @@
 #include "graphics/LightDirection.h"
 
 
-const float FRAME_BUFFER_W = 1280.0f;				//フレームバッファの幅。
-const float FRAME_BUFFER_H = 720.0f;				//フレームバッファの高さ。
 
-static const int MAX_BONE = 512;	//!<ボーンの最大数。
-static const int MAX_SHADOW_MAP = 1;
-static const int RTV_MAX = 8;
+

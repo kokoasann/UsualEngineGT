@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include "Wraped/ViewPort.h"
 namespace UsualEngine
 {
 	/// <summary>
@@ -27,8 +27,8 @@ namespace UsualEngine
 		/// <param name="renderTarget">レンダーターゲットのテクスチャ。NULLなら勝手に作る</param>
 		/// <param name="depthStencil">デプスステンシルのテクスチャ。NULLなら勝手に作る</param>
 		/// <returns>成功したらtrueを返す</returns>
-		bool Create(int w, int h, int mipLevel, int arraySize, DXGI_FORMAT colformat, DXGI_FORMAT dsFormat, 
-			DXGI_SAMPLE_DESC msDesc,ID3D11Texture2D* renderTarget=nullptr,ID3D11Texture2D* depthStencil= nullptr);
+		bool Create(int w, int h, int mipLevel, int arraySize, DXGI_FORMAT colformat, DXGI_FORMAT dsFormat,
+			DXGI_SAMPLE_DESC msDesc, ID3D11Texture2D* renderTarget = nullptr, ID3D11Texture2D* depthStencil = nullptr, bool RTVDisNone =false);
 
 		/// <summary>
 		/// renderTargetViewを返す
@@ -74,6 +74,15 @@ namespace UsualEngine
 		{
 			return m_height;
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		ViewPort GetViewPort()
+		{
+			return m_viewport;
+		}
 	private:
 		ID3D11Texture2D* m_renderTarget = NULL;
 		ID3D11RenderTargetView* m_renderTargetView = NULL;
@@ -85,6 +94,7 @@ namespace UsualEngine
 
 		DXGI_FORMAT m_colFormat = DXGI_FORMAT_UNKNOWN;
 		DXGI_FORMAT m_dsFormat = DXGI_FORMAT_UNKNOWN;
+		ViewPort m_viewport;
 		int m_width = 0;
 		int m_height = 0;
 		bool m_isMSAA = false;

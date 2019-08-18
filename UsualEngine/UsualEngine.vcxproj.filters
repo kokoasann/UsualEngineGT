@@ -49,6 +49,9 @@
     <Filter Include="Graphics\GPUView">
       <UniqueIdentifier>{7a7b842a-df32-4ccc-886e-63c0a13c5826}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\Wrap">
+      <UniqueIdentifier>{ccbcc088-cbe9-4867-9c48-70f4ee6e407f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="character\CharacterController.cpp">
@@ -184,6 +187,9 @@
     </ClCompile>
     <ClCompile Include="graphics\ShadowMap.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\Wraped\ViewPort.cpp">
+      <Filter>Graphics\Wrap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -332,6 +338,9 @@
     </ClInclude>
     <ClInclude Include="graphics\ShadowMap.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Wraped\ViewPort.h">
+      <Filter>Graphics\Wrap</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

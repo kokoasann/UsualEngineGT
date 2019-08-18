@@ -12,15 +12,22 @@ namespace UsualEngine
 	}
 	void ShadowMap::Init(float w, float h)
 	{
+		DXGI_SAMPLE_DESC multiSampleDesc;
+		multiSampleDesc.Count = 1;
+		multiSampleDesc.Quality = 0;
 		for (int i = 0; i < MAX_SHADOW_MAP; i++)
 		{
-			m_shadowMapRT[i].Create(w, h, 1, 1, DXGI_FORMAT_R32_FLOAT, DXGI_FORMAT_D32_FLOAT, { 1,0 });
+			m_shadowMapRT[i].Create(w, h, 1, 1, DXGI_FORMAT_R32_FLOAT, DXGI_FORMAT_D32_FLOAT, multiSampleDesc);
+
+			m_shadowCBEntity.pixSize[i].x = 1.f / w;
+			m_shadowCBEntity.pixSize[i].y = 1.f / h;
 		}
 		m_shadowCB.Create(&m_shadowCBEntity, sizeof(m_shadowCBEntity));
 	}
 	void ShadowMap::Update()
 	{
 		Camera& MainCamera = usualEngine()->GetMainCamera();
+		//m_lightHeight = MainCamera.GetPosition().y + 500.f;
 		//シーンをレンダリング使用としているカメラを使って、ライトカメラの回転を求める。
 		CVector3 cameraDirXZ = MainCamera.GetForward();
 		if (fabs(cameraDirXZ.x) < FLT_EPSILON && fabsf(cameraDirXZ.z) < FLT_EPSILON) {
@@ -147,7 +154,7 @@ namespace UsualEngine
 		dc->PSSetConstantBuffers(enSkinModelCBReg_Shadow, 1, &m_shadowCB.GetBody());
 		for (int i = 0; i < MAX_SHADOW_MAP; i++)
 		{
-			dc->PSGetShaderResources(enSkinModelSRVReg_ShadowMap + i, 1, &m_shadowMapRT[i].GetSRV());
+			dc->PSSetShaderResources(enSkinModelSRVReg_ShadowMap + i, 1, &m_shadowMapRT[i].GetSRV());
 		}
 	}
 	void ShadowMap::Render()
@@ -167,27 +174,32 @@ namespace UsualEngine
 			RenderTarget* rts[MAX_SHADOW_MAP] = { &m_shadowMapRT[i] };
 			usualEngine()->GetGraphicsEngine()->OMSetRenderTarget(1, rts);
 
-			m_viewPort.Width = 0.f;
-			m_viewPort.Height = 0.f;
-			m_viewPort.TopLeftX = (float)m_shadowMapRT[i].GetWidth();
-			m_viewPort.TopLeftY = (float)m_shadowMapRT[i].GetHeight();
-			dc->RSSetViewports(1, &m_viewPort);
+			/*m_viewPort.Width = (float)m_shadowMapRT[i].GetWidth();
+			m_viewPort.Height = (float)m_shadowMapRT[i].GetHeight();
+			m_viewPort.TopLeftX = 0.f;
+			m_viewPort.TopLeftY = 0.f;
+			m_viewPort.MaxDepth = 1.f;
+			m_viewPort.MinDepth = 0.f;*/
+			dc->RSSetViewports(1, &m_shadowMapRT[i].GetViewPort().Get());
 
 			float col[4] = { 1.f,1.f,1.f,1.f };
 			dc->ClearRenderTargetView(m_shadowMapRT[i].GetRTV(), col);
 			dc->ClearDepthStencilView(m_shadowMapRT[i].GetDSV(),D3D11_CLEAR_DEPTH,1.f,0);
 
-			for (auto chast : m_shadowChaster)
+			for (auto cast : m_shadowCaster)
 			{
-				chast->Draw(m_mLVP[i], CMatrix::Identity());
+				cast->Draw(m_mLVP[i], CMatrix::Identity());
 			}
 		}
+		m_shadowCaster.clear();
 
 		usualEngine()->GetGraphicsEngine()->OMSetRenderTarget(numRenderTargetViews, oldRenderTargets);
-		m_viewPort.Width = 0.f;
-		m_viewPort.Height = 0.f;
-		m_viewPort.TopLeftX = FRAME_BUFFER_W;
-		m_viewPort.TopLeftY = FRAME_BUFFER_H;
+		m_viewPort.Width = FRAME_BUFFER_W;
+		m_viewPort.Height = FRAME_BUFFER_H;
+		m_viewPort.TopLeftX = 0.f;
+		m_viewPort.TopLeftY = 0.f;
+		m_viewPort.MaxDepth = 1.f;
+		m_viewPort.MinDepth = 0.f;
 		dc->RSSetViewports(1, &m_viewPort);
 	}
 }

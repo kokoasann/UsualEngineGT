@@ -105,6 +105,9 @@ namespace UsualEngine
 
 		//スケルトンの更新。
 		m_skeleton.Update(m_worldMatrix);
+
+		if(m_isShadowCaster)
+			usualEngine()->GetGraphicsEngine()->GetShadowMap().AddShadowCaster(this);
 	}
 	void SkinModel::Draw(CMatrix viewMatrix, CMatrix projMatrix)
 	{
@@ -125,6 +128,7 @@ namespace UsualEngine
 		d3dDeviceContext->PSSetSamplers(0, 1, &m_samplerState);
 		//ボーン行列をGPUに転送。
 		m_skeleton.SendBoneMatrixArrayToGPU();
+
 
 		//描画。
 		m_modelDx->Draw(

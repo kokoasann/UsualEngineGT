@@ -38,6 +38,15 @@ namespace UsualEngine
 		{
 			return m_scale;
 		}
+
+		void SetIsShadowCaster(bool b)
+		{
+			m_skinModel.SetIsShadowCaster(b);
+		}
+		bool IsShadowCaster()
+		{
+			return m_skinModel.IsShadowCaster();
+		}
 	private:
 		SkinModel m_skinModel;	//siknModel
 		Animation m_animation;	//Animation

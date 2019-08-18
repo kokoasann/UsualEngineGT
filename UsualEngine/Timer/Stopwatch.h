@@ -17,39 +17,39 @@ namespace UsualEngine
 
 		void Start()
 		{
-			::QueryPerformanceCounter((LARGE_INTEGER*)&mBegin);
+			::QueryPerformanceCounter((LARGE_INTEGER*)&m_begin);
 		}
 		double Stop()
 		{
-			::QueryPerformanceFrequency((LARGE_INTEGER*)&mFrec);
-			::QueryPerformanceCounter((LARGE_INTEGER*)&mEnd);
-			mSec = double(mBegin - mEnd) / mFrec;
-			mMillSec = mSec * 1000.;
-			mMicrSec = mMillSec * 1000.;
+			::QueryPerformanceFrequency((LARGE_INTEGER*)&m_frec);
+			::QueryPerformanceCounter((LARGE_INTEGER*)&m_end);
+			m_sec = double(m_end - m_begin) / m_frec;
+			m_millSec = m_sec * 1000.;
+			m_micrSec = m_millSec * 1000.;
 
-			return mSec;
+			return m_sec;
 		}
 
 		double GetSec()
 		{
-			return mSec;
+			return m_sec;
 		}
 		double GetMillSec()
 		{
-			return mMillSec;
+			return m_millSec;
 		}
 		double GetMicrSec()
 		{
-			return mMicrSec;
+			return m_micrSec;
 		}
 
 	private:
-		LONGLONG mFrec = 0;
-		LONGLONG mBegin = 0;
-		LONGLONG mEnd = 0;
+		LONGLONG m_frec = 0;
+		LONGLONG m_begin = 0;
+		LONGLONG m_end = 0;
 
-		double mSec = 0.0;
-		double mMillSec = 0.0;
-		double mMicrSec = 0.0;
+		double m_sec = 0.0;
+		double m_millSec = 0.0;
+		double m_micrSec = 0.0;
 	};
 }

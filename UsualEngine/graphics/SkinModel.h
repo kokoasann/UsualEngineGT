@@ -82,6 +82,24 @@ namespace UsualEngine
 			enSkinModelSRVReg_DiffuseTexture = 0,		//!<ディフューズテクスチャ。
 			enSkinModelSRVReg_BoneMatrix,				//!<ボーン行列。
 		};
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="b"></param>
+		void SetIsShadowCaster(bool b)
+		{
+			m_isShadowCaster = b;
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		bool IsShadowCaster()
+		{
+			return m_isShadowCaster;
+		}
+
 	private:
 		/*!
 		*@brief	サンプラステートの初期化。
@@ -97,6 +115,7 @@ namespace UsualEngine
 		*/
 		void InitSkeleton(const wchar_t* filePath);
 
+		
 	private:
 		//定数バッファ。
 		struct SVSConstantBuffer {
@@ -110,6 +129,8 @@ namespace UsualEngine
 		CMatrix				m_worldMatrix;					//!<ワールド行列。
 		DirectX::Model* m_modelDx;						//!<DirectXTKが提供するモデルクラス。
 		ID3D11SamplerState* m_samplerState = nullptr;		//!<サンプラステート。
+
+		bool m_isShadowCaster = false;					//影を落とす
 	};
 
 }

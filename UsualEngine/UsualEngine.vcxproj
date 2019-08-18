@@ -187,6 +187,7 @@
     <ClCompile Include="graphics\SpriteRender.cpp" />
     <ClCompile Include="graphics\StructuredBuffer.cpp" />
     <ClCompile Include="graphics\VertexBuffer.cpp" />
+    <ClCompile Include="graphics\Wraped\ViewPort.cpp" />
     <ClCompile Include="HID\Pad.cpp" />
     <ClCompile Include="level\Level.cpp" />
     <ClCompile Include="level\MapChip.cpp" />
@@ -238,6 +239,7 @@
     <ClInclude Include="graphics\SpriteRender.h" />
     <ClInclude Include="graphics\StructuredBuffer.h" />
     <ClInclude Include="graphics\VertexBuffer.h" />
+    <ClInclude Include="graphics\Wraped\ViewPort.h" />
     <ClInclude Include="HID\Pad.h" />
     <ClInclude Include="level\Level.h" />
     <ClInclude Include="level\MapChip.h" />

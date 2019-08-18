@@ -2,9 +2,19 @@
 
 #include "RenderTarget.h"
 #include "LightManager.h"
+#include "ShadowMap.h"
 
 namespace UsualEngine
 {
+	/// <summary>
+	/// 
+	/// </summary>
+	enum EnRenderMode
+	{
+		enRenderMode_ShadowMap,		//シャドウマップへ描画
+		enRenderMode_3DModel,			//3Dモデルを描画
+	};
+
 	/*!
 	 *@brief	グラフィックスエンジン。
 	 */
@@ -64,6 +74,28 @@ namespace UsualEngine
 		 *@brief	描画終了。
 		 */
 		void EndRender();
+
+		ShadowMap& GetShadowMap()
+		{
+			return m_shadowMap;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="rm"></param>
+		void SetRenderMode(EnRenderMode rm)
+		{
+			m_renderMode = rm;
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		EnRenderMode GetRenderMode()
+		{
+			return m_renderMode;
+		}
 	private:
 		D3D_FEATURE_LEVEL		m_featureLevel;				//Direct3D デバイスのターゲットとなる機能セット。
 		ID3D11Device* m_pd3dDevice = NULL;		//D3D11デバイス。
@@ -75,10 +107,12 @@ namespace UsualEngine
 		ID3D11Texture2D* m_depthStencil = NULL;		//デプスステンシル。
 		ID3D11DepthStencilView* m_depthStencilView = NULL;	//デプスステンシルビュー。
 		
-
+		ShadowMap m_shadowMap;							//シャドウマップ
 		LightManager mLightManager;						//ライトのマネージャー
-		RenderTarget* m_nowRenderTargets[RTV_MAX];		//今のレンダーターゲット
+		RenderTarget* m_nowRenderTargets[RTV_MAX] = { 0 };		//今のレンダーターゲット
 		int m_renderTargetCount = 1;									//今のレンダーターゲットの数
+		
+		EnRenderMode m_renderMode = enRenderMode_3DModel;		//今どの工程？
 	};
 
 	//extern GraphicsEngine* g_graphicsEngine;			//グラフィックスエンジン

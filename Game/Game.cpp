@@ -21,8 +21,18 @@ bool Game::Start()
 	p2 = ue::NewGO<ue::SkinModelRender>(0);
 	p2->Init(L"Assets/model/unityChan.cmo");
 	p2->SetPos({ -20,0,-50 });
+	p2->SetIsShadowCaster(true);
 
-	campos = { 200,50,0 };
+	p3 = ue::NewGO<ue::SkinModelRender>(0);
+	p3->Init(L"Assets/model/unityChan.cmo");
+	p3->SetPos({ 0,-50,1500 });
+	p3->SetSca({ 30,0.4f,30 });
+	ue::CQuaternion rot;
+	rot.SetRotationDeg(ue::CVector3::AxisX(), -90);
+	p3->SetRot(rot);
+	p3->SetIsShadowCaster(true);
+
+	campos = { 300,150,0 };
 	cam->SetPosition(campos);
 	cam->Update();
 	return true;
@@ -31,7 +41,7 @@ bool Game::Start()
 void Game::Update()
 {
 	ue::CQuaternion add = ue::CQuaternion::Identity();
-	add.SetRotationDeg(ue::CVector3::AxisY(), 2);
+	add.SetRotationDeg(ue::CVector3::AxisY(), 0.5f);
 	rot.Multiply(add);
 	ue::CVector3 p = campos;
 	rot.Multiply(p);

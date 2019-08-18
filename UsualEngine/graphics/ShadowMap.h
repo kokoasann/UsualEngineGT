@@ -1,5 +1,6 @@
 #pragma once
 
+#include "SkinModel.h"
 
 namespace UsualEngine
 {
@@ -19,20 +20,26 @@ namespace UsualEngine
 		void Send2GPU();
 
 		void Render();
+
+		void AddShadowCaster(SkinModel* m)
+		{
+			m_shadowCaster.push_back(m);
+		}
 	private:
 		struct SShadowCB
 		{
 			CMatrix mLVP[MAX_SHADOW_MAP] = { CMatrix::Identity() };
 			CVector4 texoffset[MAX_SHADOW_MAP];
+			CVector4 pixSize[MAX_SHADOW_MAP];
 			float depthoffset[MAX_SHADOW_MAP] = { 0.f };
 		};
 		CVector3 m_lightDirection = CVector3::Down();				//ƒ‰ƒCƒg‚Ì•ûŒü
 		float m_near = 0.1f;
-		float m_far = 100.f;
-		float m_lightHeight = 2000.f;
+		float m_far = 100000.f;
+		float m_lightHeight = 1000.f;
 		RenderTarget m_shadowMapRT[MAX_SHADOW_MAP];
 		ConstantBuffer m_shadowCB;
-		std::vector<SkinModel*> m_shadowChaster;
+		std::vector<SkinModel*> m_shadowCaster;
 		CMatrix m_mLVP[MAX_SHADOW_MAP] = {CMatrix::Identity()};
 		SShadowCB m_shadowCBEntity;
 		D3D11_VIEWPORT m_viewPort;

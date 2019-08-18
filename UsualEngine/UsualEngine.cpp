@@ -110,10 +110,15 @@ namespace UsualEngine
 			st.Start();
 
 			mGraphicsEngine->BegineRender();
-
+			mGraphicsEngine->GetShadowMap().Update();
+			mGraphicsEngine->SetRenderMode(enRenderMode_ShadowMap);
+			mGraphicsEngine->GetShadowMap().Render();
+			mGraphicsEngine->SetRenderMode(enRenderMode_3DModel);
 			LightManager& lm = mGraphicsEngine->GetLightManager();
 			lm.Update();
 			lm.Render();
+
+			mGraphicsEngine->GetShadowMap().Send2GPU();
 
 			mGameObjectManager->Update();
 
@@ -123,6 +128,18 @@ namespace UsualEngine
 
 			float frameTime = st.Stop();
 			gameTime()->PushFrameDeltaTime(frameTime);
+
+			m_count++;
+			if (m_count >= 30)
+			{
+				char s[25] = { 0 };
+				sprintf_s(s, "%f3.2\n", 1.f / (m_sumTime / 30.f));
+				OutputDebugStringA(s);
+				m_sumTime = 0.f;
+				m_count = 0;
+			}
+			m_sumTime += frameTime;
+
 		}
 	}
 	void UsualEngine::Release()

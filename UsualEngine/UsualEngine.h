@@ -60,6 +60,9 @@ namespace UsualEngine
 		GameObjectManager* mGameObjectManager = nullptr;
 		Camera mMainCamera;
 		Camera mCamera2D;
+
+		int m_count = 0;
+		float m_sumTime = 0.f;
 	};
 
 	static UsualEngine* usualEngine()

@@ -44,12 +44,15 @@ namespace UsualEngine
 		float ClearColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f }; //red,green,blue,alpha
 														  //描き込み先をバックバッファにする。
 
-		m_pd3dDeviceContext->OMSetRenderTargets(1, &m_backBuffer, m_depthStencilView);
-		//RenderTarget* rt[] = { &m_renderTarget };
-		//OMSetRenderTarget(1, rt);
+		//m_pd3dDeviceContext->OMSetRenderTargets(1, &m_backBuffer, m_depthStencilView);
+		RenderTarget* rt[] = { &m_renderTarget };
+		OMSetRenderTarget(1, rt);
 		//バックバッファを灰色で塗りつぶす。
-		m_pd3dDeviceContext->ClearRenderTargetView(m_backBuffer, ClearColor);
-		m_pd3dDeviceContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
+		//m_pd3dDeviceContext->ClearRenderTargetView(m_backBuffer, ClearColor);
+		//m_pd3dDeviceContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+		m_pd3dDeviceContext->ClearRenderTargetView(m_renderTarget.GetRTV(), ClearColor);
+		m_pd3dDeviceContext->ClearDepthStencilView(m_renderTarget.GetDSV(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 	}
 
 	void GraphicsEngine::EndRender()
@@ -139,35 +142,35 @@ namespace UsualEngine
 
 		ID3D11Texture2D* pBackBuffer = NULL;
 		m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)& pBackBuffer);
-		m_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &m_backBuffer);
+		//m_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &m_backBuffer);
+		//pBackBuffer->Release();
+
+		DXGI_SAMPLE_DESC msaaD;
+		ZeroMemory(&msaaD, sizeof(msaaD));
+		msaaD.Count = 1;
+		msaaD.Quality = 0;
+		/*for (int i = 1; i <= 4; i <<= 1)
+		{
+			UINT Quality;
+			if (SUCCEEDED(m_pd3dDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_D32_FLOAT, i, &Quality)))
+			{
+				if (0 < Quality)
+				{
+					msaaD.Count = i;
+					msaaD.Quality = Quality - 1;
+				}
+			}
+		}*/
+		bool res = m_renderTarget.Create(FRAME_BUFFER_W, FRAME_BUFFER_H, 1, 1, DXGI_FORMAT_R16G16B16A16_FLOAT, DXGI_FORMAT_D32_FLOAT,msaaD,pBackBuffer,NULL,true);
+		if (!res)
+			int o = 0+1;
+		RenderTarget* rts[] = { &m_renderTarget };
+		OMSetRenderTarget(1, rts);
+		m_depthStencilView = m_renderTarget.GetDSV();
+
 		pBackBuffer->Release();
-
-		//DXGI_SAMPLE_DESC msaaD;
-		//ZeroMemory(&msaaD, sizeof(msaaD));
-		//msaaD.Count = 1;
-		//msaaD.Quality = 0;
-		///*for (int i = 1; i <= 4; i <<= 1)
-		//{
-		//	UINT Quality;
-		//	if (SUCCEEDED(m_pd3dDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_D32_FLOAT, i, &Quality)))
-		//	{
-		//		if (0 < Quality)
-		//		{
-		//			msaaD.Count = i;
-		//			msaaD.Quality = Quality - 1;
-		//		}
-		//	}
-		//}*/
-		//bool res = m_renderTarget.Create(FRAME_BUFFER_W, FRAME_BUFFER_H, 1, 1, DXGI_FORMAT_R16G16B16A16_FLOAT, DXGI_FORMAT_D32_FLOAT,msaaD,pBackBuffer);
-		//if (!res)
-		//	int o = 0+1;
-		//RenderTarget* rts[] = { &m_renderTarget };
-		//OMSetRenderTarget(1, rts);
-		//m_depthStencilView = m_renderTarget.GetDSV();
-
-		
 		//深度ステンシルビューの作成。
-#if 1
+#if 0
 		{
 			//深度テクスチャの作成。
 			D3D11_TEXTURE2D_DESC texDesc;
@@ -212,6 +215,7 @@ namespace UsualEngine
 		m_pd3dDeviceContext->RSSetViewports(1, &viewport);
 		m_pd3dDeviceContext->RSSetState(m_rasterizerState);
 
+		m_shadowMap.Init(2048, 2048);
 		mLightManager.Init();
 	}
 }

@@ -30,16 +30,14 @@
     <FxCompile Include="Assets\shader\modelData.h">
       <Filter>Assets\Shader</Filter>
     </FxCompile>
+    <FxCompile Include="Assets\shader\sprite.fx">
+      <Filter>Assets\Shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Assets\model\unityChan.fbx">
       <Filter>Assets\Model</Filter>
     </MeshContentTask>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Assets\shader\sprite.fx">
-      <Filter>Assets\Shader</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ImageContentTask Include="Assets\sprite\daru.PNG">
