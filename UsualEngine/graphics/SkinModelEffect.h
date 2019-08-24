@@ -54,6 +54,23 @@ namespace UsualEngine
 			return wcscmp(name, m_materialName.c_str()) == 0;
 		}
 
+		/// <summary>
+		/// メインの頂点シェーダにセット
+		/// </summary>
+		/// <param name="shader">シェーダ</param>
+		void SetVSShader(Shader& shader)
+		{
+			m_pVSShader = &shader;
+		}
+
+		/// <summary>
+		/// メインのピクセルシェーダにセット
+		/// </summary>
+		/// <param name="shader">シェーダ</param>
+		void SetPSShader(Shader& shader)
+		{
+			m_pPSShader = &shader;
+		}
 	};
 	/*!
 	*@brief

@@ -32,7 +32,12 @@ bool Game::Start()
 	p3->SetRot(rot);
 	p3->SetIsShadowCaster(true);
 
-	campos = { 300,150,0 };
+	ground = ue::NewGO<ue::SMR4Ground>(0);
+	ground->InitG(L"Assets/model/dun.cmo", 0, 0, ue::enFbxUpAxisZ);
+	ground->SetSca(ue::CVector3{1, 2, 1});
+	ground->SetPos({ 100,0,0 });
+
+	campos = { 10,3500,0 };
 	cam->SetPosition(campos);
 	cam->Update();
 	return true;
@@ -46,6 +51,6 @@ void Game::Update()
 	ue::CVector3 p = campos;
 	rot.Multiply(p);
 	
-	cam->SetPosition(p);
+	//cam->SetPosition(p);
 	cam->Update();
 }

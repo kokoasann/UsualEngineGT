@@ -176,10 +176,8 @@ PSInputDepth VSMainDepth_Skin(VSInputNmTxWeights In)
 	return psInput;
 }
 
-//--------------------------------------------------------------------------------------
-// ピクセルシェーダーのエントリ関数。
-//--------------------------------------------------------------------------------------
-float4 PSMain( PSInput In ) : SV_Target0
+
+float4 PSProcess(PSInput In)
 {
 	float4 albe = albedoTexture.Sample(Sampler, In.TexCoord);
 
@@ -200,7 +198,7 @@ float4 PSMain( PSInput In ) : SV_Target0
 		[unroll(ksize)]
 		for (int x = 0; x < ksize; x++)
 		{
-			sum += GetShadow(In.Pos, shadowMap_1, float2(x - (ksize - 1) / 2, y - (ksize - 1) / 2)) *gaus[y][x];
+			sum += GetShadow(In.Pos, shadowMap_1, float2(x - (ksize - 1) / 2, y - (ksize - 1) / 2)) * gaus[y][x];
 		}
 	}
 	float scol = sum;
@@ -212,12 +210,33 @@ float4 PSMain( PSInput In ) : SV_Target0
 	float3 li = 0.f;
 	for (int i = 0; i < DLcount; i++)
 	{
-		li += max(dot(DirLights[i].dir*-1.f, In.Normal), 0.2f) * DirLights[i].color;
+		li += max(dot(DirLights[i].dir * -1.f, In.Normal), 0.2f) * DirLights[i].color;
 	}
 	//albe.xyz *= li;
 	float4 fcol = float4(0.f, 0.f, 0.f, 1.f);
 	fcol.xyz = albe.xyz;
 	return fcol;
+}
+
+//--------------------------------------------------------------------------------------
+// ピクセルシェーダーのエントリ関数。
+//--------------------------------------------------------------------------------------
+float4 PSMain(PSInput In) : SV_Target0
+{
+	return PSProcess(In);
+}
+
+/*/////////////////////////////////////////////////////////////////////////////////
+		地面用
+*/////////////////////////////////////////////////////////////////////////////////
+float4 PSMain_Ground(PSInput In) : SV_Target0
+{
+	PSInput psi = In;
+	//psi.TexCoord *= 10.f;
+	psi.TexCoord.x *= groundScale.y;
+	psi.TexCoord.y *= groundScale.x;
+
+	return PSProcess(psi);
 }
 
 /*///////////////////////////////////////////////////////////////////////////////

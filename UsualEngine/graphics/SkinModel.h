@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Skeleton.h"
-
+#include "SkinModelEffect.h"
 
 namespace UsualEngine
 {
@@ -20,6 +20,8 @@ namespace UsualEngine
 	public:
 		//メッシュが見つかったときのコールバック関数。
 		using OnFindMesh = std::function<void(const std::unique_ptr<DirectX::ModelMeshPart>&)>;
+		//マテリアルのコールバック関数。
+		using OnFindMaterial = std::function<void(ModelEffect*)>;
 		/*!
 		*@brief	デストラクタ。
 		*/
@@ -74,6 +76,19 @@ namespace UsualEngine
 					onFindMesh(mesh);
 				}
 			}
+		}
+		
+		/// <summary>
+		/// マテリアルを検索する
+		/// </summary>
+		/// <param name="func">マテリアルのコールバック関数</param>
+		void FindMaterial(OnFindMaterial func)
+		{
+			FindMesh([&](auto& mesh)
+			{
+					ModelEffect* eff = reinterpret_cast<ModelEffect*>(mesh->effect.get());
+					func(eff);
+			});
 		}
 		/*!
 		*@brief	SRVのレジスタ番号。

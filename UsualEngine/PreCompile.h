@@ -74,6 +74,9 @@ static const int RTV_MAX = 8;
 #include "graphics/LightBase.h"
 #include "graphics/LightDirection.h"
 
-
-
+#include "Prefab/SkinModelRender4Ground.h"
+namespace UsualEngine
+{
+	using SMR4Ground = SkinModelRender4Ground;
+}
 

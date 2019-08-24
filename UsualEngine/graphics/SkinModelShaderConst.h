@@ -15,7 +15,7 @@ namespace UsualEngine
 		enSkinModelCBReg_Material,	//!<マテリアルパラメータ。
 		enSkinModelCBReg_Shadow,	//!<影。
 		enSkinModelCBReg_GBuffer,	//!<G-Buffer。
-
+		enSkinModelCBReg_Ground,	//地面用の定数バッファ
 	};
 	/*!
 	 *@brief	SRVのレジスタ番号。

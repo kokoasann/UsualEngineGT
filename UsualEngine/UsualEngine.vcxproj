@@ -202,6 +202,7 @@
     <ClCompile Include="PreCompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Prefab\SkinModelRender4Ground.cpp" />
     <ClCompile Include="system\system.cpp" />
     <ClCompile Include="Timer\GameTime.cpp" />
     <ClCompile Include="Timer\Stopwatch.cpp" />
@@ -254,6 +255,7 @@
     <ClInclude Include="physics\PhysicsStaticObject.h" />
     <ClInclude Include="physics\RigidBody.h" />
     <ClInclude Include="PreCompile.h" />
+    <ClInclude Include="Prefab\SkinModelRender4Ground.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="Timer\GameTime.h" />
     <ClInclude Include="Timer\Stopwatch.h" />

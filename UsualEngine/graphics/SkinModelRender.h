@@ -47,6 +47,15 @@ namespace UsualEngine
 		{
 			return m_skinModel.IsShadowCaster();
 		}
+
+		/// <summary>
+		/// ƒXƒLƒ“ƒ‚ƒfƒ‹‚ð•Ô‚·
+		/// </summary>
+		/// <returns></returns>
+		SkinModel& GetSkinModel()
+		{
+			return m_skinModel;
+		}
 	private:
 		SkinModel m_skinModel;	//siknModel
 		Animation m_animation;	//Animation

@@ -38,6 +38,9 @@
     <MeshContentTask Include="Assets\model\unityChan.fbx">
       <Filter>Assets\Model</Filter>
     </MeshContentTask>
+    <MeshContentTask Include="Assets\model\block\dun.fbx">
+      <Filter>Assets\Model</Filter>
+    </MeshContentTask>
   </ItemGroup>
   <ItemGroup>
     <ImageContentTask Include="Assets\sprite\daru.PNG">

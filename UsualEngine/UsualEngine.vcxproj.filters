@@ -52,6 +52,9 @@
     <Filter Include="Graphics\Wrap">
       <UniqueIdentifier>{ccbcc088-cbe9-4867-9c48-70f4ee6e407f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Prefab">
+      <UniqueIdentifier>{da311915-e7a9-4ea6-bff4-f7636e251022}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="character\CharacterController.cpp">
@@ -190,6 +193,9 @@
     </ClCompile>
     <ClCompile Include="graphics\Wraped\ViewPort.cpp">
       <Filter>Graphics\Wrap</Filter>
+    </ClCompile>
+    <ClCompile Include="Prefab\SkinModelRender4Ground.cpp">
+      <Filter>Prefab</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -341,6 +347,9 @@
     </ClInclude>
     <ClInclude Include="graphics\Wraped\ViewPort.h">
       <Filter>Graphics\Wrap</Filter>
+    </ClInclude>
+    <ClInclude Include="Prefab\SkinModelRender4Ground.h">
+      <Filter>Prefab</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
