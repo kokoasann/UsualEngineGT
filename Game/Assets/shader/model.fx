@@ -3,7 +3,7 @@
  */
 
 #include "modelData.h"
-
+#include "Math.h"
 
 /////////////////////////////////////////////////////////////
 // Shader Resource View
@@ -231,12 +231,47 @@ float4 PSMain(PSInput In) : SV_Target0
 */////////////////////////////////////////////////////////////////////////////////
 float4 PSMain_Ground(PSInput In) : SV_Target0
 {
-	PSInput psi = In;
-	//psi.TexCoord *= 10.f;
-	psi.TexCoord.x *= groundScale.y;
-	psi.TexCoord.y *= groundScale.x;
+	float3 gsca = groundScale;
+	float3 gdir = normalize(float3(groundDir.x, 0.f, groundDir.z));
+	float deg = Rad2Deg(acos(dot(float3(0, 0, 1), gdir)));
+	if (((deg > 45.f && deg < 135.f) || (deg > 180.f && deg < 315.f)))
+	{
+		float z = gsca.z;
+		gsca.z = gsca.x;
+		gsca.x = z;
+	}
+	gdir = normalize(float3(0.f, groundDir.y, groundDir.z));
+	deg = Rad2Deg(acos(dot(float3(0, 0, 1), gdir)));
+	if (((deg > 45.f && deg < 135.f) || (deg > 180.f && deg < 315.f)))
+	{
+		float z = gsca.z;
+		gsca.z = gsca.y;
+		gsca.y = z;
+	}
+	//In.TexCoord *= 10.f;
 
-	return PSProcess(psi);
+	float dg = Rad2Deg(acos(dot(float3(0, 1, 0), In.Normal)));
+	if (dg > 45.f && dg < 135.f || dg >180.f && dg < 315.f)
+	{
+		In.TexCoord.y *= gsca.y;
+
+		dg = Rad2Deg(acos(dot(float3(1,0, 0), In.Normal)));
+		if (dg > 45.f && dg < 135.f || dg >180.f && dg < 315.f)
+		{
+			In.TexCoord.x *= gsca.x;
+		}
+		else
+		{
+			In.TexCoord.x *= gsca.z;
+		}
+	}
+	else
+	{
+		In.TexCoord.x *= gsca.z;
+		In.TexCoord.y *= gsca.x;
+	}
+	
+	return PSProcess(In);
 }
 
 /*///////////////////////////////////////////////////////////////////////////////

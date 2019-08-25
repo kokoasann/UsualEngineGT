@@ -10,6 +10,7 @@ namespace UsualEngine
 		struct GroundCB
 		{
 			CVector3 scale = CVector3::Zero();
+			CVector3 dir = CVector3::Zero();
 		};
 		/// <summary>
 		/// 

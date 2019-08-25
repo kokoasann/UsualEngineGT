@@ -8,6 +8,9 @@
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Assets\shader\Math.h">
+      <Filter>Assets\Shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">

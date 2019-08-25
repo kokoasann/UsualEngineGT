@@ -88,6 +88,9 @@ namespace UsualEngine
 		if (m_enFbxUpAxis == enFbxUpAxisZ) {
 			//Z-up
 			mBias.MakeRotationX(CMath::PI * -0.5f);
+			float z = scale.z;
+			scale.z = scale.y;
+			scale.y = z;
 		}
 		CMatrix transMatrix, rotMatrix, scaleMatrix;
 		//•½sˆÚ“®s—ñ‚ğì¬‚·‚éB

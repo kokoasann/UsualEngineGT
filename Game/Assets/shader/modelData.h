@@ -98,4 +98,5 @@ Texture2D<float4> shadowMap_1 : register(t2);		//シャドウマップ
 cbuffer GroundCB : register(b5)
 {
 	float3 groundScale;				//スケール
+	float3 groundDir;					//方向
 }

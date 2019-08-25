@@ -26,7 +26,7 @@ bool Game::Start()
 	p3 = ue::NewGO<ue::SkinModelRender>(0);
 	p3->Init(L"Assets/model/unityChan.cmo");
 	p3->SetPos({ 0,-50,1500 });
-	p3->SetSca({ 30,0.4f,30 });
+	p3->SetSca({ 30,30,0.4f });
 	ue::CQuaternion rot;
 	rot.SetRotationDeg(ue::CVector3::AxisX(), -90);
 	p3->SetRot(rot);
@@ -34,10 +34,12 @@ bool Game::Start()
 
 	ground = ue::NewGO<ue::SMR4Ground>(0);
 	ground->InitG(L"Assets/model/dun.cmo", 0, 0, ue::enFbxUpAxisZ);
-	ground->SetSca(ue::CVector3{1, 2, 1});
+	ground->SetSca(ue::CVector3{1, 1.5f, 2});
 	ground->SetPos({ 100,0,0 });
+	rot.SetRotationDeg(ue::CVector3::AxisY(), 90);
+	ground->SetRot(rot);
 
-	campos = { 10,3500,0 };
+	campos = { 2500,2500,0 };
 	cam->SetPosition(campos);
 	cam->Update();
 	return true;
@@ -50,7 +52,11 @@ void Game::Update()
 	rot.Multiply(add);
 	ue::CVector3 p = campos;
 	rot.Multiply(p);
-	
-	//cam->SetPosition(p);
+
+	auto r = ground->GetRot();
+	r.Multiply(add);
+	//ground->SetRot(r);
+
+	cam->SetPosition(p);
 	cam->Update();
 }
