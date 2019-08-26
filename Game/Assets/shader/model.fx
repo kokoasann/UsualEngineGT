@@ -240,14 +240,14 @@ float4 PSMain_Ground(PSInput In) : SV_Target0
 		gsca.z = gsca.x;
 		gsca.x = z;
 	}
-	gdir = normalize(float3(0.f, groundDir.y, groundDir.z));
+	/*gdir = normalize(float3(0.f, groundDir.y, groundDir.z));
 	deg = Rad2Deg(acos(dot(float3(0, 0, 1), gdir)));
 	if (((deg > 45.f && deg < 135.f) || (deg > 180.f && deg < 315.f)))
 	{
 		float z = gsca.z;
 		gsca.z = gsca.y;
 		gsca.y = z;
-	}
+	}*/
 	//In.TexCoord *= 10.f;
 
 	float dg = Rad2Deg(acos(dot(float3(0, 1, 0), In.Normal)));
