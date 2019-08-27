@@ -219,6 +219,8 @@ float4 PSProcess(PSInput In)
 		shadow.z = lerp(1.0f, 0.6f, scol);
 		//albe.xyz *= lerp(1.0f, 0.5f, GetShadow(In.Pos,shadowMap_1,float2(0,0)));
 	}
+
+	
 	float3 li = 0.f;
 	//[unroll(DLcount)]
 	for (int i = 0; i < DLcount; i++)
@@ -235,6 +237,10 @@ float4 PSProcess(PSInput In)
 		}
 	}
 	albe.xyz *= li;
+	float3 usu = float3(0.61f, 0.88f, 1.f)*0.7f;
+	float usulen = min(length(In.PosInView) * 0.0001f, 0.5f);
+	albe.xyz *= 1.f - usulen;
+	albe.xyz += usu * usulen;
 	float4 fcol = float4(0.f, 0.f, 0.f, 1.f);
 	fcol.xyz = albe.xyz;
 	return fcol;
@@ -250,13 +256,15 @@ float4 PSMain(PSInput In) : SV_Target0
 
 
 /*/////////////////////////////////////////////////////////////////////////////////
-		地面用
+		地面用。
+			モデルの拡大縮小によってUVが変形することがないようになっている
+			if文多様につき改良予定(予定)
 */////////////////////////////////////////////////////////////////////////////////
 float4 PSMain_Ground(PSInput In) : SV_Target0
 {
 	float3 gsca = groundScale.xyz;	//地面のスケール
 
-	float3 orig = normalize(mul(groundDir,In.Normal));
+	float3 orig = normalize(mul(groundDir,In.Normal));//回転をなくす
 
 	In.TexCoord *= 10.f;
 
@@ -264,11 +272,11 @@ float4 PSMain_Ground(PSInput In) : SV_Target0
 	float y = abs(orig.y);
 	float z = abs(orig.z);
 	float o = 0;
-	if (x > y && x > z)
+	if (x > y && x > z)			//x軸の方を向いている面
 	{
 		gsca.x = gsca.y;
 	}
-	else if (y > x && y > z)
+	else if (y > x && y > z)	//y軸の方を向いている面
 	{
 		if (orig.y < 0)
 		{
@@ -277,7 +285,7 @@ float4 PSMain_Ground(PSInput In) : SV_Target0
 			gsca.x = o;
 		}
 	}
-	else if (z > x && z > y)
+	else if (z > x && z > y)	//z軸の方を向いている面
 	{
 		gsca.z = gsca.x;
 		gsca.x = gsca.y;

@@ -13,6 +13,9 @@ void Game::OnDestroy()
 
 bool Game::Start()
 {
+	animclip[0].Load(L"Assets/animData/run.tka");
+	animclip[0].SetLoopFlag(true);
+
 	ue::CQuaternion rot;
 	cam = &ue::usualEngine()->GetMainCamera();
 	p1 = ue::NewGO<ue::SkinModelRender>(0);
@@ -20,10 +23,12 @@ bool Game::Start()
 	p1->SetPos({ 30,0,50 });
 
 	p2 = ue::NewGO<ue::SkinModelRender>(0);
-	p2->Init(L"Assets/model/unityChan.cmo");
+	p2->Init(L"Assets/model/unityChan.cmo",animclip,1);
 	p2->SetPos({ -20,0,-50 });
+	rot.SetRotationDeg(ue::CVector3::AxisX(), 90);
+	p2->SetRot(rot);
 	p2->SetIsShadowCaster(true);
-	p2->SetIsShadowReciever(false);
+	//p2->SetIsShadowReciever(false);
 
 	/*p3 = ue::NewGO<ue::SkinModelRender>(0);
 	p3->Init(L"Assets/model/unityChan.cmo");
@@ -44,7 +49,7 @@ bool Game::Start()
 	light = ue::NewGO<ue::LightDirection>(0);
 	light->SetDir({ 0,-1,0 });
 
-	campos = { 300,100,0 };
+	campos = { 2000,1000,0 };
 	cam->SetPosition(campos);
 	//cam->SetTarget({ 0,0,0 });
 	cam->Update();
