@@ -115,6 +115,22 @@ namespace UsualEngine
 			return m_isShadowCaster;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="b"></param>
+		void SetIsShadowReciever(bool b)
+		{
+			m_isShadowReciever = b;
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		bool IsShadowReciever()
+		{
+			return m_isShadowReciever;
+		}
 	private:
 		/*!
 		*@brief	サンプラステートの初期化。
@@ -130,13 +146,13 @@ namespace UsualEngine
 		*/
 		void InitSkeleton(const wchar_t* filePath);
 
-		
 	private:
 		//定数バッファ。
 		struct SVSConstantBuffer {
 			CMatrix mWorld;
 			CMatrix mView;
 			CMatrix mProj;
+			int isShadowReciever;
 		};
 		EnFbxUpAxis			m_enFbxUpAxis = enFbxUpAxisZ;	//!<FBXの上方向。
 		ID3D11Buffer* m_cb = nullptr;					//!<定数バッファ。
@@ -146,6 +162,7 @@ namespace UsualEngine
 		ID3D11SamplerState* m_samplerState = nullptr;		//!<サンプラステート。
 
 		bool m_isShadowCaster = false;					//影を落とす
+		bool m_isShadowReciever = true;				//影が落ちる
 	};
 
 }

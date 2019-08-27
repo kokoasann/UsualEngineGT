@@ -17,4 +17,6 @@ private:
 	ue::CVector3 campos;
 	ue::CQuaternion rot = ue::CQuaternion::Identity();
 	ue::Camera* cam = 0;
+
+	ue::LightDirection* light = 0;
 };

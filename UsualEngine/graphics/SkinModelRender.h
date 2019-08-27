@@ -48,6 +48,15 @@ namespace UsualEngine
 			return m_skinModel.IsShadowCaster();
 		}
 
+		void SetIsShadowReciever(bool b)
+		{
+			m_skinModel.SetIsShadowReciever(b);
+		}
+		bool IsShadowReciever()
+		{
+			return m_skinModel.IsShadowReciever();
+		}
+
 		/// <summary>
 		/// ƒXƒLƒ“ƒ‚ƒfƒ‹‚ð•Ô‚·
 		/// </summary>

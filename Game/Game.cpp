@@ -23,6 +23,7 @@ bool Game::Start()
 	p2->Init(L"Assets/model/unityChan.cmo");
 	p2->SetPos({ -20,0,-50 });
 	p2->SetIsShadowCaster(true);
+	p2->SetIsShadowReciever(false);
 
 	/*p3 = ue::NewGO<ue::SkinModelRender>(0);
 	p3->Init(L"Assets/model/unityChan.cmo");
@@ -40,7 +41,10 @@ bool Game::Start()
 	rot.SetRotationDeg(ue::CVector3::AxisZ(), 90);
 	//ground->SetRot(rot);
 
-	campos = { 800,300,0 };
+	light = ue::NewGO<ue::LightDirection>(0);
+	light->SetDir({ 0,-1,0 });
+
+	campos = { 300,100,0 };
 	cam->SetPosition(campos);
 	//cam->SetTarget({ 0,0,0 });
 	cam->Update();

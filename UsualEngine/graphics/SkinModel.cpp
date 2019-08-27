@@ -123,6 +123,7 @@ namespace UsualEngine
 		vsCb.mWorld = m_worldMatrix;
 		vsCb.mProj = projMatrix;
 		vsCb.mView = viewMatrix;
+		vsCb.isShadowReciever = m_isShadowReciever;
 		d3dDeviceContext->UpdateSubresource(m_cb, 0, nullptr, &vsCb, 0, 0);
 		//定数バッファをGPUに転送。
 		d3dDeviceContext->VSSetConstantBuffers(enSkinModelCBReg_VSPS, 1, &m_cb);

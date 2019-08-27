@@ -26,7 +26,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//sr->SetPos({ 0,0,500 });
 	//sr->SetSca(ue::CVector3::One() * 10);
 
-	ue::LightDirection* light = ue::NewGO<ue::LightDirection>(0);
+	
 	/*light = ue::NewGO<ue::LightDirection>(0);
 	light->SetDir({ 0,-1,-0.707f });
 	light->SetCol(ue::CVector4{ 0.7f,0.2f,0.1f,1.f }/2.f);

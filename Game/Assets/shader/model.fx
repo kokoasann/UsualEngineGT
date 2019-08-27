@@ -28,6 +28,7 @@ cbuffer VSPSCb : register(b0){
 	float4x4 mWorld;
 	float4x4 mView;
 	float4x4 mProj;
+	int isShadowReciever;
 };
 
 
@@ -46,7 +47,7 @@ float GetShadow(float3 wpos,Texture2D<float4> tex, float2 offset)
 		{
 			float2 pix = float2(ligPixSize[i].x * offset.x, ligPixSize[i].y * offset.y);
 			shadow = tex.Sample(Sampler, smuv+pix/2).r;
-			if (depth > shadow.r+0.0002f)
+			if (depth > shadow.r+0.00004f)
 			{
 				return 1.f;
 			}
@@ -184,35 +185,56 @@ float4 PSProcess(PSInput In)
 	float2 uv = In.PosInProj.xy / In.PosInProj.w;
 	uv *= float2(0.5f, -0.5f);
 	uv += 0.5f;
-	float sum = 0.f;
-	float gaus[5][5] = {
-	{1.f / 256.f, 4.f / 256.f,	 6.f / 256.f,   4.f / 256.f,  1.f / 256.f},
-	{4.f / 256.f, 16.f / 256.f, 24.f / 256.f, 16.f / 256.f, 4.f / 256.f},
-	{6.f / 256.f, 24.f / 256.f, 36.f / 256.f, 24.f / 256.f, 6.f / 256.f},
-	{4.f / 256.f, 16.f / 256.f, 24.f / 256.f, 16.f / 256.f, 4.f / 256.f },
-	{1.f / 256.f, 4.f / 256.f,   6.f / 256.f,   4.f / 256.f,   1.f / 256.f } };
-	int ksize = 5;
-	[unroll(ksize)]
-	for (int y = 0; y < ksize; y++)
+	float4 shadow = float4(1, 1, 1, 1);
+	if (isShadowReciever)
 	{
+		float sum = 0.f;
+		/*float gaus[5][5] = {
+		{1.f / 256.f, 4.f / 256.f,	 6.f / 256.f,   4.f / 256.f,  1.f / 256.f},
+		{4.f / 256.f, 16.f / 256.f, 24.f / 256.f, 16.f / 256.f, 4.f / 256.f},
+		{6.f / 256.f, 24.f / 256.f, 36.f / 256.f, 24.f / 256.f, 6.f / 256.f},
+		{4.f / 256.f, 16.f / 256.f, 24.f / 256.f, 16.f / 256.f, 4.f / 256.f },
+		{1.f / 256.f, 4.f / 256.f,   6.f / 256.f,   4.f / 256.f,   1.f / 256.f } };*/
+		float gaus[3][3] = {
+		{1.f / 16.f,2.f / 16.f,1.f / 16.f},
+		{2.f / 16.f,4.f / 16.f,2.f / 16.f},
+		{1.f / 16.f,2.f / 16.f,1.f / 16.f}
+		};
+		int ksize = 3;
 		[unroll(ksize)]
-		for (int x = 0; x < ksize; x++)
+		for (int y = 0; y < ksize; y++)
 		{
-			sum += GetShadow(In.Pos, shadowMap_1, float2(x - (ksize - 1) / 2, y - (ksize - 1) / 2)) * gaus[y][x];
+			[unroll(ksize)]
+			for (int x = 0; x < ksize; x++)
+			{
+				sum += GetShadow(In.Pos, shadowMap_1, float2(x - (ksize - 1) / 2, y - (ksize - 1) / 2)) * gaus[y][x];
+			}
 		}
+		float scol = sum;
+		//float scol = GetShadow(In.Pos, shadowMap_1, float2(0, 0));
+		//float scol = sum / pow(ksize,2);
+
+		shadow.x = lerp(1.0f, 0.45f, scol);
+		shadow.y = lerp(1.0f, 0.4f, scol);
+		shadow.z = lerp(1.0f, 0.6f, scol);
+		//albe.xyz *= lerp(1.0f, 0.5f, GetShadow(In.Pos,shadowMap_1,float2(0,0)));
 	}
-	float scol = sum;
-	//float scol = sum / pow(ksize,2);
-	albe.xyz *= lerp(1.0f, 0.5f, scol);
-
-	//albe.xyz *= lerp(1.0f, 0.5f, GetShadow(In.Pos,shadowMap_1,float2(0,0)));
-
 	float3 li = 0.f;
+	//[unroll(DLcount)]
 	for (int i = 0; i < DLcount; i++)
 	{
-		li += max(dot(DirLights[i].dir * -1.f, In.Normal), 0.2f) * DirLights[i].color;
+		float rad = dot(DirLights[i].dir * -1.f, In.Normal);
+		//li += max(rad, 0.2f) * DirLights[i].color;
+		if (Rad2Deg(rad) < 10.f)
+		{
+			li = float3(0.45f,0.4f,0.6f);
+		}
+		else
+		{
+			li += DirLights[i].color*shadow;
+		}
 	}
-	//albe.xyz *= li;
+	albe.xyz *= li;
 	float4 fcol = float4(0.f, 0.f, 0.f, 1.f);
 	fcol.xyz = albe.xyz;
 	return fcol;
