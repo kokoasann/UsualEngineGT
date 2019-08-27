@@ -9,8 +9,8 @@ namespace UsualEngine
 	public:
 		struct GroundCB
 		{
-			CVector3 scale = CVector3::Zero();
-			CVector3 dir = CVector3::Zero();
+			CVector4 scale = CVector4::Zero();
+			CMatrix dir = CMatrix::Identity();
 		};
 		/// <summary>
 		/// 

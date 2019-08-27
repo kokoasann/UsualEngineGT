@@ -283,6 +283,8 @@ namespace UsualEngine
 			Div(s);
 			return *this;
 		}
+
+
 	public:
 		static CVector3 Zero()
 		{
@@ -494,6 +496,10 @@ namespace UsualEngine
 			DirectX::XMVECTOR xmv = DirectX::XMLoadFloat4(&vec);
 			xmv = DirectX::XMVectorScale(xmv, s);
 			DirectX::XMStoreFloat4(&vec, xmv);
+		}
+		static CVector4 Zero()
+		{
+			return { 0.f,0.f,0.f,0.f };
 		}
 		static CVector4 White()
 		{

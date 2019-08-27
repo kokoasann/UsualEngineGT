@@ -19,8 +19,10 @@ namespace UsualEngine
 	{
 		m_goundData.scale = GetSca();
 		CVector3 dir = {0,0,1};
-		GetRot().Multiply(dir);
-		m_goundData.dir = dir;
+		CQuaternion rot = GetRot();
+		rot=rot*-1;
+		rot.w *= -1;
+		m_goundData.dir.MakeRotationFromQuaternion(rot);
 
 		auto dc = usualEngine()->GetGraphicsEngine()->GetD3DDeviceContext();
 		dc->UpdateSubresource(m_groundCB.GetBody(), 0, NULL, (const GroundCB*)& m_goundData, 0, 0);

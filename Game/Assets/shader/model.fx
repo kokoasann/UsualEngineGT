@@ -226,51 +226,43 @@ float4 PSMain(PSInput In) : SV_Target0
 	return PSProcess(In);
 }
 
+
 /*/////////////////////////////////////////////////////////////////////////////////
 		地面用
 */////////////////////////////////////////////////////////////////////////////////
 float4 PSMain_Ground(PSInput In) : SV_Target0
 {
-	float3 gsca = groundScale;
-	float3 gdir = normalize(float3(groundDir.x, 0.f, groundDir.z));
-	float deg = Rad2Deg(acos(dot(float3(0, 0, 1), gdir)));
-	if (((deg > 45.f && deg < 135.f) || (deg > 180.f && deg < 315.f)))
+	float3 gsca = groundScale.xyz;	//地面のスケール
+
+	float3 orig = normalize(mul(groundDir,In.Normal));
+
+	In.TexCoord *= 10.f;
+
+	float x = abs(orig.x);
+	float y = abs(orig.y);
+	float z = abs(orig.z);
+	float o = 0;
+	if (x > y && x > z)
 	{
-		float z = gsca.z;
+		gsca.x = gsca.y;
+	}
+	else if (y > x && y > z)
+	{
+		if (orig.y < 0)
+		{
+			o = gsca.z;
+			gsca.z = gsca.x;
+			gsca.x = o;
+		}
+	}
+	else if (z > x && z > y)
+	{
 		gsca.z = gsca.x;
-		gsca.x = z;
+		gsca.x = gsca.y;
 	}
-	/*gdir = normalize(float3(0.f, groundDir.y, groundDir.z));
-	deg = Rad2Deg(acos(dot(float3(0, 0, 1), gdir)));
-	if (((deg > 45.f && deg < 135.f) || (deg > 180.f && deg < 315.f)))
-	{
-		float z = gsca.z;
-		gsca.z = gsca.y;
-		gsca.y = z;
-	}*/
-	//In.TexCoord *= 10.f;
+	In.TexCoord.x *= gsca.z;
+	In.TexCoord.y *= gsca.x;
 
-	float dg = Rad2Deg(acos(dot(float3(0, 1, 0), In.Normal)));
-	if (dg > 45.f && dg < 135.f || dg >180.f && dg < 315.f)
-	{
-		In.TexCoord.y *= gsca.y;
-
-		dg = Rad2Deg(acos(dot(float3(1,0, 0), In.Normal)));
-		if (dg > 45.f && dg < 135.f || dg >180.f && dg < 315.f)
-		{
-			In.TexCoord.x *= gsca.x;
-		}
-		else
-		{
-			In.TexCoord.x *= gsca.z;
-		}
-	}
-	else
-	{
-		In.TexCoord.x *= gsca.z;
-		In.TexCoord.y *= gsca.x;
-	}
-	
 	return PSProcess(In);
 }
 

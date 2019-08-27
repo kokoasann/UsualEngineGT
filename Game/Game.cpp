@@ -13,6 +13,7 @@ void Game::OnDestroy()
 
 bool Game::Start()
 {
+	ue::CQuaternion rot;
 	cam = &ue::usualEngine()->GetMainCamera();
 	p1 = ue::NewGO<ue::SkinModelRender>(0);
 	p1->Init(L"Assets/model/unityChan.cmo");
@@ -23,24 +24,25 @@ bool Game::Start()
 	p2->SetPos({ -20,0,-50 });
 	p2->SetIsShadowCaster(true);
 
-	p3 = ue::NewGO<ue::SkinModelRender>(0);
+	/*p3 = ue::NewGO<ue::SkinModelRender>(0);
 	p3->Init(L"Assets/model/unityChan.cmo");
 	p3->SetPos({ 0,-50,1500 });
 	p3->SetSca({ 30,30,0.4f });
-	ue::CQuaternion rot;
+	
 	rot.SetRotationDeg(ue::CVector3::AxisX(), -90);
 	p3->SetRot(rot);
-	p3->SetIsShadowCaster(true);
+	p3->SetIsShadowCaster(true);*/
 
 	ground = ue::NewGO<ue::SMR4Ground>(0);
 	ground->InitG(L"Assets/model/dun.cmo", 0, 0, ue::enFbxUpAxisZ);
-	ground->SetSca(ue::CVector3{1, 1.5f, 2});
-	ground->SetPos({ 100,0,0 });
-	rot.SetRotationDeg(ue::CVector3::AxisY(), 90);
-	ground->SetRot(rot);
+	ground->SetSca(ue::CVector3{30, 0.1f, 10});
+	ground->SetPos({ 0,-100,0 });
+	rot.SetRotationDeg(ue::CVector3::AxisZ(), 90);
+	//ground->SetRot(rot);
 
-	campos = { 2500,2500,0 };
+	campos = { 800,300,0 };
 	cam->SetPosition(campos);
+	//cam->SetTarget({ 0,0,0 });
 	cam->Update();
 	return true;
 }
@@ -54,6 +56,8 @@ void Game::Update()
 	rot.Multiply(p);
 
 	auto r = ground->GetRot();
+	//r.Multiply(add);
+	add.SetRotationDeg(ue::CVector3::AxisZ(), 0.7f);
 	r.Multiply(add);
 	//ground->SetRot(r);
 
