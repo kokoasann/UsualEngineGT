@@ -28,6 +28,7 @@ cbuffer VSPSCb : register(b0){
 	float4x4 mWorld;
 	float4x4 mView;
 	float4x4 mProj;
+	float3 camDir;
 	int isShadowReciever;
 };
 
@@ -237,10 +238,14 @@ float4 PSProcess(PSInput In)
 		}
 	}
 	albe.xyz *= li;
+
+	//‰“‚­‚ð‚¤‚·‚­
 	float3 usu = float3(0.61f, 0.88f, 1.f)*0.7f;
-	float usulen = min(length(In.PosInView) * 0.0001f, 0.5f);
+	float usulen = min(length(In.PosInView) * 0.00002f, 0.7f);
+	//usulen = min(In.PosInView.y * 0.0005f, usulen);
 	albe.xyz *= 1.f - usulen;
 	albe.xyz += usu * usulen;
+
 	float4 fcol = float4(0.f, 0.f, 0.f, 1.f);
 	fcol.xyz = albe.xyz;
 	return fcol;
@@ -266,7 +271,7 @@ float4 PSMain_Ground(PSInput In) : SV_Target0
 
 	float3 orig = normalize(mul(groundDir,In.Normal));//‰ñ“]‚ð‚È‚­‚·
 
-	In.TexCoord *= 10.f;
+	In.TexCoord *= 2.f;
 
 	float x = abs(orig.x);
 	float y = abs(orig.y);
@@ -292,8 +297,21 @@ float4 PSMain_Ground(PSInput In) : SV_Target0
 	}
 	In.TexCoord.x *= gsca.z;
 	In.TexCoord.y *= gsca.x;
+	
+	float4 fcol = PSProcess(In);
 
-	return PSProcess(In);
+	float rad = acos(dot(camDir * -1.f, In.Normal));
+	rad = Rad2Deg(rad);
+	rad = min(rad, 360.f - rad);
+	rad = lerp(0, 0.4f, rad / 180.f);
+	rad *= lerp(1,0,length(In.PosInView) * 0.00007f);
+	float3 usu = float3(0.81f, 0.88f, 0.5f) * 0.7f;
+	float usulen = rad;
+	//usulen = min(In.PosInView.y * 0.0005f, usulen);
+	fcol.xyz *= 1.f - usulen;
+	fcol.xyz += usu * usulen;
+
+	return fcol;
 }
 
 /*///////////////////////////////////////////////////////////////////////////////

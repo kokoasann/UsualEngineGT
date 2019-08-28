@@ -152,6 +152,7 @@ namespace UsualEngine
 			CMatrix mWorld;
 			CMatrix mView;
 			CMatrix mProj;
+			CVector3 camDir;
 			int isShadowReciever;
 		};
 		EnFbxUpAxis			m_enFbxUpAxis = enFbxUpAxisZ;	//!<FBX‚Ìã•ûŒüB

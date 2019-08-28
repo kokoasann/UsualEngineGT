@@ -200,5 +200,5 @@ namespace UsualEngine
 
 	//ゲームパッドのグローバル変数のextern宣言。
 	//extern宣言は変数の定義ではないので注意する！
-	extern Pad g_pad[Pad::CONNECT_PAD_MAX];
+	//extern Pad g_pad[Pad::CONNECT_PAD_MAX];
 }

@@ -2,7 +2,7 @@
 
 namespace UsualEngine
 {
-	static constexpr int MAX_SHADOW_MAP = 1;
+	static constexpr int MAX_SHADOW_MAP = 3;
 }
 const float FRAME_BUFFER_W = 1280.0f;				//フレームバッファの幅。
 const float FRAME_BUFFER_H = 720.0f;				//フレームバッファの高さ。
@@ -35,6 +35,7 @@ static const int RTV_MAX = 8;
 #include "DirectXTK/Inc/SpriteFont.h"
 #include "DirectXTK/Inc/DDSTextureLoader.h"
 
+#include "HID/Pad.h"
 #include "UsualEngine.h"
 
 #include "util/Util.h"
@@ -73,6 +74,8 @@ static const int RTV_MAX = 8;
 #include "graphics/SpriteRender.h"
 #include "graphics/LightBase.h"
 #include "graphics/LightDirection.h"
+
+
 
 #include "Prefab/SkinModelRender4Ground.h"
 namespace UsualEngine

@@ -45,13 +45,32 @@ bool Game::Start()
 	ground->SetPos({ 0,-100,0 });
 	rot.SetRotationDeg(ue::CVector3::AxisZ(), 90);
 	//ground->SetRot(rot);
+	ue::SkinModelRender* grounda;
+
+	ground = ue::NewGO<ue::SMR4Ground>(0);
+	ground->InitG(L"Assets/model/octagon.cmo", 0, 0, ue::enFbxUpAxisZ);
+	ground->SetSca(ue::CVector3{ 7, 9.2f, 7 });
+	ground->SetPos({0,0,-20000 });
+	ground->SetIsShadowCaster(true);
+
+	ground = ue::NewGO<ue::SMR4Ground>(0);
+	ground->InitG(L"Assets/model/octagon.cmo", 0, 0, ue::enFbxUpAxisZ);
+	ground->SetSca(ue::CVector3{ 1.5, 2.2f, 1.5 });
+	ground->SetPos({ -1500,0,-10000 });
+	ground->SetIsShadowCaster(true);
+
+	ground = ue::NewGO<ue::SMR4Ground>(0);
+	ground->InitG(L"Assets/model/octagon.cmo", 0, 0, ue::enFbxUpAxisZ);
+	ground->SetSca(ue::CVector3{ 0.4, 1.2f, 0.4 });
+	ground->SetPos({ 700,0,-3000 });
+	ground->SetIsShadowCaster(true);
 
 	light = ue::NewGO<ue::LightDirection>(0);
-	light->SetDir({ 0,-1,0 });
+	light->SetDir({ -0.3f,-1,-0.2f });
 
-	campos = { 2000,1000,0 };
+	campos = { 0,100,200 };
 	cam->SetPosition(campos);
-	//cam->SetTarget({ 0,0,0 });
+	cam->SetTarget({ 0,0,0 });
 	cam->Update();
 	return true;
 }
@@ -59,17 +78,53 @@ bool Game::Start()
 void Game::Update()
 {
 	ue::CQuaternion add = ue::CQuaternion::Identity();
-	add.SetRotationDeg(ue::CVector3::AxisY(), 0.5f);
-	rot.Multiply(add);
-	ue::CVector3 p = campos;
-	rot.Multiply(p);
+	//add.SetRotationDeg(ue::CVector3::AxisY(), 0.5f);
+	//rot.Multiply(add);
+	//ue::CVector3 p = campos;
+	//rot.Multiply(p);
 
-	auto r = ground->GetRot();
+	//auto r = ground->GetRot();
+	////r.Multiply(add);
+	//add.SetRotationDeg(ue::CVector3::AxisZ(), 0.7f);
 	//r.Multiply(add);
-	add.SetRotationDeg(ue::CVector3::AxisZ(), 0.7f);
-	r.Multiply(add);
 	//ground->SetRot(r);
+	auto camtar = cam->GetTarget();
+	
+	ue::CVector3 ofs = { 0,0,-200 };
+	auto pad = ue::GamePad(0);
+	float speed = 30.f;
+	if (pad.IsPress(ue::enButtonUp))
+	{
+		campos += cam->GetForward()*speed;
+	
+	}
+	if (pad.IsPress(ue::enButtonDown))
+	{
+		campos += cam->GetForward() * -speed;
+	}
+	if (pad.IsPress(ue::enButtonLeft))
+	{
+		campos += cam->GetRight() * -speed;
+	}
+	if (pad.IsPress(ue::enButtonRight))
+	{
+		campos += cam->GetRight() * speed;
+	}
+	static float deg = 0.f;
+	if (pad.IsPress(ue::enButtonRB1))
+	{
+		deg -= 10.f;
+	}
+	if (pad.IsPress(ue::enButtonLB1))
+	{
+		deg += 10.f;
+	}
+	add.SetRotationDeg(ue::CVector3::Up(), deg);
+	add.Multiply(ofs);
+	camtar = campos + ofs;
 
-	cam->SetPosition(p);
+
+	cam->SetPosition(campos);
+	cam->SetTarget(camtar);
 	cam->Update();
 }

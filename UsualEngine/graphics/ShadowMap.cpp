@@ -15,14 +15,22 @@ namespace UsualEngine
 		DXGI_SAMPLE_DESC multiSampleDesc;
 		multiSampleDesc.Count = 1;
 		multiSampleDesc.Quality = 0;
+		int iw = w;
+		int ih = h;
+		
 		for (int i = 0; i < MAX_SHADOW_MAP; i++)
 		{
-			m_shadowMapRT[i].Create(w, h, 1, 1, DXGI_FORMAT_R32_FLOAT, DXGI_FORMAT_D32_FLOAT, multiSampleDesc);
+			m_shadowMapRT[i].Create(iw, ih, 1, 1, DXGI_FORMAT_R32_FLOAT, DXGI_FORMAT_D32_FLOAT, multiSampleDesc);
 
-			m_shadowCBEntity.pixSize[i].x = 1.f / w;
-			m_shadowCBEntity.pixSize[i].y = 1.f / h;
+			m_shadowCBEntity.pixSize[i].x = 1.f / iw;
+			m_shadowCBEntity.pixSize[i].y = 1.f / ih;
+			iw >>= 1;
+			ih >>= 1;
 		}
 		m_shadowCB.Create(&m_shadowCBEntity, sizeof(m_shadowCBEntity));
+
+		m_lightDirection = { -0.3f,-1,-0.2f };
+		m_lightDirection.Normalize();
 	}
 	void ShadowMap::Update()
 	{
@@ -80,9 +88,12 @@ namespace UsualEngine
 		CVector3 cameraUp;
 		cameraUp.Cross(MainCamera.GetRight(), MainCamera.GetForward());
 
+		float shadowAriaTable[3] = { 0.25f,0.5f,1 };
+		//float shadowAriaTable[3] = { 1,0.5f,0.25f };
+
 		//視推台を分割するようにライトビュープロジェクション行列を計算する。
 		for (int i = 0; i < MAX_SHADOW_MAP; i++) {
-			farPlaneZ = nearPlaneZ + m_lightHeight;
+			farPlaneZ = nearPlaneZ + m_lightHeight * shadowAriaTable[i];
 			CMatrix mLightView = CMatrix::Identity();
 			float halfViewAngle = MainCamera.GetViewAngle() * 0.5f;
 			//視推台の8頂点をライト空間に変換してAABBを求めて、正射影の幅と高さを求める。

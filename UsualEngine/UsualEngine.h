@@ -54,12 +54,17 @@ namespace UsualEngine
 		{
 			return mCamera2D;
 		}
+		Pad& GetPad(int no)
+		{
+			return m_pad[no];
+		}
 	private:
 		HWND mHwnd = 0;
 		GraphicsEngine* mGraphicsEngine = nullptr;
 		GameObjectManager* mGameObjectManager = nullptr;
 		Camera mMainCamera;
 		Camera mCamera2D;
+		Pad m_pad[Pad::CONNECT_PAD_MAX];
 
 		int m_count = 0;
 		float m_sumTime = 0.f;
@@ -68,5 +73,9 @@ namespace UsualEngine
 	static UsualEngine* usualEngine()
 	{
 		return UsualEngine::Get();
+	}
+	static inline Pad& GamePad(int i)
+	{
+		return usualEngine()->GetPad(i);
 	}
 }

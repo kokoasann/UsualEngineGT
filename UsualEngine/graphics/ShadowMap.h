@@ -36,7 +36,7 @@ namespace UsualEngine
 		CVector3 m_lightDirection = CVector3::Down();				//ƒ‰ƒCƒg‚Ì•ûŒü
 		float m_near = 0.1f;
 		float m_far = 100000.f;
-		float m_lightHeight = 1000.f;
+		float m_lightHeight = 10000.f;
 		RenderTarget m_shadowMapRT[MAX_SHADOW_MAP];
 		ConstantBuffer m_shadowCB;
 		std::vector<SkinModel*> m_shadowCaster;

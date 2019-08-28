@@ -29,10 +29,10 @@ namespace UsualEngine
 
 		//ゲームパッドの初期化。
 		//最大４つのコントローラーを接続できるようにしましょう。
-		g_pad[0].Init(0);
-		g_pad[1].Init(1);
-		g_pad[2].Init(2);
-		g_pad[3].Init(3);
+		m_pad[0].Init(0);
+		m_pad[1].Init(1);
+		m_pad[2].Init(2);
+		m_pad[3].Init(3);
 
 		//2Dカメラの初期化
 		mCamera2D.SetPosition({ 0,0,-500 });
@@ -108,6 +108,10 @@ namespace UsualEngine
 		{
 			Stopwatch st;
 			st.Start();
+			for (auto& pad : m_pad)
+			{
+				pad.Update();
+			}
 
 			mGraphicsEngine->BegineRender();
 			mGraphicsEngine->GetShadowMap().Update();

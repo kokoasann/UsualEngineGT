@@ -8,7 +8,7 @@
 namespace UsualEngine
 {
 #define INPUT_DEADZONE  ( 0.24f * FLOAT(0x7FFF) )  // 入力の遊びとなる範囲。
-	Pad g_pad[Pad::CONNECT_PAD_MAX];		//g_padの定義。
+	//Pad g_pad[Pad::CONNECT_PAD_MAX];		//g_padの定義。
 
 	/*!
 	 *@brief	仮想ボタンとXBoxコントローラのボタンとの関連付けを表す構造体。
@@ -44,20 +44,20 @@ namespace UsualEngine
 		DWORD keyCoord;			//!<キーボードのキーコード。
 	};
 	const VirtualPadToKeyboard vPadToKeyboardTable[enButtonNum] = {
-		{ enButtonUp		, '8' },
-		{ enButtonDown		, '2' },
-		{ enButtonLeft		, '4' },
-		{ enButtonRight		, '6' },
+		{ enButtonUp		, 'W' },
+		{ enButtonDown		, 'S' },
+		{ enButtonLeft		, 'A' },
+		{ enButtonRight		, 'D' },
 		{ enButtonA			, 'J' },
 		{ enButtonB			, 'K' },
 		{ enButtonY			, 'I' },
 		{ enButtonX			, 'L' },
 		{ enButtonSelect	, VK_SPACE },
 		{ enButtonStart		, VK_RETURN },
-		{ enButtonRB1		, '7' },
+		{ enButtonRB1		, 'O' },
 		{ enButtonRB2		, '8' },
 		{ enButtonRB3		, '9' },
-		{ enButtonLB1		, 'B' },
+		{ enButtonLB1		, 'P' },
 		{ enButtonLB2		, 'N' },
 		{ enButtonLB3		, 'M' },
 	};
