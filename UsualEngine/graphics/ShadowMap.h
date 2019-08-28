@@ -31,7 +31,7 @@ namespace UsualEngine
 			CMatrix mLVP[MAX_SHADOW_MAP] = { CMatrix::Identity() };
 			CVector4 texoffset[MAX_SHADOW_MAP];
 			CVector4 pixSize[MAX_SHADOW_MAP];
-			float depthoffset[MAX_SHADOW_MAP] = { 0.f };
+			CVector4 depthoffset;
 		};
 		CVector3 m_lightDirection = CVector3::Down();				//ƒ‰ƒCƒg‚Ì•ûŒü
 		float m_near = 0.1f;

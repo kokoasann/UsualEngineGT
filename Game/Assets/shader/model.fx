@@ -47,8 +47,19 @@ float GetShadow(float3 wpos,Texture2D<float4> tex, float2 offset)
 		if (smuv.x < 1.f && smuv.y < 1.f && smuv.x > 0.f && smuv.y > 0.f)
 		{
 			float2 pix = float2(ligPixSize[i].x * offset.x, ligPixSize[i].y * offset.y);
-			shadow = tex.Sample(Sampler, smuv+pix/2).r;
-			if (depth > shadow.r+0.00004f)
+			if (i == 0)
+			{
+				shadow = shadowMap_1.Sample(Sampler, smuv + pix / 2).r;
+			}
+			else if (i == 1)
+			{
+				shadow = shadowMap_2.Sample(Sampler, smuv + pix / 2).r;
+			}
+			else if (i == 2)
+			{
+				shadow = shadowMap_3.Sample(Sampler, smuv + pix / 2).r;
+			}
+			if (depth > shadow.r + depthoffset[i])
 			{
 				return 1.f;
 			}

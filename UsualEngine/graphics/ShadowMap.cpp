@@ -28,6 +28,12 @@ namespace UsualEngine
 			ih >>= 1;
 		}
 		m_shadowCB.Create(&m_shadowCBEntity, sizeof(m_shadowCBEntity));
+		
+		m_shadowCBEntity.depthoffset.x = 0.00004f;
+		m_shadowCBEntity.depthoffset.y = 0.001f;
+		m_shadowCBEntity.depthoffset.z = 0.002f;
+
+		m_lightHeight = 5000.f;
 
 		m_lightDirection = { -0.3f,-1,-0.2f };
 		m_lightDirection.Normalize();
@@ -89,6 +95,7 @@ namespace UsualEngine
 		cameraUp.Cross(MainCamera.GetRight(), MainCamera.GetForward());
 
 		float shadowAriaTable[3] = { 0.25f,0.5f,1 };
+		//float shadowAriaTable[3] = { 0.4f,0.8f,1.6f };
 		//float shadowAriaTable[3] = { 1,0.5f,0.25f };
 
 		//視推台を分割するようにライトビュープロジェクション行列を計算する。
@@ -165,7 +172,7 @@ namespace UsualEngine
 		dc->PSSetConstantBuffers(enSkinModelCBReg_Shadow, 1, &m_shadowCB.GetBody());
 		for (int i = 0; i < MAX_SHADOW_MAP; i++)
 		{
-			dc->PSSetShaderResources(enSkinModelSRVReg_ShadowMap + i, 1, &m_shadowMapRT[i].GetSRV());
+			dc->PSSetShaderResources(enSkinModelSRVReg_ShadowMap_1 + i, 1, &m_shadowMapRT[i].GetSRV());
 		}
 	}
 	void ShadowMap::Render()
@@ -174,7 +181,7 @@ namespace UsualEngine
 		for (int i = 0; i < MAX_SHADOW_MAP; i++)
 		{
 			ID3D11ShaderResourceView* none[] = { NULL };
-			dc->PSSetShaderResources(enSkinModelSRVReg_ShadowMap + i, 1, none);
+			dc->PSSetShaderResources(enSkinModelSRVReg_ShadowMap_1 + i, 1, none);
 		}
 
 		RenderTarget* oldRenderTargets[RTV_MAX];

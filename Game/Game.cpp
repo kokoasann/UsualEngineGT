@@ -113,11 +113,11 @@ void Game::Update()
 	static float deg = 0.f;
 	if (pad.IsPress(ue::enButtonRB1))
 	{
-		deg -= 10.f;
+		deg += 10.f;
 	}
 	if (pad.IsPress(ue::enButtonLB1))
 	{
-		deg += 10.f;
+		deg -= 10.f;
 	}
 	add.SetRotationDeg(ue::CVector3::Up(), deg);
 	add.Multiply(ofs);

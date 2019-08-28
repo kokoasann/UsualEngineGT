@@ -82,10 +82,12 @@ cbuffer ShadowCB : register(b3)
 	float4x4 mLVP[MAX_SHADOWMAP];			//ライトビュープロジェクションマトリクス
 	float4 texoffset[MAX_SHADOWMAP];			//オフセット
 	float4 ligPixSize[MAX_SHADOWMAP];			//uvでの1ピクセルのサイズ
-	float depthoffset[MAX_SHADOWMAP];		//深度オフセット
+	float4 depthoffset;		//深度オフセット
 }
 
 Texture2D<float4> shadowMap_1 : register(t2);		//シャドウマップ
+Texture2D<float4> shadowMap_2 : register(t3);		//シャドウマップ
+Texture2D<float4> shadowMap_3 : register(t4);		//シャドウマップ
 
 
 /*/////////////////////////////////////////////////////////////////////////////////////////////
