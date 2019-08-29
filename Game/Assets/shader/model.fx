@@ -234,7 +234,6 @@ float4 PSProcess(PSInput In)
 
 	
 	float3 li = 0.f;
-	//[unroll(DLcount)]
 	for (int i = 0; i < DLcount; i++)
 	{
 		float rad = dot(DirLights[i].dir * -1.f, In.Normal);
@@ -242,6 +241,7 @@ float4 PSProcess(PSInput In)
 		if (Rad2Deg(rad) < 10.f)
 		{
 			li = float3(0.45f,0.4f,0.6f);
+
 		}
 		else
 		{
