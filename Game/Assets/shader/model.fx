@@ -189,10 +189,9 @@ PSInputDepth VSMainDepth_Skin(VSInputNmTxWeights In)
 	return psInput;
 }
 
-
-float4 PSProcess(PSInput In)
+float4 PSProcess(float4 albe, PSInput In)
 {
-	float4 albe = albedoTexture.Sample(Sampler, In.TexCoord);
+	
 
 	float2 uv = In.PosInProj.xy / In.PosInProj.w;
 	uv *= float2(0.5f, -0.5f);
@@ -232,7 +231,7 @@ float4 PSProcess(PSInput In)
 		//albe.xyz *= lerp(1.0f, 0.5f, GetShadow(In.Pos,shadowMap_1,float2(0,0)));
 	}
 
-	
+
 	float3 li = 0.f;
 	for (int i = 0; i < DLcount; i++)
 	{
@@ -240,18 +239,18 @@ float4 PSProcess(PSInput In)
 		//li += max(rad, 0.2f) * DirLights[i].color;
 		if (Rad2Deg(rad) < 10.f)
 		{
-			li = float3(0.45f,0.4f,0.6f);
+			li = float3(0.45f, 0.4f, 0.6f);
 
 		}
 		else
 		{
-			li += DirLights[i].color*shadow;
+			li += DirLights[i].color * shadow;
 		}
 	}
 	albe.xyz *= li;
 
 	//遠くをうすく
-	float3 usu = float3(0.61f, 0.88f, 1.f)*0.7f;
+	float3 usu = float3(0.61f, 0.88f, 1.f) * 0.7f;
 	float usulen = min(length(In.PosInView) * 0.00002f, 0.7f);
 	//usulen = min(In.PosInView.y * 0.0005f, usulen);
 	albe.xyz *= 1.f - usulen;
@@ -267,7 +266,8 @@ float4 PSProcess(PSInput In)
 //--------------------------------------------------------------------------------------
 float4 PSMain(PSInput In) : SV_Target0
 {
-	return PSProcess(In);
+	float4 albe = albedoTexture.Sample(Sampler, In.TexCoord);
+	return PSProcess(albe,In);
 }
 
 
@@ -278,6 +278,7 @@ float4 PSMain(PSInput In) : SV_Target0
 */////////////////////////////////////////////////////////////////////////////////
 float4 PSMain_Ground(PSInput In) : SV_Target0
 {
+	float2 UV = In.TexCoord;
 	float3 gsca = groundScale.xyz;	//地面のスケール
 
 	float3 orig = normalize(mul(groundDir,In.Normal));//回転をなくす
@@ -308,8 +309,40 @@ float4 PSMain_Ground(PSInput In) : SV_Target0
 	}
 	In.TexCoord.x *= gsca.z;
 	In.TexCoord.y *= gsca.x;
-	
-	float4 fcol = PSProcess(In);
+
+	//アルベドの取得
+	float4 alb = float4(0, 0, 0, 1);
+	if (groundUseTexs.x!=0)//ブレンド・S
+	{
+		float4 blend = groundBlendMap.Sample(Sampler, UV);
+		float4 alb1 = texture_1.Sample(Sampler, In.TexCoord);
+		float4 alb2 = texture_2.Sample(Sampler, In.TexCoord);
+		float len = 0.f;
+		if(groundUseTexs.w!=0)
+		{
+			float4 alb3 = texture_2.Sample(Sampler, In.TexCoord);
+			len = blend.x + blend.y + blend.z;
+			blend /= len;
+			alb1 *= blend.x;
+			alb2 *= blend.y;
+			alb3 *= blend.z;
+			alb = alb1 + alb2 + alb3;
+		}
+		else
+		{
+			len = blend.x + blend.y;
+			blend /= len;
+			alb1 *= blend.x;
+			alb2 *= blend.y;
+			alb = alb1 + alb2;
+		}
+	}
+	else
+	{
+		alb = albedoTexture.Sample(Sampler, In.TexCoord);
+	}
+
+	float4 fcol = PSProcess(alb,In);
 
 	float rad = acos(dot(camDir * -1.f, In.Normal));
 	rad = Rad2Deg(rad);

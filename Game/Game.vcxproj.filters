@@ -28,6 +28,9 @@
     <Filter Include="Assets\Model\StagePreset">
       <UniqueIdentifier>{d4956ca1-0f14-4d9d-b654-be2e43208847}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Model\StagePreset\texture">
+      <UniqueIdentifier>{7b61f1c2-db14-418e-8703-c120560a1899}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\model.fx">
@@ -54,6 +57,15 @@
   <ItemGroup>
     <ImageContentTask Include="Assets\sprite\daru.PNG">
       <Filter>Assets\Sprite</Filter>
+    </ImageContentTask>
+    <ImageContentTask Include="Assets\model\block\kusa.png">
+      <Filter>Assets\Model\StagePreset\texture</Filter>
+    </ImageContentTask>
+    <ImageContentTask Include="Assets\model\block\map.png">
+      <Filter>Assets\Model\StagePreset\texture</Filter>
+    </ImageContentTask>
+    <ImageContentTask Include="Assets\model\block\tuti.png">
+      <Filter>Assets\Model\StagePreset\texture</Filter>
     </ImageContentTask>
   </ItemGroup>
 </Project>

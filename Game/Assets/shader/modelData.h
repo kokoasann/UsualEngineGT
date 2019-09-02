@@ -98,4 +98,11 @@ cbuffer GroundCB : register(b5)
 {
 	float4 groundScale;				//スケール
 	float4x4 groundDir;					//回転マトリクス
+	int4 groundUseTexs;
 }
+Texture2D<float4> groundBlendMap:register(t101);
+
+
+Texture2D<float4> texture_1:register(t102);		//多目的用
+Texture2D<float4> texture_2:register(t103);		//多目的用
+Texture2D<float4> texture_3:register(t104);		//多目的用

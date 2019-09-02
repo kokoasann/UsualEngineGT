@@ -53,7 +53,7 @@ static const int RTV_MAX = 8;
 
 #include "graphics/Primitive.h"
 #include "graphics/Shader.h"
-
+#include "graphics/SpriteDataManager.h"
 #include "graphics/Sprite.h"
 
 #include "graphics/SkinModelShaderConst.h"

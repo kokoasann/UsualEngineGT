@@ -44,8 +44,10 @@ bool Game::Start()
 	ground->SetSca(ue::CVector3{30, 0.1f, 10});
 	ground->SetPos({ 0,-100,0 });
 	rot.SetRotationDeg(ue::CVector3::AxisZ(), 90);
+	ground->SetBlendMap(L"Assets/sprite/map.dds");
+	ground->SetTexture(0, L"Assets/sprite/kusa.dds");
+	ground->SetTexture(1, L"Assets/sprite/tuti.dds");
 	//ground->SetRot(rot);
-	ue::SkinModelRender* grounda;
 
 	ground = ue::NewGO<ue::SMR4Ground>(0);
 	ground->InitG(L"Assets/model/octagon.cmo", 0, 0, ue::enFbxUpAxisZ);
@@ -68,15 +70,17 @@ bool Game::Start()
 	light = ue::NewGO<ue::LightDirection>(0);
 	light->SetDir({ -0.3f,-1,-0.2f });
 
-	campos = { 0,100,200 };
+	campos = { 0,250,200 };
+	//campos = { 0,3000,2000 };
 	cam->SetPosition(campos);
-	cam->SetTarget({ 0,0,0 });
+	//cam->SetTarget({ 0,2000,-1000 });
 	cam->Update();
 	return true;
 }
 
 void Game::Update()
 {
+	//return;
 	ue::CQuaternion add = ue::CQuaternion::Identity();
 	//add.SetRotationDeg(ue::CVector3::AxisY(), 0.5f);
 	//rot.Multiply(add);
@@ -90,37 +94,28 @@ void Game::Update()
 	//ground->SetRot(r);
 	auto camtar = cam->GetTarget();
 	
-	ue::CVector3 ofs = { 0,0,-200 };
+	static ue::CVector3 ofs = { 0,0,-200 };
 	auto pad = ue::GamePad(0);
 	float speed = 30.f;
-	if (pad.IsPress(ue::enButtonUp))
-	{
-		campos += cam->GetForward()*speed;
-	
-	}
-	if (pad.IsPress(ue::enButtonDown))
-	{
-		campos += cam->GetForward() * -speed;
-	}
-	if (pad.IsPress(ue::enButtonLeft))
-	{
-		campos += cam->GetRight() * -speed;
-	}
-	if (pad.IsPress(ue::enButtonRight))
-	{
-		campos += cam->GetRight() * speed;
-	}
-	static float deg = 0.f;
-	if (pad.IsPress(ue::enButtonRB1))
-	{
-		deg += 10.f;
-	}
-	if (pad.IsPress(ue::enButtonLB1))
-	{
-		deg -= 10.f;
-	}
-	add.SetRotationDeg(ue::CVector3::Up(), deg);
+	campos += cam->GetForward() * speed * pad.GetLStickYF();
+	campos += cam->GetRight() * speed * pad.GetLStickXF();
+
+
+	float yx = pad.GetRStickXF();
+	float yy = pad.GetRStickYF();
+	speed = 5.f;
+	ue::CQuaternion r = ue::CQuaternion::Identity();
+	add.SetRotationDeg(ue::CVector3::Up(), speed * yx);
+	//camrot.Multiply(add);
 	add.Multiply(ofs);
+
+	ue::CVector3 axix = ue::CVector3::Zero();
+	axix.Cross(ofs, ue::CVector3::AxisY());
+	axix.Normalize();
+	r.SetRotationDeg(axix, speed * yy);
+	add.Multiply(r);
+	add.Multiply(ofs);
+
 	camtar = campos + ofs;
 
 
