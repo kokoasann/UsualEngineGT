@@ -73,7 +73,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ReferencePath>$(SolutionDir)$(Platform)\$(Configuration)\;$(ReferencePath)</ReferencePath>
-    <IncludePath>$(SolutionDir)UsualEngine\bulletPhysics\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)UsualEngine\bulletPhysics\src;$(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)x64\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Character\Character.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -155,6 +156,7 @@
     <ClInclude Include="Assets\shader\Math.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="Character\Character.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
@@ -172,6 +174,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </MeshContentTask>
     <MeshContentTask Include="Assets\model\block\octagon.fbx" />
+    <MeshContentTask Include="Assets\model\gib\gib.bone.fbx" />
     <MeshContentTask Include="Assets\model\unityChan.fbx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </MeshContentTask>

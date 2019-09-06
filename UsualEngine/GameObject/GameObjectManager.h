@@ -28,7 +28,7 @@ namespace UsualEngine
 		T* TakeTrash()
 		{
 			T* t = NULL;
-			for (GameObject* tr : mTrashBox)
+			for (GameObject* tr : m_trashBox)
 			{
 				t = dynamic_cast<T*>(tr);
 				if (t != NULL)
@@ -38,8 +38,8 @@ namespace UsualEngine
 			}
 			if (t != NULL)
 			{
-				auto it = std::find(mTrashBox.begin(), mTrashBox.end(), t);
-				mTrashBox.erase(it);
+				auto it = std::find(m_trashBox.begin(), m_trashBox.end(), t);
+				m_trashBox.erase(it);
 				//ob = (GameObject*)(t);
 				t->Revive();
 			}
@@ -49,7 +49,7 @@ namespace UsualEngine
 		template<class T>
 		T* NewGameObject(int prio, const char* name,bool isCheckIned)
 		{
-			if (prio >= mMaxSize)
+			if (prio >= m_maxSize)
 			{
 				//MessageBoxA(usualEngine()->GetHwnd(),"","",0)
 				assert(0);
@@ -66,9 +66,9 @@ namespace UsualEngine
 			o->Awake();
 			o->SetPrio(prio);
 			o->SetName(hash);
-			mGameObjectList[prio].push_back((GameObject*)go);
-			if (isCheckIned && mCheckInCountList[prio]>0)
-				mCheckInCountList[prio] -= 1;
+			m_gameObjectList[prio].push_back((GameObject*)go);
+			if (isCheckIned && m_checkInCountList[prio]>0)
+				m_checkInCountList[prio] -= 1;
 			return go;
 		}
 
@@ -85,11 +85,12 @@ namespace UsualEngine
 		void ClearCapacity(int prio);
 		void CheckIN(int prio, int count);
 	private:
-		static const size_t mMaxSize = 32;
-		std::array<std::vector<GameObject*>,mMaxSize> mGameObjectList;
+		static const size_t m_maxSize = 32;
+		std::array<std::vector<GameObject*>,m_maxSize> m_gameObjectList;
 		
-		std::array<int, mMaxSize> mCheckInCountList;
-		std::vector<GameObject*> mTrashBox;
+		std::array<int, m_maxSize> m_checkInCountList;
+		std::vector<DeadData> m_ddList;
+		std::vector<GameObject*> m_trashBox;
 	};
 
 	template<class T>

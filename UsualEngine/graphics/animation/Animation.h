@@ -58,6 +58,11 @@ namespace UsualEngine
 		*/
 		void Update(float deltaTime);
 
+		AnimationPlayController* GetAnimationPlayController(int& num)
+		{
+			num = ANIMATION_PLAY_CONTROLLER_NUM;
+			return m_animationPlayController;
+		}
 	private:
 		void PlayCommon(AnimationClip* nextClip, float interpolateTime)
 		{
@@ -117,5 +122,6 @@ namespace UsualEngine
 		float m_interpolateTimeEnd = 0.0f;
 		bool m_isInterpolate = false;				//!<•âŠÔ’†H
 
+		
 	};
 }

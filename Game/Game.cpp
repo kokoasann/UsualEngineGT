@@ -13,17 +13,18 @@ void Game::OnDestroy()
 
 bool Game::Start()
 {
-	animclip[0].Load(L"Assets/animData/run.tka");
+	animclip[0].Load(L"Assets/animData/gib/gib.idol.tka");
 	animclip[0].SetLoopFlag(true);
 
 	ue::CQuaternion rot;
 	cam = &ue::usualEngine()->GetMainCamera();
 	p1 = ue::NewGO<ue::SkinModelRender>(0);
-	p1->Init(L"Assets/model/unityChan.cmo");
+	p1->Init(L"Assets/model/gib.bone.cmo", animclip, 1,ue::enFbxUpAxisY);
 	p1->SetPos({ 30,0,50 });
+	p1->SetSca({ 100,100,100 });
 
 	p2 = ue::NewGO<ue::SkinModelRender>(0);
-	p2->Init(L"Assets/model/unityChan.cmo",animclip,1);
+	p2->Init(L"Assets/model/unityChan.cmo"/*,animclip,1*/);
 	p2->SetPos({ -20,0,-50 });
 	rot.SetRotationDeg(ue::CVector3::AxisX(), 90);
 	p2->SetRot(rot);
@@ -80,22 +81,41 @@ bool Game::Start()
 
 void Game::Update()
 {
+	auto pad = ue::GamePad(0);
 	//return;
 	ue::CQuaternion add = ue::CQuaternion::Identity();
-	//add.SetRotationDeg(ue::CVector3::AxisY(), 0.5f);
-	//rot.Multiply(add);
-	//ue::CVector3 p = campos;
-	//rot.Multiply(p);
+	
+	static std::vector<ue::SkinModelRender*> list;
 
-	//auto r = ground->GetRot();
-	////r.Multiply(add);
-	//add.SetRotationDeg(ue::CVector3::AxisZ(), 0.7f);
-	//r.Multiply(add);
-	//ground->SetRot(r);
+	if (pad.IsTrigger(ue::enButtonA))
+	{
+		if (list.size() != 0)
+		{
+			ue::DeleteGO(list[list.size()-1]);
+			list.pop_back();
+		}
+	}
+	else if (pad.IsTrigger(ue::enButtonB))
+	{
+		ue::SkinModelRender* p1 = ue::NewGO<ue::SkinModelRender>(0);
+		p1->Init(L"Assets/model/unityChan.cmo");
+		p1->SetPos({ 30,0,50 });
+		p1->Update();
+		list.push_back(p1);
+	}
+	if (list.size() != 0)
+	{
+		float speed = 30.f;
+		auto npo = list[list.size() - 1]->GetPos();
+		npo += cam->GetForward() * speed* pad.GetLStickYF();
+		npo += cam->GetRight() * speed * pad.GetLStickXF();
+		list[list.size() - 1]->SetPos(npo);
+	}
+
 	auto camtar = cam->GetTarget();
 	
 	static ue::CVector3 ofs = { 0,0,-200 };
-	auto pad = ue::GamePad(0);
+	
 	float speed = 30.f;
 	campos += cam->GetForward() * speed * pad.GetLStickYF();
 	campos += cam->GetRight() * speed * pad.GetLStickXF();

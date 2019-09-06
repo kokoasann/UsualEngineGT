@@ -37,11 +37,11 @@ static const int RTV_MAX = 8;
 
 #include "HID/Pad.h"
 #include "UsualEngine.h"
+#include "Physics/CollisionAttr.h"
+#include "physics/Physics.h"
+#include "physics/CapsuleCollider.h"
 
 #include "util/Util.h"
-
-#include "physics/Physics.h"
-#include "HID/Pad.h"
 
 #include "math/Vector.h"
 #include "math/Matrix.h"

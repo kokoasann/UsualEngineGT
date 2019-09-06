@@ -10,6 +10,8 @@
 
 namespace UsualEngine
 {
+	
+
 
 	Animation::Animation()
 	{
@@ -39,6 +41,8 @@ namespace UsualEngine
 		for (auto& ctr : m_animationPlayController) {
 			ctr.Init(m_skeleton);
 		}
+		
+		
 
 		Play(0);
 	}
@@ -123,6 +127,9 @@ namespace UsualEngine
 				qGlobalPose[boneNo].Slerp(intepolateRate, qGlobalPose[boneNo], qBone);
 			}
 		}
+
+
+
 		//グローバルポーズをスケルトンに反映させていく。
 		for (int boneNo = 0; boneNo < numBone; boneNo++) {
 

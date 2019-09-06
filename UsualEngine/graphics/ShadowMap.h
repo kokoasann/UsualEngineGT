@@ -24,6 +24,7 @@ namespace UsualEngine
 		void AddShadowCaster(SkinModel* m)
 		{
 			m_shadowCaster.push_back(m);
+			
 		}
 	private:
 		struct SShadowCB

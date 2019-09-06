@@ -262,6 +262,12 @@ namespace UsualEngine
 				DirectX::XMMatrixTranspose(*this)
 			);
 		}
+		CVector3 GetTranslation() const
+		{
+			CVector3 v;
+			v.Set(_41, _42, _43);
+			return v;
+		}
 		static const CMatrix Identity()
 		{
 			static const CMatrix identity(

@@ -105,7 +105,7 @@ namespace UsualEngine
 		int mName = 0;					//名前(hash値)
 		int mPrio = 0;						//プライオリティ
 
-		bool mIsTrashTake = false;	//ゴミ拾う？
+		bool mIsTrashTake = true;	//ゴミ拾う？
 	protected:
 	};
 

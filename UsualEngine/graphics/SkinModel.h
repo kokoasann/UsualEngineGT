@@ -131,6 +131,15 @@ namespace UsualEngine
 		{
 			return m_isShadowReciever;
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		EnFbxUpAxis GetFbxUpAxis()
+		{
+			return m_enFbxUpAxis;
+		}
 	private:
 		/*!
 		*@brief	サンプラステートの初期化。

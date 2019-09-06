@@ -23,7 +23,7 @@ namespace UsualEngine
 
 	void GameObjectManager::UpdateStart()
 	{
-		for (auto goList : mGameObjectList)
+		for (auto goList : m_gameObjectList)
 		{
 			for (auto go : goList)
 			{
@@ -38,15 +38,16 @@ namespace UsualEngine
 
 	void GameObjectManager::DeleteGameObject(GameObject* go)
 	{
+		if (go == nullptr)
+			return;
 		go->OnDestroy();
 		go->DEAD();
 	}
 
 	void GameObjectManager::UpdateUpdate()
 	{
-		std::vector<DeadData> ddList;
 		int Count = 0;
-		for (auto goList : mGameObjectList)
+		for (auto goList : m_gameObjectList)
 		{
 			for (auto go : goList)
 			{
@@ -59,6 +60,7 @@ namespace UsualEngine
 						DeadData dd;
 						dd.ind = Count;
 						dd.prio = go->GetPrio();
+						m_ddList.push_back(dd);
 					}
 				}
 				Count++;
@@ -66,21 +68,22 @@ namespace UsualEngine
 			Count = 0;
 		}
 
-		for (auto dd : ddList)
+		for (auto dd : m_ddList)
 		{
-			GameObject* go = mGameObjectList[dd.prio][dd.ind];
-			auto it = std::find(mGameObjectList[dd.prio].begin(), mGameObjectList[dd.prio].end(), go);
-			mGameObjectList[dd.prio].erase(it);
+			GameObject* go = m_gameObjectList[dd.prio][dd.ind];
+			auto it = std::find(m_gameObjectList[dd.prio].begin(), m_gameObjectList[dd.prio].end(), go);
+			m_gameObjectList[dd.prio].erase(it);
 			if (go->IsTrashTake())
-				mTrashBox.push_back(go);
+				m_trashBox.push_back(go);
 			else
 				delete go;
 		}
+		m_ddList.clear();
 	}
 
 	void GameObjectManager::UpdateRender()
 	{
-		for (auto goList : mGameObjectList)
+		for (auto goList : m_gameObjectList)
 		{
 			for (auto go : goList)
 			{
@@ -91,7 +94,7 @@ namespace UsualEngine
 
 	void GameObjectManager::UpdatePostRender()
 	{
-		for (auto goList : mGameObjectList)
+		for (auto goList : m_gameObjectList)
 		{
 			for (auto go : goList)
 			{
@@ -102,21 +105,21 @@ namespace UsualEngine
 
 	void GameObjectManager::AddReserved(int prio, int add)
 	{
-		mGameObjectList[prio].reserve(mGameObjectList[prio].capacity() + add);
+		m_gameObjectList[prio].reserve(m_gameObjectList[prio].capacity() + add);
 	}
 	int GameObjectManager::Capacity(int prio)
 	{
-		int cap = mGameObjectList[prio].capacity();
-		cap -= mCheckInCountList[prio];
+		int cap = m_gameObjectList[prio].capacity();
+		cap -= m_checkInCountList[prio];
 		return cap;
 	}
 	void GameObjectManager::ClearCapacity(int prio)
 	{
-		mCheckInCountList[prio] = 0;
-		mGameObjectList[prio].shrink_to_fit();
+		m_checkInCountList[prio] = 0;
+		m_gameObjectList[prio].shrink_to_fit();
 	}
 	void GameObjectManager::CheckIN(int prio, int count)
 	{
-		mCheckInCountList[prio] += count;
+		m_checkInCountList[prio] += count;
 	}
 }

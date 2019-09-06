@@ -96,6 +96,7 @@ namespace UsualEngine
 		void AddChild(Bone* bone)
 		{
 			m_children.push_back(bone);
+			bone->SetParent(this);
 		}
 		/*!
 		*@brief	子供を取得。
@@ -103,6 +104,15 @@ namespace UsualEngine
 		std::vector<Bone*>& GetChildren()
 		{
 			return m_children;
+		}
+
+		void SetParent(Bone* chil)
+		{
+			m_parent = chil;
+		}
+		Bone* GetParent()
+		{
+			return m_parent;
 		}
 
 		/*!
@@ -133,6 +143,7 @@ namespace UsualEngine
 		CVector3		m_scale = CVector3::One();				//!<このボーンの拡大率。最後にCalcWorldTRSを実行したときの結果が格納されている。
 		CQuaternion		m_rotation = CQuaternion::Identity();	//!<このボーンの回転。最後にCalcWorldTRSを実行したときの結果が格納されている。
 		std::vector<Bone*>	m_children;		//!<子供。
+		Bone* m_parent = nullptr;			//親ボーン
 	};
 	/*!
 	 *@brief	スケルトン。
@@ -187,6 +198,14 @@ namespace UsualEngine
 		Bone* GetBone(int boneNo)
 		{
 			return m_bones[boneNo];
+		}
+		/// <summary>
+		/// 全ボーンを取得。
+		/// </summary>
+		/// <returns></returns>
+		std::vector<Bone*>& GetAllBone()
+		{
+			return m_bones;
 		}
 		/*!
 		*@brief	ボーン行列の配列をGPUに転送。

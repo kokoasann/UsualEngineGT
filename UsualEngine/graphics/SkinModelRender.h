@@ -72,5 +72,7 @@ namespace UsualEngine
 		CVector3 m_position = CVector3::Zero();
 		CQuaternion m_rotation = CQuaternion::Identity();
 		CVector3 m_scale = CVector3::One();
+
+		bool m_isRenderingOK = false; //ƒŒƒ“ƒ_ƒŠƒ“ƒO‚µ‚Ä‚à‚æ‚©‚ÆH
 	};
 }
