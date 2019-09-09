@@ -17,21 +17,11 @@ namespace UsualEngine
 	void AnimationPlayController::Init(Skeleton* skeleton)
 	{
 		int numBones = skeleton->GetNumBones();
-		m_skeleton = skeleton;
+
 		//ボーン行列をバシッと確保。
 		m_boneMatrix.resize(numBones);
 
-		//IKするボーンをゲッツ
-		int cont = 0;
-		for (auto bone : skeleton->GetAllBone())
-		{
-			if (std::wstring::npos != std::wstring(L"IK").find(bone->GetName()))
-			{
-				m_isIKBoneList[cont] = bone->GetNo();
-				cont++;
-			}
-		}
-		m_collider.Create(5, 5);
+		
 	}
 
 

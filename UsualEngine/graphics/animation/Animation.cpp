@@ -79,7 +79,17 @@ namespace UsualEngine
 			ctr.Init(m_skeleton);
 		}
 		
-		
+		//IKするボーンをゲッツ
+		int cont = 0;
+		for (auto bone : m_skeleton->GetAllBone())
+		{
+			if (std::wstring::npos != std::wstring(L"IK").find(bone->GetName()))
+			{
+				m_isIKBoneList[cont] = bone->GetNo();
+				cont++;
+			}
+		}
+		m_collider.Create(5, 5);
 
 		Play(0);
 	}
