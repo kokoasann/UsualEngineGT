@@ -63,6 +63,12 @@ namespace UsualEngine
 			num = ANIMATION_PLAY_CONTROLLER_NUM;
 			return m_animationPlayController;
 		}
+
+		void SetWorldMatrix(CMatrix mat)
+		{
+			m_oldWorldMatrix = m_worldMatrix;
+			m_worldMatrix = mat;
+		}
 	private:
 		void PlayCommon(AnimationClip* nextClip, float interpolateTime)
 		{
@@ -93,6 +99,8 @@ namespace UsualEngine
 			*/
 		void UpdateGlobalPose();
 
+
+		void UpdateIK(const std::vector<CMatrix>& oldBonesMat);
 	private:
 
 		/*!
@@ -122,6 +130,11 @@ namespace UsualEngine
 		float m_interpolateTimeEnd = 0.0f;
 		bool m_isInterpolate = false;				//!<•âŠÔ’†H
 
-		
+		CMatrix m_oldWorldMatrix;
+		CMatrix m_worldMatrix;
+		static const int m_MAXIKBONE = 64;
+		unsigned int m_isIKBoneList[m_MAXIKBONE] = { 0 };
+		Skeleton* m_skeleton = nullptr;
+		CapsuleCollider m_collider;
 	};
 }

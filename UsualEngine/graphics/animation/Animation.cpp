@@ -10,7 +10,44 @@
 
 namespace UsualEngine
 {
-	
+	//IK用の当たり判定のやつ
+	struct SweepResultIK : public btCollisionWorld::ConvexResultCallback
+	{
+		bool isHit = false;
+		CVector3 hitPos = CVector3::Zero();
+		CVector3 startPos = CVector3::Zero();
+		CVector3 hitNormal = CVector3::Zero();
+		float dist = FLT_MAX;
+
+		btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
+		{
+			if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_Character)
+			{
+				return 0.0f;
+			}
+			isHit = true;
+			CVector3 hitp = *(CVector3*)& convexResult.m_hitPointLocal;
+			CVector3 div = startPos - hitp;
+			float dis = div.Length();
+			if (dis < dist)
+			{
+				hitNormal = *(CVector3*)& convexResult.m_hitNormalLocal;
+				hitPos = *(CVector3*)& convexResult.m_hitPointLocal;
+				dist = dis;
+			}
+			return 0.0f;
+		}
+	};
+	struct Node
+	{
+		CVector3 pos;
+		float rad = 0;
+	};
+	struct Joint
+	{
+		CVector3 pos;
+		float n = 0;
+	};
 
 
 	Animation::Animation()
@@ -128,10 +165,13 @@ namespace UsualEngine
 			}
 		}
 
-
+		std::vector<CMatrix> oldSkelMat;
+		oldSkelMat.reserve(numBone);
 
 		//グローバルポーズをスケルトンに反映させていく。
 		for (int boneNo = 0; boneNo < numBone; boneNo++) {
+			oldSkelMat[boneNo] = m_skeleton->GetBone(boneNo)->GetWorldMatrix();
+
 
 			//拡大行列を作成。
 			CMatrix scaleMatrix;
@@ -154,6 +194,8 @@ namespace UsualEngine
 			);
 		}
 
+		
+
 		//最終アニメーション以外は補間完了していたら除去していく。
 		int numAnimationPlayController = m_numAnimationPlayController;
 		for (int i = 1; i < m_numAnimationPlayController; i++) {
@@ -165,6 +207,58 @@ namespace UsualEngine
 			}
 		}
 		m_numAnimationPlayController = numAnimationPlayController;
+	}
+
+	struct BoneMatrix
+	{
+		CMatrix World;
+		CMatrix Local;
+	};
+	void Animation::UpdateIK(const std::vector<CMatrix>& oldBonesMat)
+	{
+		const auto& bones = m_skeleton->GetAllBone();
+		
+		//
+		for (int ind : m_isIKBoneList)
+		{
+			auto currentBone = bones[ind];
+			const auto& effectorBone = bones[ind+1];
+
+			auto localmat = bones[ind]->GetLocalMatrix();
+			localmat.Mul(m_worldMatrix,localmat);
+			auto newpos = localmat.GetTranslation();
+
+			auto oldpos = oldBonesMat[ind].GetTranslation();
+
+			SweepResultIK sr;
+			sr.startPos = oldpos;
+
+			btTransform bstart, bend;
+			bstart.setIdentity();
+			bend.setIdentity();
+
+			bstart.setOrigin(btVector3(oldpos.x, oldpos.y, oldpos.z));
+			bend.setOrigin(btVector3(newpos.x, newpos.y, newpos.z));
+
+			auto target = newpos;
+			g_physics.ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), bstart, bend, sr);
+			if (sr.isHit)
+			{
+				auto norm = sr.hitNormal;
+				norm.Normalize();
+				auto meri = newpos - sr.hitPos;
+				float rad = meri.Dot(norm);
+				target += sr.hitNormal * (-rad + 5);
+
+
+				std::wstring end = L"END";
+				currentBone = std::move(m_skeleton->GetAllBone()[ind]->GetParent());
+				while (std::wstring::npos != end.find(currentBone->GetName()))
+				{
+					auto effector = ;
+				}
+			}
+		}
 	}
 
 
