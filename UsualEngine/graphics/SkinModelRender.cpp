@@ -30,12 +30,9 @@ namespace UsualEngine
 		worldMatrix.Mul(scaleMatrix, rotMatrix);
 		worldMatrix.Mul(worldMatrix, transMatrix);
 
-		int num = 0;
-		auto apc = m_animation.GetAnimationPlayController(num);
-		for (int i = 0; i < num; i++)
-		{
-			apc[i].SetWorldMatrix(worldMatrix);
-		}
+		
+		m_animation.SetWorldMatrix(worldMatrix);
+		
 
 		m_animation.Update(gameTime()->GetDeltaTime());
 		m_skinModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);

@@ -87,11 +87,7 @@ namespace UsualEngine
 			return m_isPlaying;
 		}
 
-		void SetWorldMatrix(CMatrix mat)
-		{
-			m_oldWorldMatrix = m_worldMatrix;
-			m_worldMatrix = mat;
-		}
+		
 	private:
 
 		/*!
@@ -107,11 +103,6 @@ namespace UsualEngine
 		float					m_interpolateEndTime;		//!<•âŠ®I—¹ŽžŠÔ
 		bool					m_isPlaying = false;		//!<Ä¶’†H
 
-		CMatrix m_oldWorldMatrix;
-		CMatrix m_worldMatrix;
-		static const int m_MAXIKBONE = 64;
-		unsigned int m_isIKBoneList[m_MAXIKBONE] = { 0 };
-		Skeleton* m_skeleton = nullptr;
-		CapsuleCollider m_collider;
+		
 	};
 }
