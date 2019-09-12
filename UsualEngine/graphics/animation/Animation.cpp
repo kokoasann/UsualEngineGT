@@ -295,12 +295,12 @@ namespace UsualEngine
 		{
 			if (ind <= 0)
 				break;
-			const auto& effectorBone = bones[ind];			//
+			auto effectorBone = bones[ind];			//
 			auto effmat = GetBoneWorldMatrix(effectorBone);
 			auto effpos = effmat.GetTranslation();
 			auto currentBone = effectorBone->GetParent();						//作業中のボーン
 			
-
+/*
 			auto bone = bones.at(ind);
 			Bone* parents[32];
 			int cont = 0;
@@ -314,7 +314,8 @@ namespace UsualEngine
 			{
 				mat.Mul(mat, parents[i]->GetLocalMatrix());
 			}
-			mat.Mul(mat, bones[ind]->GetLocalMatrix());
+			mat.Mul(mat, bones[ind]->GetLocalMatrix());*/
+			auto mat = GetBoneWorldMatrix(effectorBone);
 			auto newpos = mat.GetTranslation();	//移動先のポジション
 
 			//auto localmat = bones[ind]->GetLocalMatrix();
@@ -352,13 +353,11 @@ namespace UsualEngine
 				auto target = CVector3{ 500,100,0 };
 				std::wstring end = L"END";
 				std::wstring wname = currentBone->GetName();
-				//currentBone = m_skeleton->GetAllBone()[ind]->GetParent();
-				for (int i = 0; i < 5; i++)
+				for (int i = 0; i < 2; i++)
 				{
 					while (true)
 					{
 						auto currentmat = GetBoneWorldMatrix(currentBone);//作業ボーンの世界行列。
-
 
 						auto currentlocal = currentBone->GetLocalMatrix();//作業ボーンのローカル行列。
 						CVector3 lopo, losc;
@@ -374,6 +373,7 @@ namespace UsualEngine
 						inv.Mul(localeffpos);
 						CVector3 localtarpos = target;
 						inv.Mul(localtarpos);
+
 						auto toEffector = localeffpos;			//エフェクターからカレントボーンのベクトル
 						auto toTarget = localtarpos;			//ターゲットからカレントボーンのベクトル
 
@@ -383,7 +383,7 @@ namespace UsualEngine
 						toEffector.Normalize();
 						toTarget.Normalize();
 
-						auto rad = toTarget.Dot(toEffector);			//二つのベクトルの角度(ラッドウィンプス)
+						auto rad = toEffector.Dot(toTarget);			//二つのベクトルの角度(ラッドウィンプス)
 						rad = acos(rad);
 						float deg = CMath::RadToDeg(rad);
 
@@ -400,16 +400,7 @@ namespace UsualEngine
 							mRot.MakeRotationFromQuaternion(addrot);
 
 							auto pos = CVector3::Zero();
-							
-							/*pos = currentmat.GetTranslation();
-							currentmat.m[3][0] = 0.f;
-							currentmat.m[3][1] = 0.f;
-							currentmat.m[3][2] = 0.f;
-							currentmat.Mul(currentmat, mRot);
-							CMatrix tra;
-							tra.MakeTranslation(pos);
-							currentlocal.Mul(currentmat, tra);
-							currentmat = GetBoneLocalMatrix(currentBone, currentmat);*/
+
 
 							loro.Multiply(addrot);
 							CMatrix msca, mrot, mpos,mfin;
@@ -434,7 +425,14 @@ namespace UsualEngine
 							currentBone->SetLocalMatrix(currentlocal);*/
 						}
 
-						
+						/*static int cnt = 0;
+						static int cntmax = 1;
+						if (cnt == cntmax)
+						{
+							cnt = 0;
+							break;
+						}
+						cnt++;*/
 
 						if (std::wstring::npos != wname.find(L"END"))
 							break;
@@ -446,6 +444,7 @@ namespace UsualEngine
 					}
 				}
 			}
+			//break;//debug用。
 		}
 	}
 

@@ -73,7 +73,7 @@ bool Game::Start()
 	light = ue::NewGO<ue::LightDirection>(0);
 	light->SetDir({ -0.3f,-1,-0.2f });
 
-	campos = { 0,250,200 };
+	campos = { 0,5,200 };
 	//campos = { 0,3000,2000 };
 	cam->SetPosition(campos);
 	//cam->SetTarget({ 0,2000,-1000 });
@@ -144,4 +144,14 @@ void Game::Update()
 	cam->SetPosition(campos);
 	cam->SetTarget(camtar);
 	cam->Update();
+
+	auto v = campos;
+	v.Normalize();
+	float f = v.Dot(ue::CVector3::AxisZ());
+	float deg = ue::CMath::RadToDeg(acos(f));
+	v.Cross(ue::CVector3::AxisZ());
+	char st[255] = { 0 };
+	//sprintf_s(st, "deg:%.3f\n", deg);
+	sprintf_s(st, "x:%.3f y:%.3f z:%.3f\n", v.x,v.y,v.z);
+	OutputDebugString(st);
 }
