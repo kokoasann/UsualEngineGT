@@ -101,6 +101,9 @@ namespace UsualEngine
 
 
 		void UpdateIK(const std::vector<CMatrix>& oldBonesMat);
+
+		CMatrix GetBoneWorldMatrix(Bone* bone);
+		CMatrix GetBoneLocalMatrix(Bone* bone,CMatrix wm);
 	private:
 
 		/*!
@@ -133,8 +136,8 @@ namespace UsualEngine
 		CMatrix m_oldWorldMatrix;
 		CMatrix m_worldMatrix;
 		static const int m_MAXIKBONE = 64;
-		unsigned int m_isIKBoneList[m_MAXIKBONE] = { 0 };
-		Skeleton* m_skeleton = nullptr;
+		int m_isIKBoneList[m_MAXIKBONE] = { -1 };
+		//Skeleton* m_skeleton = nullptr;
 		CapsuleCollider m_collider;
 	};
 }

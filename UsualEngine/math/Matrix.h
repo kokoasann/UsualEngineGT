@@ -268,6 +268,24 @@ namespace UsualEngine
 			v.Set(_41, _42, _43);
 			return v;
 		}
+		void CalcMatrixDecompose(CVector3& trans, CQuaternion& rot, CVector3& scale)
+		{
+			CMatrix mat = *this;
+			//行列から拡大率を取得する。
+			scale.x = mat.v[0].Length();
+			scale.y = mat.v[1].Length();
+			scale.z = mat.v[2].Length();
+			//行列から平行移動量を取得する。
+			trans.Set(mat.v[3]);
+			//行列から拡大率と平行移動量を除去して回転量を取得する。
+			mat.v[0].Normalize();
+			mat.v[1].Normalize();
+			mat.v[2].Normalize();
+			mat.v[3].Set(0.0f, 0.0f, 0.0f, 1.0f);
+			rot.SetRotation(mat);
+		}
+
+
 		static const CMatrix Identity()
 		{
 			static const CMatrix identity(

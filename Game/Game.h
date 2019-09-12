@@ -10,7 +10,7 @@ public:
 	bool Start() override;
 	void Update() override;
 private:
-	ue::AnimationClip animclip[1];
+	ue::AnimationClip animclip[5];
 	ue::SkinModelRender* p1 = 0;
 	ue::SkinModelRender* p2 = 0;
 	ue::SkinModelRender* p3 = 0;

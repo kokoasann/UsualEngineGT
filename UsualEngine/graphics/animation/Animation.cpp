@@ -81,9 +81,11 @@ namespace UsualEngine
 		
 		//IKするボーンをゲッツ
 		int cont = 0;
+		std::wstring wstik = L"IK";
 		for (auto bone : m_skeleton->GetAllBone())
 		{
-			if (std::wstring::npos != std::wstring(L"IK").find(bone->GetName()))
+			std::wstring wname = bone->GetName();
+			if (std::wstring::npos != wname.find(wstik))
 			{
 				m_isIKBoneList[cont] = bone->GetNo();
 				cont++;
@@ -178,9 +180,13 @@ namespace UsualEngine
 		std::vector<CMatrix> oldSkelMat;
 		oldSkelMat.reserve(numBone);
 
+		auto a = m_skeleton->GetBone(3);
+		auto m = GetBoneWorldMatrix(a);
+		m = GetBoneLocalMatrix(a, m);
+
 		//グローバルポーズをスケルトンに反映させていく。
 		for (int boneNo = 0; boneNo < numBone; boneNo++) {
-			oldSkelMat[boneNo] = m_skeleton->GetBone(boneNo)->GetWorldMatrix();
+			oldSkelMat.push_back(m_skeleton->GetBone(boneNo)->GetWorldMatrix());
 
 
 			//拡大行列を作成。
@@ -193,10 +199,22 @@ namespace UsualEngine
 			CMatrix transMat;
 			transMat.MakeTranslation(vGlobalPose[boneNo]);
 
+			
+
 			//全部を合成して、ボーン行列を作成。
 			CMatrix boneMatrix;
 			boneMatrix.Mul(scaleMatrix, rotMatrix);
 			boneMatrix.Mul(boneMatrix, transMat);
+
+			
+			/*if (boneNo == 3)
+			{
+				auto rot = CQuaternion::Identity();
+				rot.SetRotationDeg(CVector3::AxisZ(), 60);
+				CMatrix r;
+				r.MakeRotationFromQuaternion(rot);
+				boneMatrix.Mul(boneMatrix, rotMatrix);
+			}*/
 
 			m_skeleton->SetBoneLocalMatrix(
 				boneNo,
@@ -204,7 +222,7 @@ namespace UsualEngine
 			);
 		}
 
-		
+		UpdateIK(oldSkelMat);
 
 		//最終アニメーション以外は補間完了していたら除去していく。
 		int numAnimationPlayController = m_numAnimationPlayController;
@@ -224,6 +242,50 @@ namespace UsualEngine
 		CMatrix World;
 		CMatrix Local;
 	};
+
+	CMatrix Animation::GetBoneWorldMatrix(Bone* bone)
+	{
+		Bone* parents[32] = {NULL};
+		int cont = 0;
+		Bone* b = bone;
+		while (true)
+		{
+			parents[cont++] = b;
+			b = b->GetParent();
+			if (b == nullptr)
+				break;
+		}
+		auto mat = m_worldMatrix;
+		for (int i = cont - 1; i >= 0; i--)
+		{
+			auto locmat = parents[i]->GetLocalMatrix();
+			mat.Mul(locmat,mat);
+		}
+		//mat.Mul(bone->GetLocalMatrix(),mat);
+		return mat;
+	}
+
+	CMatrix Animation::GetBoneLocalMatrix(Bone* bone,CMatrix wm)
+	{
+		CMatrix parents[32];
+		CMatrix mat = wm;
+		int cont = 0;
+		CMatrix inv;
+		/*Bone* b = bone;
+		while (true)
+		{
+			b = b->GetParent();
+			if (b == nullptr)
+				break;
+			b->GetInvBindPoseMatrix();
+			inv.Inverse(GetBoneWorldMatrix(b));
+			mat.Mul(mat,inv);
+		}*/
+		inv.Inverse(GetBoneWorldMatrix(bone->GetParent()));
+		mat.Mul(wm,inv);
+		return mat;
+	}
+
 	void Animation::UpdateIK(const std::vector<CMatrix>& oldBonesMat)
 	{
 		const auto& bones = m_skeleton->GetAllBone();
@@ -231,14 +293,36 @@ namespace UsualEngine
 		//
 		for (int ind : m_isIKBoneList)
 		{
-			auto currentBone = bones[ind];
-			const auto& effectorBone = bones[ind+1];
+			if (ind <= 0)
+				break;
+			const auto& effectorBone = bones[ind];			//
+			auto effmat = GetBoneWorldMatrix(effectorBone);
+			auto effpos = effmat.GetTranslation();
+			auto currentBone = effectorBone->GetParent();						//作業中のボーン
+			
 
-			auto localmat = bones[ind]->GetLocalMatrix();
-			localmat.Mul(m_worldMatrix,localmat);
-			auto newpos = localmat.GetTranslation();
+			auto bone = bones.at(ind);
+			Bone* parents[32];
+			int cont = 0;
+			while (bone != nullptr)
+			{
+				bone = bone->GetParent();
+				parents[cont++] = bone;
+			}
+			auto mat = m_worldMatrix;
+			for (int i = cont - 1; i <= 0; i++)
+			{
+				mat.Mul(mat, parents[i]->GetLocalMatrix());
+			}
+			mat.Mul(mat, bones[ind]->GetLocalMatrix());
+			auto newpos = mat.GetTranslation();	//移動先のポジション
 
-			auto oldpos = oldBonesMat[ind].GetTranslation();
+			//auto localmat = bones[ind]->GetLocalMatrix();
+			//auto worldmat = CMatrix::Identity();
+			//worldmat.Mul(m_worldMatrix,localmat);
+			//auto newpos = worldmat.GetTranslation();	//移動先のポジション
+
+			auto oldpos = oldBonesMat[ind].GetTranslation();	//移動前のポジション
 
 			SweepResultIK sr;
 			sr.startPos = oldpos;
@@ -250,9 +334,10 @@ namespace UsualEngine
 			bstart.setOrigin(btVector3(oldpos.x, oldpos.y, oldpos.z));
 			bend.setOrigin(btVector3(newpos.x, newpos.y, newpos.z));
 
-			auto target = newpos;
+			auto target = newpos;			//ターゲット
+						//ターゲット
 			g_physics.ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), bstart, bend, sr);
-			if (sr.isHit)
+			if (sr.isHit or true)
 			{
 				auto norm = sr.hitNormal;
 				norm.Normalize();
@@ -260,12 +345,105 @@ namespace UsualEngine
 				float rad = meri.Dot(norm);
 				target += sr.hitNormal * (-rad + 5);
 
+				auto invworldmat = CMatrix::Identity();
+				invworldmat.Inverse(m_worldMatrix);
+				invworldmat.Mul(target);
 
+				auto target = CVector3{ 500,100,0 };
 				std::wstring end = L"END";
-				currentBone = std::move(m_skeleton->GetAllBone()[ind]->GetParent());
-				while (std::wstring::npos != end.find(currentBone->GetName()))
+				std::wstring wname = currentBone->GetName();
+				//currentBone = m_skeleton->GetAllBone()[ind]->GetParent();
+				for (int i = 0; i < 5; i++)
 				{
-					auto effector = ;
+					while (true)
+					{
+						auto currentmat = GetBoneWorldMatrix(currentBone);//作業ボーンの世界行列。
+
+
+						auto currentlocal = currentBone->GetLocalMatrix();//作業ボーンのローカル行列。
+						CVector3 lopo, losc;
+						CQuaternion loro;
+						currentlocal.CalcMatrixDecompose(lopo, loro, losc);
+
+						auto currentpos = currentmat.GetTranslation();	//作業中のボーンの位置。
+
+						CMatrix inv;
+						inv.Inverse(currentmat);
+
+						CVector3 localeffpos=effpos;
+						inv.Mul(localeffpos);
+						CVector3 localtarpos = target;
+						inv.Mul(localtarpos);
+						auto toEffector = localeffpos;			//エフェクターからカレントボーンのベクトル
+						auto toTarget = localtarpos;			//ターゲットからカレントボーンのベクトル
+
+						auto elen = toEffector.Length();
+						auto tlen = toTarget.Length();
+
+						toEffector.Normalize();
+						toTarget.Normalize();
+
+						auto rad = toTarget.Dot(toEffector);			//二つのベクトルの角度(ラッドウィンプス)
+						rad = acos(rad);
+						float deg = CMath::RadToDeg(rad);
+
+						if (rad > 0.000001f)
+						{
+							auto axis = CVector3::Zero();					//回転軸.
+							axis.Cross(toEffector, toTarget);
+							axis.Normalize();
+
+							auto addrot = CQuaternion::Identity();			//加える回転.
+							addrot.SetRotation(axis, rad);
+
+							CMatrix mRot;									//加える回転行列。
+							mRot.MakeRotationFromQuaternion(addrot);
+
+							auto pos = CVector3::Zero();
+							
+							/*pos = currentmat.GetTranslation();
+							currentmat.m[3][0] = 0.f;
+							currentmat.m[3][1] = 0.f;
+							currentmat.m[3][2] = 0.f;
+							currentmat.Mul(currentmat, mRot);
+							CMatrix tra;
+							tra.MakeTranslation(pos);
+							currentlocal.Mul(currentmat, tra);
+							currentmat = GetBoneLocalMatrix(currentBone, currentmat);*/
+
+							loro.Multiply(addrot);
+							CMatrix msca, mrot, mpos,mfin;
+							msca.MakeScaling(losc);
+							mrot.MakeRotationFromQuaternion(loro);
+							mpos.MakeTranslation(lopo);
+
+							mfin.Mul(msca, mrot);
+							mfin.Mul(mfin, mpos);
+							currentBone->SetLocalMatrix(mfin);
+
+
+							/*pos = currentlocal.GetTranslation();
+							currentlocal.m[3][0] = 0.f;
+							currentlocal.m[3][1] = 0.f;
+							currentlocal.m[3][2] = 0.f;
+							currentlocal.Mul(currentlocal, mRot);
+							CMatrix tra;
+							tra.MakeTranslation(pos);
+							currentlocal.Mul(currentlocal, tra);
+
+							currentBone->SetLocalMatrix(currentlocal);*/
+						}
+
+						
+
+						if (std::wstring::npos != wname.find(L"END"))
+							break;
+						effmat = GetBoneWorldMatrix(effectorBone);
+						effpos = effmat.GetTranslation();
+
+						currentBone = currentBone->GetParent();
+						wname = currentBone->GetName();
+					}
 				}
 			}
 		}

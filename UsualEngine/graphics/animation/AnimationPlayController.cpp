@@ -12,25 +12,20 @@
 	
 namespace UsualEngine
 {
-	
-
 	void AnimationPlayController::Init(Skeleton* skeleton)
 	{
 		int numBones = skeleton->GetNumBones();
 
 		//ボーン行列をバシッと確保。
 		m_boneMatrix.resize(numBones);
-
-		
 	}
-
-
 
 	void AnimationPlayController::StartLoop()
 	{
 		m_currentKeyFrameNo = 0;
 		m_time = 0.0f;
 	}
+
 	void AnimationPlayController::Update(float deltaTime, Animation* animation)
 	{
 		if (m_animationClip == nullptr) {
@@ -77,7 +72,6 @@ namespace UsualEngine
 			Keyframe* keyframe = keyFrameList.at(m_currentKeyFrameNo);
 			if (keyframe->boneIndex < m_boneMatrix.size()) {
 				m_boneMatrix[keyframe->boneIndex] = keyframe->transform;
-
 			}
 			else {
 #ifdef _DEBUG			
@@ -90,5 +84,4 @@ namespace UsualEngine
 			}
 		}
 	}
-
 }

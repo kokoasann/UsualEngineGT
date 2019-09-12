@@ -6,6 +6,9 @@
 
 namespace UsualEngine
 {
+	class CMatrix;
+	class CVector3;
+
 	class CMath {
 	public:
 		static const float PI;
@@ -33,5 +36,6 @@ namespace UsualEngine
 		{
 			return t0 + (t1 - t0) * rate;
 		}
+
 	};
 }
