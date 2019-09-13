@@ -20,5 +20,7 @@ private:
 	ue::Camera* cam = 0;
 	ue::CQuaternion camrot=ue::CQuaternion::Identity();
 
+	ue::PhysicsStaticObject pso;
+
 	ue::LightDirection* light = 0;
 };

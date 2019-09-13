@@ -93,6 +93,7 @@ namespace UsualEngine
 		}
 		m_collider.Create(5, 5);
 
+
 		Play(0);
 	}
 	/*!
@@ -267,20 +268,8 @@ namespace UsualEngine
 
 	CMatrix Animation::GetBoneLocalMatrix(Bone* bone,CMatrix wm)
 	{
-		CMatrix parents[32];
 		CMatrix mat = wm;
-		int cont = 0;
 		CMatrix inv;
-		/*Bone* b = bone;
-		while (true)
-		{
-			b = b->GetParent();
-			if (b == nullptr)
-				break;
-			b->GetInvBindPoseMatrix();
-			inv.Inverse(GetBoneWorldMatrix(b));
-			mat.Mul(mat,inv);
-		}*/
 		inv.Inverse(GetBoneWorldMatrix(bone->GetParent()));
 		mat.Mul(wm,inv);
 		return mat;
@@ -300,23 +289,7 @@ namespace UsualEngine
 			auto effpos = effmat.GetTranslation();
 			auto currentBone = effectorBone->GetParent();						//作業中のボーン
 			
-/*
-			auto bone = bones.at(ind);
-			Bone* parents[32];
-			int cont = 0;
-			while (bone != nullptr)
-			{
-				bone = bone->GetParent();
-				parents[cont++] = bone;
-			}
-			auto mat = m_worldMatrix;
-			for (int i = cont - 1; i <= 0; i++)
-			{
-				mat.Mul(mat, parents[i]->GetLocalMatrix());
-			}
-			mat.Mul(mat, bones[ind]->GetLocalMatrix());*/
-			auto mat = GetBoneWorldMatrix(effectorBone);
-			auto newpos = mat.GetTranslation();	//移動先のポジション
+			auto newpos = effpos;	//移動先のポジション
 
 			//auto localmat = bones[ind]->GetLocalMatrix();
 			//auto worldmat = CMatrix::Identity();
@@ -338,7 +311,7 @@ namespace UsualEngine
 			auto target = newpos;			//ターゲット
 						//ターゲット
 			g_physics.ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), bstart, bend, sr);
-			if (sr.isHit or true)
+			if (sr.isHit)
 			{
 				auto norm = sr.hitNormal;
 				norm.Normalize();
@@ -350,10 +323,11 @@ namespace UsualEngine
 				invworldmat.Inverse(m_worldMatrix);
 				invworldmat.Mul(target);
 
-				auto target = CVector3{ 500,100,0 };
+				//static auto target = CVector3{ 500,500,0 };
 				std::wstring end = L"END";
 				std::wstring wname = currentBone->GetName();
-				for (int i = 0; i < 2; i++)
+				static int roop = 1;
+				for (int i = 0; i < roop; i++)
 				{
 					while (true)
 					{
@@ -395,15 +369,19 @@ namespace UsualEngine
 
 							auto addrot = CQuaternion::Identity();			//加える回転.
 							addrot.SetRotation(axis, rad);
+							auto difrot = CQuaternion::Identity();			//
+							difrot.SetRotationDeg(axis, 360.f-CMath::RadToDeg(rad));
 
 							CMatrix mRot;									//加える回転行列。
 							mRot.MakeRotationFromQuaternion(addrot);
 
-							auto pos = CVector3::Zero();
 
-
+							auto bfloro = loro;
 							loro.Multiply(addrot);
 							CMatrix msca, mrot, mpos,mfin;
+
+
+
 							msca.MakeScaling(losc);
 							mrot.MakeRotationFromQuaternion(loro);
 							mpos.MakeTranslation(lopo);
@@ -412,8 +390,30 @@ namespace UsualEngine
 							mfin.Mul(mfin, mpos);
 							currentBone->SetLocalMatrix(mfin);
 
+							auto fepos = GetBoneWorldMatrix(effectorBone).GetTranslation();
+							auto fe2target = (fepos - target).Length();
+							auto ef2target = (effpos - target).Length();
 
-							/*pos = currentlocal.GetTranslation();
+							CMatrix mfin2;
+							bfloro.Multiply(difrot);
+							mrot.MakeRotationFromQuaternion(bfloro);
+							mfin2.Mul(msca, mrot);
+							mfin2.Mul(mfin2, mpos);
+							//currentBone->SetLocalMatrix(mfin2);
+
+							fepos = GetBoneWorldMatrix(effectorBone).GetTranslation();
+							auto fe2target2 = (fepos - target).Length();
+							if (fe2target < fe2target2)
+							{
+								//currentBone->SetLocalMatrix(mfin);
+							}
+							else
+							{
+								int i = 0;
+							}
+
+
+							/*auto pos = currentlocal.GetTranslation();
 							currentlocal.m[3][0] = 0.f;
 							currentlocal.m[3][1] = 0.f;
 							currentlocal.m[3][2] = 0.f;
