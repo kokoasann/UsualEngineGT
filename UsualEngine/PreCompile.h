@@ -40,6 +40,7 @@ static const int RTV_MAX = 8;
 #include "Physics/CollisionAttr.h"
 #include "physics/Physics.h"
 #include "physics/CapsuleCollider.h"
+#include "physics/PhysicsStaticObject.h"
 
 #include "util/Util.h"
 

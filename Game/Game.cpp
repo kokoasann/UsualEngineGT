@@ -13,7 +13,7 @@ void Game::OnDestroy()
 
 bool Game::Start()
 {
-	animclip[0].Load(L"Assets/animData/gib/gib.idol.tka");
+	animclip[0].Load(L"Assets/animData/gib/gib.walk1.tka");
 	animclip[0].SetLoopFlag(true);
 	animclip[1].Load(L"Assets/animData/run.tka");
 	animclip[1].SetLoopFlag(true);
@@ -50,6 +50,8 @@ bool Game::Start()
 	ground->SetBlendMap(L"Assets/sprite/map.dds");
 	ground->SetTexture(0, L"Assets/sprite/kusa.dds");
 	ground->SetTexture(1, L"Assets/sprite/tuti.dds");
+
+	pso.CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot());
 	//ground->SetRot(rot);
 
 	ground = ue::NewGO<ue::SMR4Ground>(0);
