@@ -22,12 +22,12 @@ bool Game::Start()
 	cam = &ue::usualEngine()->GetMainCamera();
 	p1 = ue::NewGO<ue::SkinModelRender>(0);
 	p1->Init(L"Assets/model/gib.bone.cmo", animclip, 1,ue::enFbxUpAxisY);
-	p1->SetPos({ 0,0,0 });
+	p1->SetPos({ 0,-100,0 });
 	p1->SetSca({ 100,100,100 });
 
 	p2 = ue::NewGO<ue::SkinModelRender>(0);
 	p2->Init(L"Assets/model/unityChan.cmo");// , animclip + 1, 1);
-	p2->SetPos({ 500,100,0 });
+	p2->SetPos({ 0,0,0 });
 	rot.SetRotationDeg(ue::CVector3::AxisX(), 90);
 	p2->SetRot(rot);
 	p2->SetIsShadowCaster(true);
@@ -87,6 +87,11 @@ void Game::Update()
 {
 	auto pad = ue::GamePad(0);
 	//return;
+
+	auto p = p1->GetPos();
+	p.z += 10;
+	p1->SetPos(p);
+
 	ue::CQuaternion add = ue::CQuaternion::Identity();
 	
 	static std::vector<ue::SkinModelRender*> list;

@@ -38,17 +38,6 @@ namespace UsualEngine
 			return 0.0f;
 		}
 	};
-	struct Node
-	{
-		CVector3 pos;
-		float rad = 0;
-	};
-	struct Joint
-	{
-		CVector3 pos;
-		float n = 0;
-	};
-
 
 	Animation::Animation()
 	{
@@ -91,7 +80,7 @@ namespace UsualEngine
 				cont++;
 			}
 		}
-		m_collider.Create(5, 5);
+		m_collider.Create(50, 50);
 
 
 		Play(0);
@@ -297,6 +286,8 @@ namespace UsualEngine
 			//auto newpos = worldmat.GetTranslation();	//移動先のポジション
 
 			auto oldpos = oldBonesMat[ind].GetTranslation();	//移動前のポジション
+			if ((newpos - oldpos).Length() < 0.000001f)
+				continue;
 
 			SweepResultIK sr;
 			sr.startPos = oldpos;
@@ -321,7 +312,7 @@ namespace UsualEngine
 
 				auto invworldmat = CMatrix::Identity();
 				invworldmat.Inverse(m_worldMatrix);
-				invworldmat.Mul(target);
+				//invworldmat.Mul(target);
 
 				//static auto target = CVector3{ 500,500,0 };
 				std::wstring end = L"END";

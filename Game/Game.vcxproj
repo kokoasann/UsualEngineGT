@@ -73,7 +73,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ReferencePath>$(SolutionDir)$(Platform)\$(Configuration)\;$(ReferencePath)</ReferencePath>
-    <IncludePath>$(SolutionDir)UsualEngine\bulletPhysics\src;$(ProjectDir);$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)UsualEngine\bulletPhysics\src;$(ProjectDir);$(SolutionDir)UsualEngine;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)x64\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

@@ -197,6 +197,9 @@
     <ClCompile Include="Prefab\SkinModelRender4Ground.cpp">
       <Filter>Prefab</Filter>
     </ClCompile>
+    <ClCompile Include="physics\PhysicsDebugDraw.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="character\CharacterController.h">
@@ -350,6 +353,9 @@
     </ClInclude>
     <ClInclude Include="Prefab\SkinModelRender4Ground.h">
       <Filter>Prefab</Filter>
+    </ClInclude>
+    <ClInclude Include="physics\PhysicsDebugDraw.h">
+      <Filter>Physics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

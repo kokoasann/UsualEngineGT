@@ -139,6 +139,6 @@ namespace UsualEngine
 		int m_isIKBoneList[m_MAXIKBONE] = { -1 };
 		//Skeleton* m_skeleton = nullptr;
 		CapsuleCollider m_collider;
-		RigidBody m_rigidBody;
+		//RigidBody m_rigidBody;
 	};
 }
