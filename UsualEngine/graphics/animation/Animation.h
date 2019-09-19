@@ -7,6 +7,7 @@
 #include "graphics/animation/AnimationClip.h"
 #include "graphics/animation/AnimationPlayController.h"
 
+#include "Physics/CapsuleCollider.h"
 
 
 
@@ -140,5 +141,6 @@ namespace UsualEngine
 		//Skeleton* m_skeleton = nullptr;
 		CapsuleCollider m_collider;
 		//RigidBody m_rigidBody;
+
 	};
 }

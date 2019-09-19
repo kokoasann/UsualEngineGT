@@ -22,8 +22,20 @@ bool Game::Start()
 	cam = &ue::usualEngine()->GetMainCamera();
 	p1 = ue::NewGO<ue::SkinModelRender>(0);
 	p1->Init(L"Assets/model/gib.bone.cmo", animclip, 1,ue::enFbxUpAxisY);
-	p1->SetPos({ 0,-100,0 });
+	p1->SetPos({ 0,-60,-1000 });
 	p1->SetSca({ 100,100,100 });
+
+	for (auto bone : p1->GetSkinModel().GetSkeleton().GetAllBone())
+	{
+		if (lstrcmpW(bone->GetName(), L"Bone.007_R.005") == 0)
+		{
+			Rfoot = bone;
+		}
+		else if(lstrcmpW(bone->GetName(), L"Bone.007_L.005") == 0)
+		{
+			Lfoot = bone;
+		}
+	}
 
 	p2 = ue::NewGO<ue::SkinModelRender>(0);
 	p2->Init(L"Assets/model/unityChan.cmo");// , animclip + 1, 1);
@@ -44,14 +56,16 @@ bool Game::Start()
 
 	ground = ue::NewGO<ue::SMR4Ground>(0);
 	ground->InitG(L"Assets/model/dun.cmo", 0, 0, ue::enFbxUpAxisZ);
-	ground->SetSca(ue::CVector3{30, 0.1f, 10});
-	ground->SetPos({ 0,-100,0 });
+	//ground->SetSca(ue::CVector3{30, 0.1f, 10});
+	ground->SetSca(ue::CVector3{30, 30.f, 10});
+	//ground->SetPos({ 0,-100,0 });
+	ground->SetPos({ 0,-100*300,0 });
 	rot.SetRotationDeg(ue::CVector3::AxisZ(), 90);
 	ground->SetBlendMap(L"Assets/sprite/map.dds");
 	ground->SetTexture(0, L"Assets/sprite/kusa.dds");
 	ground->SetTexture(1, L"Assets/sprite/tuti.dds");
 
-	pso.CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot());
+	pso.CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(),ground->GetSca());
 	//ground->SetRot(rot);
 
 	ground = ue::NewGO<ue::SMR4Ground>(0);
@@ -89,7 +103,27 @@ void Game::Update()
 	//return;
 
 	auto p = p1->GetPos();
-	p.z += 10;
+
+	if (GetAsyncKeyState('Q'))
+	{
+		p.z += 60;
+	}
+	else if (GetAsyncKeyState('E'))
+	{
+		p.z -= 50;
+	}
+
+	if (Lfoot->IsONGround())
+	{
+		auto v = Rfoot->GetMove();
+		p.z += v.Length();
+	}
+	else if(Rfoot->IsONGround())
+	{
+		auto v = Lfoot->GetMove();
+		p.z += v.Length();
+	}
+	//p.z += 5;
 	p1->SetPos(p);
 
 	ue::CQuaternion add = ue::CQuaternion::Identity();
@@ -159,6 +193,6 @@ void Game::Update()
 	v.Cross(ue::CVector3::AxisZ());
 	char st[255] = { 0 };
 	//sprintf_s(st, "deg:%.3f\n", deg);
-	sprintf_s(st, "x:%.3f y:%.3f z:%.3f\n", v.x,v.y,v.z);
-	OutputDebugString(st);
+	//sprintf_s(st, "x:%.3f y:%.3f z:%.3f\n", v.x,v.y,v.z);
+	//OutputDebugString(st);
 }

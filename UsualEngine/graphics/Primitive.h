@@ -24,7 +24,13 @@ namespace UsualEngine
 			const void* indexData
 		);
 
+		VertexBuffer& GetVertexBuffer()
+		{
+			return mVertexBuffer;
+		}
+		
 		void Draw();
+		void Draw(ID3D11DeviceContext* dc, int vertexnum);
 	private:
 		VertexBuffer mVertexBuffer;		//頂点バッファ
 		IndexBuffer mIndexBuffer;		//インデックスバッファ

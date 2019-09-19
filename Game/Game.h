@@ -1,5 +1,6 @@
 #pragma once
 
+#include "physics/PhysicsStaticObject.h"
 
 class Game :public ue::GameObject
 {
@@ -19,6 +20,9 @@ private:
 	ue::CQuaternion rot = ue::CQuaternion::Identity();
 	ue::Camera* cam = 0;
 	ue::CQuaternion camrot=ue::CQuaternion::Identity();
+
+	ue::Bone* Lfoot;
+	ue::Bone* Rfoot;
 
 	ue::PhysicsStaticObject pso;
 

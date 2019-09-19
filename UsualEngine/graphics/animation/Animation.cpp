@@ -77,10 +77,16 @@ namespace UsualEngine
 			if (std::wstring::npos != wname.find(wstik))
 			{
 				m_isIKBoneList[cont] = bone->GetNo();
+
+				/*SkinModelRender* s = NewGO<SkinModelRender>(0);
+				s->Init(L"Assets/model/dun.cmo");
+				s->SetSca({ 0.05,0.05,0.05 });
+				m_marker.push_back(s);*/
+
 				cont++;
 			}
 		}
-		m_collider.Create(50, 50);
+		m_collider.Create(80, 80);
 
 
 		Play(0);
@@ -170,9 +176,6 @@ namespace UsualEngine
 		std::vector<CMatrix> oldSkelMat;
 		oldSkelMat.reserve(numBone);
 
-		auto a = m_skeleton->GetBone(3);
-		auto m = GetBoneWorldMatrix(a);
-		m = GetBoneLocalMatrix(a, m);
 
 		//グローバルポーズをスケルトンに反映させていく。
 		for (int boneNo = 0; boneNo < numBone; boneNo++) {
@@ -268,6 +271,7 @@ namespace UsualEngine
 	{
 		const auto& bones = m_skeleton->GetAllBone();
 		
+		int con = 0;
 		//
 		for (int ind : m_isIKBoneList)
 		{
@@ -301,18 +305,30 @@ namespace UsualEngine
 
 			auto target = newpos;			//ターゲット
 						//ターゲット
-			g_physics.ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), bstart, bend, sr);
+			Physics().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), bstart, bend, sr);
 			if (sr.isHit)
 			{
 				auto norm = sr.hitNormal;
 				norm.Normalize();
 				auto meri = newpos - sr.hitPos;
 				float rad = meri.Dot(norm);
-				target += sr.hitNormal * (-rad + 5);
-
+				target += sr.hitNormal * (-rad + 15);
+				target = sr.hitPos;
 				auto invworldmat = CMatrix::Identity();
 				invworldmat.Inverse(m_worldMatrix);
-				//invworldmat.Mul(target);
+
+				if (effectorBone->IsONGround())
+				{
+					target = oldpos;
+				}
+				effectorBone->SetIsONGround(true);
+
+				//invworldmat.Mul(target);.
+
+				/*auto mark = NewGO<SkinModelRender>(0);
+				mark->Init(L"assets/model/dun.cmo");
+				mark->SetSca({ 0.01,0.01 ,0.01 });
+				mark->SetPos(target);*/
 
 				//static auto target = CVector3{ 500,500,0 };
 				std::wstring end = L"END";
@@ -434,6 +450,10 @@ namespace UsualEngine
 						wname = currentBone->GetName();
 					}
 				}
+			}
+			else
+			{
+				effectorBone->SetIsONGround(false);
 			}
 			//break;//debug用。
 		}

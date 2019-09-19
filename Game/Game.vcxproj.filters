@@ -51,6 +51,9 @@
     <FxCompile Include="Assets\shader\sprite.fx">
       <Filter>Assets\Shader</Filter>
     </FxCompile>
+    <FxCompile Include="Assets\shader\linePrimitive.fx">
+      <Filter>Assets\Shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Assets\model\unityChan.fbx">

@@ -19,6 +19,8 @@ namespace UsualEngine
 		UpdateUpdate();
 		UpdateRender();
 		UpdatePostRender();
+
+		Physics().DebugDraw();
 	}
 
 	void GameObjectManager::UpdateStart()
@@ -90,6 +92,8 @@ namespace UsualEngine
 				go->Render();
 			}
 		}
+
+		
 	}
 
 	void GameObjectManager::UpdatePostRender()

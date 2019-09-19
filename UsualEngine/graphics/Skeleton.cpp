@@ -53,9 +53,16 @@ namespace UsualEngine
 		//ワールド行列を計算する。
 		CMatrix mBoneWorld;
 		CMatrix localMatrix = bone.GetLocalMatrix();
+
+		CVector3 oldpos, newpos;
+		oldpos = bone.GetWorldMatrix().GetTranslation();
+
 		//親の行列とローカル行列を乗算して、ワールド行列を計算する。
 		mBoneWorld.Mul(localMatrix, parentMatrix);
 		bone.SetWorldMatrix(mBoneWorld);
+
+		newpos = mBoneWorld.GetTranslation();
+		bone.SetMove(newpos - oldpos);
 
 		//子供のワールド行列も計算する。
 		std::vector<Bone*>& children = bone.GetChildren();

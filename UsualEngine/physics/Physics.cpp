@@ -4,7 +4,7 @@
 
 namespace UsualEngine
 {
-	PhysicsWorld g_physics;
+	//PhysicsWorld g_physics;
 
 	PhysicsWorld::~PhysicsWorld()
 	{
@@ -48,6 +48,8 @@ namespace UsualEngine
 		);
 
 		dynamicWorld->setGravity(btVector3(0, -10, 0));
+
+		m_debugDraw.Init();
 	}
 	void PhysicsWorld::Update()
 	{
@@ -60,5 +62,13 @@ namespace UsualEngine
 	void PhysicsWorld::RemoveRigidBody(RigidBody & rb)
 	{
 		dynamicWorld->removeRigidBody(rb.GetBody());
+	}
+	void PhysicsWorld::DebugDraw()
+	{
+#if _DEBUG
+		m_debugDraw.BeginRender();
+		dynamicWorld->debugDrawWorld();
+		m_debugDraw.EndRender();
+#endif
 	}
 }

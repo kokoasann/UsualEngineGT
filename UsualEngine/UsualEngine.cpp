@@ -39,7 +39,7 @@ namespace UsualEngine
 		mCamera2D.CameraModeOrth();
 		mCamera2D.Update();
 
-		g_physics.Init();
+		Physics().Init();
 	}
 
 	void UsualEngine::InitWindow(InitGameState initGS)

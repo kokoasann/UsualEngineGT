@@ -36,11 +36,16 @@ static const int RTV_MAX = 8;
 #include "DirectXTK/Inc/DDSTextureLoader.h"
 
 #include "HID/Pad.h"
-#include "UsualEngine.h"
+
+
+
+
 #include "Physics/CollisionAttr.h"
-#include "physics/Physics.h"
-#include "physics/CapsuleCollider.h"
-#include "physics/PhysicsStaticObject.h"
+//#include "physics/Physics.h"
+//#include "physics/CapsuleCollider.h"
+//#include "physics/PhysicsStaticObject.h"
+
+
 
 #include "util/Util.h"
 
@@ -52,18 +57,25 @@ static const int RTV_MAX = 8;
 #include "graphics/ConstantBuffer.h"
 #include "graphics/StructuredBuffer.h"
 
+
 #include "graphics/Primitive.h"
 #include "graphics/Shader.h"
 #include "graphics/SpriteDataManager.h"
 #include "graphics/Sprite.h"
 
+
 #include "graphics/SkinModelShaderConst.h"
 #include "graphics/SkinModel.h"
+
 #include "graphics/Skeleton.h"
 #include "graphics/ShadowMap.h"
 
-#include "graphics/animation/Animation.h"
 #include "graphics/animation/AnimationClip.h"
+
+
+
+#include "graphics/animation/Animation.h"
+
 #include "graphics/Camera.h"
 
 #include "GameObject/GameObject.h"
@@ -71,13 +83,15 @@ static const int RTV_MAX = 8;
 #include "Timer/GameTime.h"
 #include "Timer/Stopwatch.h"
 
-#include "graphics/SkinModelRender.h"
+#include "UsualEngine.h"
+
+
 #include "graphics/SpriteRender.h"
 #include "graphics/LightBase.h"
 #include "graphics/LightDirection.h"
 
 
-
+#include "graphics/SkinModelRender.h"
 #include "Prefab/SkinModelRender4Ground.h"
 namespace UsualEngine
 {

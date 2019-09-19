@@ -118,7 +118,7 @@ namespace UsualEngine
 		//@todo 未対応。trans.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z));
 		m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_Character);
 		m_rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
-		g_physics.AddRigidBody(m_rigidBody);
+		Physics().AddRigidBody(m_rigidBody);
 
 	}
 	const CVector3& CharacterController::Execute(float deltaTime, CVector3& moveSpeed)
@@ -169,7 +169,7 @@ namespace UsualEngine
 				callback.me = m_rigidBody.GetBody();
 				callback.startPos = posTmp;
 				//衝突検出。
-				g_physics.ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
+				Physics().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
 
 				if (callback.isHit) {
 					//当たった。
@@ -265,7 +265,7 @@ namespace UsualEngine
 			callback.startPos.Set(start.getOrigin());
 			//衝突検出。
 			if(fabsf(endPos.y - callback.startPos.y) > FLT_EPSILON){
-				g_physics.ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
+				Physics().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
 				if (callback.isHit) {
 					//当たった。
 					moveSpeed.y = 0.0f;
@@ -296,7 +296,7 @@ namespace UsualEngine
 	*/
 	void CharacterController::RemoveRigidBoby()
 	{
-		g_physics.RemoveRigidBody(m_rigidBody);
+		Physics().RemoveRigidBody(m_rigidBody);
 	}
 
 }

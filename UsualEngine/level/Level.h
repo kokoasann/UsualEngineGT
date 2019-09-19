@@ -11,6 +11,7 @@ namespace UsualEngine
 	struct LevelObjectData {
 		CVector3 position;		//<座標。
 		CQuaternion rotation;	//!<回転。
+		CVector3 scale;			//
 		const wchar_t* name;	//!<名前。
 	};
 	/*!

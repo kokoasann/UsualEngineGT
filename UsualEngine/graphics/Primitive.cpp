@@ -40,4 +40,12 @@ namespace UsualEngine
 
 		dc->DrawIndexed(mIndexBuffer.GetIndexNum(), 0, 0);
 	}
+	void Primitive::Draw(ID3D11DeviceContext* dc, int vertexnum)
+	{
+		UINT ofs = 0;
+		UINT stride = mVertexBuffer.GetStride();
+		dc->IAGetVertexBuffers(0, 1, &mVertexBuffer.GetBody(), &stride, &ofs);
+		dc->IASetPrimitiveTopology(mTopology);
+		dc->Draw(vertexnum, 0);
+	}
 }

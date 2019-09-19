@@ -1,6 +1,8 @@
 #pragma once
 
-
+#if _DEBUG
+#include "physics/PhysicsDebugDraw.h"
+#endif
 
 namespace UsualEngine
 {
@@ -12,6 +14,8 @@ namespace UsualEngine
 		btBroadphaseInterface* overlappingPairCache = nullptr;	//!<ブロードフェーズ。衝突判定の枝切り。
 		btSequentialImpulseConstraintSolver* constraintSolver = nullptr;		//!<コンストレイントソルバー。拘束条件の解決処理。
 		btDiscreteDynamicsWorld* dynamicWorld = nullptr;			//!<ワールド。
+
+		PhysicsDebugDraw m_debugDraw;
 	public:
 		~PhysicsWorld();
 		void Init();
@@ -49,8 +53,10 @@ namespace UsualEngine
 		{
 			dynamicWorld->contactTest(colObj, resultCallback);
 		}
+
+		void DebugDraw();
 	};
 
-	extern PhysicsWorld g_physics;
+	//extern PhysicsWorld g_physics;
 
 }

@@ -122,6 +122,25 @@ namespace UsualEngine
 		{
 			return m_boneName.c_str();
 		}
+
+		bool IsONGround()
+		{
+			return m_isONGround;
+		}
+		void SetIsONGround(bool b)
+		{
+			m_isONGround = b;
+		}
+
+		void SetMove(CVector3 v)
+		{
+			m_move = v;
+		}
+		CVector3 GetMove()
+		{
+			return m_move;
+		}
+
 		/*!
 		*@brief	このボーンのワールド空間での位置と回転とスケールを計算する。
 		*@param[out]	trans		平行移動量の格納先。
@@ -144,6 +163,10 @@ namespace UsualEngine
 		CQuaternion		m_rotation = CQuaternion::Identity();	//!<このボーンの回転。最後にCalcWorldTRSを実行したときの結果が格納されている。
 		std::vector<Bone*>	m_children;		//!<子供。
 		Bone* m_parent = nullptr;			//親ボーン
+
+		CVector3 m_move = CVector3::Zero();			//ボーンの移動ベクトル
+
+		bool m_isONGround = false;
 	};
 	/*!
 	 *@brief	スケルトン。

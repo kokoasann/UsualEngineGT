@@ -22,6 +22,9 @@ namespace UsualEngine
 	{
 		CMatrix mBias;
 		mBias.MakeRotationX(CMath::PI * -0.5f);
+		if (offsetMatrix != nullptr) {
+			mBias = mBias * (*offsetMatrix);
+		}
 		m_stridingMeshInterface = std::make_unique<btTriangleIndexVertexArray>();
 
 		model.FindMesh([&](const auto & mesh) {

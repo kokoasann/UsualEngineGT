@@ -1,5 +1,6 @@
 #pragma once
 #include "graphics/Camera.h"
+#include "physics/Physics.h"
 namespace UsualEngine
 {
 	class GraphicsEngine;
@@ -58,6 +59,11 @@ namespace UsualEngine
 		{
 			return m_pad[no];
 		}
+
+		PhysicsWorld& GetPhysics()
+		{
+			return m_physics;
+		}
 	private:
 		HWND mHwnd = 0;
 		GraphicsEngine* mGraphicsEngine = nullptr;
@@ -65,6 +71,7 @@ namespace UsualEngine
 		Camera mMainCamera;
 		Camera mCamera2D;
 		Pad m_pad[Pad::CONNECT_PAD_MAX];
+		PhysicsWorld m_physics;
 
 		int m_count = 0;
 		float m_sumTime = 0.f;
@@ -77,5 +84,9 @@ namespace UsualEngine
 	static inline Pad& GamePad(int i)
 	{
 		return usualEngine()->GetPad(i);
+	}
+	static PhysicsWorld& Physics()
+	{
+		return usualEngine()->GetPhysics();
 	}
 }
