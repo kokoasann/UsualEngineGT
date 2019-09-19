@@ -319,7 +319,7 @@ namespace UsualEngine
 
 				if (effectorBone->IsONGround())
 				{
-					target = oldpos;
+					//target = oldpos;
 				}
 				effectorBone->SetIsONGround(true);
 
@@ -364,7 +364,7 @@ namespace UsualEngine
 						toEffector.Normalize();
 						toTarget.Normalize();
 
-						auto rad = toEffector.Dot(toTarget);			//二つのベクトルの角度(ラッドウィンプス)
+						auto rad = min(1,toEffector.Dot(toTarget));			//二つのベクトルの角度(ラッドウィンプス)
 						rad = acos(rad);
 						float deg = CMath::RadToDeg(rad);
 
