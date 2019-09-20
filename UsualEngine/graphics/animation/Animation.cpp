@@ -319,7 +319,7 @@ namespace UsualEngine
 
 				if (effectorBone->IsONGround())
 				{
-					target = oldpos;
+					//target = oldpos;
 				}
 				effectorBone->SetIsONGround(true);
 

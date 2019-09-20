@@ -41,6 +41,69 @@ namespace UsualEngine
 		CVector3 transform[4];		//!<トランスフォーム。
 	};
 
+	class AnimationEvent
+	{
+	public:
+		AnimationEvent(){}
+		~AnimationEvent(){}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		const std::string& GetEventName()
+		{
+			return m_eventName;
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="name"></param>
+		void SetEventName(std::string& name)
+		{
+			m_eventName = name;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		float GetInvokeTime()
+		{
+			return m_invokeTime;
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="time"></param>
+		void SetInvokeTime(float time)
+		{
+			m_invokeTime = time;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		bool IsInvoked()
+		{
+			return m_isInvoked;
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="b"></param>
+		void SetIsInvoked(bool b)
+		{
+			m_isInvoked = b;
+		}
+
+	private:
+		std::string m_eventName;
+		float m_invokeTime = 0.f;
+		bool m_isInvoked = false;
+	};
+
 	/*!
 	*@brief	アニメーションクリップ。
 	*/
@@ -62,7 +125,7 @@ namespace UsualEngine
 		*@brief	アニメーションクリップをロード。
 		*@param[in]	filePath	ファイルパス。
 		*/
-		void Load(const wchar_t* filePath);
+		void Load(const wchar_t* filePath,const char* clipname=nullptr);
 
 		/*!
 		*@brief	ループする？
@@ -89,14 +152,31 @@ namespace UsualEngine
 		{
 			return *m_topBoneKeyFramList;
 		}
-	private:
 
+		int GetNumAnimationEvent()
+		{
+			return m_numAnimationEvent;
+		}
+		AnimationEvent* GetAnimationEvent()
+		{
+			return m_animationEventList;
+		}
+		const std::string& GetClipName()
+		{
+			return m_clipName;
+		}
+
+	private:
+		std::string m_clipName = std::string();									//
 		bool m_isLoop = false;									//!<ループフラグ。
 		std::vector<Keyframe*> m_keyframes;						//全てのキーフレーム。
 		std::vector<keyFramePtrList> m_keyFramePtrListArray;	//ボーンごとのキーフレームのリストを管理するための配列。
 																//例えば、m_keyFramePtrListArray[0]は0番目のボーンのキーフレームのリスト、
 																//m_keyFramePtrListArray[1]は1番目のボーンのキーフレームのリストといった感じ。
 		keyFramePtrList* m_topBoneKeyFramList = nullptr;
+
+		int m_numAnimationEvent = 0;
+		AnimationEvent* m_animationEventList = nullptr;
 	};
 
 }

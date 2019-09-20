@@ -56,12 +56,14 @@ namespace UsualEngine
 
 		CVector3 oldpos, newpos;
 		oldpos = bone.GetWorldMatrix().GetTranslation();
+		oldpos -= m_oldWorldMatrix.GetTranslation();
 
 		//親の行列とローカル行列を乗算して、ワールド行列を計算する。
 		mBoneWorld.Mul(localMatrix, parentMatrix);
 		bone.SetWorldMatrix(mBoneWorld);
 
 		newpos = mBoneWorld.GetTranslation();
+		newpos -= m_worldMatrix.GetTranslation();
 		bone.SetMove(newpos - oldpos);
 
 		//子供のワールド行列も計算する。
@@ -208,6 +210,8 @@ namespace UsualEngine
 	}
 	void Skeleton::Update(const CMatrix& mWorld)
 	{
+		m_oldWorldMatrix = m_worldMatrix;
+		m_worldMatrix = mWorld;
 		//ここがワールド行列を計算しているところ！！！
 		for (int boneNo = 0; boneNo < m_bones.size(); boneNo++) {
 			Bone* bone = m_bones[boneNo];

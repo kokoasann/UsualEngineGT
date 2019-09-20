@@ -23,6 +23,8 @@ private:
 
 	ue::Bone* Lfoot;
 	ue::Bone* Rfoot;
+	bool m_isleftON = false;
+	bool m_isrightON = false;
 
 	ue::PhysicsStaticObject pso;
 

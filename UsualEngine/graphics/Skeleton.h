@@ -132,9 +132,12 @@ namespace UsualEngine
 			m_isONGround = b;
 		}
 
+
 		void SetMove(CVector3 v)
 		{
-			m_move = v;
+			CVector3 av = m_move + v;
+			av /= 2.f;
+			m_move = av;
 		}
 		CVector3 GetMove()
 		{
@@ -254,12 +257,15 @@ namespace UsualEngine
 		*@param[in]	bone		更新するボーン。
 		*@param[in]	parentMatrix	親のボーンのワールド行列。
 		*/
-		static 	void UpdateBoneWorldMatrix(Bone& bone, const CMatrix& parentMatrix);
+		void UpdateBoneWorldMatrix(Bone& bone, const CMatrix& parentMatrix);
 	private:
 
 		std::vector<Bone*>			m_bones;					//!<ボーンの配列。
 		std::vector<CMatrix>		m_boneMatrixs;				//!<ボーン行列。
 		ID3D11Buffer* m_boneMatrixSB = nullptr;	//!<ボーン行列のストラクチャーバッファ。
 		ID3D11ShaderResourceView* m_boneMatrixSRV = nullptr;	//!<ボーン行列のSRV。
+
+		CMatrix m_worldMatrix = CMatrix::Identity();
+		CMatrix m_oldWorldMatrix = CMatrix::Identity();
 	};
 }

@@ -13,7 +13,7 @@ void Game::OnDestroy()
 
 bool Game::Start()
 {
-	animclip[0].Load(L"Assets/animData/gib/gib.walk1.tka");
+	animclip[0].Load(L"Assets/animData/gib/gib.walk1.tka","walk");
 	animclip[0].SetLoopFlag(true);
 	animclip[1].Load(L"Assets/animData/run.tka");
 	animclip[1].SetLoopFlag(true);
@@ -24,6 +24,24 @@ bool Game::Start()
 	p1->Init(L"Assets/model/gib.bone.cmo", animclip, 1,ue::enFbxUpAxisY);
 	p1->SetPos({ 0,-60,-1000 });
 	p1->SetSca({ 100,100,100 });
+
+	auto& anim = p1->GetAnimation();
+	anim.AddEventListener([&](const auto & clipname, const auto & eventname)
+	{
+		if (eventname.substr(eventname.size() - 2, 2) == "st")
+		{
+			if (eventname[5] == 'L')
+			{
+				m_isleftON = true;
+				m_isrightON = false;
+			}
+			else if (eventname[5] == 'R')
+			{
+				m_isleftON = false;
+				m_isrightON = true;
+			}
+		}
+	});
 
 	for (auto bone : p1->GetSkinModel().GetSkeleton().GetAllBone())
 	{
@@ -113,12 +131,12 @@ void Game::Update()
 		p.z -= 50;
 	}
 
-	if (Lfoot->IsONGround())
+	if (m_isrightON)
 	{
 		auto v = Rfoot->GetMove();
 		p.z += v.Length();
 	}
-	else if(Rfoot->IsONGround())
+	else if(m_isleftON)
 	{
 		auto v = Lfoot->GetMove();
 		p.z += v.Length();

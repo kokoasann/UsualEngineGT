@@ -21,6 +21,8 @@ namespace UsualEngine
 	*/
 	class Animation {
 	public:
+		using EventListener = std::function<void(const std::string& clipname,const std::string& eventname)>;
+
 		Animation();
 		~Animation();
 		/*!
@@ -69,6 +71,18 @@ namespace UsualEngine
 		{
 			m_oldWorldMatrix = m_worldMatrix;
 			m_worldMatrix = mat;
+		}
+
+		void AddEventListener(EventListener ev)
+		{
+			m_eventListener.push_back(ev);
+		}
+		void EventListen(const std::string& clipname,const std::string& eventname)
+		{
+			for (auto& el : m_eventListener)
+			{
+				el(clipname, eventname);
+			}
 		}
 	private:
 		void PlayCommon(AnimationClip* nextClip, float interpolateTime)
@@ -142,5 +156,6 @@ namespace UsualEngine
 		CapsuleCollider m_collider;
 		//RigidBody m_rigidBody;
 
+		std::vector<EventListener> m_eventListener;
 	};
 }

@@ -65,6 +65,11 @@ namespace UsualEngine
 		{
 			return m_skinModel;
 		}
+
+		Animation& GetAnimation()
+		{
+			return m_animation;
+		}
 	private:
 		SkinModel m_skinModel;	//siknModel
 		Animation m_animation;	//Animation

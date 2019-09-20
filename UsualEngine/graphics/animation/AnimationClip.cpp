@@ -14,9 +14,11 @@ namespace UsualEngine
 		for (auto& keyFrame : m_keyframes) {
 			delete keyFrame;
 		}
+		if(m_animationEventList != nullptr)
+			delete[] m_animationEventList;
 	}
 
-	void AnimationClip::Load(const wchar_t* filePath)
+	void AnimationClip::Load(const wchar_t* filePath,const char* clipname)
 	{
 		FILE* fp = _wfopen(filePath, L"rb");
 		if (fp == nullptr) {
@@ -38,7 +40,20 @@ namespace UsualEngine
 		if (header.numAnimationEvent > 0) {
 			//アニメーションイベントは未対応。
 			//就職作品でチャレンジしてみよう。
-			std::abort();
+			//チャレンジします。
+			m_numAnimationEvent = header.numAnimationEvent;
+			m_animationEventList = new AnimationEvent[m_numAnimationEvent];
+			for (int i = 0; i < m_numAnimationEvent; i++)
+			{
+				AnimationEventData AED;
+				fread(&AED, sizeof(AED), 1, fp);
+				char str[256] = {0};
+				fread(str, AED.eventNameLength+1, 1, fp);
+
+				std::string st = str;
+				m_animationEventList[i].SetEventName(st);
+				m_animationEventList[i].SetInvokeTime(AED.invokeTime);
+			}
 		}
 
 

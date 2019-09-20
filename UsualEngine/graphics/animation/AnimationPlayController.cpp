@@ -22,6 +22,11 @@ namespace UsualEngine
 
 	void AnimationPlayController::StartLoop()
 	{
+		auto AE = m_animationClip->GetAnimationEvent();
+		for (int i = 0; i < m_animationClip->GetNumAnimationEvent(); i++)
+		{
+			AE[i].SetIsInvoked(false);
+		}
 		m_currentKeyFrameNo = 0;
 		m_time = 0.0f;
 	}
@@ -34,6 +39,8 @@ namespace UsualEngine
 		}
 		const auto& topBoneKeyFrameList = m_animationClip->GetTopBoneKeyFrameList();
 		m_time += deltaTime;
+
+		AnimationEvetnInvokeUpdate(animation);
 
 		//補完時間も進めていく。
 		m_interpolateTime = min(1.0f, m_interpolateTime + deltaTime);
@@ -74,13 +81,26 @@ namespace UsualEngine
 				m_boneMatrix[keyframe->boneIndex] = keyframe->transform;
 			}
 			else {
-#ifdef _DEBUG			
+#ifdef _DEBUG
 				MessageBox(NULL, "AnimationPlayController::Update : 存在しないボーンに値を書き込もうとしています。次のような原因が考えられます。\n"
 					"① tkaファイルを出力する時に、選択したルートボーンがスケルトンのルートボーンと異なっている。\n"
 					"② 異なるスケルトンのアニメーションクリップを使っている。\n"
 					"もう一度tkaファイルを出力しなおしてください。", "error", MB_OK);
 				std::abort();
 #endif
+			}
+		}
+	}
+	void AnimationPlayController::AnimationEvetnInvokeUpdate(Animation* anim)
+	{
+		auto animevents = m_animationClip->GetAnimationEvent();
+
+		for (int i = 0; i < m_animationClip->GetNumAnimationEvent(); i++)
+		{
+			if (m_time > animevents[i].GetInvokeTime() && !animevents[i].IsInvoked())
+			{
+				anim->EventListen(m_animationClip->GetClipName(), animevents[i].GetEventName());
+				animevents->SetIsInvoked(true);
 			}
 		}
 	}

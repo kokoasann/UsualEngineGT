@@ -68,6 +68,9 @@ namespace UsualEngine
 		*@param[in]	deltaTime		アニメーションを進める時間。
 		*/
 		void Update(float deltaTime, Animation * animation);
+
+		void AnimationEvetnInvokeUpdate(Animation* anim);
+
 		/*!
 		* @brief	ローカルボーン行列を取得。
 		*/
@@ -86,8 +89,6 @@ namespace UsualEngine
 		{
 			return m_isPlaying;
 		}
-
-		
 	private:
 
 		/*!
@@ -102,7 +103,5 @@ namespace UsualEngine
 		float					m_interpolateTime;			//!<補完時間
 		float					m_interpolateEndTime;		//!<補完終了時間
 		bool					m_isPlaying = false;		//!<再生中？
-
-		
 	};
 }
