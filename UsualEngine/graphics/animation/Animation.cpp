@@ -312,8 +312,8 @@ namespace UsualEngine
 				norm.Normalize();
 				auto meri = newpos - sr.hitPos;
 				float rad = meri.Dot(norm);
-				target += sr.hitNormal * (-rad + 15);
-				target = sr.hitPos;
+				target += sr.hitNormal * (-rad + 85);
+				//target = sr.hitPos;
 				auto invworldmat = CMatrix::Identity();
 				invworldmat.Inverse(m_worldMatrix);
 

@@ -134,12 +134,14 @@ void Game::Update()
 	if (m_isrightON)
 	{
 		auto v = Rfoot->GetMove();
-		p.z += v.Length();
+		v.y = 0;
+		p += v*-1;
 	}
 	else if(m_isleftON)
 	{
 		auto v = Lfoot->GetMove();
-		p.z += v.Length();
+		v.y = 0;
+		p += v*-1;
 	}
 	//p.z += 5;
 	p1->SetPos(p);
