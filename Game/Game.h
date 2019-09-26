@@ -25,6 +25,8 @@ private:
 	ue::Bone* Rfoot;
 	bool m_isleftON = false;
 	bool m_isrightON = false;
+	std::array<ue::CVector3, 3> m_movedata;
+	int count = 0;
 
 	ue::PhysicsStaticObject pso;
 

@@ -30,11 +30,9 @@ namespace UsualEngine
 		worldMatrix.Mul(scaleMatrix, rotMatrix);
 		worldMatrix.Mul(worldMatrix, transMatrix);
 
-		
 		m_animation.SetWorldMatrix(worldMatrix);
-		
-
 		m_animation.Update(gameTime()->GetDeltaTime());
+
 		m_skinModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 		m_isRenderingOK = true;
 	}

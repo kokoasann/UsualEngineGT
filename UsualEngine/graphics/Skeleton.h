@@ -135,9 +135,7 @@ namespace UsualEngine
 
 		void SetMove(CVector3 v)
 		{
-			CVector3 av = m_move + v;
-			av /= 2.f;
-			m_move = av;
+			m_move = v;
 		}
 		CVector3 GetMove()
 		{

@@ -13,10 +13,11 @@ void Game::OnDestroy()
 
 bool Game::Start()
 {
-	animclip[0].Load(L"Assets/animData/gib/gib.walk1.tka","walk");
+	animclip[0].Load(L"Assets/model/gib/gib.punch_1.tka");
 	animclip[0].SetLoopFlag(true);
 	animclip[1].Load(L"Assets/animData/run.tka");
 	animclip[1].SetLoopFlag(true);
+	
 
 	ue::CQuaternion rot;
 	cam = &ue::usualEngine()->GetMainCamera();
@@ -34,11 +35,13 @@ bool Game::Start()
 			{
 				m_isleftON = true;
 				m_isrightON = false;
+				count = 0;
 			}
 			else if (eventname[5] == 'R')
 			{
 				m_isleftON = false;
 				m_isrightON = true;
+				count = 0;
 			}
 		}
 	});
@@ -55,12 +58,12 @@ bool Game::Start()
 		}
 	}
 
-	p2 = ue::NewGO<ue::SkinModelRender>(0);
-	p2->Init(L"Assets/model/unityChan.cmo");// , animclip + 1, 1);
-	p2->SetPos({ 0,0,0 });
-	rot.SetRotationDeg(ue::CVector3::AxisX(), 90);
-	p2->SetRot(rot);
-	p2->SetIsShadowCaster(true);
+	//p2 = ue::NewGO<ue::SkinModelRender>(0);
+	//p2->Init(L"Assets/model/unityChan.cmo");// , animclip + 1, 1);
+	//p2->SetPos({ 0,0,0 });
+	//rot.SetRotationDeg(ue::CVector3::AxisX(), 90);
+	//p2->SetRot(rot);
+	//p2->SetIsShadowCaster(true);
 	//p2->SetIsShadowReciever(false);
 
 	/*p3 = ue::NewGO<ue::SkinModelRender>(0);
@@ -117,7 +120,7 @@ bool Game::Start()
 
 void Game::Update()
 {
-	auto pad = ue::GamePad(0);
+	auto& pad = ue::GamePad(0);
 	//return;
 
 	auto p = p1->GetPos();
@@ -130,18 +133,30 @@ void Game::Update()
 	{
 		p.z -= 50;
 	}
-
+	ue::CVector3 vv;
+	bool ON = 0;
 	if (m_isrightON)
 	{
-		auto v = Rfoot->GetMove();
-		v.y = 0;
-		p += v*-1;
+		vv = Rfoot->GetMove();
+		ON = 1;
 	}
 	else if(m_isleftON)
 	{
-		auto v = Lfoot->GetMove();
-		v.y = 0;
-		p += v*-1;
+		vv = Lfoot->GetMove();
+		ON = 1;
+	}
+	if (ON)
+	{
+		vv.y = 0;
+		p += vv * -1;
+		
+		count++;
+		if (count == 5)
+		{
+			//vv= m_movedata[0];
+			//count = 0;
+		}
+		m_movedata[0] = vv;
 	}
 	//p.z += 5;
 	p1->SetPos(p);

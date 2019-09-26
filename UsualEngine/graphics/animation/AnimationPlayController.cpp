@@ -100,7 +100,7 @@ namespace UsualEngine
 			if (m_time > animevents[i].GetInvokeTime() && !animevents[i].IsInvoked())
 			{
 				anim->EventListen(m_animationClip->GetClipName(), animevents[i].GetEventName());
-				animevents->SetIsInvoked(true);
+				animevents[i].SetIsInvoked(true);
 			}
 		}
 	}
