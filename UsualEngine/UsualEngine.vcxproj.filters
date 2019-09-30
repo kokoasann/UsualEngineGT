@@ -200,6 +200,12 @@
     <ClCompile Include="physics\PhysicsDebugDraw.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
+    <ClCompile Include="physics\SphereCollider.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\animation\IK.cpp">
+      <Filter>Graphics\Animation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="character\CharacterController.h">
@@ -356,6 +362,12 @@
     </ClInclude>
     <ClInclude Include="physics\PhysicsDebugDraw.h">
       <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="physics\SphereCollider.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\animation\IK.h">
+      <Filter>Graphics\Animation</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

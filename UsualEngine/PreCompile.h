@@ -73,7 +73,6 @@ static const int RTV_MAX = 8;
 #include "graphics/animation/AnimationClip.h"
 
 
-
 #include "graphics/animation/Animation.h"
 
 #include "graphics/Camera.h"

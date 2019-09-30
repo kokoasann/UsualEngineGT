@@ -68,6 +68,9 @@
     <MeshContentTask Include="Assets\model\gib\gib.bone.fbx">
       <Filter>Assets\Model</Filter>
     </MeshContentTask>
+    <MeshContentTask Include="Assets\model\player\Player.fbx">
+      <Filter>Assets\Model</Filter>
+    </MeshContentTask>
   </ItemGroup>
   <ItemGroup>
     <ImageContentTask Include="Assets\sprite\daru.PNG">

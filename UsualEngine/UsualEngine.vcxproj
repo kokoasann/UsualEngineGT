@@ -163,6 +163,7 @@
     <ClCompile Include="graphics\animation\Animation.cpp" />
     <ClCompile Include="graphics\animation\AnimationClip.cpp" />
     <ClCompile Include="graphics\animation\AnimationPlayController.cpp" />
+    <ClCompile Include="graphics\animation\IK.cpp" />
     <ClCompile Include="graphics\Camera.cpp" />
     <ClCompile Include="graphics\ConstantBuffer.cpp" />
     <ClCompile Include="graphics\GPUViewer.cpp" />
@@ -200,6 +201,7 @@
     <ClCompile Include="physics\PhysicsDebugDraw.cpp" />
     <ClCompile Include="physics\PhysicsStaticObject.cpp" />
     <ClCompile Include="physics\RigidBody.cpp" />
+    <ClCompile Include="physics\SphereCollider.cpp" />
     <ClCompile Include="PreCompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
@@ -216,6 +218,7 @@
     <ClInclude Include="graphics\animation\Animation.h" />
     <ClInclude Include="graphics\animation\AnimationClip.h" />
     <ClInclude Include="graphics\animation\AnimationPlayController.h" />
+    <ClInclude Include="graphics\animation\IK.h" />
     <ClInclude Include="graphics\Camera.h" />
     <ClInclude Include="graphics\ConstantBuffer.h" />
     <ClInclude Include="graphics\GPUViewer.h" />
@@ -256,6 +259,7 @@
     <ClInclude Include="physics\PhysicsDebugDraw.h" />
     <ClInclude Include="physics\PhysicsStaticObject.h" />
     <ClInclude Include="physics\RigidBody.h" />
+    <ClInclude Include="physics\SphereCollider.h" />
     <ClInclude Include="PreCompile.h" />
     <ClInclude Include="Prefab\SkinModelRender4Ground.h" />
     <ClInclude Include="system\system.h" />

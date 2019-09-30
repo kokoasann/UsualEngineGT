@@ -178,6 +178,7 @@
     </MeshContentTask>
     <MeshContentTask Include="Assets\model\block\octagon.fbx" />
     <MeshContentTask Include="Assets\model\gib\gib.bone.fbx" />
+    <MeshContentTask Include="Assets\model\player\Player.fbx" />
     <MeshContentTask Include="Assets\model\unityChan.fbx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </MeshContentTask>

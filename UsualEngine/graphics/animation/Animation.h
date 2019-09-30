@@ -7,10 +7,10 @@
 #include "graphics/animation/AnimationClip.h"
 #include "graphics/animation/AnimationPlayController.h"
 
-#include "Physics/CapsuleCollider.h"
+#include "Physics/SphereCollider.h"
 
 
-
+#include "IK.h"
 
 namespace UsualEngine
 {
@@ -84,6 +84,12 @@ namespace UsualEngine
 				el(clipname, eventname);
 			}
 		}
+
+		void SetingIK(Bone* effector, Bone* end)
+		{
+			IK ik(effector, end);
+			m_ik.push_back(ik);
+		}
 	private:
 		void PlayCommon(AnimationClip* nextClip, float interpolateTime)
 		{
@@ -116,6 +122,7 @@ namespace UsualEngine
 
 
 		void UpdateIK(const std::vector<CMatrix>& oldBonesMat);
+		void UpdateIK();
 
 		CMatrix GetBoneWorldMatrix(Bone* bone);
 		CMatrix GetBoneLocalMatrix(Bone* bone,CMatrix wm);
@@ -153,9 +160,11 @@ namespace UsualEngine
 		static const int m_MAXIKBONE = 64;
 		int m_isIKBoneList[m_MAXIKBONE] = { -1 };
 		//Skeleton* m_skeleton = nullptr;
-		CapsuleCollider m_collider;
+		SphereCollider m_collider;
 		//RigidBody m_rigidBody;
 
 		std::vector<EventListener> m_eventListener;
+
+		std::vector<IK> m_ik;
 	};
 }

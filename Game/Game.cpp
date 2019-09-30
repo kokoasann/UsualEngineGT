@@ -15,7 +15,7 @@ bool Game::Start()
 {
 	animclip[0].Load(L"Assets/model/gib/gib.punch_1.tka");
 	animclip[0].SetLoopFlag(true);
-	animclip[1].Load(L"Assets/animData/run.tka");
+	animclip[1].Load(L"Assets/model/Player/player.idol.tka");
 	animclip[1].SetLoopFlag(true);
 	
 
@@ -58,13 +58,14 @@ bool Game::Start()
 		}
 	}
 
-	//p2 = ue::NewGO<ue::SkinModelRender>(0);
-	//p2->Init(L"Assets/model/unityChan.cmo");// , animclip + 1, 1);
-	//p2->SetPos({ 0,0,0 });
-	//rot.SetRotationDeg(ue::CVector3::AxisX(), 90);
-	//p2->SetRot(rot);
-	//p2->SetIsShadowCaster(true);
-	//p2->SetIsShadowReciever(false);
+	p2 = ue::NewGO<ue::SkinModelRender>(0);
+	p2->Init(L"Assets/model/Player.cmo" , animclip + 1, 1);
+	p2->SetPos({ 0,0,0 });
+	p2->SetSca({ 10,10,10 });
+	rot.SetRotationDeg(ue::CVector3::AxisX(), 90);
+	p2->SetRot(rot);
+	p2->SetIsShadowCaster(true);
+	p2->SetIsShadowReciever(true);
 
 	/*p3 = ue::NewGO<ue::SkinModelRender>(0);
 	p3->Init(L"Assets/model/unityChan.cmo");
