@@ -13,10 +13,10 @@ void Game::OnDestroy()
 
 bool Game::Start()
 {
-	animclip[0].Load(L"Assets/model/gib/gib.punch_1.tka");
+	animclip[0].Load(L"Assets/model/gib/gib.walk1.tka");
 	animclip[0].SetLoopFlag(true);
-	animclip[1].Load(L"Assets/model/Player/player.idol.tka");
-	animclip[1].SetLoopFlag(true);
+	//animclip[1].Load(L"Assets/model/Player/player.idol.tka");
+	//animclip[1].SetLoopFlag(true);
 	
 
 	ue::CQuaternion rot;
@@ -25,6 +25,8 @@ bool Game::Start()
 	p1->Init(L"Assets/model/gib.bone.cmo", animclip, 1,ue::enFbxUpAxisY);
 	p1->SetPos({ 0,-60,-1000 });
 	p1->SetSca({ 100,100,100 });
+
+	cc.Init(50, 100, { 0,10,-1000 });
 
 	auto& anim = p1->GetAnimation();
 	anim.AddEventListener([&](const auto & clipname, const auto & eventname)
@@ -48,18 +50,39 @@ bool Game::Start()
 
 	for (auto bone : p1->GetSkinModel().GetSkeleton().GetAllBone())
 	{
-		if (lstrcmpW(bone->GetName(), L"Bone.007_R.005") == 0)
+		if (lstrcmpW(bone->GetName(), L"IK_Bone.007_R.003") == 0)
 		{
 			Rfoot = bone;
 		}
-		else if(lstrcmpW(bone->GetName(), L"Bone.007_L.005") == 0)
+		else if(lstrcmpW(bone->GetName(), L"IK_Bone.007_L.003") == 0)
 		{
 			Lfoot = bone;
 		}
 	}
+	p1->GetAnimation().SetingIK(Rfoot, Rfoot->GetParent()->GetParent(), 50.f);
+	p1->GetAnimation().SetingIK(Lfoot, Lfoot->GetParent()->GetParent(), 50.f);
+	p1->SetMoveFunc([&](ue::CVector3 & pos)
+	{
+		ue::CVector3 move;
+		if (Rfoot->IsONGround())
+		{
+			move = Rfoot->GetMove();
+		}
+		else if (Lfoot->IsONGround())
+		{
+			move = Lfoot->GetMove();
+		}
+		if (move.y >= 0)
+		{
+			move.y = 0;
+			move *= -1;
+			//pos = cc.Execute(ue::gameTime()->GetDeltaTime(), move);
+			pos += move;
+		}
+	});
 
 	p2 = ue::NewGO<ue::SkinModelRender>(0);
-	p2->Init(L"Assets/model/Player.cmo" , animclip + 1, 1);
+	p2->Init(L"Assets/model/Player.cmo"/* , animclip + 1, 1*/);
 	p2->SetPos({ 0,0,0 });
 	p2->SetSca({ 10,10,10 });
 	rot.SetRotationDeg(ue::CVector3::AxisX(), 90);
@@ -124,43 +147,43 @@ void Game::Update()
 	auto& pad = ue::GamePad(0);
 	//return;
 
-	auto p = p1->GetPos();
+	//auto p = p1->GetPos();
 
-	if (GetAsyncKeyState('Q'))
-	{
-		p.z += 60;
-	}
-	else if (GetAsyncKeyState('E'))
-	{
-		p.z -= 50;
-	}
-	ue::CVector3 vv;
-	bool ON = 0;
-	if (m_isrightON)
-	{
-		vv = Rfoot->GetMove();
-		ON = 1;
-	}
-	else if(m_isleftON)
-	{
-		vv = Lfoot->GetMove();
-		ON = 1;
-	}
-	if (ON)
-	{
-		vv.y = 0;
-		p += vv * -1;
-		
-		count++;
-		if (count == 5)
-		{
-			//vv= m_movedata[0];
-			//count = 0;
-		}
-		m_movedata[0] = vv;
-	}
-	//p.z += 5;
-	p1->SetPos(p);
+	//if (GetAsyncKeyState('Q'))
+	//{
+	//	p.z += 60;
+	//}
+	//else if (GetAsyncKeyState('E'))
+	//{
+	//	p.z -= 50;
+	//}
+	//ue::CVector3 vv;
+	//bool ON = 0;
+	//if (m_isrightON)
+	//{
+	//	vv = Rfoot->GetMove();
+	//	ON = 1;
+	//}
+	//else if(m_isleftON)
+	//{
+	//	vv = Lfoot->GetMove();
+	//	ON = 1;
+	//}
+	//if (ON)
+	//{
+	//	vv.y = 0;
+	//	p += vv * -1;
+	//	
+	//	count++;
+	//	if (count == 5)
+	//	{
+	//		//vv= m_movedata[0];
+	//		//count = 0;
+	//	}
+	//	m_movedata[0] = vv;
+	//}
+	////p.z += 5;
+	//p1->SetPos(p);
 
 	ue::CQuaternion add = ue::CQuaternion::Identity();
 	

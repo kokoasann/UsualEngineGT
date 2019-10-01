@@ -89,6 +89,7 @@ static const int RTV_MAX = 8;
 #include "graphics/LightBase.h"
 #include "graphics/LightDirection.h"
 
+#include "character/CharacterController.h"
 
 #include "graphics/SkinModelRender.h"
 #include "Prefab/SkinModelRender4Ground.h"

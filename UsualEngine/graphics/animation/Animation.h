@@ -69,7 +69,7 @@ namespace UsualEngine
 
 		void SetWorldMatrix(CMatrix mat)
 		{
-			m_oldWorldMatrix = m_worldMatrix;
+			m_oldWorldMatrix = mat;
 			m_worldMatrix = mat;
 		}
 
@@ -85,9 +85,9 @@ namespace UsualEngine
 			}
 		}
 
-		void SetingIK(Bone* effector, Bone* end)
+		void SetingIK(Bone* effector, Bone* end,float radius)
 		{
-			IK ik(effector, end);
+			IK* ik = new IK(effector, end, radius);
 			m_ik.push_back(ik);
 		}
 	private:
@@ -165,6 +165,6 @@ namespace UsualEngine
 
 		std::vector<EventListener> m_eventListener;
 
-		std::vector<IK> m_ik;
+		std::vector<IK*> m_ik;
 	};
 }

@@ -33,6 +33,11 @@ namespace UsualEngine
 		m_animation.SetWorldMatrix(worldMatrix);
 		m_animation.Update(gameTime()->GetDeltaTime());
 
+		if (m_isUseMoveFunc)
+		{
+			m_moveFunc(m_position);
+		}
+
 		m_skinModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 		m_isRenderingOK = true;
 	}

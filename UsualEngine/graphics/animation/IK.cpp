@@ -65,6 +65,19 @@ namespace UsualEngine
 	}
 
 
+	IK::IK(Bone* effector, Bone* end, float radius) :
+		m_effectorBone(effector),
+		m_endBone(end),
+		m_radius(radius)
+	{
+		m_collider.Create(radius);
+	}
+
+	IK::~IK()
+	{
+		
+	}
+
 	void IK::Update(CMatrix& worldMat)
 	{
 		switch (m_usingIK)
@@ -110,7 +123,7 @@ namespace UsualEngine
 			norm.Normalize();
 			auto meri = newpos - sr.hitPos;
 			float rad = meri.Dot(norm);
-			target += sr.hitNormal * (-rad + 85);
+			target += sr.hitNormal * (-rad + m_radius-5);
 			//target = sr.hitPos;
 			auto invworldmat = CMatrix::Identity();
 			invworldmat.Inverse(worldMat);
@@ -121,14 +134,6 @@ namespace UsualEngine
 			}
 			m_effectorBone->SetIsONGround(true);
 
-			//invworldmat.Mul(target);.
-
-			/*auto mark = NewGO<SkinModelRender>(0);
-			mark->Init(L"assets/model/dun.cmo");
-			mark->SetSca({ 0.01,0.01 ,0.01 });
-			mark->SetPos(target);*/
-
-			//static auto target = CVector3{ 500,500,0 };
 			std::wstring end = L"END";
 			std::wstring wname = currentBone->GetName();
 			static int roop = 1;

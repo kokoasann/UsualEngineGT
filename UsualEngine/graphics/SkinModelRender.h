@@ -6,7 +6,8 @@ namespace UsualEngine
 	class SkinModelRender :public GameObject
 	{
 	public:
-		
+		using MoveFunc = std::function<void(CVector3& pos)>;
+
 		void Update() override;
 		void Render() override;
 		
@@ -70,6 +71,12 @@ namespace UsualEngine
 		{
 			return m_animation;
 		}
+
+		void SetMoveFunc(MoveFunc mf)
+		{
+			m_moveFunc = mf;
+			m_isUseMoveFunc = true;
+		}
 	private:
 		SkinModel m_skinModel;	//siknModel
 		Animation m_animation;	//Animation
@@ -79,5 +86,8 @@ namespace UsualEngine
 		CVector3 m_scale = CVector3::One();
 
 		bool m_isRenderingOK = false; //ƒŒƒ“ƒ_ƒŠƒ“ƒO‚µ‚Ä‚à‚æ‚©‚ÆH
+
+		MoveFunc m_moveFunc;
+		bool m_isUseMoveFunc=false;
 	};
 }

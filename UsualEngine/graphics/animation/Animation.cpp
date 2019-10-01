@@ -239,7 +239,7 @@ namespace UsualEngine
 	{
 		for (auto ik : m_ik)
 		{
-			ik.Update(m_worldMatrix);
+			ik->Update(m_worldMatrix);
 		}
 	}
 

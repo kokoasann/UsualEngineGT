@@ -12,14 +12,8 @@ namespace UsualEngine
 		{
 			enUSE_CCD,
 		};
-		IK(Bone* effector, Bone* end) :
-			m_effectorBone(effector),
-			m_endBone(end)
-		{
-
-		}
-		IK();
-		~IK(){}
+		IK(Bone* effector, Bone* end, float radius);
+		~IK();
 
 		void Update(CMatrix& worldMat);
 
@@ -36,6 +30,7 @@ namespace UsualEngine
 	private:
 		Bone* m_effectorBone=0;
 		Bone* m_endBone=0;
+		float m_radius = 0.f;
 		int m_usingIK = enUSE_CCD;
 
 		SphereCollider m_collider;

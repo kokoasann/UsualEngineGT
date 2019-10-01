@@ -173,15 +173,23 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <MeshContentTask Include="Assets\model\block\dun.fbx">
+    <None Include="Assets\model\block\dun.fbx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </MeshContentTask>
-    <MeshContentTask Include="Assets\model\block\octagon.fbx" />
-    <MeshContentTask Include="Assets\model\gib\gib.bone.fbx" />
-    <MeshContentTask Include="Assets\model\player\Player.fbx" />
-    <MeshContentTask Include="Assets\model\unityChan.fbx">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Assets\model\block\octagon.fbx">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Assets\model\gib\gib.bone.fbx">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Assets\model\player\Player.fbx">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Assets\model\unityChan.fbx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </MeshContentTask>
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ImageContentTask Include="Assets\sprite\daru.PNG">
@@ -189,9 +197,9 @@
     </ImageContentTask>
   </ItemGroup>
   <ItemGroup>
-    <ImageContentTask Include="Assets\model\block\kusa.png" />
-    <ImageContentTask Include="Assets\model\block\map.png" />
-    <ImageContentTask Include="Assets\model\block\tuti.png" />
+    <None Include="Assets\model\block\kusa.png" />
+    <None Include="Assets\model\block\map.png" />
+    <None Include="Assets\model\block\tuti.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
