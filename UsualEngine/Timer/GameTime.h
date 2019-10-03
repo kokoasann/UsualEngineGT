@@ -32,7 +32,7 @@ namespace UsualEngine
 				mFrameDeltaTime = min(1.f / 30.f, totalTime / Qsize);
 				mDeltaTimeQue.pop_front();
 			}
-		}
+		} 
 
 		float GetDeltaTime()
 		{

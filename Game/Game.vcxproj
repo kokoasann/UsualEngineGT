@@ -173,23 +173,26 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\model\block\dun.fbx">
+    <MeshContentTask Include="Assets\model\block\dun.fbx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <FileType>Document</FileType>
-    </None>
-    <None Include="Assets\model\block\octagon.fbx">
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\block\octagon.fbx">
       <FileType>Document</FileType>
-    </None>
-    <None Include="Assets\model\gib\gib.bone.fbx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\gib\gib.bone.fbx">
       <FileType>Document</FileType>
-    </None>
-    <None Include="Assets\model\player\Player.fbx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\player\Player.fbx">
       <FileType>Document</FileType>
-    </None>
-    <None Include="Assets\model\unityChan.fbx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\unityChan.fbx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <FileType>Document</FileType>
-    </None>
+    </MeshContentTask>
   </ItemGroup>
   <ItemGroup>
     <ImageContentTask Include="Assets\sprite\daru.PNG">
@@ -197,9 +200,15 @@
     </ImageContentTask>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\model\block\kusa.png" />
-    <None Include="Assets\model\block\map.png" />
-    <None Include="Assets\model\block\tuti.png" />
+    <ImageContentTask Include="Assets\model\block\kusa.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ImageContentTask>
+    <ImageContentTask Include="Assets\model\block\map.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ImageContentTask>
+    <ImageContentTask Include="Assets\model\block\tuti.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ImageContentTask>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

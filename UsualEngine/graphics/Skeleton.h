@@ -142,6 +142,26 @@ namespace UsualEngine
 			return m_move;
 		}
 
+		void SetBaseWorldMatrix(const CMatrix& mat)
+		{
+			m_oldWorldMatrix = m_baseWorldMatrix;
+			m_baseWorldMatrix = mat;
+			
+		}
+		const CMatrix& GetBaseWorldMatrix()
+		{
+			return m_baseWorldMatrix;
+		}
+
+		void SetOldWorldMatrix(const CMatrix& mat)
+		{
+			m_oldWorldMatrix = mat;
+		}
+		const CMatrix& GetOldWorldMatrix()
+		{
+			return m_oldWorldMatrix;
+		}
+
 		/*!
 		*@brief	このボーンのワールド空間での位置と回転とスケールを計算する。
 		*@param[out]	trans		平行移動量の格納先。
@@ -164,6 +184,9 @@ namespace UsualEngine
 		CQuaternion		m_rotation = CQuaternion::Identity();	//!<このボーンの回転。最後にCalcWorldTRSを実行したときの結果が格納されている。
 		std::vector<Bone*>	m_children;		//!<子供。
 		Bone* m_parent = nullptr;			//親ボーン
+
+		CMatrix			m_baseWorldMatrix = CMatrix::Identity();
+		CMatrix			m_oldWorldMatrix = CMatrix::Identity();
 
 		CVector3 m_move = CVector3::Zero();			//ボーンの移動ベクトル
 
@@ -248,6 +271,8 @@ namespace UsualEngine
 		 *@brief	更新。
 		 */
 		void Update(const CMatrix& mWorld);
+
+		void UpdateBase(const CMatrix& mWorld);
 		/*!
 		*@brief	ボーンのワールド行列の更新関数。
 		*@details
@@ -256,6 +281,8 @@ namespace UsualEngine
 		*@param[in]	parentMatrix	親のボーンのワールド行列。
 		*/
 		void UpdateBoneWorldMatrix(Bone& bone, const CMatrix& parentMatrix);
+
+		void UpdateBoneBaseWorldMatrix(Bone& bone, const CMatrix& parentMatrix);
 	private:
 
 		std::vector<Bone*>			m_bones;					//!<ボーンの配列。

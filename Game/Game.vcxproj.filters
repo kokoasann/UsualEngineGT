@@ -59,31 +59,31 @@
     <ImageContentTask Include="Assets\sprite\daru.PNG">
       <Filter>Assets\Sprite</Filter>
     </ImageContentTask>
+    <ImageContentTask Include="Assets\model\block\kusa.png">
+      <Filter>Assets\Model\StagePreset\texture</Filter>
+    </ImageContentTask>
+    <ImageContentTask Include="Assets\model\block\map.png">
+      <Filter>Assets\Model\StagePreset\texture</Filter>
+    </ImageContentTask>
+    <ImageContentTask Include="Assets\model\block\tuti.png">
+      <Filter>Assets\Model\StagePreset\texture</Filter>
+    </ImageContentTask>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\model\unityChan.fbx">
-      <Filter>Assets\Model</Filter>
-    </None>
-    <None Include="Assets\model\block\map.png">
-      <Filter>Assets\Model\StagePreset\texture</Filter>
-    </None>
-    <None Include="Assets\model\block\tuti.png">
-      <Filter>Assets\Model\StagePreset\texture</Filter>
-    </None>
-    <None Include="Assets\model\block\dun.fbx">
+    <MeshContentTask Include="Assets\model\block\dun.fbx">
       <Filter>Assets\Model\StagePreset</Filter>
-    </None>
-    <None Include="Assets\model\block\octagon.fbx">
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\block\octagon.fbx">
       <Filter>Assets\Model\StagePreset</Filter>
-    </None>
-    <None Include="Assets\model\gib\gib.bone.fbx">
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\gib\gib.bone.fbx">
       <Filter>Assets\Model</Filter>
-    </None>
-    <None Include="Assets\model\player\Player.fbx">
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\player\Player.fbx">
       <Filter>Assets\Model</Filter>
-    </None>
-    <None Include="Assets\model\block\kusa.png">
-      <Filter>Assets\Model\StagePreset\texture</Filter>
-    </None>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\unityChan.fbx">
+      <Filter>Assets\Model</Filter>
+    </MeshContentTask>
   </ItemGroup>
 </Project>

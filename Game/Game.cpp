@@ -13,10 +13,10 @@ void Game::OnDestroy()
 
 bool Game::Start()
 {
-	animclip[0].Load(L"Assets/model/gib/gib.walk1.tka");
+	animclip[0].Load(L"Assets/model/gib/gib.rotation.tka");
 	animclip[0].SetLoopFlag(true);
-	//animclip[1].Load(L"Assets/model/Player/player.idol.tka");
-	//animclip[1].SetLoopFlag(true);
+	animclip[1].Load(L"Assets/model/Player/player_idol.tka");
+	animclip[1].SetLoopFlag(true);
 	
 
 	ue::CQuaternion rot;
@@ -25,8 +25,10 @@ bool Game::Start()
 	p1->Init(L"Assets/model/gib.bone.cmo", animclip, 1,ue::enFbxUpAxisY);
 	p1->SetPos({ 0,-60,-1000 });
 	p1->SetSca({ 100,100,100 });
+	p1->SetIsShadowCaster(true);
+	p1->SetIsShadowReciever(true);
 
-	cc.Init(50, 100, { 0,10,-1000 });
+	cc.Init(50, 100, { 0,100,-1000 });
 
 	auto& anim = p1->GetAnimation();
 	anim.AddEventListener([&](const auto & clipname, const auto & eventname)
@@ -47,6 +49,7 @@ bool Game::Start()
 			}
 		}
 	});
+	
 
 	for (auto bone : p1->GetSkinModel().GetSkeleton().GetAllBone())
 	{
@@ -59,30 +62,62 @@ bool Game::Start()
 			Lfoot = bone;
 		}
 	}
-	p1->GetAnimation().SetingIK(Rfoot, Rfoot->GetParent()->GetParent(), 50.f);
-	p1->GetAnimation().SetingIK(Lfoot, Lfoot->GetParent()->GetParent(), 50.f);
+	p1->GetAnimation().SetingIK(Rfoot, Rfoot->GetParent()->GetParent(), 110.f);
+	p1->GetAnimation().SetingIK(Lfoot, Lfoot->GetParent()->GetParent(), 110.f);
+
 	p1->SetMoveFunc([&](ue::CVector3 & pos)
 	{
-		ue::CVector3 move;
+		ue::CVector3 move = ue::CVector3::Zero();
 		if (Rfoot->IsONGround())
 		{
 			move = Rfoot->GetMove();
 		}
-		else if (Lfoot->IsONGround())
+		if (Lfoot->IsONGround())
 		{
 			move = Lfoot->GetMove();
 		}
-		if (move.y >= 0)
+		if (move.Length()>0.0001f)
 		{
 			move.y = 0;
 			move *= -1;
-			//pos = cc.Execute(ue::gameTime()->GetDeltaTime(), move);
-			pos += move;
+			//move.y += -1;
+			auto rpos = cc.Execute(1, move);
+			rpos.y -= 50;
+			pos = rpos;
+			//pos += move;
+		}
+	});
+	p1->SetRotateFunc([&](auto & rot)
+	{
+		if (Rfoot->IsONGround())
+		{
+			auto mold = Rfoot->GetOldWorldMatrix();
+			auto mnew = Rfoot->GetBaseWorldMatrix();
+			ue::CQuaternion rold, rnew;
+			auto pos = ue::CVector3::Zero(), sca = ue::CVector3::Zero();
+			mold.CalcMatrixDecompose(pos, rold, sca);
+			mnew.CalcMatrixDecompose(pos, rnew, sca);
+			
+			ue::CVector3 vold = ue::CVector3::AxisZ(), vnew = ue::CVector3::AxisZ();
+			rold.Multiply(vold);
+			rnew.Multiply(vnew);
+
+			vold.Normalize();
+			vnew.Normalize();
+
+			float rad = vold.Dot(vnew);
+			rad = acos(rad);
+			
+			ue::CQuaternion add;
+			add.SetRotation(ue::CVector3::AxisY(), rad);
+			auto rot = p1->GetRot();
+			rot.Multiply(add);
+			p1->SetRot(rot);
 		}
 	});
 
 	p2 = ue::NewGO<ue::SkinModelRender>(0);
-	p2->Init(L"Assets/model/Player.cmo"/* , animclip + 1, 1*/);
+	p2->Init(L"Assets/model/Player.cmo" , animclip + 1, 1);
 	p2->SetPos({ 0,0,0 });
 	p2->SetSca({ 10,10,10 });
 	rot.SetRotationDeg(ue::CVector3::AxisX(), 90);
@@ -147,16 +182,16 @@ void Game::Update()
 	auto& pad = ue::GamePad(0);
 	//return;
 
-	//auto p = p1->GetPos();
+	auto p = p1->GetPos();
 
-	//if (GetAsyncKeyState('Q'))
-	//{
-	//	p.z += 60;
-	//}
-	//else if (GetAsyncKeyState('E'))
-	//{
-	//	p.z -= 50;
-	//}
+	if (GetAsyncKeyState('Q'))
+	{
+		p.z += 60;
+	}
+	else if (GetAsyncKeyState('E'))
+	{
+		p.z -= 50;
+	}
 	//ue::CVector3 vv;
 	//bool ON = 0;
 	//if (m_isrightON)
@@ -182,8 +217,35 @@ void Game::Update()
 	//	}
 	//	m_movedata[0] = vv;
 	//}
-	////p.z += 5;
-	//p1->SetPos(p);
+	
+	 
+	
+	//ue::CVector3 move;
+	//if (Rfoot->IsONGround())
+	//{
+	//	move = Rfoot->GetMove();
+	//}
+	//else if (Lfoot->IsONGround())
+	//{
+	//	move = Lfoot->GetMove();
+	//}
+	//if (move.y >= 0)
+	//{
+	//	move.y = 0;
+	//	move *= -1;
+	//	//move.y += -10;
+	//	//auto rpos = cc.Execute(ue::gameTime()->GetDeltaTime(), move);
+	//	//rpos.y -= 50;
+	//	//pos = rpos;
+	//	p += move;
+	//}
+	
+	auto grav = ue::CVector3(0, -50, 0);
+	p = cc.Execute(1, grav);
+	p.y -= 50;
+	p1->SetPos(p);
+
+
 
 	ue::CQuaternion add = ue::CQuaternion::Identity();
 	

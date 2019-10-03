@@ -7,6 +7,7 @@ namespace UsualEngine
 	{
 	public:
 		using MoveFunc = std::function<void(CVector3& pos)>;
+		using RotateFunc = std::function<void(CQuaternion& rot)>;
 
 		void Update() override;
 		void Render() override;
@@ -77,6 +78,11 @@ namespace UsualEngine
 			m_moveFunc = mf;
 			m_isUseMoveFunc = true;
 		}
+		void SetRotateFunc(RotateFunc rf)
+		{
+			m_rotateFunc = rf;
+			m_isUseRotateFunc = true;
+		}
 	private:
 		SkinModel m_skinModel;	//siknModel
 		Animation m_animation;	//Animation
@@ -89,5 +95,7 @@ namespace UsualEngine
 
 		MoveFunc m_moveFunc;
 		bool m_isUseMoveFunc=false;
+		RotateFunc m_rotateFunc;
+		bool m_isUseRotateFunc = false;
 	};
 }

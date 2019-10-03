@@ -134,8 +134,6 @@ namespace UsualEngine
 			}
 			m_effectorBone->SetIsONGround(true);
 
-			std::wstring end = L"END";
-			std::wstring wname = currentBone->GetName();
 			static int roop = 1;
 			for (int i = 0; i < roop; i++)
 			{
@@ -236,13 +234,12 @@ namespace UsualEngine
 					}
 
 
-					if (std::wstring::npos != wname.find(L"END"))
+					if (m_endBone == currentBone)
 						break;
 					effmat = GetBoneWorldMatrix(m_effectorBone, worldMat);
 					effpos = effmat.GetTranslation();
 
 					currentBone = currentBone->GetParent();
-					wname = currentBone->GetName();
 				}
 			}
 		}

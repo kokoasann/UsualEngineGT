@@ -55,7 +55,7 @@ namespace UsualEngine
 		CMatrix localMatrix = bone.GetLocalMatrix();
 
 		CVector3 oldpos, newpos;
-		oldpos = bone.GetWorldMatrix().GetTranslation();
+		oldpos = bone.GetBaseWorldMatrix().GetTranslation();
 		//oldpos -= m_oldWorldMatrix.GetTranslation();
 
 		//親の行列とローカル行列を乗算して、ワールド行列を計算する。
@@ -68,8 +68,38 @@ namespace UsualEngine
 		auto len = m_worldMatrix.GetTranslation() - m_oldWorldMatrix.GetTranslation();
 		bone.SetMove((newpos - oldpos)-len);
 
+
 		//子供のワールド行列も計算する。
 		std::vector<Bone*>& children = bone.GetChildren();
+		for (int childNo = 0; childNo < children.size(); childNo++) {
+			//この骨のワールド行列をUpdateBoneWorldMatrixに渡して、さらに子供のワールド行列を計算する。
+			UpdateBoneWorldMatrix(*children[childNo], mBoneWorld);
+		}
+	}
+
+	void Skeleton::UpdateBoneBaseWorldMatrix(Bone& bone, const CMatrix& parentMatrix)
+	{
+		//ワールド行列を計算する。
+		CMatrix mBoneWorld;
+		CMatrix localMatrix = bone.GetLocalMatrix();
+
+		CVector3 oldpos, newpos;
+		oldpos = bone.GetWorldMatrix().GetTranslation();
+		//oldpos -= m_oldWorldMatrix.GetTranslation();
+
+		//親の行列とローカル行列を乗算して、ワールド行列を計算する。
+		mBoneWorld.Mul(localMatrix, parentMatrix);
+		bone.SetBaseWorldMatrix(mBoneWorld);
+
+		newpos = mBoneWorld.GetTranslation();
+		//newpos -= m_worldMatrix.GetTranslation();
+
+		auto len = m_worldMatrix.GetTranslation() - m_oldWorldMatrix.GetTranslation();
+		bone.SetMove((newpos - oldpos) - len);
+
+
+		//子供のワールド行列も計算する。
+		std::vector<Bone*> & children = bone.GetChildren();
 		for (int childNo = 0; childNo < children.size(); childNo++) {
 			//この骨のワールド行列をUpdateBoneWorldMatrixに渡して、さらに子供のワールド行列を計算する。
 			UpdateBoneWorldMatrix(*children[childNo], mBoneWorld);
@@ -210,6 +240,7 @@ namespace UsualEngine
 
 		usualEngine()->GetGraphicsEngine()->GetD3DDevice()->CreateShaderResourceView(m_boneMatrixSB, &desc, &m_boneMatrixSRV);
 	}
+
 	void Skeleton::Update(const CMatrix& mWorld)
 	{
 		m_oldWorldMatrix = m_worldMatrix;
@@ -234,6 +265,20 @@ namespace UsualEngine
 			m_boneMatrixs[boneNo] = mBone;
 		}
 	}
+
+	void Skeleton::UpdateBase(const CMatrix& mWorld)
+	{
+		//ここがワールド行列を計算しているところ！！！
+		for (int boneNo = 0; boneNo < m_bones.size(); boneNo++) {
+			Bone* bone = m_bones[boneNo];
+			if (bone->GetParentId() != -1) {
+				continue;
+			}
+			//ルートが見つかったので、ボーンのワールド行列を計算していく。
+			UpdateBoneBaseWorldMatrix(*bone, mWorld);
+		}
+	}
+
 	/*!
 	*@brief	ボーン行列の配列をGPUに転送。
 	*/

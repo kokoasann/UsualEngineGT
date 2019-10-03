@@ -69,7 +69,6 @@ namespace UsualEngine
 
 		void SetWorldMatrix(CMatrix mat)
 		{
-			m_oldWorldMatrix = mat;
 			m_worldMatrix = mat;
 		}
 
@@ -120,12 +119,10 @@ namespace UsualEngine
 			*/
 		void UpdateGlobalPose();
 
-
-		void UpdateIK(const std::vector<CMatrix>& oldBonesMat);
+		/// <summary>
+		/// 
+		/// </summary>
 		void UpdateIK();
-
-		CMatrix GetBoneWorldMatrix(Bone* bone);
-		CMatrix GetBoneLocalMatrix(Bone* bone,CMatrix wm);
 	private:
 
 		/*!
@@ -155,13 +152,7 @@ namespace UsualEngine
 		float m_interpolateTimeEnd = 0.0f;
 		bool m_isInterpolate = false;				//!<•âŠÔ’†H
 
-		CMatrix m_oldWorldMatrix;
 		CMatrix m_worldMatrix;
-		static const int m_MAXIKBONE = 64;
-		int m_isIKBoneList[m_MAXIKBONE] = { -1 };
-		//Skeleton* m_skeleton = nullptr;
-		SphereCollider m_collider;
-		//RigidBody m_rigidBody;
 
 		std::vector<EventListener> m_eventListener;
 

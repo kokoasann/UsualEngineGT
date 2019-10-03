@@ -10,35 +10,6 @@
 
 namespace UsualEngine
 {
-	//IK用の当たり判定のやつ
-	struct SweepResultIK : public btCollisionWorld::ConvexResultCallback
-	{
-		bool isHit = false;
-		CVector3 hitPos = CVector3::Zero();
-		CVector3 startPos = CVector3::Zero();
-		CVector3 hitNormal = CVector3::Zero();
-		float dist = FLT_MAX;
-
-		btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
-		{
-			if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_Character)
-			{
-				return 0.0f;
-			}
-			isHit = true;
-			CVector3 hitp = *(CVector3*)& convexResult.m_hitPointLocal;
-			CVector3 div = startPos - hitp;
-			float dis = div.Length();
-			if (dis < dist)
-			{
-				hitNormal = *(CVector3*)& convexResult.m_hitNormalLocal;
-				hitPos = *(CVector3*)& convexResult.m_hitPointLocal;
-				dist = dis;
-			}
-			return 0.0f;
-		}
-	};
-
 	Animation::Animation()
 	{
 	}
@@ -68,26 +39,6 @@ namespace UsualEngine
 			ctr.Init(m_skeleton);
 		}
 		
-		//IKするボーンをゲッツ
-		int cont = 0;
-		std::wstring wstik = L"IK";
-		for (auto bone : m_skeleton->GetAllBone())
-		{
-			std::wstring wname = bone->GetName();
-			if (std::wstring::npos != wname.find(wstik))
-			{
-				m_isIKBoneList[cont] = bone->GetNo();
-
-				/*SkinModelRender* s = NewGO<SkinModelRender>(0);
-				s->Init(L"Assets/model/dun.cmo");
-				s->SetSca({ 0.05,0.05,0.05 });
-				m_marker.push_back(s);*/
-
-				cont++;
-			}
-		}
-		m_collider.Create(80);
-
 
 		Play(0);
 	}
@@ -173,9 +124,6 @@ namespace UsualEngine
 			}
 		}
 
-		//std::vector<CMatrix> oldSkelMat;
-		//oldSkelMat.reserve(numBone);
-
 
 		//グローバルポーズをスケルトンに反映させていく。
 		for (int boneNo = 0; boneNo < numBone; boneNo++) {
@@ -199,15 +147,6 @@ namespace UsualEngine
 			boneMatrix.Mul(scaleMatrix, rotMatrix);
 			boneMatrix.Mul(boneMatrix, transMat);
 
-			
-			/*if (boneNo == 3)
-			{
-				auto rot = CQuaternion::Identity();
-				rot.SetRotationDeg(CVector3::AxisZ(), 60);
-				CMatrix r;
-				r.MakeRotationFromQuaternion(rot);
-				boneMatrix.Mul(boneMatrix, rotMatrix);
-			}*/
 
 			m_skeleton->SetBoneLocalMatrix(
 				boneNo,
@@ -229,11 +168,6 @@ namespace UsualEngine
 		m_numAnimationPlayController = numAnimationPlayController;
 	}
 
-	struct BoneMatrix
-	{
-		CMatrix World;
-		CMatrix Local;
-	};
 
 	void Animation::UpdateIK()
 	{
@@ -242,38 +176,6 @@ namespace UsualEngine
 			ik->Update(m_worldMatrix);
 		}
 	}
-
-	CMatrix Animation::GetBoneWorldMatrix(Bone* bone)
-	{
-		Bone* parents[32] = {NULL};
-		int cont = 0;
-		Bone* b = bone;
-		while (true)
-		{
-			parents[cont++] = b;
-			b = b->GetParent();
-			if (b == nullptr)
-				break;
-		}
-		auto mat = m_worldMatrix;
-		for (int i = cont - 1; i >= 0; i--)
-		{
-			auto locmat = parents[i]->GetLocalMatrix();
-			mat.Mul(locmat,mat);
-		}
-		//mat.Mul(bone->GetLocalMatrix(),mat);
-		return mat;
-	}
-
-	CMatrix Animation::GetBoneLocalMatrix(Bone* bone,CMatrix wm)
-	{
-		CMatrix mat = wm;
-		CMatrix inv;
-		inv.Inverse(GetBoneWorldMatrix(bone->GetParent()));
-		mat.Mul(wm,inv);
-		return mat;
-	}
-
 
 
 

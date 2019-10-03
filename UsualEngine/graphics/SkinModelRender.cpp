@@ -26,16 +26,23 @@ namespace UsualEngine
 		//ƒ[ƒ‹ƒhs—ñ‚ðì¬‚·‚éB
 		//Šg‘å~‰ñ“]~•½sˆÚ“®‚Ì‡”Ô‚ÅæŽZ‚·‚é‚æ‚¤‚ÉI
 		//‡”Ô‚ðŠÔˆá‚¦‚½‚çŒ‹‰Ê‚ª•Ï‚í‚é‚æB
-		CMatrix worldMatrix = CMatrix::Identity();
-		worldMatrix.Mul(scaleMatrix, rotMatrix);
-		worldMatrix.Mul(worldMatrix, transMatrix);
+		CMatrix worldMatrix = CMatrix::Identity(),scarot;
+		scarot.Mul(scaleMatrix, rotMatrix);
+		worldMatrix.Mul(scarot, transMatrix);
 
 		m_animation.SetWorldMatrix(worldMatrix);
 		m_animation.Update(gameTime()->GetDeltaTime());
 
+		auto& ske = m_skinModel.GetSkeleton();
+		ske.UpdateBase(scaleMatrix);
+
 		if (m_isUseMoveFunc)
 		{
 			m_moveFunc(m_position);
+		}
+		if (m_isUseRotateFunc)
+		{
+			m_rotateFunc(m_rotation);
 		}
 
 		m_skinModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
