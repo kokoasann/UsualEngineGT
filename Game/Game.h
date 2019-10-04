@@ -21,13 +21,15 @@ private:
 	ue::Camera* cam = 0;
 	ue::CQuaternion camrot=ue::CQuaternion::Identity();
 
-	ue::Bone* Lfoot;
-	ue::Bone* Rfoot;
+	ue::Bone* Lfoot=0;
+	ue::Bone* Rfoot=0;
+	ue::Bone* Rwaist=0;
 	bool m_isleftON = false;
 	bool m_isrightON = false;
 	std::array<ue::CVector3, 3> m_movedata;
 	int count = 0;
 	ue::CharacterController cc;
+	float modeloffset = 30.f;
 
 	ue::PhysicsStaticObject pso;
 

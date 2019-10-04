@@ -53,17 +53,23 @@ bool Game::Start()
 
 	for (auto bone : p1->GetSkinModel().GetSkeleton().GetAllBone())
 	{
-		if (lstrcmpW(bone->GetName(), L"IK_Bone.007_R.003") == 0)
+		if (Rfoot==NULL && lstrcmpW(bone->GetName(), L"IK_Bone.007_R.003") == 0)
 		{
 			Rfoot = bone;
 		}
-		else if(lstrcmpW(bone->GetName(), L"IK_Bone.007_L.003") == 0)
+		else if(Lfoot == NULL && lstrcmpW(bone->GetName(), L"IK_Bone.007_L.003") == 0)
 		{
 			Lfoot = bone;
 		}
+		else if (Rwaist == NULL && lstrcmpW(bone->GetName(), L"Bone.007_R") == 0)
+		{
+			Rwaist = bone;
+		}
 	}
-	p1->GetAnimation().SetingIK(Rfoot, Rfoot->GetParent()->GetParent(), 110.f);
-	p1->GetAnimation().SetingIK(Lfoot, Lfoot->GetParent()->GetParent(), 110.f);
+	p1->GetAnimation().SetingIK(Rfoot, Rfoot->GetParent()->GetParent(), 60.f);
+	p1->GetAnimation().SetingIK(Lfoot, Lfoot->GetParent()->GetParent(), 60.f);
+	p1->GetAnimation().SetingIK(Rfoot->GetChildren()[0], Rfoot, 10.f);
+	p1->GetAnimation().SetingIK(Lfoot->GetChildren()[0], Lfoot, 10.f);
 
 	p1->SetMoveFunc([&](ue::CVector3 & pos)
 	{
@@ -74,7 +80,7 @@ bool Game::Start()
 		}
 		if (Lfoot->IsONGround())
 		{
-			move = Lfoot->GetMove();
+			//move = Lfoot->GetMove();
 		}
 		if (move.Length()>0.0001f)
 		{
@@ -82,7 +88,7 @@ bool Game::Start()
 			move *= -1;
 			//move.y += -1;
 			auto rpos = cc.Execute(1, move);
-			rpos.y -= 50;
+			rpos.y -= modeloffset;
 			pos = rpos;
 			//pos += move;
 		}
@@ -91,14 +97,19 @@ bool Game::Start()
 	{
 		if (Rfoot->IsONGround())
 		{
-			auto mold = Rfoot->GetOldWorldMatrix();
-			auto mnew = Rfoot->GetBaseWorldMatrix();
+			auto mold = Rwaist->GetOldWorldMatrix();
+			auto mnew = Rwaist->GetBaseWorldMatrix();
 			ue::CQuaternion rold, rnew;
 			auto pos = ue::CVector3::Zero(), sca = ue::CVector3::Zero();
 			mold.CalcMatrixDecompose(pos, rold, sca);
 			mnew.CalcMatrixDecompose(pos, rnew, sca);
-			
-			ue::CVector3 vold = ue::CVector3::AxisZ(), vnew = ue::CVector3::AxisZ();
+
+			ue::CQuaternion rloc;
+			auto bmat = Rwaist->GetBindPoseMatrix();
+			bmat.CalcMatrixDecompose(pos, rloc, sca);
+			ue::CVector3 axis = ue::CVector3::AxisZ();
+			rloc.Multiply(axis);
+			ue::CVector3 vold = ue::CVector3::AxisX(), vnew = ue::CVector3::AxisX();
 			rold.Multiply(vold);
 			rnew.Multiply(vnew);
 
@@ -106,10 +117,27 @@ bool Game::Start()
 			vnew.Normalize();
 
 			float rad = vold.Dot(vnew);
+			rad = min(rad, 1);
 			rad = acos(rad);
 			
 			ue::CQuaternion add;
-			add.SetRotation(ue::CVector3::AxisY(), rad);
+			add.SetRotation(ue::CVector3::AxisY(), rad*-1);
+
+			auto fpos = Rfoot->GetWorldMatrix().GetTranslation();
+			fpos -= Rfoot->GetMove();
+			auto mpos = p1->GetPos();
+			fpos.y = 0;
+			mpos.y = 0;
+			auto f2m = mpos - fpos;
+
+			add.Multiply(f2m);
+			auto npos = fpos + f2m;
+			auto m2n = npos - mpos;
+
+			auto rpos = cc.Execute(1, m2n);
+			rpos.y -= modeloffset;
+			p1->SetPos(rpos);
+
 			auto rot = p1->GetRot();
 			rot.Multiply(add);
 			p1->SetRot(rot);
@@ -133,6 +161,8 @@ bool Game::Start()
 	rot.SetRotationDeg(ue::CVector3::AxisX(), -90);
 	p3->SetRot(rot);
 	p3->SetIsShadowCaster(true);*/
+	
+
 
 	ground = ue::NewGO<ue::SMR4Ground>(0);
 	ground->InitG(L"Assets/model/dun.cmo", 0, 0, ue::enFbxUpAxisZ);
@@ -242,7 +272,7 @@ void Game::Update()
 	
 	auto grav = ue::CVector3(0, -50, 0);
 	p = cc.Execute(1, grav);
-	p.y -= 50;
+	p.y -= modeloffset;
 	p1->SetPos(p);
 
 

@@ -183,7 +183,7 @@
     </MeshContentTask>
     <MeshContentTask Include="Assets\model\gib\gib.bone.fbx">
       <FileType>Document</FileType>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </MeshContentTask>
     <MeshContentTask Include="Assets\model\player\Player.fbx">
       <FileType>Document</FileType>

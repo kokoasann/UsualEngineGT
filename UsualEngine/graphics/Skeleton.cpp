@@ -65,8 +65,8 @@ namespace UsualEngine
 		newpos = mBoneWorld.GetTranslation();
 		//newpos -= m_worldMatrix.GetTranslation();
 
-		auto len = m_worldMatrix.GetTranslation() - m_oldWorldMatrix.GetTranslation();
-		bone.SetMove((newpos - oldpos)-len);
+		//auto len = m_worldMatrix.GetTranslation() - m_oldWorldMatrix.GetTranslation();
+		//bone.SetMove((newpos - oldpos)-len);
 
 
 		//子供のワールド行列も計算する。
@@ -84,7 +84,7 @@ namespace UsualEngine
 		CMatrix localMatrix = bone.GetLocalMatrix();
 
 		CVector3 oldpos, newpos;
-		oldpos = bone.GetWorldMatrix().GetTranslation();
+		oldpos = bone.GetBaseWorldMatrix().GetTranslation();
 		//oldpos -= m_oldWorldMatrix.GetTranslation();
 
 		//親の行列とローカル行列を乗算して、ワールド行列を計算する。
@@ -95,14 +95,14 @@ namespace UsualEngine
 		//newpos -= m_worldMatrix.GetTranslation();
 
 		auto len = m_worldMatrix.GetTranslation() - m_oldWorldMatrix.GetTranslation();
-		bone.SetMove((newpos - oldpos) - len);
+		bone.SetMove((newpos - oldpos)-len);
 
 
 		//子供のワールド行列も計算する。
 		std::vector<Bone*> & children = bone.GetChildren();
 		for (int childNo = 0; childNo < children.size(); childNo++) {
 			//この骨のワールド行列をUpdateBoneWorldMatrixに渡して、さらに子供のワールド行列を計算する。
-			UpdateBoneWorldMatrix(*children[childNo], mBoneWorld);
+			UpdateBoneBaseWorldMatrix(*children[childNo], mBoneWorld);
 		}
 	}
 	bool Skeleton::Load(const wchar_t* filePath)

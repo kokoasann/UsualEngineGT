@@ -34,7 +34,7 @@ namespace UsualEngine
 		m_animation.Update(gameTime()->GetDeltaTime());
 
 		auto& ske = m_skinModel.GetSkeleton();
-		ske.UpdateBase(scaleMatrix);
+		ske.UpdateBase(worldMatrix);
 
 		if (m_isUseMoveFunc)
 		{
