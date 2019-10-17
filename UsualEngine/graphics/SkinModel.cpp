@@ -55,6 +55,8 @@ namespace UsualEngine
 	}
 	void SkinModel::InitConstantBuffer()
 	{
+		if (m_cb != nullptr)
+			return;
 		//作成するバッファのサイズをsizeof演算子で求める。
 		int bufferSize = sizeof(SVSConstantBuffer);
 		//どんなバッファを作成するのかをせてbufferDescに設定する。
@@ -72,6 +74,8 @@ namespace UsualEngine
 	}
 	void SkinModel::InitSamplerState()
 	{
+		if (m_samplerState != nullptr)
+			return;
 		//テクスチャのサンプリング方法を指定するためのサンプラステートを作成。
 		D3D11_SAMPLER_DESC desc;
 		ZeroMemory(&desc, sizeof(desc));

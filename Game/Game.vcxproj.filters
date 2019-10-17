@@ -7,6 +7,12 @@
     <ClCompile Include="Character\Character.cpp">
       <Filter>Chara</Filter>
     </ClCompile>
+    <ClCompile Include="Player\Player.cpp">
+      <Filter>Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Player\PlayerCamera.cpp">
+      <Filter>Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -16,6 +22,12 @@
     </ClInclude>
     <ClInclude Include="Character\Character.h">
       <Filter>Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="Player\Player.h">
+      <Filter>Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Player\PlayerCamera.h">
+      <Filter>Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -39,6 +51,9 @@
     </Filter>
     <Filter Include="Chara">
       <UniqueIdentifier>{2adf3474-8b0c-4842-bdff-0f5cd19d1d2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Player">
+      <UniqueIdentifier>{2cb27f24-e428-45ad-8640-d5a2ef80cbc4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

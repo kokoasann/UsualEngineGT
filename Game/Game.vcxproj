@@ -144,6 +144,8 @@
     <ClCompile Include="Character\Character.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Player\Player.cpp" />
+    <ClCompile Include="Player\PlayerCamera.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
@@ -161,6 +163,8 @@
     </ClInclude>
     <ClInclude Include="Character\Character.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Player\Player.h" />
+    <ClInclude Include="Player\PlayerCamera.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
@@ -183,7 +187,7 @@
     </MeshContentTask>
     <MeshContentTask Include="Assets\model\gib\gib.bone.fbx">
       <FileType>Document</FileType>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </MeshContentTask>
     <MeshContentTask Include="Assets\model\player\Player.fbx">
       <FileType>Document</FileType>

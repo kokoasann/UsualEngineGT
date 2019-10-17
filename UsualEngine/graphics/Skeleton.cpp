@@ -54,15 +54,15 @@ namespace UsualEngine
 		CMatrix mBoneWorld;
 		CMatrix localMatrix = bone.GetLocalMatrix();
 
-		CVector3 oldpos, newpos;
-		oldpos = bone.GetBaseWorldMatrix().GetTranslation();
+		//CVector3 oldpos, newpos;
+		//oldpos = bone.GetBaseWorldMatrix().GetTranslation();
 		//oldpos -= m_oldWorldMatrix.GetTranslation();
 
 		//親の行列とローカル行列を乗算して、ワールド行列を計算する。
 		mBoneWorld.Mul(localMatrix, parentMatrix);
 		bone.SetWorldMatrix(mBoneWorld);
 
-		newpos = mBoneWorld.GetTranslation();
+		//newpos = mBoneWorld.GetTranslation();
 		//newpos -= m_worldMatrix.GetTranslation();
 
 		//auto len = m_worldMatrix.GetTranslation() - m_oldWorldMatrix.GetTranslation();
@@ -107,6 +107,7 @@ namespace UsualEngine
 	}
 	bool Skeleton::Load(const wchar_t* filePath)
 	{
+		m_bones.clear();
 		//tksファイルをオープン。
 		FILE* fp = _wfopen(filePath, L"rb");
 

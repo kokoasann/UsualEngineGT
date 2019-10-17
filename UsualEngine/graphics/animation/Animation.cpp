@@ -31,6 +31,7 @@ namespace UsualEngine
 
 		}
 		m_skeleton = &skinModel.GetSkeleton();
+		m_animationClips.clear();
 
 		for (int i = 0; i < numAnimClip; i++) {
 			m_animationClips.push_back(&animClipList[i]);

@@ -16,10 +16,15 @@ namespace UsualEngine
 	void GameObjectManager::Update()
 	{
 		UpdateStart();
+		//Stopwatch sw;
+		//sw.Start();
 		UpdateUpdate();
+		/*auto t = sw.Stop();
+		char str[255] = { 0 };
+		sprintf(str, "%.3f\n", t);
+		OutputDebugString(str);*/
 		UpdateRender();
 		UpdatePostRender();
-
 		Physics().DebugDraw();
 	}
 
@@ -55,8 +60,11 @@ namespace UsualEngine
 			{
 				if (go->isStart())
 				{
-					if(!go->isDead())
+					if (!go->isDead())
+					{
 						go->Update();
+						
+					}
 					else
 					{
 						DeadData dd;

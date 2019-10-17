@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Game.h"
-
+#include "Player/Player.h"
 Game::Game()
 {
 }
@@ -13,6 +13,7 @@ void Game::OnDestroy()
 
 bool Game::Start()
 {
+	ue::NewGO<Player>(0);
 	animclip[0].Load(L"Assets/model/gib/gib.rotation.tka");
 	animclip[0].SetLoopFlag(true);
 	animclip[1].Load(L"Assets/model/Player/player_idol.tka");
@@ -73,6 +74,7 @@ bool Game::Start()
 
 	p1->SetMoveFunc([&](ue::CVector3 & pos)
 	{
+		return;
 		ue::CVector3 move = ue::CVector3::Zero();
 		if (Rfoot->IsONGround())
 		{
@@ -80,7 +82,7 @@ bool Game::Start()
 		}
 		if (Lfoot->IsONGround())
 		{
-			//move = Lfoot->GetMove();
+			move = Lfoot->GetMove();
 		}
 		if (move.Length()>0.0001f)
 		{
@@ -99,19 +101,24 @@ bool Game::Start()
 		{
 			auto mold = Rwaist->GetOldWorldMatrix();
 			auto mnew = Rwaist->GetBaseWorldMatrix();
+			//分改！！
 			ue::CQuaternion rold, rnew;
 			auto pos = ue::CVector3::Zero(), sca = ue::CVector3::Zero();
 			mold.CalcMatrixDecompose(pos, rold, sca);
 			mnew.CalcMatrixDecompose(pos, rnew, sca);
 
+			//バインディングポーズの
 			ue::CQuaternion rloc;
 			auto bmat = Rwaist->GetBindPoseMatrix();
 			bmat.CalcMatrixDecompose(pos, rloc, sca);
 			ue::CVector3 axis = ue::CVector3::AxisZ();
 			rloc.Multiply(axis);
-			ue::CVector3 vold = ue::CVector3::AxisX(), vnew = ue::CVector3::AxisX();
+			ue::CVector3 vold = axis, vnew = axis;
 			rold.Multiply(vold);
 			rnew.Multiply(vnew);
+
+			vold.y = 0;
+			vnew.y = 0;
 
 			vold.Normalize();
 			vnew.Normalize();
@@ -123,8 +130,9 @@ bool Game::Start()
 			ue::CQuaternion add;
 			add.SetRotation(ue::CVector3::AxisY(), rad*-1);
 
+
 			auto fpos = Rfoot->GetWorldMatrix().GetTranslation();
-			fpos -= Rfoot->GetMove();
+			//fpos -= Rfoot->GetMove();
 			auto mpos = p1->GetPos();
 			fpos.y = 0;
 			mpos.y = 0;
@@ -142,16 +150,41 @@ bool Game::Start()
 			rot.Multiply(add);
 			p1->SetRot(rot);
 		}
+#if 0
+		{
+			ue::CQuaternion adrot;
+			adrot.SetRotationDeg(ue::CVector3::AxisY(), 1);
+
+			auto fpos = Rfoot->GetWorldMatrix().GetTranslation();
+			//fpos -= Rfoot->GetMove();
+			auto mpos = p1->GetPos();
+			fpos.y = 0;
+			mpos.y = 0;
+			auto f2m = mpos - fpos;
+
+			adrot.Multiply(f2m);
+			auto npos = fpos + f2m;
+			auto m2n = npos - mpos;
+
+			auto rpos = cc.Execute(1, m2n);
+			rpos.y -= modeloffset;
+			p1->SetPos(rpos);
+
+			auto rot = p1->GetRot();
+			rot.Multiply(adrot);
+			p1->SetRot(rot);
+		}
+#endif
 	});
 
-	p2 = ue::NewGO<ue::SkinModelRender>(0);
+	/*p2 = ue::NewGO<ue::SkinModelRender>(0);
 	p2->Init(L"Assets/model/Player.cmo" , animclip + 1, 1);
 	p2->SetPos({ 0,0,0 });
 	p2->SetSca({ 10,10,10 });
 	rot.SetRotationDeg(ue::CVector3::AxisX(), 90);
 	p2->SetRot(rot);
 	p2->SetIsShadowCaster(true);
-	p2->SetIsShadowReciever(true);
+	p2->SetIsShadowReciever(true);*/
 
 	/*p3 = ue::NewGO<ue::SkinModelRender>(0);
 	p3->Init(L"Assets/model/unityChan.cmo");

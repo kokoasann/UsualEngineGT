@@ -34,8 +34,9 @@ namespace UsualEngine
 		m_animation.Update(gameTime()->GetDeltaTime());
 
 		auto& ske = m_skinModel.GetSkeleton();
+		
 		ske.UpdateBase(worldMatrix);
-
+		
 		if (m_isUseMoveFunc)
 		{
 			m_moveFunc(m_position);
@@ -44,8 +45,10 @@ namespace UsualEngine
 		{
 			m_rotateFunc(m_rotation);
 		}
-
+		
 		m_skinModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
+		
+		
 		m_isRenderingOK = true;
 	}
 
