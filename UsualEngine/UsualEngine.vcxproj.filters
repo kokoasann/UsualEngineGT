@@ -55,6 +55,12 @@
     <Filter Include="Prefab">
       <UniqueIdentifier>{da311915-e7a9-4ea6-bff4-f7636e251022}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\RenderState">
+      <UniqueIdentifier>{b204934b-7670-40e4-8467-c30e84cd800c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\PostEffect">
+      <UniqueIdentifier>{c61123f4-f6ff-4fd5-ad1a-4b794375bb5c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="character\CharacterController.cpp">
@@ -205,6 +211,18 @@
     </ClCompile>
     <ClCompile Include="graphics\animation\IK.cpp">
       <Filter>Graphics\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\RenderState.cpp">
+      <Filter>Graphics\RenderState</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\PostEffect\PostEffect.cpp">
+      <Filter>Graphics\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\PostEffect\Bloom.cpp">
+      <Filter>Graphics\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\PostEffect\GaussianBlur.cpp">
+      <Filter>Graphics\PostEffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -368,6 +386,18 @@
     </ClInclude>
     <ClInclude Include="graphics\animation\IK.h">
       <Filter>Graphics\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\RenderState.h">
+      <Filter>Graphics\RenderState</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\PostEffect\GaussianBlur.h">
+      <Filter>Graphics\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\PostEffect\PostEffect.h">
+      <Filter>Graphics\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\PostEffect\Bloom.h">
+      <Filter>Graphics\PostEffect</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
