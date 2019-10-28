@@ -63,4 +63,8 @@ namespace UsualEngine
 	{
 		return m_renderTarget[m_renderTargetNum];
 	}
+	void PostEffect::DrawPrimitive()
+	{
+		m_primitive.Draw();
+	}
 }

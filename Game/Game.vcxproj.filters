@@ -75,6 +75,9 @@
     <FxCompile Include="Assets\shader\Bloom.fx">
       <Filter>Assets\Shader</Filter>
     </FxCompile>
+    <FxCompile Include="Assets\shader\Copy.fx">
+      <Filter>Assets\Shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ImageContentTask Include="Assets\sprite\daru.PNG">

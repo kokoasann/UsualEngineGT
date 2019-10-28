@@ -33,6 +33,7 @@ namespace UsualEngine
 		/// </summary>
 		/// <returns></returns>
 		RenderTarget& GetCurrentRenderTarget();
+		void DrawPrimitive();
 	private:
 		Primitive m_primitive;
 		int m_renderTargetNum = 0;			//作業中のレンダーターゲット
