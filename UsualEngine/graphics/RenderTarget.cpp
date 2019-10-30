@@ -9,6 +9,7 @@ namespace UsualEngine
 	}
 	RenderTarget::~RenderTarget()
 	{
+		Release();
 	}
 	void RenderTarget::Release()
 	{

@@ -6,12 +6,12 @@ namespace UsualEngine
 	RenderState::RenderState()
 	{
 		InitBlendState();
+		InitSamplerState();
 	}
-	RenderState::RenderState()
+	RenderState::~RenderState()
 	{
-		m_blendStatePreset.disable->Release();
-		m_blendStatePreset.trans->Release();
-		m_blendStatePreset.add->Release();
+		ReleaseBlendState();
+		ReleaseSamplerState();
 	}
 
 	void RenderState::InitBlendState()
@@ -36,6 +36,13 @@ namespace UsualEngine
 
 		desc.RenderTarget[0].BlendEnable = false;
 		dev->CreateBlendState(&desc, &m_blendStatePreset.disable);
+	}
+
+	void RenderState::ReleaseBlendState()
+	{
+		m_blendStatePreset.disable->Release();
+		m_blendStatePreset.trans->Release();
+		m_blendStatePreset.add->Release();
 	}
 
 	ID3D11BlendState* RenderState::GetBlendState(int kind)
@@ -67,6 +74,11 @@ namespace UsualEngine
 
 			dev->CreateSamplerState(&desc, &m_samplerStatePreset.pointSampling);
 		}
+	}
+	void RenderState::ReleaseSamplerState()
+	{
+		m_samplerStatePreset.linerSampling->Release();
+		m_samplerStatePreset.pointSampling->Release();
 	}
 	ID3D11SamplerState* RenderState::GetSamplerState(int kind)
 	{

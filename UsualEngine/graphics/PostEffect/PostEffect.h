@@ -1,8 +1,9 @@
 #pragma once
 #include "Bloom.h"
-
+#include "../Primitive.h"
 namespace UsualEngine
 {
+
 	class PostEffect
 	{
 	public:
@@ -34,6 +35,8 @@ namespace UsualEngine
 		/// <returns></returns>
 		RenderTarget& GetCurrentRenderTarget();
 		void DrawPrimitive();
+
+		Primitive* GetPrimitive();
 	private:
 		Primitive m_primitive;
 		int m_renderTargetNum = 0;			//作業中のレンダーターゲット

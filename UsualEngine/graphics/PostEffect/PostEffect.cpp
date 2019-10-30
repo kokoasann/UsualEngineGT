@@ -11,7 +11,6 @@ namespace UsualEngine
 
 	PostEffect::PostEffect()
 	{
-		Init();
 	}
 	PostEffect::~PostEffect()
 	{
@@ -20,6 +19,8 @@ namespace UsualEngine
 	{
 		InitRenderTarget();
 		InitPrimitive();
+		m_bloom.Init();
+		
 	}
 	void PostEffect::InitRenderTarget()
 	{
@@ -55,6 +56,23 @@ namespace UsualEngine
 		m_primitive.Cteate(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP, 4, sizeof(SSimpleVertex), vertices, 4, IndexBuffer::e16bit,ind);
 	}
 
+	void PostEffect::Render()
+	{
+		auto gEngine = usualEngine()->GetGraphicsEngine();
+		auto devcon = gEngine->GetD3DDeviceContext();
+
+		devcon->ResolveSubresource(
+			GetCurrentRenderTarget().GetRenderTarget(),
+			0,
+			gEngine->GetMainRenderTarget()->GetRenderTarget(),
+			0, 
+			*GetCurrentRenderTarget().GetTexFormat()
+		);
+		m_bloom.Render(this);
+
+		//gEngine->EndPostEffect();
+	}
+
 	void PostEffect::ToggleRenderTargetNum()
 	{
 		m_renderTargetNum ^= 1;
@@ -66,5 +84,9 @@ namespace UsualEngine
 	void PostEffect::DrawPrimitive()
 	{
 		m_primitive.Draw();
+	}
+	Primitive* PostEffect::GetPrimitive()
+	{
+		return &m_primitive;
 	}
 }

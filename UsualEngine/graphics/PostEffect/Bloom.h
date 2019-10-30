@@ -11,10 +11,10 @@ namespace UsualEngine
 	class Bloom
 	{
 	public:
-		Bloom();
-		~Bloom();
+		Bloom() {}
+		~Bloom() {}
 		void Init();
-		void Release();
+		void Release(){}
 
 		void Render(PostEffect* pe);
 	private:

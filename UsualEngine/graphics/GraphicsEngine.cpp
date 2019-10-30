@@ -45,14 +45,14 @@ namespace UsualEngine
 														  //描き込み先をバックバッファにする。
 
 		//m_pd3dDeviceContext->OMSetRenderTargets(1, &m_backBuffer, m_depthStencilView);
-		RenderTarget* rt[] = { &m_renderTarget };
+		RenderTarget* rt[] = { &m_mainRenderTarget };
 		OMSetRenderTarget(1, rt);
 		//バックバッファを灰色で塗りつぶす。
 
-		//m_pd3dDeviceContext->ClearRenderTargetView(m_backBuffer, ClearColor);
-		//m_pd3dDeviceContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
-		m_pd3dDeviceContext->ClearRenderTargetView(m_renderTarget.GetRTV(), ClearColor);
-		m_pd3dDeviceContext->ClearDepthStencilView(m_renderTarget.GetDSV(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+		m_pd3dDeviceContext->ClearRenderTargetView(m_backBuffer, ClearColor);
+		m_pd3dDeviceContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+		m_pd3dDeviceContext->ClearRenderTargetView(m_mainRenderTarget.GetRTV(), ClearColor);
+		m_pd3dDeviceContext->ClearDepthStencilView(m_mainRenderTarget.GetDSV(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 	}
 
 	void GraphicsEngine::EndRender()
@@ -60,6 +60,27 @@ namespace UsualEngine
 
 		//バックバッファとフロントバッファを入れ替える。
 		m_pSwapChain->Present(2, 0);
+	}
+	void GraphicsEngine::EndPostEffect()
+	{
+		ID3D11Texture2D* pBackBuffer = 0;
+		m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)& pBackBuffer);
+
+		ID3D11RenderTargetView* rtl[] = { m_backBuffer };
+		m_pd3dDeviceContext->OMSetRenderTargets(1, rtl,nullptr);
+		//RenderTarget* rtl[] = { &m_mainRenderTarget };
+		//OMSetRenderTarget(1, rtl);
+
+		m_pd3dDeviceContext->PSSetShader((ID3D11PixelShader*)m_psCopy.GetBody(), 0, 0);
+		m_pd3dDeviceContext->VSSetShader((ID3D11VertexShader*)m_vsCopy.GetBody(), 0, 0);
+		//m_pd3dDeviceContext->IASetInputLayout(m_vsCopy.GetInputLayout());
+		ID3D11ShaderResourceView* srv[] = { m_postEffect.GetCurrentRenderTarget().GetSRV() };
+		m_pd3dDeviceContext->PSSetShaderResources(0, 1, srv);
+		m_postEffect.DrawPrimitive();
+
+		pBackBuffer->Release();
+		srv[0] = nullptr;
+		m_pd3dDeviceContext->PSSetShaderResources(0, 1, srv);
 	}
 	void GraphicsEngine::Release()
 	{
@@ -161,12 +182,12 @@ namespace UsualEngine
 				}
 			}
 		}*/
-		bool res = m_renderTarget.Create(FRAME_BUFFER_W, FRAME_BUFFER_H, 1, 1, DXGI_FORMAT_R16G16B16A16_FLOAT, DXGI_FORMAT_D32_FLOAT,msaaD,pBackBuffer,NULL,true);
+		bool res = m_mainRenderTarget.Create(FRAME_BUFFER_W, FRAME_BUFFER_H, 1, 1, DXGI_FORMAT_R16G16B16A16_FLOAT, DXGI_FORMAT_D32_FLOAT,msaaD,pBackBuffer,NULL,true);
 		if (!res)
 			int o = 0+1;
-		RenderTarget* rts[] = { &m_renderTarget };
+		RenderTarget* rts[] = { &m_mainRenderTarget };
 		OMSetRenderTarget(1, rts);
-		m_depthStencilView = m_renderTarget.GetDSV();
+		m_depthStencilView = m_mainRenderTarget.GetDSV();
 
 		pBackBuffer->Release();
 		//深度ステンシルビューの作成。
@@ -217,5 +238,26 @@ namespace UsualEngine
 		
 		m_shadowMap.Init(2048, 2048);
 		mLightManager.Init();
+
+		m_postEffect.Init();
+
+		m_vsCopy.Load("Assets/shader/copy.fx", "VSMain", Shader::EnType::VS);
+		m_psCopy.Load("Assets/shader/copy.fx", "PSMain", Shader::EnType::PS);
+
+		InitBackBuffer();
+	}
+	void GraphicsEngine::InitBackBuffer()
+	{
+		//書き込み先になるレンダリングターゲットを作成。
+		ID3D11Texture2D* pBackBuffer = NULL;
+		HRESULT hr = m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)& pBackBuffer);
+		if (FAILED(hr)) {
+			return ;
+		}
+		hr = m_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &m_backBuffer);
+		if (FAILED(hr)) {
+			return ;
+		}
+		return ;
 	}
 }

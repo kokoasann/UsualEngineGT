@@ -237,14 +237,19 @@ float4 PSProcess(float4 albe, PSInput In)
 	{
 		float rad = dot(DirLights[i].dir * -1.f, In.Normal);
 		//li += max(rad, 0.2f) * DirLights[i].color;
-		if (Rad2Deg(rad) < 10.f)
+		if (Rad2Deg(rad) < 10.f)//‰e‚Ì`ô@‚µ‚å`‚è‚¡`ô
 		{
 			li = float3(0.45f, 0.4f, 0.6f);
-
+			
 		}
-		else
+		else//
 		{
 			li += DirLights[i].color * shadow;
+
+			float3 R = -camDir + 2 * dot(camDir, In.Normal) * In.Normal;
+			rad = dot(DirLights[i].dir, R);
+			float sp = max(0.f, rad);
+			li += pow(sp, 5);
 		}
 	}
 	albe.xyz *= li;

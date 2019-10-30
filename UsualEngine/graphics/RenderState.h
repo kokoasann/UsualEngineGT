@@ -42,6 +42,10 @@ namespace UsualEngine
 		/// </summary>
 		void InitBlendState();
 		/// <summary>
+		/// 
+		/// </summary>
+		void ReleaseBlendState();
+		/// <summary>
 		/// blendstateをかえす
 		/// かえすblendstateはkindに依存する
 		/// </summary>
@@ -73,6 +77,10 @@ namespace UsualEngine
 		/// <summary>
 		/// 
 		/// </summary>
+		void ReleaseSamplerState();
+		/// <summary>
+		/// 
+		/// </summary>
 		/// <param name="kind"></param>
 		/// <returns></returns>
 		ID3D11SamplerState* GetSamplerState(int kind);
@@ -85,7 +93,7 @@ namespace UsualEngine
 	/// アルファブレンド無効のBlendStateをかえす
 	/// </summary>
 	/// <returns></returns>
-	ID3D11BlendState* BlendState_Disable()
+	static ID3D11BlendState* BlendState_Disable()
 	{
 		return RenderState::Get().GetBlendState(RenderState::bsDisable);
 	}
@@ -93,7 +101,7 @@ namespace UsualEngine
 	/// 半透明合成のBlendStateをかえす
 	/// </summary>
 	/// <returns></returns>
-	ID3D11BlendState* BlendState_Trans()
+	static ID3D11BlendState* BlendState_Trans()
 	{
 		return RenderState::Get().GetBlendState(RenderState::bsTrans);
 	}
@@ -101,7 +109,7 @@ namespace UsualEngine
 	/// 加算合成のBlendStateをかえす
 	/// </summary>
 	/// <returns></returns>
-	ID3D11BlendState* BlendState_Add()
+	static ID3D11BlendState* BlendState_Add()
 	{
 		return RenderState::Get().GetBlendState(RenderState::bsAdd);
 	}
@@ -111,7 +119,7 @@ namespace UsualEngine
 	/// ポイントサンプリング
 	/// </summary>
 	/// <returns></returns>
-	ID3D11SamplerState* SamplerState_Point()
+	static ID3D11SamplerState* SamplerState_Point()
 	{
 		return RenderState::Get().GetSamplerState(RenderState::ssPoint);
 	}
@@ -119,7 +127,7 @@ namespace UsualEngine
 	/// 線形補完のサンプラステート
 	/// </summary>
 	/// <returns></returns>
-	ID3D11SamplerState* SamplerState_Liner()
+	static ID3D11SamplerState* SamplerState_Liner()
 	{
 		return RenderState::Get().GetSamplerState(RenderState::ssLiner);
 	}

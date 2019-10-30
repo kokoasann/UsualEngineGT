@@ -23,9 +23,11 @@ namespace UsualEngine
 		char str[255] = { 0 };
 		sprintf(str, "%.3f\n", t);
 		OutputDebugString(str);*/
+
 		UpdateRender();
 		UpdatePostRender();
-		Physics().DebugDraw();
+		usualEngine()->GetGraphicsEngine()->GetPostEffect().Render();
+		//Physics().DebugDraw();
 	}
 
 	void GameObjectManager::UpdateStart()

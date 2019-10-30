@@ -58,6 +58,24 @@ namespace UsualEngine
 		}
 
 		/// <summary>
+		/// レンダーターゲットを返す。
+		/// </summary>
+		/// <returns></returns>
+		ID3D11Texture2D* GetRenderTarget()
+		{
+			return m_renderTarget;
+		}
+
+		/// <summary>
+		/// テクスチャのフォーマットを返す
+		/// </summary>
+		/// <returns></returns>
+		DXGI_FORMAT* GetTexFormat()
+		{
+			return &m_colFormat;
+		}
+
+		/// <summary>
 		/// 横を返す
 		/// </summary>
 		/// <returns></returns>

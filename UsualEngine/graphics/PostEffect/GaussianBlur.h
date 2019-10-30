@@ -4,12 +4,13 @@
 #define BLUR_NUM_WEIGHT 9
 namespace UsualEngine
 {
+	class Primitive;
 	class GaussianBlur
 	{
 	public:
 		GaussianBlur();
 		~GaussianBlur();
-		void Init(float w,float h);
+		void Init(int w,int h);
 		void Release();
 
 		/// <summary>

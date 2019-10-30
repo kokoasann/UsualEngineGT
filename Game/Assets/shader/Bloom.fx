@@ -10,8 +10,8 @@ struct PSInput
 	float2 uv:TEXCOORD0;
 };
 
-Texture2D<float4> Teture:register(t0);
-sampler Sampler; register(s0);
+Texture2D<float4> Texture:register(t0);
+sampler Sampler: register(s0);
 
 PSInput VSMain(VSInput In)
 {
@@ -33,7 +33,20 @@ float4 PSMain_SamplingLuminance(PSInput In) :SV_Target0
 	return col;
 }
 
-float4 PSMain_Combine(PSInput In):SV_Target0
+Texture2D<float4> tex0:register(t0);
+Texture2D<float4> tex1:register(t1);
+Texture2D<float4> tex2:register(t2);
+Texture2D<float4> tex3:register(t3);
+Texture2D<float4> tex4:register(t4);
+
+float4 PSMain_Combine(PSInput In) :SV_Target0
 {
-	return float4();
+	float4 col = tex0.Sample(Sampler,In.uv);
+	col += tex1.Sample(Sampler, In.uv);
+	col += tex2.Sample(Sampler, In.uv);
+	col += tex3.Sample(Sampler, In.uv);
+	col += tex4.Sample(Sampler, In.uv);
+	col /= 5.0f;
+	col.w = 1.0f;
+	return col;
 }
