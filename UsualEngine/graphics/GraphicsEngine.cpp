@@ -49,8 +49,9 @@ namespace UsualEngine
 		OMSetRenderTarget(1, rt);
 		//バックバッファを灰色で塗りつぶす。
 
-		m_pd3dDeviceContext->ClearRenderTargetView(m_backBuffer, ClearColor);
-		m_pd3dDeviceContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+		//m_pd3dDeviceContext->ClearRenderTargetView(m_backBuffer, ClearColor);
+		//m_pd3dDeviceContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+		m_pd3dDeviceContext->ClearRenderTargetView(m_mainRenderTarget.GetRTV(), ClearColor);
 		m_pd3dDeviceContext->ClearRenderTargetView(m_mainRenderTarget.GetRTV(), ClearColor);
 		m_pd3dDeviceContext->ClearDepthStencilView(m_mainRenderTarget.GetDSV(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 	}
@@ -189,6 +190,7 @@ namespace UsualEngine
 		RenderTarget* rts[] = { &m_mainRenderTarget };
 		OMSetRenderTarget(1, rts);
 		m_depthStencilView = m_mainRenderTarget.GetDSV();
+		
 
 		//pBackBuffer->Release();
 		//深度ステンシルビューの作成。

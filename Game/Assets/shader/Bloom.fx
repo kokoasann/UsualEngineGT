@@ -26,8 +26,9 @@ float4 PSMain_SamplingLuminance(PSInput In) :SV_Target0
 
 
 	float4 col = Texture.Sample(Sampler,In.uv);
+	
 	float t = dot(col.xyz, float3(0.2125f, 0.7154f, 0.0721f));
-	//clip(t - 1.001f);
+	clip(t - 1.001f);
 	col.xyz *= t - 1.f;
 	col.w = 1.0f;
 	return col;

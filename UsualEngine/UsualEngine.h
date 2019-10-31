@@ -45,7 +45,7 @@ namespace UsualEngine
 		}
 		GraphicsEngine* GetGraphicsEngine()
 		{
-			return mGraphicsEngine;
+			return m_graphicsEngine;
 		}
 		Camera& GetMainCamera()
 		{
@@ -66,7 +66,7 @@ namespace UsualEngine
 		}
 	private:
 		HWND mHwnd = 0;
-		GraphicsEngine* mGraphicsEngine = nullptr;
+		GraphicsEngine* m_graphicsEngine = nullptr;
 		GameObjectManager* mGameObjectManager = nullptr;
 		Camera mMainCamera;
 		Camera mCamera2D;

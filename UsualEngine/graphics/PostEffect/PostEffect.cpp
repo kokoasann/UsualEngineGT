@@ -65,12 +65,13 @@ namespace UsualEngine
 			GetCurrentRenderTarget().GetRenderTarget(),
 			0,
 			gEngine->GetMainRenderTarget()->GetRenderTarget(),
+			
 			0, 
 			*GetCurrentRenderTarget().GetTexFormat()
 		);
 		m_bloom.Render(this);
 
-		//gEngine->EndPostEffect();
+		gEngine->EndPostEffect();
 	}
 
 	void PostEffect::ToggleRenderTargetNum()

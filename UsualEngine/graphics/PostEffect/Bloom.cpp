@@ -44,7 +44,8 @@ namespace UsualEngine
 		//RenderTarget* oldrtl[4];
 		//gEngine->OMGetRenderTargets(oldnumRT, oldrtl);
 		ID3D11ShaderResourceView* srl[5] = { pe->GetCurrentRenderTarget().GetSRV() };
-		devcon->PSSetShaderResources(0, 1, srl);
+		devcon->PSSetShaderResources(0, 1, &pe->GetCurrentRenderTarget().GetSRV());
+
 		RenderTarget* rtl[5] = {&m_luminanceRT};
 		gEngine->OMSetRenderTarget(1, rtl);
 		devcon->ClearRenderTargetView(m_luminanceRT.GetRTV(), clearcol);

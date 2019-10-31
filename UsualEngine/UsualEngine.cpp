@@ -22,8 +22,8 @@ namespace UsualEngine
 		//ウィンドウを初期化。
 		InitWindow(initGS);
 		//DirectXの初期化。
-		mGraphicsEngine = new GraphicsEngine();
-		mGraphicsEngine->Init(mHwnd);
+		m_graphicsEngine = new GraphicsEngine();
+		m_graphicsEngine->Init(mHwnd);
 
 		mGameObjectManager = GameObjectManager::Get();
 
@@ -113,22 +113,22 @@ namespace UsualEngine
 				pad.Update();
 			}
 
-			mGraphicsEngine->BegineRender();
-			mGraphicsEngine->GetShadowMap().Update();
-			mGraphicsEngine->SetRenderMode(enRenderMode_ShadowMap);
-			mGraphicsEngine->GetShadowMap().Render();
-			mGraphicsEngine->SetRenderMode(enRenderMode_3DModel);
-			LightManager& lm = mGraphicsEngine->GetLightManager();
+			m_graphicsEngine->BegineRender();
+			m_graphicsEngine->GetShadowMap().Update();
+			m_graphicsEngine->SetRenderMode(enRenderMode_ShadowMap);
+			m_graphicsEngine->GetShadowMap().Render();
+			m_graphicsEngine->SetRenderMode(enRenderMode_3DModel);
+			LightManager& lm = m_graphicsEngine->GetLightManager();
 			lm.Update();
 			lm.Render();
 
-			mGraphicsEngine->GetShadowMap().Send2GPU();
+			m_graphicsEngine->GetShadowMap().Send2GPU();
 
 			mGameObjectManager->Update();
 
 			lm.EndRender();
 
-			mGraphicsEngine->EndRender();
+			m_graphicsEngine->EndRender();
 
 			float frameTime = st.Stop();
 			gameTime()->PushFrameDeltaTime(frameTime);
@@ -148,7 +148,7 @@ namespace UsualEngine
 	}
 	void UsualEngine::Release()
 	{
-		mGraphicsEngine->Release();
+		m_graphicsEngine->Release();
 	}
 	void UsualEngine::Run()
 	{
