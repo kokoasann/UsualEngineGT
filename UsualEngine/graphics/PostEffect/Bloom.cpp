@@ -41,13 +41,14 @@ namespace UsualEngine
 		ID3D11SamplerState* ssl[] = { SamplerState_Liner() };
 		devcon->PSSetSamplers(0, 1, ssl);
 		int oldnumRT = 0;
-		RenderTarget* oldrtl[4];
-		gEngine->OMGetRenderTargets(oldnumRT, oldrtl);
-		ID3D11ShaderResourceView* srl[5] = { oldrtl[0]->GetSRV() };
+		//RenderTarget* oldrtl[4];
+		//gEngine->OMGetRenderTargets(oldnumRT, oldrtl);
+		ID3D11ShaderResourceView* srl[5] = { pe->GetCurrentRenderTarget().GetSRV() };
 		devcon->PSSetShaderResources(0, 1, srl);
 		RenderTarget* rtl[5] = {&m_luminanceRT};
 		gEngine->OMSetRenderTarget(1, rtl);
 		devcon->ClearRenderTargetView(m_luminanceRT.GetRTV(), clearcol);
+		devcon->IASetInputLayout(m_vs.GetInputLayout());
 		pe->DrawPrimitive();
 
 		//ƒuƒ‰[‚¼‚¢‚Á

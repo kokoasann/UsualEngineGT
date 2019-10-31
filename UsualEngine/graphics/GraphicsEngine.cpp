@@ -163,7 +163,7 @@ namespace UsualEngine
 
 		ID3D11Texture2D* pBackBuffer = NULL;
 		m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)& pBackBuffer);
-		//m_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &m_backBuffer);
+		m_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &m_backBuffer);
 		//pBackBuffer->Release();
 
 		DXGI_SAMPLE_DESC msaaD;
@@ -182,14 +182,15 @@ namespace UsualEngine
 				}
 			}
 		}*/
-		bool res = m_mainRenderTarget.Create(FRAME_BUFFER_W, FRAME_BUFFER_H, 1, 1, DXGI_FORMAT_R16G16B16A16_FLOAT, DXGI_FORMAT_D32_FLOAT,msaaD,pBackBuffer,NULL,true);
+		bool res = m_mainRenderTarget.Create(FRAME_BUFFER_W, FRAME_BUFFER_H, 1, 1, DXGI_FORMAT_R16G16B16A16_FLOAT, DXGI_FORMAT_D32_FLOAT,msaaD,NULL,NULL,true);
+		//bool res = m_mainRenderTarget.Create(FRAME_BUFFER_W, FRAME_BUFFER_H, 1, 1, DXGI_FORMAT_R16G16B16A16_FLOAT, DXGI_FORMAT_D32_FLOAT,msaaD,pBackBuffer,NULL,true);
 		if (!res)
 			int o = 0+1;
 		RenderTarget* rts[] = { &m_mainRenderTarget };
 		OMSetRenderTarget(1, rts);
 		m_depthStencilView = m_mainRenderTarget.GetDSV();
 
-		pBackBuffer->Release();
+		//pBackBuffer->Release();
 		//深度ステンシルビューの作成。
 #if 0
 		{
