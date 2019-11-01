@@ -19,6 +19,7 @@ namespace UsualEngine
 		{
 			int sft = i;
 			m_gausBlur[i].Init(w >> sft, h >> sft);
+			m_gausBlur[i].SetDispersion(5.f);
 		}
 		DXGI_SAMPLE_DESC desc;
 		ZeroMemory(&desc, sizeof(desc));
@@ -27,6 +28,7 @@ namespace UsualEngine
 		m_combineRT.Create(w >> 2, h >> 2, 1, 1, DXGI_FORMAT_R16G16B16A16_FLOAT, DXGI_FORMAT_UNKNOWN, desc);
 		m_luminanceRT.Create(w, h, 1, 1, DXGI_FORMAT_R16G16B16A16_FLOAT, DXGI_FORMAT_UNKNOWN, desc);
 
+		
 	}
 	void Bloom::Render(PostEffect* pe)
 	{

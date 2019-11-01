@@ -74,7 +74,7 @@ namespace UsualEngine
 
 		RenderTarget* rtl[] = { &m_renderTargetX };
 		gEngine->OMSetRenderTarget(1, rtl);
-		m_bp.offset.x = 16.f / m_renderTargetX.GetWidth();
+		m_bp.offset.x = 16.f / (m_renderTargetX.GetWidth()<<1);
 		m_bp.offset.y = 0.f;
 		devcon->UpdateSubresource(m_cb.GetBody(), 0,0,&m_bp,0,0);
 		devcon->ClearRenderTargetView(m_renderTargetX.GetRTV(), clearColor);
@@ -90,7 +90,7 @@ namespace UsualEngine
 		rtl[0] = &m_renderTargetY;
 		gEngine->OMSetRenderTarget(1, rtl);
 		m_bp.offset.x = 0.f;
-		m_bp.offset.y = 16.f / m_renderTargetY.GetWidth();
+		m_bp.offset.y = 16.f / m_renderTargetX.GetWidth();
 		devcon->UpdateSubresource(m_cb.GetBody(), 0, 0, &m_bp, 0, 0);
 		devcon->ClearRenderTargetView(m_renderTargetY.GetRTV(), clearColor);
 		devcon->VSSetShaderResources(0, 1, &m_renderTargetX.GetSRV());
