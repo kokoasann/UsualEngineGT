@@ -16,7 +16,8 @@ namespace UsualEngine
 		bool res = mVertexBuffer.Create(vertexNum, stride, vertexData);
 		if (!res)
 			return false;
-		res = mIndexBuffer.Create(indexNum, indexType, indexData);
+		if(indexData)
+			res = mIndexBuffer.Create(indexNum, indexType, indexData);
 		if (!res)
 			return false;
 		return true;
@@ -44,7 +45,7 @@ namespace UsualEngine
 	{
 		UINT ofs = 0;
 		UINT stride = mVertexBuffer.GetStride();
-		dc->IAGetVertexBuffers(0, 1, &mVertexBuffer.GetBody(), &stride, &ofs);
+		dc->IASetVertexBuffers(0, 1, &mVertexBuffer.GetBody(), &stride, &ofs);
 		dc->IASetPrimitiveTopology(mTopology);
 		dc->Draw(vertexnum, 0);
 	}

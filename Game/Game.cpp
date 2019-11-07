@@ -366,9 +366,9 @@ void Game::Update()
 	camtar = campos + ofs;
 
 
-	//cam->SetPosition(campos);
-	//cam->SetTarget(camtar);
-	//cam->Update();
+	cam->SetPosition(campos);
+	cam->SetTarget(camtar);
+	cam->Update();
 
 	auto v = campos;
 	v.Normalize();

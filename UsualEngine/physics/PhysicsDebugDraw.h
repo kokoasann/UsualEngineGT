@@ -48,6 +48,6 @@ namespace UsualEngine
 		std::array<CVector4, MAX_VERTEX> m_vertexBuffer;
 		int m_numLine = 0;
 
-		int m_debugMode = btIDebugDraw::DBG_NoDebug;
+		int m_debugMode = btIDebugDraw::DBG_DrawWireframe;
 	};
 }

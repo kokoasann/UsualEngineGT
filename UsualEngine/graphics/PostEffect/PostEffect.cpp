@@ -65,7 +65,6 @@ namespace UsualEngine
 			GetCurrentRenderTarget().GetRenderTarget(),
 			0,
 			gEngine->GetMainRenderTarget()->GetRenderTarget(),
-			
 			0, 
 			*GetCurrentRenderTarget().GetTexFormat()
 		);

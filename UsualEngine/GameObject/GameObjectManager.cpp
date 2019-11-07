@@ -26,15 +26,18 @@ namespace UsualEngine
 
 		UpdateRender();
 		UpdatePostRender();
+
+		Physics().DebugDraw();
+
 		usualEngine()->GetGraphicsEngine()->GetPostEffect().Render();
-		//Physics().DebugDraw();
+		
 	}
 
 	void GameObjectManager::UpdateStart()
 	{
 		for (auto& goList : m_gameObjectList)
 		{
-			for (auto& go : goList)
+			for (auto go : goList)
 			{
 				if (!go->isStart() && !go->isDead())
 				{
@@ -58,7 +61,7 @@ namespace UsualEngine
 		int Count = 0;
 		for (auto& goList : m_gameObjectList)
 		{
-			for (auto& go : goList)
+			for (auto go : goList)
 			{
 				if (go->isStart())
 				{
@@ -97,7 +100,7 @@ namespace UsualEngine
 	{
 		for (auto& goList : m_gameObjectList)
 		{
-			for (auto& go : goList)
+			for (auto go : goList)
 			{
 				go->Render();
 			}
@@ -110,7 +113,7 @@ namespace UsualEngine
 	{
 		for (auto& goList : m_gameObjectList)
 		{
-			for (auto& go : goList)
+			for (auto go : goList)
 			{
 				go->PostRender();
 			}

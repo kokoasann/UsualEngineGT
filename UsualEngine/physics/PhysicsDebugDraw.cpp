@@ -25,11 +25,11 @@ namespace UsualEngine
 		ID3D11DeviceContext* dc = usualEngine()->GetGraphicsEngine()->GetD3DDeviceContext();
 		dc->UpdateSubresource(m_constbuff.GetBody(), 0, NULL, &cb, 0, 0);
 
+		dc->IASetInputLayout(m_vs.GetInputLayout());
 		dc->VSSetShader((ID3D11VertexShader*)m_vs.GetBody(), 0, 0);
 		dc->PSSetShader((ID3D11PixelShader*)m_ps.GetBody(), 0, 0);
 		dc->VSSetConstantBuffers(0, 1, (ID3D11Buffer*const *)m_constbuff.GetBody());
 
-		dc->IASetInputLayout(m_vs.GetInputLayout());
 		dc->UpdateSubresource(m_primi.GetVertexBuffer().GetBody(), 0, 0, &m_vertexBuffer[0], 0, 0);
 
 		m_primi.Draw(dc,m_numLine*2);
