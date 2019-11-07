@@ -19,7 +19,7 @@ namespace UsualEngine
 		{
 			int sft = i;
 			m_gausBlur[i].Init(w >> sft, h >> sft);
-			m_gausBlur[i].SetDispersion(5.f);
+			m_gausBlur[i].SetDispersion(1.f);
 		}
 		DXGI_SAMPLE_DESC desc;
 		ZeroMemory(&desc, sizeof(desc));

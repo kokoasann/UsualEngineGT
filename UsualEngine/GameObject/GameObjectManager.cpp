@@ -32,9 +32,9 @@ namespace UsualEngine
 
 	void GameObjectManager::UpdateStart()
 	{
-		for (auto goList : m_gameObjectList)
+		for (auto& goList : m_gameObjectList)
 		{
-			for (auto go : goList)
+			for (auto& go : goList)
 			{
 				if (!go->isStart() && !go->isDead())
 				{
@@ -56,9 +56,9 @@ namespace UsualEngine
 	void GameObjectManager::UpdateUpdate()
 	{
 		int Count = 0;
-		for (auto goList : m_gameObjectList)
+		for (auto& goList : m_gameObjectList)
 		{
-			for (auto go : goList)
+			for (auto& go : goList)
 			{
 				if (go->isStart())
 				{
@@ -80,7 +80,7 @@ namespace UsualEngine
 			Count = 0;
 		}
 
-		for (auto dd : m_ddList)
+		for (auto& dd : m_ddList)
 		{
 			GameObject* go = m_gameObjectList[dd.prio][dd.ind];
 			auto it = std::find(m_gameObjectList[dd.prio].begin(), m_gameObjectList[dd.prio].end(), go);
@@ -95,9 +95,9 @@ namespace UsualEngine
 
 	void GameObjectManager::UpdateRender()
 	{
-		for (auto goList : m_gameObjectList)
+		for (auto& goList : m_gameObjectList)
 		{
-			for (auto go : goList)
+			for (auto& go : goList)
 			{
 				go->Render();
 			}
@@ -108,9 +108,9 @@ namespace UsualEngine
 
 	void GameObjectManager::UpdatePostRender()
 	{
-		for (auto goList : m_gameObjectList)
+		for (auto& goList : m_gameObjectList)
 		{
-			for (auto go : goList)
+			for (auto& go : goList)
 			{
 				go->PostRender();
 			}

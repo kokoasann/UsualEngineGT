@@ -50,10 +50,11 @@ namespace UsualEngine
 		dynamicWorld->setGravity(btVector3(0, -10, 0));
 
 		m_debugDraw.Init();
+		dynamicWorld->setDebugDrawer(&m_debugDraw);
 	}
 	void PhysicsWorld::Update()
 	{
-		dynamicWorld->stepSimulation(1.0f / 60.0f);
+		dynamicWorld->stepSimulation(gameTime()->GetDeltaTime());
 	}
 	void PhysicsWorld::AddRigidBody(RigidBody & rb)
 	{

@@ -5,12 +5,13 @@
 PlayerCamera::PlayerCamera()
 {
 	m_camera = &ue::usualEngine()->GetMainCamera();
-	m_p2cLen = 400.f;
-	m_c2tLen = 50.f;
-	m_p2c = { 5,1,-7 };
+	m_p2cLen = 60.f;
+	m_c2tLen = 60.f;
+	m_p2c = { 2,0,-7 };
 	m_p2c.Normalize();
-	m_c2t = { -2.5f,3,7 };
+	m_c2t = { 1.f,0,7 };
 	m_c2t.Normalize();
+	m_offsetY = 100;
 }
 
 void PlayerCamera::OnDestroy()
@@ -55,7 +56,10 @@ void PlayerCamera::Update()
 	auto campos = m_p2c * m_p2cLen + ppos;
 	auto camtar = m_c2t * m_c2tLen + campos;
 
-	//m_camera->SetPosition(campos);
-	//m_camera->SetTarget(camtar);
-	//m_camera->Update();
+	campos.y += m_offsetY;
+	camtar.y += m_offsetY;
+
+	m_camera->SetPosition(campos);
+	m_camera->SetTarget(camtar);
+	m_camera->Update();
 }

@@ -24,7 +24,6 @@ Player::Player()
 	model->GetAnimation().Play(1);
 	m_gmList[0] = &m_camera;
 	m_gmList[1] = &m_chara;
-	
 }
 
 Player::~Player()
@@ -38,7 +37,6 @@ bool Player::Start()
 
 void Player::Update()
 {
-
 	for (auto gm : m_gmList)
 	{
 		gm->Update(); 
