@@ -14,7 +14,7 @@ void Game::OnDestroy()
 bool Game::Start()
 {
 	ue::NewGO<Player>(0);
-	animclip[0].Load(L"Assets/model/gib/gib.rotation.tka");
+	animclip[0].Load(L"Assets/model/gib/gib.walk1.tka");
 	animclip[0].SetLoopFlag(true);
 	animclip[1].Load(L"Assets/model/Player/player_idol.tka");
 	animclip[1].SetLoopFlag(true);
@@ -74,7 +74,6 @@ bool Game::Start()
 
 	p1->SetMoveFunc([&](ue::CVector3 & pos)
 	{
-		return;
 		ue::CVector3 move = ue::CVector3::Zero();
 		if (Rfoot->IsONGround())
 		{
@@ -97,6 +96,7 @@ bool Game::Start()
 	});
 	p1->SetRotateFunc([&](auto & rot)
 	{
+		return;
 		if (Rfoot->IsONGround())
 		{
 			auto mold = Rwaist->GetOldWorldMatrix();
@@ -230,7 +230,8 @@ bool Game::Start()
 	ground->SetIsShadowCaster(true);
 
 	light = ue::NewGO<ue::LightDirection>(0);
-	light->SetDir({ -0.3f,-1,-0.2f });
+	light->SetDir(ue::CVector3{ -0.3f,-1,-0.2f });
+	//light->SetCol(ue::CVector3::One()* 5.f);
 
 	campos = { 0,5,200 };
 	//campos = { 0,3000,2000 };
@@ -365,10 +366,11 @@ void Game::Update()
 
 	camtar = campos + ofs;
 
-
+#if 0
 	cam->SetPosition(campos);
 	cam->SetTarget(camtar);
 	cam->Update();
+#endif
 
 	auto v = campos;
 	v.Normalize();

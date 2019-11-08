@@ -21,6 +21,10 @@ public:
 	//更新
 	void Update();
 
+	ue::Camera* GetCamera()
+	{
+		return m_camera;
+	}
 private:
 	ue::Camera* m_camera = nullptr;				//カメラのポインタ
 	ue::CVector3 m_pos = ue::CVector3::Zero();	//position

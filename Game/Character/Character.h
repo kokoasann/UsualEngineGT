@@ -1,6 +1,10 @@
 #pragma once
 
-
+/// <summary>
+/// モデルのインスタンスの所持、
+/// IKによる移動のサポート等をしているクラス
+/// 基本的にキャラクターにはこのクラスを持たす
+/// </summary>
 class Character:public ue::GameObject
 {
 public:
@@ -9,6 +13,7 @@ public:
 	/// </summary>
 	enum ActionMode
 	{
+		AM_None,
 		AM_Move,
 		AM_Rotate,
 	};
@@ -117,6 +122,17 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	const ue::CQuaternion& GetRot();
+
+	/// <summary>
+	/// アニメーションを再生
+	/// </summary>
+	/// <param name="anim">再生するアニメーション</param>
+	/// <param name="lerp">アニメーションの保管時間(秒) 初期値は1秒</param>
+	/// <param name="am">アニメーションによるアクションで何をさせたいか 設定しない場合は何もしない</param>
+	void PlayAnim(int anim, float lerp = 1.0f, ActionMode am = AM_None);
+
+	void SetMove(const ue::CVector3& move);
+	void SetRotate(const ue::CQuaternion& rot);
 private:
 	ue::SkinModelRender* m_model = nullptr;		//モデルのポインタ
 	ue::Bone* m_footL = nullptr;				//左足のボーン
@@ -128,7 +144,9 @@ private:
 	std::vector<ue::Bone*> m_boneList;			//ボーンのリスト
 	ue::CharacterController m_characon;			//キャラコン
 	ue::CVector3 m_ccOffset;					//キャラコンのオフセット(基本的にy軸だけ)
-	ue::AnimationClip* m_animClip = nullptr;	//アニメーションクリップ
 	ActionMode m_actionMode = AM_Move;			//なんの動きをしているか
-	float m_gravity = -50.0f;					//重力。
+	float m_gravity = -200.0f;					//重力。
+
+	ue::CVector3 m_move = ue::CVector3::Zero();
+	ue::CQuaternion m_rotate = ue::CQuaternion::Identity();
 };

@@ -17,7 +17,7 @@ namespace UsualEngine
 		{
 			if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_Character)
 			{
-				return 0.0f;
+				return 1.0f;
 			}
 			isHit = true;
 			CVector3 hitp = *(CVector3*)& convexResult.m_hitPointLocal;

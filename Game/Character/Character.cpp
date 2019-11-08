@@ -7,6 +7,8 @@ Character::Character()
 
 Character::~Character()
 {
+	if(m_model)
+		ue::DeleteGO(m_model);
 }
 
 void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, const ue::CVector3& offset)
@@ -21,13 +23,16 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 			return;
 
 		ue::CVector3 move = ue::CVector3::Zero();
+		int debug = 0;
 		if (m_footR->IsONGround())
 		{
 			move += m_footR->GetMove();
+			debug++;
 		}
 		if (m_footL->IsONGround())
 		{
 			move += m_footL->GetMove();
+			debug++;
 		}
 		if (move.Length() > 0.0001f)
 		{
@@ -184,9 +189,16 @@ ue::Bone* Character::FindBone(wstr name, BoneKind bk, bool isSetingIK, int len,f
 void Character::Update()
 {
 	auto grav = ue::CVector3(0, m_gravity, 0);
-	auto p = m_characon.Execute(ue::gameTime()->GetDeltaTime(), grav);
+	m_move += grav;
+	auto p = m_characon.Execute(ue::gameTime()->GetDeltaTime(), m_move);
 	p += m_ccOffset;
 	m_model->SetPos(p);
+	m_move = ue::CVector3::Zero();
+
+	auto rot = m_model->GetRot();
+	rot.Multiply(m_rotate);
+	m_model->SetRot(rot);
+	m_rotate = ue::CQuaternion::Identity();
 }
 
 void Character::SetMoveFunc(const ue::SkinModelRender::MoveFunc& movefunc)
@@ -222,4 +234,20 @@ const ue::CVector3& Character::GetPos()
 const ue::CQuaternion& Character::GetRot()
 {
 	return m_model->GetRot();
+}
+
+void Character::PlayAnim(int anim, float lerp, ActionMode am)
+{
+	m_model->GetAnimation().Play(anim, 1.f);
+	m_actionMode = am;
+}
+
+void Character::SetMove(const ue::CVector3& move)
+{
+	m_move = move;
+}
+
+void Character::SetRotate(const ue::CQuaternion& rot)
+{
+	m_rotate = rot;
 }

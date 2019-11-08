@@ -15,9 +15,11 @@ public:
 	/// <returns></returns>
 	ue::CVector3 GetPos();
 private:
-	Character m_chara;
-	PlayerCamera m_camera;
-	GameObject* m_gmList[2] = { 0 };
+	Character m_chara;					//外身。
+	PlayerCamera m_camera;				//カメラ
+	GameObject* m_gmList[2] = { 0 };	
 
 	ue::AnimationClip m_anim[3];
+	ue::Pad* m_pad = 0;
+	bool m_isWalk = false;
 };

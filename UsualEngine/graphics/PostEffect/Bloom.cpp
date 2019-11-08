@@ -35,7 +35,7 @@ namespace UsualEngine
 		auto gEngine = usualEngine()->GetGraphicsEngine();
 		auto devcon = usualEngine()->GetGraphicsEngine()->GetD3DDeviceContext();
 
-		float clearcol[4] = { 0.f,0.f,0.f,0.f };
+		float clearcol[4] = { 0.f,0.f,0.f,1.f };
 
 		//光度抽出！するよ！
 		devcon->VSSetShader((ID3D11VertexShader*)m_vs.GetBody(), 0, 0);
@@ -82,6 +82,8 @@ namespace UsualEngine
 		rtl[0] = RT;
 		gEngine->OMSetRenderTarget(1,rtl);
 		vpl[0] = { 0.f,0.f,(float)RT->GetWidth(),(float)RT->GetHeight() };
+		blurList[0] = m_combineRT.GetSRV();
+		devcon->PSSetShaderResources(0, 1, blurList);
 		devcon->RSSetViewports(1, vpl);
 		devcon->OMSetBlendState(BlendState_Add(), 0, 0xFFFFFFFF);
 		devcon->VSSetShader((ID3D11VertexShader*)m_vsCopy.GetBody(), 0, 0);
