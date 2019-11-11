@@ -22,4 +22,7 @@ private:
 	ue::AnimationClip m_anim[3];
 	ue::Pad* m_pad = 0;
 	bool m_isWalk = false;
+
+	float m_HP = 10.f;
+	float m_AP = 10.f;
 };

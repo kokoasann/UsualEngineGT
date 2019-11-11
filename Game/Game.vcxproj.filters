@@ -13,6 +13,12 @@
     <ClCompile Include="Player\PlayerCamera.cpp">
       <Filter>Player</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy\Enemy.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy\Gib\Ene_Gib.cpp">
+      <Filter>Enemy\Gib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -28,6 +34,12 @@
     </ClInclude>
     <ClInclude Include="Player\PlayerCamera.h">
       <Filter>Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy\Enemy.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy\Gib\Ene_Gib.h">
+      <Filter>Enemy\Gib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -54,6 +66,12 @@
     </Filter>
     <Filter Include="Player">
       <UniqueIdentifier>{2cb27f24-e428-45ad-8640-d5a2ef80cbc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enemy">
+      <UniqueIdentifier>{0be400f2-cc53-4638-9cbd-8e725fc2f912}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enemy\Gib">
+      <UniqueIdentifier>{61cd68e1-f41b-48d5-90d8-b50e60e1776a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

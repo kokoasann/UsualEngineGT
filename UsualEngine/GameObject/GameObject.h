@@ -6,7 +6,7 @@ namespace UsualEngine
 	{
 	public:
 		GameObject();
-		~GameObject();
+		virtual ~GameObject();
 
 		void Revive()
 		{
