@@ -5,7 +5,7 @@
 PlayerCamera::PlayerCamera()
 {
 	m_camera = &ue::usualEngine()->GetMainCamera();
-	m_p2cLen = 150.f;
+	m_p2cLen = 180.f;
 	m_c2tLen = 60.f;
 	m_p2c = { 1,0,-15 };
 	m_p2c.Normalize();

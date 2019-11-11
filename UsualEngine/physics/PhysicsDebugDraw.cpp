@@ -28,7 +28,7 @@ namespace UsualEngine
 		dc->IASetInputLayout(m_vs.GetInputLayout());
 		dc->VSSetShader((ID3D11VertexShader*)m_vs.GetBody(), 0, 0);
 		dc->PSSetShader((ID3D11PixelShader*)m_ps.GetBody(), 0, 0);
-		dc->VSSetConstantBuffers(0, 1, (ID3D11Buffer*const *)m_constbuff.GetBody());
+		dc->VSSetConstantBuffers(0, 1, &m_constbuff.GetBody());
 
 		dc->UpdateSubresource(m_primi.GetVertexBuffer().GetBody(), 0, 0, &m_vertexBuffer[0], 0, 0);
 

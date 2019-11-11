@@ -27,7 +27,7 @@ namespace UsualEngine
 		UpdateRender();
 		UpdatePostRender();
 
-		//Physics().DebugDraw();
+		Physics().DebugDraw();
 
 		usualEngine()->GetGraphicsEngine()->GetPostEffect().Render();
 		

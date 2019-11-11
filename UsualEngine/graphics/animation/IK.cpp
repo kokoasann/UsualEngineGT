@@ -71,11 +71,22 @@ namespace UsualEngine
 		m_radius(radius)
 	{
 		m_collider.Create(radius);
+		InitRigidBody();
 	}
 
 	IK::~IK()
 	{
-		
+	}
+
+	void IK::InitRigidBody()
+	{
+		RigidBodyInfo rbinfo;
+		rbinfo.mass = 0.f;
+		rbinfo.collider = &m_collider;
+		m_rigidBody.Create(rbinfo);
+		m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_Character);
+		m_rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
+		Physics().AddRigidBody(m_rigidBody);
 	}
 
 	void IK::Update(CMatrix& worldMat)
@@ -127,6 +138,8 @@ namespace UsualEngine
 			//target = sr.hitPos;
 			auto invworldmat = CMatrix::Identity();
 			invworldmat.Inverse(worldMat);
+
+			
 
 			if (m_effectorBone->IsONGround())
 			{
@@ -247,6 +260,14 @@ namespace UsualEngine
 		{
 			m_effectorBone->SetIsONGround(false);
 		}
-		//break;//debug用。
+		//rigidBodyの更新
+		UpdateRigidBody(target);
+	}
+	void IK::UpdateRigidBody(CVector3 pos)
+	{
+		auto body = m_rigidBody.GetBody();
+		body->setActivationState(DISABLE_DEACTIVATION);
+		auto& bpo = body->getWorldTransform();
+		bpo.setOrigin({ pos.x,pos.y, pos.z });
 	}
 }

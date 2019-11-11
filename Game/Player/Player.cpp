@@ -14,16 +14,16 @@ Player::Player()
 	model->SetPos({ 0,50,0 });
 	model->SetSca(ue::CVector3::One()*20.f);
 	m_camera.Init(this);
-	m_chara.Init(model, 20, 40, {0,0.f,0});
-	//m_chara.FindBone(L"Bone_L.003", Character::BK_FootL, true, 3, 10.f);
-	//m_chara.FindBone(L"Bone_R.003", Character::BK_FootR, true, 3, 10.f);
+	m_chara.Init(model, 20, 40, {0,-2.f,0});
+	m_chara.FindBone(L"Bone_L.003", Character::BK_FootL, true, 3, 15.f);
+	m_chara.FindBone(L"Bone_R.003", Character::BK_FootR, true, 3, 15.f);
 	//m_chara.FindBone(L"Bone.003_L.003", Character::BK_HandL, true, 3, 1);
 	//m_chara.FindBone(L"Bone.003_R.003", Character::BK_HandR, true, 3, 1);
-	//m_chara.FindBone(L"Bone_L.005", Character::BK_None, true, 2, 5);
-	//m_chara.FindBone(L"Bone_R.005", Character::BK_None, true, 2, 5);
+	m_chara.FindBone(L"Bone_L.005", Character::BK_None, true, 2, 5);
+	m_chara.FindBone(L"Bone_R.005", Character::BK_None, true, 2, 5);
 
-	m_chara.SetMoveFunc([&](auto & move) {return; });
-	m_chara.SetRotateFunc([&](auto & rote) {return; });
+	//m_chara.SetMoveFunc([&](auto & move) {return; });
+	//m_chara.SetRotateFunc([&](auto & rote) {return; });
 
 	model->GetAnimation().Play(1);
 	m_gmList[0] = &m_camera;
