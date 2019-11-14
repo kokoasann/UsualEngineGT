@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Game.h"
 #include "Player/Player.h"
+
+
 Game::Game()
 {
 }
@@ -13,7 +15,7 @@ void Game::OnDestroy()
 
 bool Game::Start()
 {
-	ue::NewGO<Player>(0);
+	//ue::NewGO<Player>(0);
 	animclip[0].Load(L"Assets/model/gib/gib.walk1.tka");
 	animclip[0].SetLoopFlag(true);
 	animclip[1].Load(L"Assets/model/Player/player_idol.tka");
@@ -68,25 +70,37 @@ bool Game::Start()
 		}
 	}
 	p1->GetAnimation().SetingIK(Rfoot, Rfoot->GetParent()->GetParent(), 60.f);
-	p1->GetAnimation().SetingIK(Lfoot, Lfoot->GetParent()->GetParent(), 60.f);
-	p1->GetAnimation().SetingIK(Rfoot->GetChildren()[0], Rfoot, 10.f);
-	p1->GetAnimation().SetingIK(Lfoot->GetChildren()[0], Lfoot, 10.f);
+	//p1->GetAnimation().SetingIK(Lfoot, Lfoot->GetParent()->GetParent(), 60.f);
+	//p1->GetAnimation().SetingIK(Rfoot->GetChildren()[0], Rfoot, 10.f);
+	//p1->GetAnimation().SetingIK(Lfoot->GetChildren()[0], Lfoot, 10.f);
 
 	p1->SetMoveFunc([&](ue::CVector3 & pos)
 	{
+		//return;
 		ue::CVector3 move = ue::CVector3::Zero();
+		ue::CVector3 moveR = ue::CVector3::Zero();
+		ue::CVector3 moveL = ue::CVector3::Zero();
 		if (Rfoot->IsONGround())
 		{
 			move = Rfoot->GetMove();
 		}
 		if (Lfoot->IsONGround())
 		{
-			move = Lfoot->GetMove();
+			//move += Lfoot->GetMove();
 		}
+		/*if (moveR.Length() > moveL.Length())
+		{
+			move = moveR;
+		}
+		else
+		{
+			move = moveL;
+		}*/
 		if (move.Length()>0.0001f)
 		{
 			move.y = 0;
 			move *= -1;
+			//move.y *= -1;
 			//move.y += -1;
 			auto rpos = cc.Execute(1, move);
 			rpos.y -= modeloffset;
@@ -129,7 +143,6 @@ bool Game::Start()
 			
 			ue::CQuaternion add;
 			add.SetRotation(ue::CVector3::AxisY(), rad*-1);
-
 
 			auto fpos = Rfoot->GetWorldMatrix().GetTranslation();
 			//fpos -= Rfoot->GetMove();
@@ -233,11 +246,12 @@ bool Game::Start()
 	light->SetDir(ue::CVector3{ -0.3f,-1,-0.2f });
 	//light->SetCol(ue::CVector3::One()* 5.f);
 
-	campos = { 0,5,200 };
+	campos = { 4000,20,0 };
 	//campos = { 0,3000,2000 };
 	cam->SetPosition(campos);
-	//cam->SetTarget({ 0,2000,-1000 });
+	cam->SetTarget({ 0,20,0 });
 	cam->Update();
+	
 	return true;
 }
 

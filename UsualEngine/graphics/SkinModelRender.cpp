@@ -30,24 +30,34 @@ namespace UsualEngine
 		scarot.Mul(scaleMatrix, rotMatrix);
 		worldMatrix.Mul(scarot, transMatrix);
 
+		auto& ske = m_skinModel.GetSkeleton();
+
 		m_animation.SetWorldMatrix(worldMatrix);
 		m_animation.Update(gameTime()->GetDeltaTime());
-
-		auto& ske = m_skinModel.GetSkeleton();
 		
 		ske.UpdateBase(worldMatrix);
+		m_animation.UpdateIKTarget();
+		m_animation.UpdateIK();
 		
+		CVector3 opos = m_position;
 		if (m_isUseMoveFunc)
 		{
 			m_moveFunc(m_position);
+			if ((m_position - opos).Length() > 0.0001f and true)
+			{
+				worldMatrix.v[3] = m_position;
+				m_animation.SetWorldMatrix(worldMatrix);
+				m_animation.UpdateIK();
+				ske.UpdateBase(worldMatrix);
+			}
 		}
 		if (m_isUseRotateFunc)
 		{
 			m_rotateFunc(m_rotation);
 		}
 		
+
 		m_skinModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
-		
 		
 		m_isRenderingOK = true;
 	}

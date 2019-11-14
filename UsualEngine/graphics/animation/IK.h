@@ -15,9 +15,10 @@ namespace UsualEngine
 		IK(Bone* effector, Bone* end, float radius);
 		~IK();
 
-		void Update(CMatrix& worldMat);
+		void UpdateTarget(const CMatrix& worldMat);
+		void Update(const CMatrix& worldMat);
 
-		void EXE_CCD(CMatrix& worldMat);
+		void EXE_CCD(const CMatrix& worldMat);
 
 		void SetEffectorBone(Bone* bone)
 		{
@@ -35,6 +36,9 @@ namespace UsualEngine
 
 		SphereCollider m_collider;
 
+		CVector3 m_target = CVector3::Zero();
+		CVector3 m_move = CVector3::Zero();
+		bool m_isHit = false;			
 	};
 
 }

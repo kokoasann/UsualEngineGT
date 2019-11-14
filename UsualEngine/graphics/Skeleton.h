@@ -141,6 +141,14 @@ namespace UsualEngine
 		{
 			return m_move;
 		}
+		void SetAnimMove(CVector3 v)
+		{
+			m_animMove = v;
+		}
+		CVector3 GetAnimMove()
+		{
+			return m_animMove;
+		}
 
 		void SetBaseWorldMatrix(const CMatrix& mat)
 		{
@@ -188,6 +196,7 @@ namespace UsualEngine
 		CMatrix			m_baseWorldMatrix = CMatrix::Identity();
 		CMatrix			m_oldWorldMatrix = CMatrix::Identity();
 
+		CVector3 m_animMove = CVector3::Zero();
 		CVector3 m_move = CVector3::Zero();			//ボーンの移動ベクトル
 
 		bool m_isONGround = false;
