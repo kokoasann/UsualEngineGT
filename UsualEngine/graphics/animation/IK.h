@@ -1,6 +1,7 @@
 #pragma once
 
 #include "physics/SphereCollider.h"
+#include "Physics/RigidBody.h"
 
 namespace UsualEngine
 {
@@ -20,6 +21,16 @@ namespace UsualEngine
 
 		void EXE_CCD(const CMatrix& worldMat);
 
+		/// <summary>
+		/// リジッドボディの初期化。
+		/// </summary>
+		void InitRigidBody();
+		/// <summary>
+		/// リジッドボディの更新
+		/// </summary>
+		/// <param name="pos"></param>
+		void UpdateRigidBody(CVector3 pos);
+
 		void SetEffectorBone(Bone* bone)
 		{
 			m_effectorBone = bone;
@@ -35,6 +46,7 @@ namespace UsualEngine
 		int m_usingIK = enUSE_CCD;
 
 		SphereCollider m_collider;
+		RigidBody m_rigidBody;				//リジッドボディ
 
 		CVector3 m_target = CVector3::Zero();
 		CVector3 m_move = CVector3::Zero();
