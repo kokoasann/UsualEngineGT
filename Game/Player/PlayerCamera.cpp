@@ -59,7 +59,7 @@ void PlayerCamera::Update()
 	campos.y += m_offsetY;
 	camtar.y += m_offsetY;
 	
-#if 1
+#if 0
 	m_camera->SetPosition(campos);
 	m_camera->SetTarget(camtar);
 	m_camera->Update();

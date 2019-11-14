@@ -11,5 +11,5 @@ public:
 	void Update() override;
 
 private:
-
+	ue::AnimationClip m_animClip[4];
 };

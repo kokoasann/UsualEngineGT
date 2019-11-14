@@ -59,6 +59,7 @@ float GetShadow(float3 wpos,Texture2D<float4> tex, float2 offset)
 			{
 				shadow = shadowMap_3.Sample(Sampler, smuv + pix / 2).r;
 			}
+
 			if (depth > shadow.r + depthoffset[i])
 			{
 				return 1.f;

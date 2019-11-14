@@ -43,7 +43,7 @@ namespace UsualEngine
 	{
 		//float ClearColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f }; //red,green,blue,alpha
 														  //描き込み先をバックバッファにする。
-		float ClearColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
+		float ClearColor[4] = { 0.f, 0.f, 0.f, 1.0f };
 
 		//m_pd3dDeviceContext->OMSetRenderTargets(1, &m_backBuffer, m_depthStencilView);
 		RenderTarget* rt[] = { &m_mainRenderTarget };

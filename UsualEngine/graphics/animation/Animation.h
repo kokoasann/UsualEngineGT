@@ -25,6 +25,7 @@ namespace UsualEngine
 
 		Animation();
 		~Animation();
+		void Release();
 		/*!
 			*@brief	初期化。
 			*@param[in]	skinModel		アニメーションさせるスキンモデル。
@@ -89,6 +90,19 @@ namespace UsualEngine
 			IK* ik = new IK(effector, end, radius);
 			m_ik.push_back(ik);
 		}
+		IK* GetIK(int num)
+		{
+			return m_ik[num];
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		void UpdateIKTarget();
+		/// <summary>
+		/// 
+		/// </summary>
+		void UpdateIK();
 	private:
 		void PlayCommon(AnimationClip* nextClip, float interpolateTime)
 		{
@@ -119,10 +133,7 @@ namespace UsualEngine
 			*/
 		void UpdateGlobalPose();
 
-		/// <summary>
-		/// 
-		/// </summary>
-		void UpdateIK();
+		
 	private:
 
 		/*!

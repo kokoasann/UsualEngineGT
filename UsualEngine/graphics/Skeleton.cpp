@@ -95,7 +95,7 @@ namespace UsualEngine
 		//newpos -= m_worldMatrix.GetTranslation();
 
 		auto len = m_worldMatrix.GetTranslation() - m_oldWorldMatrix.GetTranslation();
-		bone.SetMove((newpos - oldpos)-len);
+		bone.SetAnimMove((newpos - oldpos)-len);
 
 
 		//子供のワールド行列も計算する。

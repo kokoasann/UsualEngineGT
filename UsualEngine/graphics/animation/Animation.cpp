@@ -15,7 +15,16 @@ namespace UsualEngine
 	}
 	Animation::~Animation()
 	{
+		Release();
+	}
 
+	void Animation::Release()
+	{
+		for (auto& ik : m_ik)
+		{
+			delete ik;
+		}
+		m_ik.clear();
 	}
 
 	void Animation::Init(SkinModel& skinModel, AnimationClip animClipList[], int numAnimClip)
@@ -170,6 +179,14 @@ namespace UsualEngine
 	}
 
 
+	void Animation::UpdateIKTarget()
+	{
+		for (auto ik : m_ik)
+		{
+			ik->UpdateTarget(m_worldMatrix);
+		}
+	}
+
 	void Animation::UpdateIK()
 	{
 		for (auto ik : m_ik)
@@ -192,6 +209,6 @@ namespace UsualEngine
 		UpdateGlobalPose();
 
 		//IK no Update
-		UpdateIK();
+		//UpdateIK();
 	}
 }
