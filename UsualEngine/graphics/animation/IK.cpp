@@ -12,12 +12,13 @@ namespace UsualEngine
 		CVector3 startPos = CVector3::Zero();
 		CVector3 hitNormal = CVector3::Zero();
 		float dist = FLT_MAX;
+		btCollisionObject* me = nullptr;
 
 		btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
 		{
-			if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_Character)
+			if (convexResult.m_hitCollisionObject == me || convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_Character)
 			{
-				return 1.0f;
+				return 0.0f;
 			}
 			isHit = true;
 			CVector3 hitp = *(CVector3*)& convexResult.m_hitPointLocal;
@@ -87,6 +88,9 @@ namespace UsualEngine
 		m_rigidBody.Create(rbinfo);
 		m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_Character);
 		m_rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
+		auto& rpos = m_rigidBody.GetBody()->getWorldTransform();
+		GetBoneWorldMatrix(m_effectorBone,)
+		rpos.setOrigin(btVector3());
 		Physics().AddRigidBody(m_rigidBody);
 	}
 
@@ -102,8 +106,11 @@ namespace UsualEngine
 		if ((newpos - oldpos).Length() < 0.000001f)
 			return;
 
+		oldpos.y += m_radius;
+
 		SweepResultIK sr;
 		sr.startPos = oldpos;
+		sr.me = m_rigidBody.GetBody();
 
 		btTransform bstart, bend;
 		bstart.setIdentity();
@@ -112,27 +119,37 @@ namespace UsualEngine
 		bstart.setOrigin(btVector3(oldpos.x, oldpos.y, oldpos.z));
 		bend.setOrigin(btVector3(newpos.x, newpos.y, newpos.z));
 
-		m_target = newpos;//ターゲット
+		CVector3 target = newpos;//ターゲット
 		Physics().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), bstart, bend, sr);
 		if (sr.isHit)
 		{
-			m_effectorBone->SetIsONGround(true);
+			if (!m_isHit)
+			{
+				m_effectorBone->SetIsONGround(true);
 
-			auto norm = sr.hitNormal;
-			norm.Normalize();
-			auto meri = newpos - sr.hitPos;
-			float rad = meri.Dot(norm);
-			m_target = sr.hitPos;
-			m_target += sr.hitNormal * (-rad + m_radius-m_radius*0.001f);
+				auto norm = sr.hitNormal;
+				norm.Normalize();
+				auto meri = newpos - sr.hitPos;
+				float rad = meri.Dot(norm);
+				target = sr.hitPos;
+				target += sr.hitNormal * (-rad + m_radius + m_radius * 0.01f);
+			}
+			else
+			{
+				target = m_target;
+			}
 		}
 		else
 		{
 			m_effectorBone->SetIsONGround(false);
 		}
+		m_target = target;
 		m_isHit = sr.isHit;
 		m_move = m_target - newpos;
 		auto o2n = m_target - oldpos;
 		m_effectorBone->SetMove(o2n);
+
+		UpdateRigidBody(m_target);
 	}
 
 	void IK::Update(const CMatrix& worldMat)
@@ -310,79 +327,82 @@ namespace UsualEngine
 #else
 		if (!m_isHit and false)
 			return;
-		auto effmat = GetBoneWorldMatrix(m_effectorBone, worldMat);
-		auto effpos = effmat.GetTranslation();
-		auto currentBone = m_effectorBone->GetParent();						//作業中のボーン
-		while (true)
+		for (int i = 0; i < 1; i++)
 		{
-			auto currentmat = GetBoneWorldMatrix(currentBone, worldMat);//作業ボーンの世界行列。
-
-			auto currentlocal = currentBone->GetLocalMatrix();//作業ボーンのローカル行列。
-			CVector3 lopo, losc;
-			CQuaternion loro;
-			currentlocal.CalcMatrixDecompose(lopo, loro, losc);
-
-			auto currentpos = currentmat.GetTranslation();	//作業中のボーンの位置。
-
-			CMatrix inv;							//カレントボーンの逆行列。
-			inv.Inverse(currentmat);				
-
-			CVector3 localeffpos = effpos;
-			inv.Mul(localeffpos);					//ワールド座標のエフェクタボーンをカレントボーンのローカル座標にする
-			CVector3 localtarpos = m_target;
-			inv.Mul(localtarpos);					//ワールド座標のターゲットをカレントボーンのローカル座標にする
-
-			auto toEffector = localeffpos;			//エフェクターからカレントボーンのベクトル
-			auto toTarget = localtarpos;			//ターゲットからカレントボーンのベクトル
-
-			auto elen = toEffector.Length();
-			auto tlen = toTarget.Length();
-
-			toEffector.Normalize();
-			toTarget.Normalize();
-
-			auto rad = min(1, toEffector.Dot(toTarget));			//二つのベクトルの角度(ラッドウィンプス)
-			rad = acos(rad);
-			float deg = CMath::RadToDeg(rad);
-
-			if (rad > 0.000001f or true)
+			auto effmat = GetBoneWorldMatrix(m_effectorBone, worldMat);
+			auto effpos = effmat.GetTranslation();
+			auto currentBone = m_effectorBone->GetParent();						//作業中のボーン
+			while (true)
 			{
-				auto axis = CVector3::Zero();					//回転軸.
-				axis.Cross(toEffector, toTarget);
-				axis.Normalize();
+				auto currentmat = GetBoneWorldMatrix(currentBone, worldMat);//作業ボーンの世界行列。
 
-				auto addrot = CQuaternion::Identity();			//加える回転.
-				addrot.SetRotation(axis, rad);
-				auto difrot = CQuaternion::Identity();			//
-				difrot.SetRotationDeg(axis, 360.f - CMath::RadToDeg(rad));
+				auto currentlocal = currentBone->GetLocalMatrix();//作業ボーンのローカル行列。
+				CVector3 lopo, losc;
+				CQuaternion loro;
+				currentlocal.CalcMatrixDecompose(lopo, loro, losc);
 
-				CMatrix mRot;									//加える回転行列。
-				mRot.MakeRotationFromQuaternion(addrot);
+				auto currentpos = currentmat.GetTranslation();	//作業中のボーンの位置。
+
+				CMatrix inv;							//カレントボーンの逆行列。
+				inv.Inverse(currentmat);
+
+				CVector3 localeffpos = effpos;
+				inv.Mul(localeffpos);					//ワールド座標のエフェクタボーンをカレントボーンのローカル座標にする
+				CVector3 localtarpos = m_target;
+				inv.Mul(localtarpos);					//ワールド座標のターゲットをカレントボーンのローカル座標にする
+
+				auto toEffector = localeffpos;			//エフェクターからカレントボーンのベクトル
+				auto toTarget = localtarpos;			//ターゲットからカレントボーンのベクトル
+
+				auto elen = toEffector.Length();
+				auto tlen = toTarget.Length();
+
+				toEffector.Normalize();
+				toTarget.Normalize();
+
+				auto rad = min(1, toEffector.Dot(toTarget));			//二つのベクトルの角度(ラッドウィンプス)
+				rad = acos(rad);
+				float deg = CMath::RadToDeg(rad);
+
+				if (true || rad > 0.000001f)
+				{
+					auto axis = CVector3::Zero();					//回転軸.
+					axis.Cross(toEffector, toTarget);
+					axis.Normalize();
+
+					auto addrot = CQuaternion::Identity();			//加える回転.
+					addrot.SetRotation(axis, rad);
+					auto difrot = CQuaternion::Identity();			//
+					difrot.SetRotationDeg(axis, 360.f - CMath::RadToDeg(rad));
+
+					CMatrix mRot;									//加える回転行列。
+					mRot.MakeRotationFromQuaternion(addrot);
 
 
-				auto bfloro = loro;
-				loro.Multiply(addrot);
-				CMatrix msca, mrot, mpos, mfin;
+					auto bfloro = loro;
+					loro.Multiply(addrot);
+					CMatrix msca, mrot, mpos, mfin;
 
-				msca.MakeScaling(losc);
-				mrot.MakeRotationFromQuaternion(loro);
-				mpos.MakeTranslation(lopo);
+					msca.MakeScaling(losc);
+					mrot.MakeRotationFromQuaternion(loro);
+					mpos.MakeTranslation(lopo);
 
-				mfin.Mul(msca, mrot);
-				mfin.Mul(mfin, mpos);
-				currentBone->SetLocalMatrix(mfin);
+					mfin.Mul(msca, mrot);
+					mfin.Mul(mfin, mpos);
+					currentBone->SetLocalMatrix(mfin);
+				}
+
+
+				if (m_endBone == currentBone)
+					break;
+				effmat = GetBoneWorldMatrix(m_effectorBone, worldMat);
+				effpos = effmat.GetTranslation();
+
+				currentBone = currentBone->GetParent();
 			}
-
-
-			if (m_endBone == currentBone)
-				break;
-			effmat = GetBoneWorldMatrix(m_effectorBone, worldMat);
-			effpos = effmat.GetTranslation();
-
-			currentBone = currentBone->GetParent();
 		}
 #endif
-		UpdateRigidBody(m_target);
+		//UpdateRigidBody(m_target);
 	}
 
 	void IK::UpdateRigidBody(CVector3 pos)

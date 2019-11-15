@@ -31,10 +31,18 @@ namespace UsualEngine
 		/// <param name="pos"></param>
 		void UpdateRigidBody(CVector3 pos);
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="bone"></param>
 		void SetEffectorBone(Bone* bone)
 		{
 			m_effectorBone = bone;
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="bone"></param>
 		void SetEndBone(Bone* bone)
 		{
 			m_endBone = bone;

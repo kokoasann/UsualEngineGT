@@ -85,7 +85,14 @@ namespace UsualEngine
 			}
 		}
 
-		void SetingIK(Bone* effector, Bone* end,float radius)
+		/// <summary>
+		/// IKをセッティングします。
+		/// </summary>
+		/// <param name="effector">IKの</param>
+		/// <param name="end"></param>
+		/// <param name="radius"></param>
+		/// <param name="modelPos"></param>
+		void SetingIK(Bone* effector, Bone* end,float radius,CVector3 modelPos)
 		{
 			IK* ik = new IK(effector, end, radius);
 			m_ik.push_back(ik);

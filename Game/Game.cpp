@@ -69,7 +69,7 @@ bool Game::Start()
 			Rwaist = bone;
 		}
 	}
-	p1->GetAnimation().SetingIK(Rfoot, Rfoot->GetParent()->GetParent(), 60.f);
+	p1->GetAnimation().SetingIK(Rfoot, Rfoot->GetParent()->GetParent()->GetParent(), 70.f);
 	//p1->GetAnimation().SetingIK(Lfoot, Lfoot->GetParent()->GetParent(), 60.f);
 	//p1->GetAnimation().SetingIK(Rfoot->GetChildren()[0], Rfoot, 10.f);
 	//p1->GetAnimation().SetingIK(Lfoot->GetChildren()[0], Lfoot, 10.f);

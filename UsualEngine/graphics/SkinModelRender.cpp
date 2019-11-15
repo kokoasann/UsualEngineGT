@@ -36,19 +36,20 @@ namespace UsualEngine
 		m_animation.Update(gameTime()->GetDeltaTime());
 		
 		ske.UpdateBase(worldMatrix);
+		
 		m_animation.UpdateIKTarget();
-		m_animation.UpdateIK();
+		//m_animation.UpdateIK();
 		
 		CVector3 opos = m_position;
 		if (m_isUseMoveFunc)
 		{
 			m_moveFunc(m_position);
-			if ((m_position - opos).Length() > 0.0001f and true)
+			if ((m_position - opos).Length() > 0.0001f or 1)
 			{
 				worldMatrix.v[3] = m_position;
 				m_animation.SetWorldMatrix(worldMatrix);
 				m_animation.UpdateIK();
-				ske.UpdateBase(worldMatrix);
+				//ske.UpdateBase(worldMatrix);
 			}
 		}
 		if (m_isUseRotateFunc)
