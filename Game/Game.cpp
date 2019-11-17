@@ -15,7 +15,7 @@ void Game::OnDestroy()
 
 bool Game::Start()
 {
-	//ue::NewGO<Player>(0);
+	ue::NewGO<Player>(0);
 	animclip[0].Load(L"Assets/model/gib/gib.walk1.tka");
 	animclip[0].SetLoopFlag(true);
 	animclip[1].Load(L"Assets/model/Player/player_idol.tka");
@@ -69,10 +69,10 @@ bool Game::Start()
 			Rwaist = bone;
 		}
 	}
-	p1->GetAnimation().SetingIK(Rfoot, Rfoot->GetParent()->GetParent()->GetParent(), 70.f);
-	//p1->GetAnimation().SetingIK(Lfoot, Lfoot->GetParent()->GetParent(), 60.f);
-	//p1->GetAnimation().SetingIK(Rfoot->GetChildren()[0], Rfoot, 10.f);
-	//p1->GetAnimation().SetingIK(Lfoot->GetChildren()[0], Lfoot, 10.f);
+	p1->SetingIK(Rfoot, Rfoot->GetParent()->GetParent()->GetParent(), 70.f);
+	p1->SetingIK(Lfoot, Lfoot->GetParent()->GetParent(), 60.f);
+	p1->SetingIK(Rfoot->GetChildren()[0], Rfoot, 10.f);
+	p1->SetingIK(Lfoot->GetChildren()[0], Lfoot, 10.f);
 
 	p1->SetMoveFunc([&](ue::CVector3 & pos)
 	{
@@ -86,7 +86,7 @@ bool Game::Start()
 		}
 		if (Lfoot->IsONGround())
 		{
-			//move += Lfoot->GetMove();
+			move += Lfoot->GetMove();
 		}
 		/*if (moveR.Length() > moveL.Length())
 		{
@@ -246,7 +246,7 @@ bool Game::Start()
 	light->SetDir(ue::CVector3{ -0.3f,-1,-0.2f });
 	//light->SetCol(ue::CVector3::One()* 5.f);
 
-	campos = { 4000,20,0 };
+	campos = { 400,20,0 };
 	//campos = { 0,3000,2000 };
 	cam->SetPosition(campos);
 	cam->SetTarget({ 0,20,0 });
@@ -380,7 +380,7 @@ void Game::Update()
 
 	camtar = campos + ofs;
 
-#if 0
+#if 1
 	cam->SetPosition(campos);
 	cam->SetTarget(camtar);
 	cam->Update();

@@ -13,11 +13,13 @@ namespace UsualEngine
 		CVector3 hitNormal = CVector3::Zero();
 		float dist = FLT_MAX;
 		btCollisionObject* me = nullptr;
+		int chit = 0;
 
 		btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
 		{
 			if (convexResult.m_hitCollisionObject == me || convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_Character)
 			{
+				chit += 1;
 				return 0.0f;
 			}
 			isHit = true;
@@ -66,13 +68,13 @@ namespace UsualEngine
 	}
 
 
-	IK::IK(Bone* effector, Bone* end, float radius) :
+	IK::IK(Bone* effector, Bone* end, float radius, const CVector3& pos) :
 		m_effectorBone(effector),
 		m_endBone(end),
 		m_radius(radius)
 	{
 		m_collider.Create(radius);
-		InitRigidBody();
+		InitRigidBody(pos);
 	}
 
 	IK::~IK()
@@ -80,7 +82,7 @@ namespace UsualEngine
 		
 	}
 
-	void IK::InitRigidBody()
+	void IK::InitRigidBody(const CVector3& pos)
 	{
 		RigidBodyInfo rbinfo;
 		rbinfo.mass = 0.f;
@@ -89,8 +91,12 @@ namespace UsualEngine
 		m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_Character);
 		m_rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
 		auto& rpos = m_rigidBody.GetBody()->getWorldTransform();
-		GetBoneWorldMatrix(m_effectorBone,)
-		rpos.setOrigin(btVector3());
+		CMatrix base,tr;
+		base = CMatrix::Identity();
+		tr.MakeTranslation(pos);
+		tr.Mul(base, tr);
+		auto m = GetBoneWorldMatrix(m_effectorBone, tr);
+		rpos.setOrigin(btVector3(m.m[3][0], m.m[3][1], m.m[3][2]));
 		Physics().AddRigidBody(m_rigidBody);
 	}
 
@@ -103,6 +109,12 @@ namespace UsualEngine
 		auto newpos = effpos;	//移動先のポジション
 
 		auto oldpos = m_effectorBone->GetWorldMatrix().GetTranslation();	//移動前のポジション
+		static bool b = 0;
+		if (!b)
+		{
+			oldpos += worldMat.GetTranslation();
+			b = 1;
+		}
 		if ((newpos - oldpos).Length() < 0.000001f)
 			return;
 
@@ -132,7 +144,7 @@ namespace UsualEngine
 				auto meri = newpos - sr.hitPos;
 				float rad = meri.Dot(norm);
 				target = sr.hitPos;
-				target += sr.hitNormal * (-rad + m_radius + m_radius * 0.01f);
+				target += sr.hitNormal * (-rad + m_radius + m_radius);
 			}
 			else
 			{
@@ -145,9 +157,9 @@ namespace UsualEngine
 		}
 		m_target = target;
 		m_isHit = sr.isHit;
-		m_move = m_target - newpos;
-		auto o2n = m_target - oldpos;
-		m_effectorBone->SetMove(o2n);
+		m_move = newpos-m_target;
+		//auto o2n = m_target - oldpos;
+		m_effectorBone->SetMove(m_move);
 
 		UpdateRigidBody(m_target);
 	}
@@ -405,7 +417,7 @@ namespace UsualEngine
 		//UpdateRigidBody(m_target);
 	}
 
-	void IK::UpdateRigidBody(CVector3 pos)
+	void IK::UpdateRigidBody(const CVector3& pos)
 	{
 		auto body = m_rigidBody.GetBody();
 		body->setActivationState(DISABLE_DEACTIVATION);

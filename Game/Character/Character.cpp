@@ -159,7 +159,7 @@ ue::Bone* Character::FindBone(wstr name, BoneKind bk, bool isSetingIK, int len,f
 		{
 			endbone = endbone->GetParent();
 		}
-		m_model->GetAnimation().SetingIK(resbone, endbone, radius);
+		m_model->SetingIK(resbone, endbone, radius);
 	}
 
 	switch (bk)

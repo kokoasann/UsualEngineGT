@@ -45,6 +45,9 @@ void Player::Update()
 {
 	float x = m_pad->GetLStickXF();
 	float y = m_pad->GetLStickYF();
+
+	x = m_pad->IsPress(ue::enButtonA);
+
 	if ((abs(x) + abs(y)) / 2.f > 0.01f)
 	{
 		if (!m_isWalk)
