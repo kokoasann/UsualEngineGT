@@ -13,6 +13,8 @@ Player::Player()
 	model->Init(L"Assets/model/Player.cmo",m_anim,3,ue::enFbxUpAxisY);
 	model->SetPos({ 0,50,0 });
 	model->SetSca(ue::CVector3::One()*20.f);
+	model->SetIsShadowCaster(true);
+	model->SetIsShadowReciever(true);
 	m_camera.Init(this);
 	m_chara.Init(model, 20, 40, {0,-2.f,0});
 	m_chara.FindBone(L"Bone_L.003", Character::BK_FootL, true, 3, 13.f);

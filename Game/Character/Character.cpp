@@ -188,8 +188,11 @@ ue::Bone* Character::FindBone(wstr name, BoneKind bk, bool isSetingIK, int len,f
 
 void Character::Update()
 {
-	auto grav = ue::CVector3(0, m_gravity, 0);
-	m_move += grav;
+	if ((m_footL && !m_footL->IsONGround()) || (m_footR && !m_footR->IsONGround()))
+	{
+		auto grav = ue::CVector3(0, m_gravity, 0);
+		m_move += grav;
+	}
 	auto p = m_characon.Execute(ue::gameTime()->GetDeltaTime(), m_move);
 	p += m_ccOffset;
 	m_model->SetPos(p);
