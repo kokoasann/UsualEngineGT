@@ -101,7 +101,7 @@ namespace UsualEngine
 		/*!
 		*@brief	éqãüÇéÊìæÅB
 		*/
-		std::vector<Bone*>& GetChildren()
+		const std::vector<Bone*>& GetChildren() const
 		{
 			return m_children;
 		}
@@ -110,7 +110,7 @@ namespace UsualEngine
 		{
 			m_parent = chil;
 		}
-		Bone* GetParent()
+		Bone* GetParent() const
 		{
 			return m_parent;
 		}
@@ -123,7 +123,7 @@ namespace UsualEngine
 			return m_boneName.c_str();
 		}
 
-		bool IsONGround()
+		bool IsONGround() const
 		{
 			return m_isONGround;
 		}
@@ -137,7 +137,7 @@ namespace UsualEngine
 		{
 			m_move = v;
 		}
-		CVector3 GetMove()
+		CVector3 GetMove() const
 		{
 			return m_move;
 		}
@@ -145,7 +145,7 @@ namespace UsualEngine
 		{
 			m_animMove = v;
 		}
-		CVector3 GetAnimMove()
+		CVector3 GetAnimMove() const
 		{
 			return m_animMove;
 		}
@@ -156,7 +156,7 @@ namespace UsualEngine
 			m_baseWorldMatrix = mat;
 			
 		}
-		const CMatrix& GetBaseWorldMatrix()
+		const CMatrix& GetBaseWorldMatrix() const
 		{
 			return m_baseWorldMatrix;
 		}
@@ -165,7 +165,7 @@ namespace UsualEngine
 		{
 			m_oldWorldMatrix = mat;
 		}
-		const CMatrix& GetOldWorldMatrix()
+		const CMatrix& GetOldWorldMatrix() const
 		{
 			return m_oldWorldMatrix;
 		}

@@ -16,7 +16,7 @@ void Game::OnDestroy()
 bool Game::Start()
 {
 	ue::NewGO<Player>(0);
-	animclip[0].Load(L"Assets/model/gib/gib.walk1.tka");
+	animclip[0].Load(L"Assets/model/gib/gib.rotation.tka");
 	animclip[0].SetLoopFlag(true);
 	animclip[1].Load(L"Assets/model/Player/player_idol.tka");
 	animclip[1].SetLoopFlag(true);
@@ -76,7 +76,7 @@ bool Game::Start()
 
 	p1->SetMoveFunc([&](ue::CVector3 & pos)
 	{
-		//return;
+		return;
 		ue::CVector3 move = ue::CVector3::Zero();
 		ue::CVector3 moveR = ue::CVector3::Zero();
 		ue::CVector3 moveL = ue::CVector3::Zero();
@@ -110,7 +110,7 @@ bool Game::Start()
 	});
 	p1->SetRotateFunc([&](auto & rot)
 	{
-		return;
+		//return;
 		if (Rfoot->IsONGround())
 		{
 			auto mold = Rwaist->GetOldWorldMatrix();

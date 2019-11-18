@@ -27,7 +27,7 @@ namespace UsualEngine
 			*@param[in]	height		カプセルコライダーの高さ。
 			*@param[in]	position	初期位置。
 			*/
-		void Init(float radius, float height, const CVector3& position);
+		void Init(float radius, float height, const CVector3& position, bool isUseRigidBody=true);
 		/*!
 			* @brief	実行。
 			*@param[in]	deltaTime		経過時間。単位は秒。
@@ -90,5 +90,6 @@ namespace UsualEngine
 		float				m_radius = 0.0f;
 		float				m_height = 0.0f;
 		RigidBody			m_rigidBody;					//剛体。
+		bool				m_isUseRigidBody = true;		//リジッドボデューを使う？
 	};
 }

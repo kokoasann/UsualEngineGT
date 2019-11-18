@@ -68,9 +68,8 @@ namespace UsualEngine
 		//auto len = m_worldMatrix.GetTranslation() - m_oldWorldMatrix.GetTranslation();
 		//bone.SetMove((newpos - oldpos)-len);
 
-
 		//子供のワールド行列も計算する。
-		std::vector<Bone*>& children = bone.GetChildren();
+		const std::vector<Bone*>& children = bone.GetChildren();
 		for (int childNo = 0; childNo < children.size(); childNo++) {
 			//この骨のワールド行列をUpdateBoneWorldMatrixに渡して、さらに子供のワールド行列を計算する。
 			UpdateBoneWorldMatrix(*children[childNo], mBoneWorld);
@@ -99,7 +98,7 @@ namespace UsualEngine
 
 
 		//子供のワールド行列も計算する。
-		std::vector<Bone*> & children = bone.GetChildren();
+		const std::vector<Bone*> & children = bone.GetChildren();
 		for (int childNo = 0; childNo < children.size(); childNo++) {
 			//この骨のワールド行列をUpdateBoneWorldMatrixに渡して、さらに子供のワールド行列を計算する。
 			UpdateBoneBaseWorldMatrix(*children[childNo], mBoneWorld);

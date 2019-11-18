@@ -70,18 +70,36 @@ namespace UsualEngine
 		{
 			m_endBone = bone;
 		}
-	private:
-		Bone* m_effectorBone=0;			//エフェクタボーン
-		Bone* m_endBone=0;					//エンドボーン
-		float m_radius = 0.f;					//コライダーの半径。
-		int m_usingIK = enUSE_CCD;		//使用するIKの種類。
 
-		SphereCollider m_collider;			//コライダー
-		RigidBody m_rigidBody;				//リジッドボディ
+		/// <summary>
+		/// 摩擦率をゲット
+		/// </summary>
+		/// <returns></returns>
+		float GetRubbing() const
+		{
+			return m_rubbing;
+		}
+		/// <summary>
+		/// 摩擦率をセット
+		/// </summary>
+		/// <param name="f">1~0が無難</param>
+		void SetRubbing(float f)
+		{
+			m_rubbing = f;
+		}
+	private:
+		Bone* m_effectorBone=0;					//エフェクタボーン
+		Bone* m_endBone=0;						//エンドボーン
+		float m_radius = 0.f;					//コライダーの半径。
+		int m_usingIK = enUSE_CCD;				//使用するIKの種類。
+
+		SphereCollider m_collider;				//コライダー
+		RigidBody m_rigidBody;					//リジッドボディ
 
 		CVector3 m_target = CVector3::Zero();	//IKのターゲット
-		CVector3 m_move = CVector3::Zero();	//移動ベクトル
-		bool m_isHit = false;			//当たった？
+		CVector3 m_move = CVector3::Zero();		//移動ベクトル
+		bool m_isHit = false;					//当たった？
+		float m_rubbing = 1.0f;					//摩擦率、初期値は100%　滑ることはない。
 	};
 
 }

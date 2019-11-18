@@ -99,27 +99,29 @@ namespace UsualEngine
 
 
 
-	void CharacterController::Init(float radius, float height, const CVector3& position)
+	void CharacterController::Init(float radius, float height, const CVector3& position,bool isUseRigidBody)
 	{
 		m_position = position;
 		//コリジョン作成。
 		m_radius = radius;
 		m_height = height;
 		m_collider.Create(radius, height);
-
-		//剛体を初期化。
-		RigidBodyInfo rbInfo;
-		rbInfo.collider = &m_collider;
-		rbInfo.mass = 0.0f;
-		m_rigidBody.Create(rbInfo);
-		btTransform& trans = m_rigidBody.GetBody()->getWorldTransform();
-		//剛体の位置を更新。
-		trans.setOrigin(btVector3(position.x, position.y, position.z));
-		//todo: 未対応。trans.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z));
-		m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_Character);
-		m_rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
-		Physics().AddRigidBody(m_rigidBody);
-
+		if (isUseRigidBody)
+		{
+			//剛体を初期化。
+			RigidBodyInfo rbInfo;
+			rbInfo.collider = &m_collider;
+			rbInfo.mass = 0.0f;
+			m_rigidBody.Create(rbInfo);
+			btTransform& trans = m_rigidBody.GetBody()->getWorldTransform();
+			//剛体の位置を更新。
+			trans.setOrigin(btVector3(position.x, position.y, position.z));
+			//todo: 未対応。trans.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z));
+			m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_Character);
+			m_rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
+			Physics().AddRigidBody(m_rigidBody);
+		}
+		m_isUseRigidBody = isUseRigidBody;
 	}
 	const CVector3& CharacterController::Execute(float deltaTime, CVector3& moveSpeed)
 	{
@@ -155,7 +157,8 @@ namespace UsualEngine
 				}
 				//カプセルコライダーの中心座標 + 高さ*0.1の座標をposTmpに求める。
 				CVector3 posTmp = m_position;
-				posTmp.y += m_height * 0.5f + m_radius + m_height * 0.1f;
+				//posTmp.y += m_height * 0.5f + m_radius + m_height * 0.1f;
+				posTmp.y += m_height + m_radius + m_height * 0.1f;
 				//レイを作成。
 				btTransform start, end;
 				start.setIdentity();
@@ -166,7 +169,8 @@ namespace UsualEngine
 				end.setOrigin(btVector3(nextPosition.x, posTmp.y, nextPosition.z));
 
 				SweepResultWall callback;
-				callback.me = m_rigidBody.GetBody();
+				if(m_isUseRigidBody)
+					callback.me = m_rigidBody.GetBody();
 				callback.startPos = posTmp;
 				//衝突検出。
 				Physics().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
@@ -261,7 +265,8 @@ namespace UsualEngine
 			}
 			end.setOrigin(btVector3(endPos.x, endPos.y, endPos.z));
 			SweepResultGround callback;
-			callback.me = m_rigidBody.GetBody();
+			if (m_isUseRigidBody)
+				callback.me = m_rigidBody.GetBody();
 			callback.startPos.Set(start.getOrigin());
 			//衝突検出。
 			if(fabsf(endPos.y - callback.startPos.y) > FLT_EPSILON){
@@ -282,13 +287,16 @@ namespace UsualEngine
 		}
 		//移動確定。
 		m_position = nextPosition;
-		btRigidBody* btBody = m_rigidBody.GetBody();
-		//剛体を動かす。
-		btBody->setActivationState(DISABLE_DEACTIVATION);
-		btTransform& trans = btBody->getWorldTransform();
-		//剛体の位置を更新。
-		trans.setOrigin(btVector3(m_position.x, m_position.y, m_position.z));
-		//@todo 未対応。 trans.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z));
+		if (m_isUseRigidBody)
+		{
+			btRigidBody* btBody = m_rigidBody.GetBody();
+			//剛体を動かす。
+			btBody->setActivationState(DISABLE_DEACTIVATION);
+			btTransform& trans = btBody->getWorldTransform();
+			//剛体の位置を更新。
+			trans.setOrigin(btVector3(m_position.x, m_position.y, m_position.z));
+			//@todo 未対応。 trans.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z));
+		}
 		return m_position;
 	}
 	/*!

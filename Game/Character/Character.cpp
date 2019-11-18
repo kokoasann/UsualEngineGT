@@ -14,7 +14,7 @@ Character::~Character()
 void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, const ue::CVector3& offset)
 {
 	m_model = smr;
-	m_characon.Init(ccradius, ccheight, smr->GetPos());
+	m_characon.Init(ccradius, ccheight, smr->GetPos(),false);
 	m_ccOffset = offset;
 
 	m_model->SetMoveFunc([&](ue::CVector3 & pos)

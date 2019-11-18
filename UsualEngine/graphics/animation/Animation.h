@@ -103,6 +103,18 @@ namespace UsualEngine
 		}
 
 		/// <summary>
+		/// アニメーションの保持するIKの摩擦率をセットする
+		/// </summary>
+		/// <param name="f">1~0がいいと思う。</param>
+		void SetIKRub(float f)
+		{
+			for (auto ik : m_ik)
+			{
+				ik->SetRubbing(f);
+			}
+		}
+
+		/// <summary>
 		/// 
 		/// </summary>
 		void UpdateIKTarget();

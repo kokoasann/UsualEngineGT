@@ -5,6 +5,26 @@ namespace UsualEngine
 {
 	void SkinModelRender::Update()
 	{
+		auto& ske = m_skinModel.GetSkeleton();
+
+		m_animation.Update(gameTime()->GetDeltaTime());
+		
+		//ske.UpdateBase(worldMatrix);
+		//ske.Update(CMatrix::Identity());
+		m_animation.UpdateIKTarget();
+		//m_animation.UpdateIK();
+		
+		CVector3 opos = m_position;
+		if (m_isUseMoveFunc)
+		{
+			m_moveFunc(m_position);
+			
+		}
+		if (m_isUseRotateFunc)
+		{
+			m_rotateFunc(m_rotation);
+		}
+
 		//3dsMaxと軸を合わせるためのバイアス。
 		CMatrix mBias = CMatrix::Identity();
 		CVector3 scale = m_scale;
@@ -26,37 +46,17 @@ namespace UsualEngine
 		//ワールド行列を作成する。
 		//拡大×回転×平行移動の順番で乗算するように！
 		//順番を間違えたら結果が変わるよ。
-		CMatrix worldMatrix = CMatrix::Identity(),scarot;
+		CMatrix worldMatrix = CMatrix::Identity(), scarot;
 		scarot.Mul(scaleMatrix, rotMatrix);
 		worldMatrix.Mul(scarot, transMatrix);
-
-		auto& ske = m_skinModel.GetSkeleton();
-
 		m_animation.SetWorldMatrix(worldMatrix);
-		m_animation.Update(gameTime()->GetDeltaTime());
-		
-		ske.UpdateBase(worldMatrix);
-		
-		m_animation.UpdateIKTarget();
-		//m_animation.UpdateIK();
-		
-		CVector3 opos = m_position;
-		if (m_isUseMoveFunc)
+
+		if ((m_position - opos).Length() > 0.0001f or 1)
 		{
-			m_moveFunc(m_position);
-			if ((m_position - opos).Length() > 0.0001f or 1)
-			{
-				worldMatrix.v[3] = m_position;
-				m_animation.SetWorldMatrix(worldMatrix);
-				m_animation.UpdateIK();
-				//ske.UpdateBase(worldMatrix);
-			}
+			worldMatrix.v[3] = m_position;
+			m_animation.SetWorldMatrix(worldMatrix);
+			m_animation.UpdateIK();
 		}
-		if (m_isUseRotateFunc)
-		{
-			m_rotateFunc(m_rotation);
-		}
-		
 
 		m_skinModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 		

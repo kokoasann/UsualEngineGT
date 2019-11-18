@@ -45,7 +45,7 @@ public:
 	/// <param name="ccradius"></param>
 	/// <param name="ccheight"></param>
 	/// <param name="offset"></param>
-	void Init(ue::SkinModelRender* smr,float ccradius,float ccheight,const ue::CVector3& offset=ue::CVector3::Zero());
+	void Init(ue::SkinModelRender* smr,float ccradius=0,float ccheight=0,const ue::CVector3& offset=ue::CVector3::Zero());
 	/// <summary>
 	/// アニメーションの初期化。(消す予定)
 	/// </summary>
@@ -130,6 +130,15 @@ public:
 	/// <param name="lerp">アニメーションの保管時間(秒) 初期値は1秒</param>
 	/// <param name="am">アニメーションによるアクションで何をさせたいか 設定しない場合は何もしない</param>
 	void PlayAnim(int anim, float lerp = 1.0f, ActionMode am = AM_None);
+	
+	/// <summary>
+	/// 全てIKは、摩擦率がfになる。
+	/// </summary>
+	/// <param name="f">1~0がオヌヌメ。この範囲外を指定すると、多分変になる。真実を知りたくばやってみるがいい。</param>
+	void SetAllIKRub(float f)
+	{
+		m_model->SetAllIKRub(f);
+	}
 
 	void SetMove(const ue::CVector3& move);
 	void SetRotate(const ue::CQuaternion& rot);

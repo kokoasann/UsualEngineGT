@@ -162,20 +162,29 @@ namespace UsualEngine
 			m_rotateFunc = rf;
 			m_isUseRotateFunc = true;
 		}
+
+		/// <summary>
+		/// アニメーションの保持する全てのIKの摩擦率をセットする
+		/// </summary>
+		/// <param name="f">1~0がおすすめ。この範囲外の値を設定すると面白い動きをしてしまう可能性がありますのでご注意ください。</param>
+		void SetAllIKRub(float f)
+		{
+			m_animation.SetIKRub(f);
+		}
 	private:
 		SkinModel m_skinModel;	//siknModel
 		Animation m_animation;	//Animation
 
 		CVector3 m_position = CVector3::Zero();					//ポジション
-		CQuaternion m_rotation = CQuaternion::Identity();	//回転.
-		CVector3 m_scale = CVector3::One();							//スケール
+		CQuaternion m_rotation = CQuaternion::Identity();		//回転.
+		CVector3 m_scale = CVector3::One();						//スケール
 
 		bool m_isRenderingOK = false; //レンダリングしてもよかと？
 
 		//↓IK用とか書いてるけど、べつにそんなことはない。
 		MoveFunc m_moveFunc;					//IK用の移動関数。
-		bool m_isUseMoveFunc=false;		//移動関数を使うか？
+		bool m_isUseMoveFunc=false;				//移動関数を使うか？
 		RotateFunc m_rotateFunc;				//IK用の回転関数。
-		bool m_isUseRotateFunc = false;		//回転関数を使うか？
+		bool m_isUseRotateFunc = false;			//回転関数を使うか？
 	};
 }

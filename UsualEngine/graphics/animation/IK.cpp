@@ -148,7 +148,8 @@ namespace UsualEngine
 			}
 			else
 			{
-				target = m_target;
+				target.Lerp(m_rubbing,newpos, m_target);
+				
 			}
 		}
 		else
