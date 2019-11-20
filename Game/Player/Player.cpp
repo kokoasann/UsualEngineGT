@@ -60,7 +60,7 @@ void Player::Update()
 			auto move = f + r;
 			//m_chara.SetMove(move);
 
-			m_chara.PlayAnim(2, 1, Character::AM_Move);
+			m_chara.PlayAnim(1, 1, Character::AM_Move);
 			m_isWalk = true;
 			m_chara.SetAllIKRub(1.0f);
 		}

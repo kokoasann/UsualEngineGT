@@ -35,9 +35,9 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 		r = m_footR->IsONGround();
 		if (!l && !r)
 		{
-			auto add = m_footL->GetMomentum() + m_footR->GetMomentum();
+			/*auto add = m_footL->GetMomentum() + m_footR->GetMomentum();
 			add.y = 0;
-			m_momentum += add;
+			m_momentum += add;*/
 		}
 		//move += m_momentum;
 
@@ -203,7 +203,7 @@ void Character::Update()
 		auto grav = ue::CVector3(0, m_gravity, 0);
 		m_move += grav;
 	}
-	m_move += m_momentum;
+	//m_move += m_momentum;
 	auto mn = m_momentum;
 	mn.Normalize();
 	m_momentum -= m_momentum * 0.05f;

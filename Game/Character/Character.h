@@ -13,7 +13,7 @@ public:
 	/// </summary>
 	enum ActionMode
 	{
-		AM_None,			
+		AM_None,
 		AM_Move,
 		AM_Rotate,
 	};
