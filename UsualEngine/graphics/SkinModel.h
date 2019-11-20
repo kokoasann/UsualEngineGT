@@ -39,7 +39,12 @@ namespace UsualEngine
 		*@param[in]	rotation	モデルの回転。
 		*@param[in]	scale		モデルの拡大率。
 		*/
-		void UpdateWorldMatrix(CVector3 position, CQuaternion rotation, CVector3 scale);
+		void UpdateWorldMatrix(const CVector3& position, const CQuaternion& rotation, const CVector3& scale);
+		/// <summary>
+		/// モデルをワールド座標系に変換するためのワールド行列を更新する。
+		/// </summary>
+		/// <param name="wmat">ワールドマトリクス</param>
+		void UpdateWorldMatrix(const CMatrix& wmat);
 		/*!
 		*@brief	ボーンを検索。
 		*@param[in]		boneName	ボーンの名前。
@@ -99,15 +104,15 @@ namespace UsualEngine
 		};
 
 		/// <summary>
-		/// 
+		/// シャドウを出しますか？
 		/// </summary>
-		/// <param name="b"></param>
+		/// <param name="b">true or false</param>
 		void SetIsShadowCaster(bool b)
 		{
 			m_isShadowCaster = b;
 		}
 		/// <summary>
-		/// 
+		/// シャドウ出す？
 		/// </summary>
 		/// <returns></returns>
 		bool IsShadowCaster()
@@ -116,15 +121,15 @@ namespace UsualEngine
 		}
 
 		/// <summary>
-		/// 
+		/// シャドウを受け取りますか？
 		/// </summary>
-		/// <param name="b"></param>
+		/// <param name="b">true or false</param>
 		void SetIsShadowReciever(bool b)
 		{
 			m_isShadowReciever = b;
 		}
 		/// <summary>
-		/// 
+		/// シャドウ受ける？
 		/// </summary>
 		/// <returns></returns>
 		bool IsShadowReciever()
@@ -133,7 +138,7 @@ namespace UsualEngine
 		}
 
 		/// <summary>
-		/// 
+		/// モデルの上軸を返す
 		/// </summary>
 		/// <returns></returns>
 		EnFbxUpAxis GetFbxUpAxis()

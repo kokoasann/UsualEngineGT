@@ -155,6 +155,14 @@ namespace UsualEngine
 		else
 		{
 			m_effectorBone->SetIsONGround(false);
+			if (m_isHit)
+			{
+				m_effectorBone->SetMomentum(newpos - oldpos);
+			}
+			else
+			{
+				m_effectorBone->SetMomentum(CVector3::Zero());
+			}
 		}
 		m_target = target;
 		m_isHit = sr.isHit;

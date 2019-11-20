@@ -21,27 +21,37 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 	{
 		if (m_actionMode != AM_Move)
 			return;
-
+		static bool l=0, r =0;
 		ue::CVector3 move = ue::CVector3::Zero();
-		int debug = 0;
 		if (m_footR->IsONGround())
 		{
 			move += m_footR->GetMove();
-			debug++;
 		}
 		if (m_footL->IsONGround())
 		{
 			move += m_footL->GetMove();
-			debug++;
 		}
+		l = m_footL->IsONGround();
+		r = m_footR->IsONGround();
+		if (!l && !r)
+		{
+			auto add = m_footL->GetMomentum() + m_footR->GetMomentum();
+			add.y = 0;
+			m_momentum += add;
+		}
+		//move += m_momentum;
+
 		if (move.Length() > 0.0001f)
 		{
+			
 			move.y = 0;
 			move *= -1;
 			auto rpos = m_characon.Execute(1, move);
 			rpos += m_ccOffset;
 			pos = rpos;
+			m_momentum += move;
 		}
+		
 	});
 
 	m_model->SetRotateFunc([&](auto & rot)
@@ -193,6 +203,13 @@ void Character::Update()
 		auto grav = ue::CVector3(0, m_gravity, 0);
 		m_move += grav;
 	}
+	m_move += m_momentum;
+	auto mn = m_momentum;
+	mn.Normalize();
+	m_momentum -= m_momentum * 0.05f;
+	char st[255] = { 0 };
+	sprintf_s(st, "x:%f y:%f z:%f\n", m_momentum.x, m_momentum.y, m_momentum.z);
+	OutputDebugString(st);
 	auto p = m_characon.Execute(ue::gameTime()->GetDeltaTime(), m_move);
 	p += m_ccOffset;
 	m_model->SetPos(p);
@@ -202,6 +219,7 @@ void Character::Update()
 	rot.Multiply(m_rotate);
 	m_model->SetRot(rot);
 	m_rotate = ue::CQuaternion::Identity();
+	
 }
 
 void Character::SetMoveFunc(const ue::SkinModelRender::MoveFunc& movefunc)

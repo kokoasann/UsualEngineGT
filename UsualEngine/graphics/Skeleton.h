@@ -170,6 +170,15 @@ namespace UsualEngine
 			return m_oldWorldMatrix;
 		}
 
+		void SetMomentum(const CVector3& v)
+		{
+			m_momentum = v;
+		}
+		const CVector3& GetMomentum() const
+		{
+			return m_momentum;
+		}
+
 		/*!
 		*@brief	このボーンのワールド空間での位置と回転とスケールを計算する。
 		*@param[out]	trans		平行移動量の格納先。
@@ -198,7 +207,7 @@ namespace UsualEngine
 
 		CVector3 m_animMove = CVector3::Zero();
 		CVector3 m_move = CVector3::Zero();			//ボーンの移動ベクトル
-
+		CVector3 m_momentum = CVector3::Zero();		//勢い。
 		bool m_isONGround = false;
 	};
 	/*!

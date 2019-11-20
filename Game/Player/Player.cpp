@@ -60,7 +60,7 @@ void Player::Update()
 			auto move = f + r;
 			//m_chara.SetMove(move);
 
-			m_chara.PlayAnim(1, 1, Character::AM_Move);
+			m_chara.PlayAnim(2, 1, Character::AM_Move);
 			m_isWalk = true;
 			m_chara.SetAllIKRub(1.0f);
 		}
@@ -69,16 +69,13 @@ void Player::Update()
 	{
 		m_chara.PlayAnim(0, 1, Character::AM_None);
 		m_isWalk = false;
-		m_chara.SetAllIKRub(0.8f);
+		m_chara.SetAllIKRub(0.0f);
 	}
 
 	for (auto gm : m_gmList)
 	{
 		gm->Update(); 
 	}
-
-	
-
 }
 
 ue::CVector3 Player::GetPos()

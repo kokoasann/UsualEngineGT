@@ -7,22 +7,19 @@ namespace UsualEngine
 	{
 		auto& ske = m_skinModel.GetSkeleton();
 
-		m_animation.Update(gameTime()->GetDeltaTime());
+		m_animation.Update(gameTime()->GetDeltaTime());		//アニメーションの更新。
 		
-		//ske.UpdateBase(worldMatrix);
-		//ske.Update(CMatrix::Identity());
-		m_animation.UpdateIKTarget();
-		//m_animation.UpdateIK();
+		ske.UpdateBase(CMatrix::Identity());				//回転のためのスケルトン更新。
+		m_animation.UpdateIKTarget();						//IKのターゲットの位置を更新
 		
 		CVector3 opos = m_position;
 		if (m_isUseMoveFunc)
 		{
-			m_moveFunc(m_position);
-			
+			m_moveFunc(m_position);					//IKとかを利用した移動の処理。足を滑らせたく無い時とか使うといいとおもう。
 		}
 		if (m_isUseRotateFunc)
 		{
-			m_rotateFunc(m_rotation);
+			m_rotateFunc(m_rotation);				//上とほぼ同じ。回転用。
 		}
 
 		//3dsMaxと軸を合わせるためのバイアス。
@@ -49,11 +46,11 @@ namespace UsualEngine
 		CMatrix worldMatrix = CMatrix::Identity(), scarot;
 		scarot.Mul(scaleMatrix, rotMatrix);
 		worldMatrix.Mul(scarot, transMatrix);
-		m_animation.SetWorldMatrix(worldMatrix);
 
-		if ((m_position - opos).Length() > 0.0001f or 1)
+		//m_animation.SetWorldMatrix(worldMatrix);
+
+		if (1)
 		{
-			worldMatrix.v[3] = m_position;
 			m_animation.SetWorldMatrix(worldMatrix);
 			m_animation.UpdateIK();
 		}

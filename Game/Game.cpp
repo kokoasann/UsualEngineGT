@@ -20,7 +20,6 @@ bool Game::Start()
 	animclip[0].SetLoopFlag(true);
 	animclip[1].Load(L"Assets/model/Player/player_idol.tka");
 	animclip[1].SetLoopFlag(true);
-	
 
 	ue::CQuaternion rot;
 	cam = &ue::usualEngine()->GetMainCamera();
@@ -380,7 +379,7 @@ void Game::Update()
 
 	camtar = campos + ofs;
 
-#if 1
+#if 0
 	cam->SetPosition(campos);
 	cam->SetTarget(camtar);
 	cam->Update();

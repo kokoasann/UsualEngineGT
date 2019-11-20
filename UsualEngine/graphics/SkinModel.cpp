@@ -85,8 +85,9 @@ namespace UsualEngine
 		desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 		usualEngine()->GetGraphicsEngine()->GetD3DDevice()->CreateSamplerState(&desc, &m_samplerState);
 	}
-	void SkinModel::UpdateWorldMatrix(CVector3 position, CQuaternion rotation, CVector3 scale)
+	void SkinModel::UpdateWorldMatrix(const CVector3& position, const CQuaternion& rotation, const CVector3& scal)
 	{
+		CVector3 scale = scal;
 		//3dsMaxと軸を合わせるためのバイアス。
 		CMatrix mBias = CMatrix::Identity();
 		if (m_enFbxUpAxis == enFbxUpAxisZ) {
@@ -114,6 +115,12 @@ namespace UsualEngine
 		m_skeleton.Update(m_worldMatrix);
 
 		if(m_isShadowCaster)
+			usualEngine()->GetGraphicsEngine()->GetShadowMap().AddShadowCaster(this);
+	}
+	void SkinModel::UpdateWorldMatrix(const CMatrix& wmat)
+	{
+		m_skeleton.Update(wmat);
+		if (m_isShadowCaster)//シャドウ、落としますか？nj
 			usualEngine()->GetGraphicsEngine()->GetShadowMap().AddShadowCaster(this);
 	}
 	void SkinModel::Draw(CMatrix viewMatrix, CMatrix projMatrix)
