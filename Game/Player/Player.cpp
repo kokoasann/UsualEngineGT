@@ -3,12 +3,15 @@
 
 Player::Player()
 {
-	m_anim[0].Load(L"Assets/model/Player/player_idol.tka");
-	m_anim[0].SetLoopFlag(true);
-	m_anim[1].Load(L"Assets/model/Player/player_walk.tka");
-	m_anim[1].SetLoopFlag(true);
-	m_anim[2].Load(L"Assets/model/Player/player_dush.tka");
-	m_anim[2].SetLoopFlag(true);
+	m_anim[PA_idol].Load(L"Assets/model/Player/player_idol.tka");
+	m_anim[PA_idol].SetLoopFlag(true);
+	m_anim[PA_walk].Load(L"Assets/model/Player/player_walk.tka");
+	m_anim[PA_walk].SetLoopFlag(true);
+	m_anim[PA_walkFast].Load(L"Assets/model/Player/player_walkFast.tka");
+	m_anim[PA_walkFast].SetLoopFlag(true);
+	m_anim[PA_dush].Load(L"Assets/model/Player/player_dush.tka");
+	m_anim[PA_dush].SetLoopFlag(true);
+
 	ue::SkinModelRender* model = ue::NewGO<ue::SkinModelRender>(0);
 	model->Init(L"Assets/model/Player.cmo",m_anim,3,ue::enFbxUpAxisY);
 	model->SetPos({ 0,50,0 });
@@ -24,8 +27,8 @@ Player::Player()
 	//m_chara.FindBone(L"Bone_L.005", Character::BK_None, true, 2, 4);
 	//m_chara.FindBone(L"Bone_R.005", Character::BK_None, true, 2, 4);
 
-	//m_chara.SetMoveFunc([&](auto & move) {return; });
-	//m_chara.SetRotateFunc([&](auto & rote) {return; });
+	m_chara.SetMoveFunc([&](auto & move) {return; });
+	m_chara.SetRotateFunc([&](auto & rote) {return; });
 
 	model->GetAnimation().Play(1);
 	m_gmList[0] = &m_camera;
@@ -48,21 +51,39 @@ void Player::Update()
 	float x = m_pad->GetLStickXF();
 	float y = m_pad->GetLStickYF();
 
-	x = m_pad->IsPress(ue::enButtonA);
+	//x = m_pad->IsPress(ue::enButtonA);
 
-	if ((abs(x) + abs(y)) / 2.f > 0.01f)
+	if (fabsf(y))
+	{
+		int a = 1 + 2;
+	}
+	if (fabsf(x) > 0.01f || fabsf(y) > 0.01f)
 	{
 		if (!m_isWalk)
 		{
-			auto cam = m_camera.GetCamera();
-			auto f = cam->GetForward() * y * 100;
-			auto r = cam->GetRight() * x * 100;
-			auto move = f + r;
+			
 			//m_chara.SetMove(move);
 
-			m_chara.PlayAnim(1, 1, Character::AM_Move);
+			m_chara.PlayAnim(2, 1, Character::AM_Move);
 			m_isWalk = true;
-			m_chara.SetAllIKRub(1.0f);
+			m_chara.SetAllIKRub(0.5f);
+			
+		}
+		
+		auto cam = m_camera.GetCamera();
+		auto f = cam->GetForward() * y * 500;
+		auto r = cam->GetRight() * x * 500;
+		auto move = f + r;
+		m_chara.SetMove(move);
+		if (move.Length() > 0.1f)
+		{
+			move.Normalize();
+			float f = move.Dot(m_dir);
+			float rad = acos(f);
+			ue::CQuaternion add;
+			add.SetRotation(ue::CVector3::AxisY(),rad);
+			add.Multiply(m_chara.GetRot());
+			m_chara.SetRotate(add);
 		}
 	}
 	else if (m_isWalk)

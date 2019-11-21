@@ -139,9 +139,9 @@ namespace UsualEngine
 		/// <param name="effector">エフェクタボーン</param>
 		/// <param name="end">エンドボーン</param>
 		/// <param name="radius">コライダーの半径</param>
-		void SetingIK(Bone* effector, Bone* end, float radius)
+		void SetingIK(Bone* effector, Bone* end, float radius, bool isCreateRigitBody = false)
 		{
-			m_animation.SetingIK(effector, end, radius, m_position);
+			m_animation.SetingIK(effector, end, radius, isCreateRigitBody, m_position);
 		}
 
 		/// <summary>

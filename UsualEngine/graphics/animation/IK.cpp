@@ -68,7 +68,7 @@ namespace UsualEngine
 	}
 
 
-	IK::IK(Bone* effector, Bone* end, float radius, const CVector3& pos) :
+	IK::IK(Bone* effector, Bone* end, float radius, bool isOnRigitBody, const CVector3& pos) :
 		m_effectorBone(effector),
 		m_endBone(end),
 		m_radius(radius)
@@ -143,12 +143,15 @@ namespace UsualEngine
 				norm.Normalize();
 				auto meri = newpos - sr.hitPos;
 				float rad = meri.Dot(norm);
+				auto ntarget = target + sr.hitNormal * (-rad + m_radius);
 				target = sr.hitPos;
 				target += sr.hitNormal * (-rad + m_radius + m_radius);
+				target.Lerp(m_rubbing, newpos, target);
+				m_rubTarget = ntarget;
 			}
 			else
 			{
-				target.Lerp(m_rubbing,newpos, m_target);
+				target.Lerp(m_rubbing, newpos, m_target);
 				
 			}
 		}
@@ -385,7 +388,7 @@ namespace UsualEngine
 				rad = acos(rad);
 				float deg = CMath::RadToDeg(rad);
 
-				if (true || rad > 0.000001f)
+				if (1 || rad > 0.000001f)
 				{
 					auto axis = CVector3::Zero();					//‰ñ“]Ž².
 					axis.Cross(toEffector, toTarget);

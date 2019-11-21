@@ -6,6 +6,17 @@ class Player : public ue::GameObject
 public:
 	Player();
 	~Player();
+
+	enum PlayerAnim
+	{
+		PA_idol,
+		PA_walk,
+		PA_walkFast,
+		PA_dush,
+
+		PA_num
+	};
+
 	bool Start() override;
 	void Update() override;
 
@@ -19,9 +30,11 @@ private:
 	PlayerCamera m_camera;				//ÉJÉÅÉâ
 	GameObject* m_gmList[2] = { 0 };	
 
-	ue::AnimationClip m_anim[3];
+	ue::AnimationClip m_anim[PA_num];
 	ue::Pad* m_pad = 0;
 	bool m_isWalk = false;
+
+	ue::CVector3 m_dir = ue::CVector3::AxisZ();
 
 	float m_HP = 10.f;
 	float m_AP = 10.f;

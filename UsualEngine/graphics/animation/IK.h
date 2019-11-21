@@ -21,7 +21,7 @@ namespace UsualEngine
 		/// <param name="effector">エフェクタボーン</param>
 		/// <param name="end">エンドボーン</param>
 		/// <param name="radius">コライダーの半径</param>
-		IK(Bone* effector, Bone* end, float radius,const CVector3& pos = CVector3::Zero());
+		IK(Bone* effector, Bone* end, float radius, bool isOnRigitBody = false , const CVector3& pos = CVector3::Zero());
 		/// <summary>
 		/// デストラクタ
 		/// </summary>
@@ -97,9 +97,11 @@ namespace UsualEngine
 		RigidBody m_rigidBody;					//リジッドボディ
 
 		CVector3 m_target = CVector3::Zero();	//IKのターゲット
+		CVector3 m_rubTarget = CVector3::Zero();	//擦った先のポジション。
 		CVector3 m_move = CVector3::Zero();		//移動ベクトル
 		bool m_isHit = false;					//当たった？
 		float m_rubbing = 1.0f;					//摩擦率、初期値は100%　滑ることはない。
+		
 	};
 
 }

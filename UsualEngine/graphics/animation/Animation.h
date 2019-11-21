@@ -92,9 +92,9 @@ namespace UsualEngine
 		/// <param name="end"></param>
 		/// <param name="radius"></param>
 		/// <param name="modelPos"></param>
-		void SetingIK(Bone* effector, Bone* end,float radius,const CVector3& modelPos)
+		void SetingIK(Bone* effector, Bone* end,float radius,bool isCreateRigitBody,const CVector3& modelPos)
 		{
-			IK* ik = new IK(effector, end, radius,modelPos);
+			IK* ik = new IK(effector, end, radius, isCreateRigitBody, modelPos);
 			m_ik.push_back(ik);
 		}
 		IK* GetIK(int num)
