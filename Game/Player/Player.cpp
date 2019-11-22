@@ -71,19 +71,34 @@ void Player::Update()
 		}
 		
 		auto cam = m_camera.GetCamera();
-		auto f = cam->GetForward() * y * 500;
-		auto r = cam->GetRight() * x * 500;
+		auto f = cam->GetForward() * y;
+		auto r = cam->GetRight() * x;
 		auto move = f + r;
+		move.Normalize();
+		move *= 500;
 		m_chara.SetMove(move);
 		if (move.Length() > 0.1f)
 		{
+			move.y = 0;
 			move.Normalize();
-			float f = move.Dot(m_dir);
-			float rad = acos(f);
+			float f = move.Dot(ue::CVector3::AxisZ());
+			char st[255] = { 0 };
+			sprintf_s(st, "DIR: x:%f y:%f z:%f\n", m_dir.x, m_dir.y, m_dir.z);
+			//OutputDebugStringA(st);
+			sprintf_s(st, "MOV: x:%f y:%f z:%f\n", move.x, move.y, move.z);
+			//OutputDebugStringA(st);
+
+			
+			f = max(f, -1.f);
+			f = min(f, 1.f);
+			float rad = acosf(f);
 			ue::CQuaternion add;
-			add.SetRotation(ue::CVector3::AxisY(),rad);
-			add.Multiply(m_chara.GetRot());
-			m_chara.SetRotate(add);
+			sprintf_s(st, "dg: %f\n", ue::CMath::RadToDeg(rad));
+			//OutputDebugStringA(st);
+			add.SetRotation(ue::CVector3::AxisY(), rad);
+			m_dir = move;
+			m_chara.SetRotation(add);
+
 		}
 	}
 	else if (m_isWalk)

@@ -207,9 +207,9 @@ void Character::Update()
 	auto mn = m_momentum;
 	mn.Normalize();
 	m_momentum -= m_momentum * 0.05f;
-	char st[255] = { 0 };
-	sprintf_s(st, "x:%f y:%f z:%f\n", m_momentum.x, m_momentum.y, m_momentum.z);
-	OutputDebugString(st);
+	//char st[255] = { 0 };
+	//sprintf_s(st, "x:%f y:%f z:%f\n", m_momentum.x, m_momentum.y, m_momentum.z);
+	//OutputDebugString(st);
 	auto p = m_characon.Execute(ue::gameTime()->GetDeltaTime(), m_move);
 	p += m_ccOffset;
 	m_model->SetPos(p);

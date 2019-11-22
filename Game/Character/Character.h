@@ -142,6 +142,10 @@ public:
 
 	void SetMove(const ue::CVector3& move);
 	void SetRotate(const ue::CQuaternion& rot);
+	void SetRotation(const ue::CQuaternion& rot)
+	{
+		m_model->SetRot(rot);
+	}
 private:
 	ue::SkinModelRender* m_model = nullptr;		//モデルのポインタ
 	ue::Bone* m_footL = nullptr;				//左足のボーン
