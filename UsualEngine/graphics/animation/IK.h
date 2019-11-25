@@ -87,7 +87,17 @@ namespace UsualEngine
 		{
 			m_rubbing = f;
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="v"></param>
+		void SetOffset(const CVector3& v)
+		{
+			m_offset = v;
+		}
 	private:
+
 		Bone* m_effectorBone=0;					//エフェクタボーン
 		Bone* m_endBone=0;						//エンドボーン
 		float m_radius = 0.f;					//コライダーの半径。
@@ -96,12 +106,14 @@ namespace UsualEngine
 		SphereCollider m_collider;				//コライダー
 		RigidBody m_rigidBody;					//リジッドボディ
 
-		CVector3 m_target = CVector3::Zero();	//IKのターゲット
-		CVector3 m_rubTarget = CVector3::Zero();	//擦った先のポジション。
-		CVector3 m_move = CVector3::Zero();		//移動ベクトル
+		CVector3 m_offset = CVector3::Zero();
+		CVector3 m_target = CVector3::Zero();			//IKのターゲット
+		CVector3 m_rubTarget = CVector3::Zero();		//擦った先のポジション。
+		CVector3 m_move = CVector3::Zero();			//移動ベクトル
+		bool m_isUseLocalTarget = 1;
+
 		bool m_isHit = false;					//当たった？
 		float m_rubbing = 1.0f;					//摩擦率、初期値は100%　滑ることはない。
-		
 	};
 
 }

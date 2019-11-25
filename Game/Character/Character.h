@@ -146,6 +146,10 @@ public:
 	{
 		m_model->SetRot(rot);
 	}
+	void SetIKOffset(const ue::CVector3& v)
+	{
+		m_model->GetAnimation().SetIKOffset(v);
+	}
 private:
 	ue::SkinModelRender* m_model = nullptr;		//モデルのポインタ
 	ue::Bone* m_footL = nullptr;				//左足のボーン

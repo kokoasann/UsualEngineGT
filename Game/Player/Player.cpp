@@ -14,23 +14,23 @@ Player::Player()
 
 	ue::SkinModelRender* model = ue::NewGO<ue::SkinModelRender>(0);
 	model->Init(L"Assets/model/Player.cmo",m_anim,3,ue::enFbxUpAxisY);
-	model->SetPos({ 0,50,0 });
+	model->SetPos({ 0,100,0 });
 	model->SetSca(ue::CVector3::One()*20.f);
 	model->SetIsShadowCaster(true);
 	model->SetIsShadowReciever(true);
 	m_camera.Init(this);
 	m_chara.Init(model, 20, 40, {0,-2.f,0});
-	m_chara.FindBone(L"Bone_L.003", Character::BK_FootL, true, 3, 13.f);
-	m_chara.FindBone(L"Bone_R.003", Character::BK_FootR, true, 3, 13.f);
+	static ue::Bone* fL = m_chara.FindBone(L"Bone_L.003", Character::BK_FootL, true, 3, 12.5f);
+	static ue::Bone* fR = m_chara.FindBone(L"Bone_R.003", Character::BK_FootR, true, 3, 12.5f);
 	//m_chara.FindBone(L"Bone.003_L.003", Character::BK_HandL, true, 3, 1);
 	//m_chara.FindBone(L"Bone.003_R.003", Character::BK_HandR, true, 3, 1);
 	//m_chara.FindBone(L"Bone_L.005", Character::BK_None, true, 2, 4);
 	//m_chara.FindBone(L"Bone_R.005", Character::BK_None, true, 2, 4);
 
-	m_chara.SetMoveFunc([&](auto & move) {return; });
+	m_chara.SetMoveFunc([&](auto & move) {return;	});
 	m_chara.SetRotateFunc([&](auto & rote) {return; });
 
-	model->GetAnimation().Play(1);
+	model->GetAnimation().Play(0);
 	m_gmList[0] = &m_camera;
 	m_gmList[1] = &m_chara;
 
@@ -66,7 +66,7 @@ void Player::Update()
 
 			m_chara.PlayAnim(2, 1, Character::AM_Move);
 			m_isWalk = true;
-			m_chara.SetAllIKRub(0.5f);
+			m_chara.SetAllIKRub(1.0f);
 			
 		}
 		
@@ -75,8 +75,10 @@ void Player::Update()
 		auto r = cam->GetRight() * x;
 		auto move = f + r;
 		move.Normalize();
+		m_chara.SetIKOffset(move * 500.f * ue::gameTime()->GetDeltaTime());
 		move *= 500;
 		m_chara.SetMove(move);
+		
 		if (move.Length() > 0.1f)
 		{
 			move.y = 0;
@@ -92,6 +94,7 @@ void Player::Update()
 			f = max(f, -1.f);
 			f = min(f, 1.f);
 			float rad = acosf(f);
+			rad = atan2(move.x,move.z );
 			ue::CQuaternion add;
 			sprintf_s(st, "dg: %f\n", ue::CMath::RadToDeg(rad));
 			//OutputDebugStringA(st);
@@ -110,7 +113,7 @@ void Player::Update()
 
 	for (auto gm : m_gmList)
 	{
-		gm->Update(); 
+		gm->Update();
 	}
 }
 

@@ -113,6 +113,13 @@ namespace UsualEngine
 				ik->SetRubbing(f);
 			}
 		}
+		void SetIKOffset(CVector3 ofs)
+		{
+			for (auto ik : m_ik)
+			{
+				ik->SetOffset(ofs);
+			}
+		}
 
 		/// <summary>
 		/// 

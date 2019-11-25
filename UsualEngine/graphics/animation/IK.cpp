@@ -35,7 +35,12 @@ namespace UsualEngine
 			return 0.0f;
 		}
 	};
-
+	/// <summary>
+	/// ボーンのワールドマトリクスを持ってくる
+	/// </summary>
+	/// <param name="bone">マトリクスの欲しいボーン</param>
+	/// <param name="worldMat">モデルのマトリクス</param>
+	/// <returns></returns>
 	CMatrix GetBoneWorldMatrix(Bone* bone,const CMatrix& worldMat)
 	{
 		Bone* parents[32] = { NULL };
@@ -57,7 +62,13 @@ namespace UsualEngine
 		//mat.Mul(bone->GetLocalMatrix(),mat);
 		return mat;
 	}
-
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="bone"></param>
+	/// <param name="wm"></param>
+	/// <param name="worldMat"></param>
+	/// <returns></returns>
 	CMatrix GetBoneLocalMatrix(Bone * bone, const CMatrix& wm, const CMatrix& worldMat)
 	{
 		CMatrix mat = wm;
@@ -74,6 +85,7 @@ namespace UsualEngine
 		m_radius(radius)
 	{
 		m_collider.Create(radius);
+
 		InitRigidBody(pos);
 	}
 
@@ -151,7 +163,7 @@ namespace UsualEngine
 			}
 			else
 			{
-				target.Lerp(m_rubbing, newpos, m_target);
+				target.Lerp(m_rubbing, newpos, m_rubTarget);
 				
 			}
 		}
@@ -167,7 +179,8 @@ namespace UsualEngine
 				m_effectorBone->SetMomentum(CVector3::Zero());
 			}
 		}
-		m_target = target;
+		m_rubTarget = target;
+		m_target = target + m_offset;
 		m_isHit = sr.isHit;
 		m_move = newpos-m_target;
 		//auto o2n = m_target - oldpos;
@@ -349,7 +362,7 @@ namespace UsualEngine
 		}
 		//break;//debug用。
 #else
-		if (!m_isHit and false)
+		if (!m_isHit and 0)
 			return;
 		for (int i = 0; i < 1; i++)
 		{
