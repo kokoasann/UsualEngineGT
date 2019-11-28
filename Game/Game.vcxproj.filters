@@ -19,6 +19,9 @@
     <ClCompile Include="Enemy\Gib\Ene_Gib.cpp">
       <Filter>Enemy\Gib</Filter>
     </ClCompile>
+    <ClCompile Include="Player\PlayerMotion.cpp">
+      <Filter>Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -40,6 +43,9 @@
     </ClInclude>
     <ClInclude Include="Enemy\Gib\Ene_Gib.h">
       <Filter>Enemy\Gib</Filter>
+    </ClInclude>
+    <ClInclude Include="Player\PlayerMotion.h">
+      <Filter>Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -3,6 +3,8 @@
 
 Player::Player()
 {
+	m_pad = &ue::GamePad(0);
+
 	m_anim[PA_idol].Load(L"Assets/model/Player/player_idol.tka");
 	m_anim[PA_idol].SetLoopFlag(true);
 	m_anim[PA_walk].Load(L"Assets/model/Player/player_walk.tka");
@@ -20,22 +22,24 @@ Player::Player()
 	model->SetIsShadowReciever(true);
 	m_camera.Init(this);
 	m_chara.Init(model, 20, 40, {0,-2.f,0});
-	m_footL = m_chara.FindBone(L"Bone_L.003", Character::BK_FootL, true, 3, 13.f);
-	m_footR = m_chara.FindBone(L"Bone_R.003", Character::BK_FootR, true, 3, 13.f);
+
+	m_motion.Init(this, &m_chara, m_camera.GetCamera(), m_anim,m_pad);
+
+	/*m_footL = m_chara.FindBone(L"Bone_L.003", Character::BK_FootL, true, 3, 13.f);
+	m_footR = m_chara.FindBone(L"Bone_R.003", Character::BK_FootR, true, 3, 13.f);*/
 	//m_chara.FindBone(L"Bone.003_L.003", Character::BK_HandL, true, 3, 1);
 	//m_chara.FindBone(L"Bone.003_R.003", Character::BK_HandR, true, 3, 1);
 	//m_chara.FindBone(L"Bone_L.005", Character::BK_None, true, 2, 4);
 	//m_chara.FindBone(L"Bone_R.005", Character::BK_None, true, 2, 4);
 
-	m_chara.SetMoveFunc([&](auto & move) {return;	});
-	m_chara.SetRotateFunc([&](auto & rote) {return; });
+	/*m_chara.SetMoveFunc([&](auto & move) {return;	});
+	m_chara.SetRotateFunc([&](auto & rote) {return; });*/
 
 
 	model->GetAnimation().Play(0);
 	m_gmList[0] = &m_camera;
 	m_gmList[1] = &m_chara;
-
-	m_pad = &ue::GamePad(0);
+	m_gmList[2] = &m_motion;
 }
 
 Player::~Player()
@@ -49,6 +53,7 @@ bool Player::Start()
 
 void Player::Update()
 {
+#if 0
 	ue::CVector2 stick;
 	stick.x = m_pad->GetLStickXF();
 	stick.y = m_pad->GetLStickYF();
@@ -121,28 +126,35 @@ void Player::Update()
 		auto moveR = m_footR->GetMove().Length();
 		if (!m_isJustedL)
 		{
-			if (m_justTimeL > 0.3f)
+			if (m_justTimeL > 0.05f)
+			{
 				m_isJustedL = true;
+				m_chara.SetIKSpeed(0.5f, m_footL);
+			}
 			auto up = m_dir*-1.f;
 			
 			up.y += 2.f;
 			up.Normalize();
 			m_chara.SetIKOffset(up *40.f, m_footL);
-			m_chara.SetIKSpeed(0.5f, m_footL);
+			m_chara.SetIKSpeed(0.2f, m_footL);
 			m_justTimeL += deltime;
 		}
 		else if (!m_isJustedR)
 		{
-			if (m_justTimeR > 0.3f)
+			if (m_justTimeR > 0.1f)
+			{
 				m_isJustedR = true;
+				m_chara.SetIKSpeed(0.5f, m_footR);
+			}
 			auto up = m_dir*-1.f;
 			up.y += 2.f;
 			up.Normalize();
 			m_chara.SetIKOffset(up* 40.f, m_footR);
-			m_chara.SetIKSpeed(0.5f, m_footR);
+			m_chara.SetIKSpeed(0.2f, m_footR);
 			m_justTimeR += deltime;
 		}
 	}
+#endif
 
 	for (auto gm : m_gmList)
 	{
@@ -158,7 +170,7 @@ void Player::Move(const ue::CVector2& padStick, PlayerAnim pa, float movespeed, 
 	{
 		float ntime = 0.f;
 		//m_animLug = 0.1f;
-		if (m_PlayingAnim != pa)
+		if (!m_isWalk)
 		{
 			auto& anm = m_chara.GetAnimation();
 			float fc = anm.GetFrameNum();			//現在再生中のアニメーションのフレーム数。
@@ -177,16 +189,17 @@ void Player::Move(const ue::CVector2& padStick, PlayerAnim pa, float movespeed, 
 	}
 
 	float speed = 0.0f;
-
 	if (m_lugTime < m_animLug)
 	{
-		speed = movespeed * m_lugTime / m_animLug;
+		speed = movespeed * m_lugTime / m_animLug + m_oldSpeed-movespeed;
 		m_lugTime += deltime;
 	}
 	else
 	{
 		speed = movespeed;
+		m_oldSpeed = speed;
 	}
+	
 
 	auto cam = m_camera.GetCamera();
 	auto f = cam->GetForward() * padStick.y;

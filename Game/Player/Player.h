@@ -1,12 +1,12 @@
 #pragma once
 #include "Character/Character.h"
 #include "PlayerCamera.h"
+#include "PlayerMotion.h"
+
+#define PLAYER_COMPONENT_NUM 3
 class Player : public ue::GameObject
 {
 public:
-	Player();
-	~Player();
-
 	enum PlayerAnim
 	{
 		PA_idol,
@@ -16,6 +16,9 @@ public:
 
 		PA_num
 	};
+
+	Player();
+	~Player();
 
 	bool Start() override;
 	void Update() override;
@@ -30,17 +33,19 @@ public:
 private:
 	Character m_chara;					//外身。
 	PlayerCamera m_camera;				//カメラ
-	GameObject* m_gmList[2] = { 0 };	
+	PlayerMotion m_motion;				//プレイヤーを動かすクラス。
+	GameObject* m_gmList[PLAYER_COMPONENT_NUM] = { 0 };
 
 	ue::AnimationClip m_anim[PA_num];
 	ue::Pad* m_pad = 0;
 	bool m_isWalk = false;
 	PlayerAnim m_PlayingAnim = PlayerAnim::PA_idol;
-	float m_animLug = 0.2f;
+	float m_animLug = 1.f;
 	float m_animLug_2idle = 0.0f;
 	float m_lugTime = 0.f;
 	ue::CVector3 m_moved = ue::CVector3::AxisZ();
 	ue::CVector3 m_dir = ue::CVector3::AxisZ();
+	float m_oldSpeed = 0.0f;
 
 	ue::SkinModelRender::MoveFunc m_walkFunc;
 	ue::Bone* m_footL = nullptr;
