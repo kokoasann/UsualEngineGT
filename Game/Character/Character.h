@@ -90,12 +90,18 @@ public:
 	/// IKを使った移動するための匿名関数を入れる
 	/// </summary>
 	/// <param name="movefunc"></param>
-	void SetMoveFunc(const ue::SkinModelRender::MoveFunc& movefunc);
+	void SetMoveFunc(const ue::SkinModelRender::MoveFunc& movefunc)
+	{
+		m_model->SetMoveFunc(movefunc);
+	}
 	/// <summary>
 	/// IKを使った回転するための匿名関数を入れる
 	/// </summary>
 	/// <param name="rotatefunc"></param>
-	void SetRotateFunc(const ue::SkinModelRender::RotateFunc& rotatefunc);
+	void SetRotateFunc(const ue::SkinModelRender::RotateFunc& rotatefunc)
+	{
+		m_model->SetRotateFunc(rotatefunc);
+	}
 	/// <summary>
 	/// MoveFuncをデフォルトのものにする
 	/// </summary>
@@ -130,12 +136,18 @@ public:
 	/// ポジションを返す
 	/// </summary>
 	/// <returns></returns>
-	const ue::CVector3& GetPos();
+	const ue::CVector3& GetPos() const
+	{
+		return m_model->GetPos();
+	}
 	/// <summary>
 	/// 回転を返す
 	/// </summary>
 	/// <returns></returns>
-	const ue::CQuaternion& GetRot();
+	const ue::CQuaternion& GetRot()
+	{
+		return m_model->GetRot();
+	}
 
 	/// <summary>
 	/// アニメーションを再生

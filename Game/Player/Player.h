@@ -23,13 +23,15 @@ public:
 	bool Start() override;
 	void Update() override;
 
-	void Move(const ue::CVector2& padStick, PlayerAnim pa, float movespeed, Character::ActionMode am);
-
 	/// <summary>
 	/// プレイヤーのポジションを返す
 	/// </summary>
 	/// <returns></returns>
-	ue::CVector3 GetPos();
+	const ue::CVector3& GetPos() const
+	{
+		return m_chara.GetPos();
+	}
+
 private:
 	Character m_chara;					//外身。
 	PlayerCamera m_camera;				//カメラ

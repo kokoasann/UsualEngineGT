@@ -56,7 +56,7 @@ namespace UsualEngine
 		/// ポジションを返す
 		/// </summary>
 		/// <returns></returns>
-		const CVector3 GetPos() const
+		const CVector3& GetPos() const
 		{
 			return m_position;
 		}
@@ -88,7 +88,7 @@ namespace UsualEngine
 		/// スケールを返す
 		/// </summary>
 		/// <returns></returns>
-		const CVector3 GetSca() const
+		const CVector3& GetSca() const
 		{
 			return m_scale;
 		}

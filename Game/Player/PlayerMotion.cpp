@@ -11,10 +11,13 @@ void PlayerMotion::Init(Player* player, Character* chara, ue::Camera* cam, ue::A
 	m_anim = anim;
 	m_pad = pad;
 
-	m_footL = m_chara->FindBone(L"Bone_L.003", Character::BK_FootL, true, 3, 13.f);
-	m_footR = m_chara->FindBone(L"Bone_R.003", Character::BK_FootR, true, 3, 13.f);
-	m_chara->SetMoveFunc([&](auto & move) {return;	});
-	m_chara->SetRotateFunc([&](auto & rote) {return; });
+	m_footL = m_chara->FindBone(L"Bone_L.003", Character::BK_FootL, true, 3, 14.f);
+	m_footR = m_chara->FindBone(L"Bone_R.003", Character::BK_FootR, true, 3, 14.f);
+	m_noneMF = [&](auto& pos) {return;	};
+	m_noneRF = [&](auto& rote) {return; };
+
+	m_chara->SetMoveFunc(m_noneMF);
+	m_chara->SetRotateFunc(m_noneRF);
 }
 
 void PlayerMotion::InitBone(ue::Bone* footL, ue::Bone* footR)
@@ -33,15 +36,15 @@ void PlayerMotion::Update()
 	if (fabsf(stick.x) > 0.01f || fabsf(stick.y) > 0.01f)	//stick入力がある。つまり移動。
 	{
 		m_chara->SetIKSpeed(1.0f);
-		if (m_pad->IsPress(ue::enButtonB))
+		if (m_pad->IsPress(ue::enButtonB))		//ダッシュ
 		{
 			Move(stick, PA_dush, m_dushSpeed, Character::AM_Move);
 		}
-		else if (stick.Length() >= 0.5f)
+		else if (stick.Length() >= 0.5f)				//早歩き
 		{
 			Move(stick, PA_walkFast, m_walkFastSpeed, Character::AM_Move);
 		}
-		else
+		else														//歩き
 		{
 			Move(stick, PA_walk, 0.f, Character::AM_Move);
 			m_chara->SetDefaultMoveFunc();
@@ -60,12 +63,14 @@ void PlayerMotion::Update()
 void PlayerMotion::Move(const ue::CVector2& padStick, PlayerAnim pa, float movespeed,int am)
 {
 	float deltime = ue::gameTime()->GetDeltaTime();
-	//x = m_pad->IsPress(ue::enButtonA);
-	if (!m_isWalk || m_PlayingAnim != pa)
+
+	if (!m_isWalk || m_PlayingAnim != pa)		//アイドルから歩き、走りから早歩き等の移動方法が変化するとここに入る。
 	{
+		ChangePlayingAnim(pa);
 		float ntime = 0.f;
-		if (!m_isWalk)
+		if (m_PlayingAnim != pa)
 		{
+			//これから再生するアニメーションの再生開始時間を計算。
 			auto& anm = m_chara->GetAnimation();
 			float fc = anm.GetFrameNum();			//現在再生中のアニメーションのフレーム数。
 			float fn = anm.GetCurrentFrameNo();		//現在再生中のアニメーションのフレーム番号。
@@ -73,26 +78,38 @@ void PlayerMotion::Move(const ue::CVector2& padStick, PlayerAnim pa, float moves
 			float nfc = m_anim[pa].GetFrameNum();	//これから再生するアニメーションのフレーム数。
 			float nfn = nfc * fnRate;				//これから再生するアニメーションのフレーム番号を調べる。
 			ntime = nfn * 1.f / 30.f;				//アニメーションのスタート時間。
+
+			//
+			auto spar = m_oldSpeed / movespeed;
+			m_lugTime = m_animLugBase * spar;
+			if (m_animLugBase > m_lugTime)	//遅い移動から速い移動。
+			{
+				m_animLug = m_animLugBase - m_lugTime;
+				m_changeWalk = CW_slow2fast;
+			}
+			else													//速い移動から遅い移動。
+			{
+				m_animLug = m_lugTime - m_animLugBase;
+				m_changeWalk = CW_fast2slow;
+			}
 		}
 		m_chara->PlayAnim(pa, m_animLug, ntime, (Character::ActionMode)am);
 		m_isWalk = true;
-		
-		ChangePlayingAnim(pa);
-
 		m_chara->SetAllIKRub(1.0f);
-
-		m_chara->SetMoveFunc([&](auto & move) {return;	});
+		m_chara->SetMoveFunc(m_noneMF);
 	}
 
+	//スピードの計算。
 	float speed = 0.0f;
-	if (m_lugTime < m_animLug)
+	if (m_changeWalk == CW_slow2fast && m_lugTime < m_animLugBase)//遅い移動から速い移動になった時のスピードの加速
 	{
-		if(m_lugTime != 0.f)
-			speed = movespeed * (m_lugTime / m_animLug) + max(m_oldSpeed - movespeed,0.f);
-		else
-			speed = max(m_oldSpeed - movespeed, 0.f);
-		
+		speed = movespeed * (m_lugTime / m_animLugBase);
 		m_lugTime += deltime;
+	}
+	else if (m_changeWalk == CW_fast2slow && m_lugTime >= m_animLugBase)//速い移動から遅い移動になった時のスピードの減速
+	{
+		speed = movespeed * (m_lugTime / m_animLugBase);
+		m_lugTime -= deltime;
 	}
 	else
 	{
@@ -100,15 +117,16 @@ void PlayerMotion::Move(const ue::CVector2& padStick, PlayerAnim pa, float moves
 	}
 	m_oldSpeedBuff = speed;
 
+	//実際に移動。
 	auto f = m_camera->GetForward() * padStick.y;
 	auto r = m_camera->GetRight() * padStick.x;
 	auto move = f + r;
 	move.y = 0;
 	move.Normalize();
-
 	m_chara->SetIKOffset(move * speed * deltime);
 	m_chara->SetMove(move * speed);
 	m_moved = move * speed;
+
 	if (move.Length() > 0.1f)	//こっから回転。
 	{
 		move.Normalize();
@@ -130,23 +148,26 @@ void PlayerMotion::Walk2Idle(float delTime)
 		float fnRate = fn / fc;					//現在再生中のフレーム番号がフレーム数に対して何％なのか調べる。
 		if (fnRate <= 0.25f)
 		{
-			float nfn = fc * 0.25f;
-			float len = nfn - fn;
-			m_animLug_2idle = len * (1.f / 30.f);
-		}
-		else if (fnRate <= 0.75f)
-		{
 			float nfn = fc * 0.75f;
 			float len = nfn - fn;
 			m_animLug_2idle = len * (1.f / 30.f);
 		}
-		else
+		else if (fnRate <= 0.75f)
 		{
 			float len = fc - fn;
 			m_animLug_2idle = len * (1.f / 30.f);
 			float nfn = fc * 0.25f * (1.f / 30.f);
 			m_animLug_2idle += nfn;
 		}
+		else
+		{
+			float len = fc - fn;
+			m_animLug_2idle = len * (1.f / 30.f);
+			float nfn = fc * 0.75f * (1.f / 30.f);
+			m_animLug_2idle += nfn;
+		}
+		if (m_animLug_2idle == 0.f)
+			return;
 
 		m_chara->PlayAnim(PA_idol, m_animLug_2idle, Character::AM_None);
 		m_isWalk = false;
@@ -154,57 +175,81 @@ void PlayerMotion::Walk2Idle(float delTime)
 		m_chara->SetIKOffset(ue::CVector3::Zero());
 		m_lugTime = m_animLug_2idle;
 
-		m_chara->SetMoveFunc([&](auto & move) {return;	});
-		m_isJustedL = false;
-		m_isJustedR = false;
-		m_justTimeL = 0.f;
-		m_justTimeR = 0.f;
-
-		m_chara->SetIKOffset(ue::CVector3::Zero());
+		ChangePlayingAnim(PA_idol);
+		m_chara->SetMoveFunc(m_noneMF);
+		m_isJustedEnd = false;
+		m_isJustedStart = false;
+		m_justTimeEnd = 0.f;
+		m_justTimeStart = 0.f;
+		m_isStartJustFoot = false;
 	}
 	auto move = m_moved * ((m_lugTime) / m_animLug_2idle);
-	m_chara->SetIKOffset(move * delTime);
+	//m_chara->SetIKOffset(move * delTime);
 	m_chara->SetMove(move);
 	m_lugTime -= delTime;
 }
 
 void PlayerMotion::JustFoot(float delTime)
 {
-	
-	
-	if (!m_isJustedL)
+	if (!m_isStartJustFoot)//遠い足の方から先に整える
 	{
 		auto moveL = m_footL->GetMove().Length();
-		if (m_justTimeL > 0.2f || moveL < 10.f)
+		auto moveR = m_footR->GetMove().Length();
+
+		if (moveL > moveR)
+			m_startJustFoot = JF_footL;
+		else
+			m_startJustFoot = JF_footR;
+		m_isStartJustFoot = true;
+	}
+	ue::Bone* startBone = nullptr;
+	ue::Bone* endBone = nullptr;
+
+	switch (m_startJustFoot)
+	{
+	case JF_footL://左足からスタート
+		startBone = m_footL;
+		endBone = m_footR;
+		break;
+	case JF_footR://右足からスタート
+		startBone = m_footR;
+		endBone = m_footL;
+		break;
+	}
+
+	if (!m_isJustedStart)//最初に出す足の処理。
+	{
+		auto move = startBone->GetMove().Length();
+		if (m_justTimeStart > 0.2f || move < 10.f)
 		{
-			m_isJustedL = true;
-			m_chara->SetIKSpeed(0.2f, m_footL);
+			m_isJustedStart = true;
+			m_chara->SetIKSpeed(0.5f, startBone);
 		}
-		else if (m_justTimeL < 0.1f)
+		else if (m_justTimeStart < 0.1f)
 		{
 			auto up = m_dir * -1.f;
 
 			up.y += 2.f;
 			up.Normalize();
-			m_chara->SetIKOffset(up * 40.f, m_footL);
-			m_chara->SetIKSpeed(0.2f, m_footL);
+			m_chara->SetIKOffset(up * 40.f, startBone);
+			m_chara->SetIKSpeed(0.4f, startBone);
 		}
-		m_justTimeL += delTime;
+		m_justTimeStart += delTime;
 	}
-	else if (!m_isJustedR)
+	else if (!m_isJustedEnd)//最後に出す足の処理。
 	{
-		auto moveR = m_footR->GetMove().Length();
-		if (m_justTimeR > 0.1f || moveR < 10.f)
+		auto move = endBone->GetMove().Length();
+		if (m_justTimeEnd > 0.1f || move < 10.f)
 		{
-			m_isJustedR = true;
-			m_chara->SetIKSpeed(0.5f, m_footR);
+			m_isJustedEnd = true;
+			m_chara->SetIKSpeed(0.5f, endBone);
 		}
 		auto up = m_dir * -1.f;
 		up.y += 2.f;
 		up.Normalize();
-		m_chara->SetIKOffset(up * 40.f, m_footR);
-		m_chara->SetIKSpeed(0.2f, m_footR);
-		m_justTimeR += delTime;
+		m_chara->SetIKOffset(up * 40.f, endBone);
+		m_chara->SetIKSpeed(0.2f, endBone);
+		m_justTimeEnd += delTime;
 	}
 }
 

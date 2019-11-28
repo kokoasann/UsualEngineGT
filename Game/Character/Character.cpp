@@ -222,17 +222,6 @@ void Character::Update()
 	rot.Multiply(m_rotate);
 	m_model->SetRot(rot);
 	m_rotate = ue::CQuaternion::Identity();
-	
-}
-
-void Character::SetMoveFunc(const ue::SkinModelRender::MoveFunc& movefunc)
-{
-	m_model->SetMoveFunc(movefunc);
-}
-
-void Character::SetRotateFunc(const ue::SkinModelRender::RotateFunc& rotatefunc)
-{
-	m_model->SetRotateFunc(rotatefunc);
 }
 
 void Character::AddEventListener(const ue::Animation::EventListener& ev)
@@ -248,16 +237,6 @@ void Character::ModeMove()
 void Character::ModeRotate()
 {
 	m_actionMode = AM_Rotate;
-}
-
-const ue::CVector3& Character::GetPos()
-{
-	return m_model->GetPos();
-}
-
-const ue::CQuaternion& Character::GetRot()
-{
-	return m_model->GetRot();
 }
 
 void Character::PlayAnim(int anim, float lerp, float start, ActionMode am)

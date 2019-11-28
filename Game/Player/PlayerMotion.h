@@ -41,10 +41,15 @@ private:
 	Character* m_chara = nullptr;					//外身。
 	ue::Camera* m_camera = nullptr;
 	ue::AnimationClip* m_anim = nullptr;
-	ue::Pad* m_pad = 0;
+	ue::Pad* m_pad = nullptr;
+
+	ue::SkinModelRender::MoveFunc m_noneMF;
+	ue::SkinModelRender::RotateFunc m_noneRF;
+	ue::SkinModelRender::MoveFunc m_walkMF;
 
 	bool m_isWalk = false;
 	PlayerAnim m_PlayingAnim = PlayerAnim::PA_idol;
+	float m_animLugBase = 0.2f;
 	float m_animLug = 0.2f;
 	float m_animLug_2idle = 0.0f;
 	float m_lugTime = 0.f;
@@ -52,15 +57,27 @@ private:
 	ue::CVector3 m_dir = ue::CVector3::AxisZ();
 	float m_oldSpeedBuff = 0.0f;
 	float m_oldSpeed = 0.0f;
+	enum EChangeWalk
+	{
+		CW_slow2fast,		//遅い移動から速い移動に変化した
+		CW_fast2slow		//速い移動から遅い移動に変化した
+	};
+	EChangeWalk m_changeWalk = CW_slow2fast;
 
-	ue::SkinModelRender::MoveFunc m_walkFunc;
 	ue::Bone* m_footL = nullptr;
 	ue::Bone* m_footR = nullptr;
-	bool m_isJustedL = false;
-	bool m_isJustedR = false;
-	float m_justTimeL = 0.f;
-	float m_justTimeR = 0.f;
+	bool m_isJustedEnd = false;
+	bool m_isJustedStart = false;
+	float m_justTimeEnd = 0.f;
+	float m_justTimeStart = 0.f;
+	enum EJustFoot
+	{
+		JF_footL,		//左足から調整する。
+		JF_footR		//右足から調整する。
+	};
+	EJustFoot m_startJustFoot = JF_footL;
+	bool m_isStartJustFoot = false;
 
-	float m_walkFastSpeed = 500.f;
+	float m_walkFastSpeed = 300.f;
 	float m_dushSpeed = 800.f;
 };
