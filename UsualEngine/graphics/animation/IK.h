@@ -65,12 +65,32 @@ namespace UsualEngine
 		/// <summary>
 		/// 
 		/// </summary>
+		Bone* GetEffectorBone() const
+		{
+			return m_effectorBone;
+		}
+		/// <summary>
+		/// 
+		/// </summary>
 		/// <param name="bone"></param>
 		void SetEndBone(Bone* bone)
 		{
 			m_endBone = bone;
 		}
-
+		/// <summary>
+		/// 
+		/// </summary>
+		Bone* GetEndBone() const
+		{
+			return m_endBone;
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		const CVector3& GetTarget() const
+		{
+			return m_target;
+		}
 		/// <summary>
 		/// 摩擦率をゲット
 		/// </summary>
@@ -96,8 +116,16 @@ namespace UsualEngine
 		{
 			m_offset = v;
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="f"></param>
+		void SetSpeed(float f)
+		{
+			m_speed = f;
+		}
 	private:
-
+		bool m_isFirst = true;					//初めてか？
 		Bone* m_effectorBone=0;					//エフェクタボーン
 		Bone* m_endBone=0;						//エンドボーン
 		float m_radius = 0.f;					//コライダーの半径。
@@ -111,6 +139,7 @@ namespace UsualEngine
 		CVector3 m_rubTarget = CVector3::Zero();		//擦った先のポジション。
 		CVector3 m_move = CVector3::Zero();			//移動ベクトル
 		bool m_isUseLocalTarget = 1;
+		float m_speed = 1.f;					//次のターゲットに移動するときの速度(%)。1なら1フレームで移動する。0なら動かない。
 
 		bool m_isHit = false;					//当たった？
 		float m_rubbing = 1.0f;					//摩擦率、初期値は100%　滑ることはない。

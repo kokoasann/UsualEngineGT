@@ -32,6 +32,17 @@ namespace UsualEngine
 		/// <param name="animCount">アニメーションクリップの数</param>
 		/// <param name="axis">モデルの軸</param>
 		void Init(const wchar_t* path, AnimationClip* anims = nullptr, int animCount = 0, EnFbxUpAxis axis = enFbxUpAxisZ);
+
+		/// <summary>
+		/// アニメーションを再生する
+		/// </summary>
+		/// <param name="animNo">アニメーションクリップの番号</param>
+		/// <param name="interpolateTime">補間時間</param>
+		/// <param name="startTime">アニメーションの始まる時間</param>
+		void PlayAnim(int animNo, float interpolateTime = 0.f, float startTime = 0.f)
+		{
+			m_animation.Play(animNo, interpolateTime, startTime);
+		}
 		
 		/// <summary>
 		/// ポジションをセットする

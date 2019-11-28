@@ -89,6 +89,32 @@ namespace UsualEngine
 		{
 			return m_isPlaying;
 		}
+
+		/// <summary>
+		/// 再生時間の設定。
+		/// </summary>
+		/// <param name="t"></param>
+		void SetTime(float t)
+		{
+			m_time = t;
+		}
+
+		/// <summary>
+		/// アニメーションクリップのフレーム数。
+		/// </summary>
+		/// <returns></returns>
+		int GetFrameNum() const
+		{
+			return m_animationClip->GetFrameNum();
+		}
+		/// <summary>
+		/// 現在のフレームの番号。
+		/// </summary>
+		/// <returns></returns>
+		int GetCurrentKeyFrameNo() const
+		{
+			return m_currentKeyFrameNo;
+		}
 	private:
 
 		/*!

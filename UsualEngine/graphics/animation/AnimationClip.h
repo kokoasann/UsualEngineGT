@@ -166,6 +166,11 @@ namespace UsualEngine
 			return m_clipName;
 		}
 
+		int GetFrameNum() const
+		{
+			return m_keyFramePtrListArray[0].size();
+		}
+
 	private:
 		std::string m_clipName = std::string();									//
 		bool m_isLoop = false;									//!<ループフラグ。

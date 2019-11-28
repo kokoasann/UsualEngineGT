@@ -40,9 +40,9 @@ namespace UsualEngine
 		*@param[in]	clipNo	アニメーションクリップの番号。Init関数に渡したanimClipListの並びとなる。
 		*@param[in]	interpolateTime		補完時間(単位：秒)
 		*/
-		void Play(int clipNo, float interpolateTime = 0.0f)
+		void Play(int clipNo, float interpolateTime = 0.0f,float startTime = 0.0f)
 		{
-			PlayCommon(m_animationClips[clipNo], interpolateTime);
+			PlayCommon(m_animationClips[clipNo], interpolateTime,startTime);
 		}
 		/*!
 		* @brief	アニメーションの再生中？
@@ -101,6 +101,21 @@ namespace UsualEngine
 		{
 			return m_ik[num];
 		}
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="bone"></param>
+		const CVector3& GetIKTarget(Bone* bone) const
+		{
+			for (auto ik : m_ik)
+			{
+				if (bone == ik->GetEffectorBone())
+				{
+					return ik->GetTarget();
+				}
+			}
+		}
 
 		/// <summary>
 		/// アニメーションの保持するIKの摩擦率をセットする
@@ -113,14 +128,10 @@ namespace UsualEngine
 				ik->SetRubbing(f);
 			}
 		}
-		void SetIKOffset(CVector3 ofs)
-		{
-			for (auto ik : m_ik)
-			{
-				ik->SetOffset(ofs);
-			}
-		}
-
+		
+		void SetIKOffset(CVector3 ofs, Bone* bone = nullptr);
+		
+		void SetIKSpeed(float speed, Bone* bone = nullptr);
 		/// <summary>
 		/// 
 		/// </summary>
@@ -129,8 +140,18 @@ namespace UsualEngine
 		/// 
 		/// </summary>
 		void UpdateIK();
+		
+		int GetFrameNum() const
+		{
+			return m_animationPlayController[GetLastAnimationControllerIndex()].GetFrameNum();
+		}
+
+		int GetCurrentFrameNo() const
+		{
+			return m_animationPlayController[GetLastAnimationControllerIndex()].GetCurrentKeyFrameNo();
+		}
 	private:
-		void PlayCommon(AnimationClip* nextClip, float interpolateTime)
+		void PlayCommon(AnimationClip* nextClip, float interpolateTime, float startTime)
 		{
 			int index = GetLastAnimationControllerIndex();
 			if (m_animationPlayController[index].GetAnimClip() == nextClip) {
@@ -147,6 +168,7 @@ namespace UsualEngine
 			index = GetLastAnimationControllerIndex();
 			m_animationPlayController[index].ChangeAnimationClip(nextClip);
 			m_animationPlayController[index].SetInterpolateTime(interpolateTime);
+			m_animationPlayController[index].SetTime(startTime);
 			m_interpolateTime = 0.0f;
 			m_interpolateTimeEnd = interpolateTime;
 		}
@@ -158,8 +180,6 @@ namespace UsualEngine
 			* @brief	グローバルポーズの更新。
 			*/
 		void UpdateGlobalPose();
-
-		
 	private:
 
 		/*!

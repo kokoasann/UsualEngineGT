@@ -22,15 +22,59 @@ namespace UsualEngine
 				chit += 1;
 				return 0.0f;
 			}
-			isHit = true;
-			CVector3 hitp = *(CVector3*)& convexResult.m_hitPointLocal;
-			CVector3 div = startPos - hitp;
-			float dis = div.Length();
-			if (dis < dist)
+			CVector3 norm;
+			norm.Set(convexResult.m_hitNormalLocal);
+			auto rad = fabsf(acosf(norm.Dot(CVector3::Up())));
+			if (rad > CMath::PI * 0.3f || true)
 			{
-				hitNormal = *(CVector3*)& convexResult.m_hitNormalLocal;
-				hitPos = *(CVector3*)& convexResult.m_hitPointLocal;
-				dist = dis;
+				isHit = true;
+				CVector3 hitp = *(CVector3*)& convexResult.m_hitPointLocal;
+				CVector3 div = startPos - hitp;
+				float dis = div.Length();
+				if (dis < dist)
+				{
+					hitNormal = *(CVector3*)& convexResult.m_hitNormalLocal;
+					hitNormal.Normalize();
+					hitPos = *(CVector3*)& convexResult.m_hitPointLocal;
+					dist = dis;
+				}
+			}
+			return 0.0f;
+		}
+	};
+	//IK用の当たり判定のやつ(壁用)
+	struct SweepResultIK_Wall : public btCollisionWorld::ConvexResultCallback
+	{
+		bool isHit = false;
+		CVector3 hitPos = CVector3::Zero();
+		CVector3 startPos = CVector3::Zero();
+		CVector3 hitNormal = CVector3::Zero();
+		float dist = FLT_MAX;
+		btCollisionObject* me = nullptr;
+		int chit = 0;
+
+		btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
+		{
+			if (convexResult.m_hitCollisionObject == me || convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_Character)
+			{
+				chit += 1;
+				return 0.0f;
+			}
+			CVector3 norm;
+			norm.Set(convexResult.m_hitNormalLocal);
+			auto rad = fabsf(acosf(norm.Dot(CVector3::Up())));
+			if (rad > CMath::PI * 0.3f)
+			{
+				isHit = true;
+				CVector3 hitp = *(CVector3*)& convexResult.m_hitPointLocal;
+				CVector3 div = startPos - hitp;
+				float dis = div.Length();
+				if (dis < dist)
+				{
+					hitNormal = *(CVector3*)& convexResult.m_hitNormalLocal;
+					hitPos = *(CVector3*)& convexResult.m_hitPointLocal;
+					dist = dis;
+				}
 			}
 			return 0.0f;
 		}
@@ -118,19 +162,22 @@ namespace UsualEngine
 		auto effpos = effmat.GetTranslation();
 		auto currentBone = m_effectorBone->GetParent();						//作業中のボーン
 
-		auto newpos = effpos;	//移動先のポジション
+		auto newpos = effpos + m_offset;	//移動先のポジション
 
 		auto oldpos = m_effectorBone->GetWorldMatrix().GetTranslation();	//移動前のポジション
-		static bool b = 0;
-		if (!b)
+		if (m_isFirst)
 		{
 			oldpos += worldMat.GetTranslation();
-			b = 1;
+			m_isFirst = false;
+		}
+		else
+		{
+			oldpos = m_target;
 		}
 		if ((newpos - oldpos).Length() < 0.000001f)
 			return;
-
-		oldpos.y += m_radius;
+		
+		//oldpos.y += m_radius;
 
 		SweepResultIK sr;
 		sr.startPos = oldpos;
@@ -147,24 +194,34 @@ namespace UsualEngine
 		Physics().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), bstart, bend, sr);
 		if (sr.isHit)
 		{
-			if (!m_isHit)
+			auto rad = fabsf(acosf(sr.hitNormal.Dot(CVector3::Up())));
+			if (rad > CMath::PI * 0.3f)
+			{
+				auto norm = sr.hitNormal;
+				norm.Normalize();
+				auto meri = newpos - sr.hitPos;
+
+				float rad = norm.Dot(meri);
+				target = newpos + sr.hitNormal * (-rad + m_radius);
+				m_rubTarget = target;
+			}
+			else if (!m_isHit)
 			{
 				m_effectorBone->SetIsONGround(true);
 
 				auto norm = sr.hitNormal;
 				norm.Normalize();
 				auto meri = newpos - sr.hitPos;
-				float rad = meri.Dot(norm);
-				auto ntarget = target + sr.hitNormal * (-rad + m_radius);
-				target = sr.hitPos;
-				target += sr.hitNormal * (-rad + m_radius + m_radius);
-				target.Lerp(m_rubbing, newpos, target);
+
+				float rad = norm.Dot(meri);
+				auto ntarget = newpos + sr.hitNormal * (-rad + m_radius);
+				target = sr.hitPos + sr.hitNormal * (m_radius);
+				target.Lerp(m_rubbing, ntarget, target);
 				m_rubTarget = ntarget;
 			}
 			else
 			{
-				target.Lerp(m_rubbing, newpos, m_rubTarget);
-				
+				target.Lerp(m_rubbing, m_rubTarget, m_target);
 			}
 		}
 		else
@@ -179,12 +236,32 @@ namespace UsualEngine
 				m_effectorBone->SetMomentum(CVector3::Zero());
 			}
 		}
-		m_rubTarget = target;
-		m_target = target + m_offset;
+
+		/*SweepResultIK_Wall sr_w;
+		Physics().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), bstart, bend, sr_w);
+		if (sr_w.isHit)
+		{
+			if (!m_isHit)
+			{
+				m_effectorBone->SetIsONGround(true);
+
+				auto norm = sr_w.hitNormal;
+				norm.Normalize();
+				auto meri = newpos - sr_w.hitPos;
+
+				float rad = norm.Dot(meri);
+				auto ntarget = newpos + sr_w.hitNormal * (-rad + m_radius);
+
+			}
+		}*/
+
+		//m_rubTarget += (target-oldpos)*m_speed;
+		m_target += (target-oldpos)*m_speed;
 		m_isHit = sr.isHit;
 		m_move = newpos-m_target;
 		//auto o2n = m_target - oldpos;
 		m_effectorBone->SetMove(m_move);
+		m_offset = CVector3::Zero();
 
 		UpdateRigidBody(m_target);
 	}
@@ -364,7 +441,7 @@ namespace UsualEngine
 #else
 		if (!m_isHit and 0)
 			return;
-		for (int i = 0; i < 1; i++)
+		for (int i = 0; i < 3; i++)
 		{
 			auto effmat = GetBoneWorldMatrix(m_effectorBone, worldMat);
 			auto effpos = effmat.GetTranslation();

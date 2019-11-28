@@ -30,7 +30,7 @@ bool Game::Start()
 	p1->SetIsShadowCaster(true);
 	p1->SetIsShadowReciever(true);
 
-	cc.Init(50, 100, { 0,100,-1000 });
+	cc.Init(50, 100, { 0,100,-1000 }, false);
 
 	auto& anim = p1->GetAnimation();
 	anim.AddEventListener([&](const auto & clipname, const auto & eventname)
@@ -328,7 +328,7 @@ void Game::Update()
 	
 	static std::vector<ue::SkinModelRender*> list;
 
-	if (pad.IsTrigger(ue::enButtonA))
+	/*if (pad.IsTrigger(ue::enButtonA))
 	{
 		if (list.size() != 0)
 		{
@@ -343,7 +343,7 @@ void Game::Update()
 		p1->SetPos({ 30,0,50 });
 		p1->Update();
 		list.push_back(p1);
-	}
+	}*/
 	if (list.size() != 0)
 	{
 		float speed = 30.f;

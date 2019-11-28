@@ -17,11 +17,11 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 	m_characon.Init(ccradius, ccheight, smr->GetPos(),false);
 	m_ccOffset = offset;
 
-	m_model->SetMoveFunc([&](ue::CVector3 & pos)
+	m_defaultMoveFunc = [&](ue::CVector3 & pos)
 	{
 		if (m_actionMode != AM_Move)
 			return;
-		static bool l=0, r =0;
+		static bool l = 0, r = 0;
 		ue::CVector3 move = ue::CVector3::Zero();
 		if (m_footR->IsONGround())
 		{
@@ -43,7 +43,7 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 
 		if (move.Length() > 0.0001f)
 		{
-			
+
 			move.y = 0;
 			move *= -1;
 			auto rpos = m_characon.Execute(1, move);
@@ -51,10 +51,9 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 			pos = rpos;
 			m_momentum += move;
 		}
-		
-	});
 
-	m_model->SetRotateFunc([&](auto & rot)
+	};
+	m_defaultRotateFunc = [&](auto & rot)
 	{
 		if (m_actionMode != AM_Rotate)
 			return;
@@ -112,7 +111,11 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 			rot.Multiply(add);
 			m_model->SetRot(rot);
 		}
-	});
+	};
+
+	m_model->SetMoveFunc(m_defaultMoveFunc);
+
+	m_model->SetRotateFunc(m_defaultRotateFunc);
 }
 
 void Character::InitAnimData(ue::AnimationClip* animclip)
@@ -257,18 +260,9 @@ const ue::CQuaternion& Character::GetRot()
 	return m_model->GetRot();
 }
 
-void Character::PlayAnim(int anim, float lerp, ActionMode am)
+void Character::PlayAnim(int anim, float lerp, float start, ActionMode am)
 {
-	m_model->GetAnimation().Play(anim, 1.f);
+	m_model->GetAnimation().Play(anim, lerp, start);
 	m_actionMode = am;
 }
 
-void Character::SetMove(const ue::CVector3& move)
-{
-	m_move = move;
-}
-
-void Character::SetRotate(const ue::CQuaternion& rot)
-{
-	m_rotate = rot;
-}

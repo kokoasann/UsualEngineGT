@@ -106,6 +106,8 @@ namespace UsualEngine
 		m_radius = radius;
 		m_height = height;
 		m_collider.Create(radius, height);
+		//m_collider.Create(radius);
+		//isUseRigidBody = true;
 		if (isUseRigidBody)
 		{
 			//„‘Ì‚ğ‰Šú‰»B
@@ -212,10 +214,17 @@ namespace UsualEngine
 					if (currentDir.Dot(originalXZDir) < 0.0f) {
 						//Šp‚É“ü‚Á‚½‚ÌƒLƒƒƒ‰ƒNƒ^‚ÌU“®‚ğ–h~‚·‚é‚½‚ß‚ÉA
 						//ˆÚ“®æ‚ª‹tŒü‚«‚É‚È‚Á‚½‚çˆÚ“®‚ğƒLƒƒƒ“ƒZƒ‹‚·‚éB
-						nextPosition.x = m_position.x;
+						/*nextPosition.x = m_position.x;
 						nextPosition.z = m_position.z;
-						break;
+						break;*/
 					}
+					char st[255] = { 0 };
+					sprintf_s(st, "nor: x:%.4f y:%.4f z:%.4f\n", callback.hitNormal.x, callback.hitNormal.y, callback.hitNormal.z);
+					OutputDebugString(st);
+					sprintf_s(st, "hip: x:%.4f y:%.4f z:%.4f\n", callback.hitPos.x, callback.hitPos.y, callback.hitPos.z);
+					OutputDebugString(st);
+					sprintf_s(st, "pos: x:%.4f y:%.4f z:%.4f\n", nextPosition.x, nextPosition.y, nextPosition.z);
+					OutputDebugString(st);
 	#endif
 				}
 				else {
@@ -223,7 +232,7 @@ namespace UsualEngine
 					break;
 				}
 				loopCount++;
-				if (loopCount == 5) {
+				if (loopCount == 1) {
 					break;
 				}
 			}

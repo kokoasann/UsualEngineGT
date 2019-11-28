@@ -41,6 +41,13 @@ namespace UsualEngine
 			float sv = 1.f / v;
 			Scale(sv);
 		}
+
+
+		float Length() const
+		{
+			DirectX::XMVECTOR xmv = DirectX::XMLoadFloat2(&vec);
+			return DirectX::XMVector2Length(xmv).m128_f32[0];
+		}
 		/*!
 		* @brief	ê¸å`ï‚ä‘ÅB
 		*@details

@@ -211,4 +211,47 @@ namespace UsualEngine
 		//IK no Update
 		//UpdateIK();
 	}
+
+	void Animation::SetIKOffset(CVector3 ofs, Bone* bone)
+	{
+		if (bone == nullptr)
+		{
+			for (auto ik : m_ik)
+			{
+				ik->SetOffset(ofs);
+			}
+		}
+		else
+		{
+			for (auto ik : m_ik)
+			{
+				if (bone == ik->GetEffectorBone())
+				{
+					ik->SetOffset(ofs);
+					return;
+				}
+			}
+		}
+	}
+	void Animation::SetIKSpeed(float speed, Bone* bone)
+	{
+		if (bone == nullptr)
+		{
+			for (auto ik : m_ik)
+			{
+				ik->SetSpeed(speed);
+			}
+		}
+		else
+		{
+			for (auto ik : m_ik)
+			{
+				if (bone == ik->GetEffectorBone())
+				{
+					ik->SetSpeed(speed);
+					return;
+				}
+			}
+		}
+	}
 }

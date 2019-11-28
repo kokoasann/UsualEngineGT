@@ -96,6 +96,20 @@ public:
 	/// </summary>
 	/// <param name="rotatefunc"></param>
 	void SetRotateFunc(const ue::SkinModelRender::RotateFunc& rotatefunc);
+	/// <summary>
+	/// MoveFuncをデフォルトのものにする
+	/// </summary>
+	void SetDefaultMoveFunc()
+	{
+		m_model->SetMoveFunc(m_defaultMoveFunc);
+	}
+	/// <summary>
+	/// RotateFuncをデフォルトのものにする
+	/// </summary>
+	void SetDefaultRotateFunc()
+	{
+		m_model->SetRotateFunc(m_defaultRotateFunc);
+	}
 
 	/// <summary>
 	/// イベントリスナーを加える
@@ -128,8 +142,9 @@ public:
 	/// </summary>
 	/// <param name="anim">再生するアニメーション</param>
 	/// <param name="lerp">アニメーションの保管時間(秒) 初期値は1秒</param>
+	/// <param name="start">アニメーションの始まる時間</param>
 	/// <param name="am">アニメーションによるアクションで何をさせたいか 設定しない場合は何もしない</param>
-	void PlayAnim(int anim, float lerp = 1.0f, ActionMode am = AM_None);
+	void PlayAnim(int anim, float lerp = 1.0f,float start = 0.0f, ActionMode am = AM_None);
 	
 	/// <summary>
 	/// 全てIKは、摩擦率がfになる。
@@ -139,16 +154,65 @@ public:
 	{
 		m_model->SetAllIKRub(f);
 	}
-
-	void SetMove(const ue::CVector3& move);
-	void SetRotate(const ue::CQuaternion& rot);
+	/// <summary>
+	/// 引数moveの分だけ移動する
+	/// </summary>
+	/// <param name="move"></param>
+	void SetMove(const ue::CVector3& move)
+	{
+		m_move = move;
+	}
+	/// <summary>
+	/// 引数rotの分だけ回転する
+	/// </summary>
+	/// <param name="rot"></param>
+	void SetRotate(const ue::CQuaternion& rot)
+	{
+		m_rotate = rot;
+	}
+	/// <summary>
+	/// 回転を
+	///	　直接っ！
+	/// SkinModelRenderに入れる
+	/// </summary>
+	/// <param name="rot"></param>
 	void SetRotation(const ue::CQuaternion& rot)
 	{
 		m_model->SetRot(rot);
 	}
-	void SetIKOffset(const ue::CVector3& v)
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="bone"></param>
+	const ue::CVector3& GetIKTarget(ue::Bone* bone) const
 	{
-		m_model->GetAnimation().SetIKOffset(v);
+		return m_model->GetAnimation().GetIKTarget(bone);
+	}
+	/// <summary>
+	/// IKのターゲットを動かすオフセット
+	/// </summary>
+	/// <param name="v"></param>
+	void SetIKOffset(const ue::CVector3& v, ue::Bone* bone = nullptr)
+	{
+		m_model->GetAnimation().SetIKOffset(v,bone);
+	}
+	/// <summary>
+	/// IKのターゲットを動かす速度(%)1なら1フレームで移動する。0なら動かない。
+	/// </summary>
+	/// <param name="speed"></param>
+	/// <param name="bone">speedを入れるボーン.nullptrの場合は全てにspeedが適応される</param>
+	void SetIKSpeed(float speed, ue::Bone* bone = nullptr)
+	{
+		m_model->GetAnimation().SetIKSpeed(speed, bone);
+	}
+	/// <summary>
+	/// SkinModelRenderの所持するAnimationを持ってくる
+	/// </summary>
+	/// <returns></returns>
+	const ue::Animation& GetAnimation() const
+	{
+		return m_model->GetAnimation();
 	}
 private:
 	ue::SkinModelRender* m_model = nullptr;		//モデルのポインタ
@@ -163,7 +227,9 @@ private:
 	ue::CVector3 m_ccOffset;					//キャラコンのオフセット(基本的にy軸だけ)
 	ActionMode m_actionMode = AM_Move;			//なんの動きをしているか
 	float m_gravity = -200.0f;					//重力。
-	ue::CVector3 m_momentum = ue::CVector3::Zero();
-	ue::CVector3 m_move = ue::CVector3::Zero();
-	ue::CQuaternion m_rotate = ue::CQuaternion::Identity();
+	ue::CVector3 m_momentum = ue::CVector3::Zero();		//勢い(多分消す)
+	ue::CVector3 m_move = ue::CVector3::Zero();					//クラス外からアクセスするための移動ベクトル
+	ue::CQuaternion m_rotate = ue::CQuaternion::Identity();		//クラス外からアクセスするための回転クォータニオン
+	ue::SkinModelRender::MoveFunc m_defaultMoveFunc;			//デフォルトのMoveFunc
+	ue::SkinModelRender::RotateFunc m_defaultRotateFunc;		//デフォルトのRotateFunc
 };
