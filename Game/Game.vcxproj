@@ -152,8 +152,10 @@
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="_Test\Ene_Tes.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="_Test\Ene_Tes.h" />
     <FxCompile Include="Assets\shader\Bloom.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>

@@ -22,6 +22,9 @@
     <ClCompile Include="Player\PlayerMotion.cpp">
       <Filter>Player</Filter>
     </ClCompile>
+    <ClCompile Include="_Test\Ene_Tes.cpp">
+      <Filter>_Tes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -46,6 +49,9 @@
     </ClInclude>
     <ClInclude Include="Player\PlayerMotion.h">
       <Filter>Player</Filter>
+    </ClInclude>
+    <ClInclude Include="_Test\Ene_Tes.h">
+      <Filter>_Tes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -78,6 +84,9 @@
     </Filter>
     <Filter Include="Enemy\Gib">
       <UniqueIdentifier>{61cd68e1-f41b-48d5-90d8-b50e60e1776a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_Tes">
+      <UniqueIdentifier>{fb57bdf4-8c69-4472-8f1f-d2523ec96694}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,7 @@
 #pragma once
-
+/// <summary>
+/// プレイヤーの移動関係のクラス
+/// </summary>
 class Player;
 class Character;
 class PlayerMotion:public ue::GameObject
@@ -19,7 +21,6 @@ public:
 	~PlayerMotion(){}
 
 	void Init(Player* player, Character* chara, ue::Camera* cam, ue::AnimationClip* anim,ue::Pad* pad);
-	void InitBone(ue::Bone* footL, ue::Bone* footR);
 
 	void Update()override;
 
@@ -45,7 +46,6 @@ private:
 
 	ue::SkinModelRender::MoveFunc m_noneMF;
 	ue::SkinModelRender::RotateFunc m_noneRF;
-	ue::SkinModelRender::MoveFunc m_walkMF;
 
 	bool m_isWalk = false;
 	PlayerAnim m_PlayingAnim = PlayerAnim::PA_idol;
@@ -78,6 +78,7 @@ private:
 	EJustFoot m_startJustFoot = JF_footL;
 	bool m_isStartJustFoot = false;
 
-	float m_walkFastSpeed = 300.f;
+	float m_walkSpeed = 150.f;
+	float m_walkFastSpeed = 500.f;
 	float m_dushSpeed = 800.f;
 };

@@ -80,6 +80,15 @@ public:
 	/// <param name="radius">IKするときのコライダーの大きさ</param>
 	/// <returns></returns>
 	ue::Bone* FindBone(wstr name,BoneKind bk=BK_None,bool isSetingIK=false,int len=0,float radius=10.f);
+	/// <summary>
+	/// ボーンをセットする。
+	/// </summary>
+	/// <param name="bone">セットするボーン</param>
+	/// <param name="bk">どこの部位か。当てはまるenumがない場合はBK_None</param>
+	/// <param name="isSetingIK">IKをする？</param>
+	/// <param name="len">IKする範囲</param>
+	/// <param name="radius">IKするときのコライダーの大きさ</param>
+	void SetBone(ue::Bone* bone, BoneKind bk = BK_None,bool isSetingIK = false, int len = 0, float radius = 10.f);
 
 	/// <summary>
 	/// 更新。

@@ -121,6 +121,28 @@ namespace UsualEngine
 		mat.Mul(wm, inv);
 		return mat;
 	}
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="effector"></param>
+	/// <param name="end"></param>
+	/// <returns></returns>
+	float GetLengthEffector2End(Bone* effector, Bone* end)
+	{
+		float len = 0.f;
+		CVector3 vlen = CVector3::Zero();
+		Bone* pb=effector->GetParent();
+		for (Bone* cb = effector; pb != end; pb = cb->GetParent())
+		{
+			vlen += (cb->GetWorldMatrix().GetTranslation() - pb->GetWorldMatrix().GetTranslation());
+			cb = pb;
+		}
+		for (Bone* b = effector; b != end; b = b->GetParent())
+		{
+			len += b->GetWorldMatrix().GetTranslation().Length();
+		}
+		return len;
+	}
 
 
 	IK::IK(Bone* effector, Bone* end, float radius, bool isOnRigitBody, const CVector3& pos) :
@@ -257,6 +279,13 @@ namespace UsualEngine
 
 		//m_rubTarget += (target-oldpos)*m_speed;
 		m_target += (target-oldpos)*m_speed;
+		/*auto e2e = GetLengthEffector2End(m_effectorBone, m_endBone);
+		auto t2e = (m_target - GetBoneWorldMatrix(m_endBone, worldMat).GetTranslation()).Length();
+		if (e2e+e2e*0.3+m_radius*2 < t2e)
+		{
+			m_target = newpos;
+		}*/
+
 		m_isHit = sr.isHit;
 		m_move = newpos-m_target;
 		//auto o2n = m_target - oldpos;

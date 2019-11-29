@@ -20,11 +20,6 @@ void PlayerMotion::Init(Player* player, Character* chara, ue::Camera* cam, ue::A
 	m_chara->SetRotateFunc(m_noneRF);
 }
 
-void PlayerMotion::InitBone(ue::Bone* footL, ue::Bone* footR)
-{
-	m_footL = footL;
-	m_footR = footR;
-}
 
 void PlayerMotion::Update()
 {
@@ -95,7 +90,7 @@ void PlayerMotion::Move(const ue::CVector2& padStick, PlayerAnim pa, float moves
 		}
 		m_chara->PlayAnim(pa, m_animLug, ntime, (Character::ActionMode)am);
 		m_isWalk = true;
-		m_chara->SetAllIKRub(1.0f);
+		//m_chara->SetAllIKRub(1.0f);
 		m_chara->SetMoveFunc(m_noneMF);
 	}
 
@@ -168,6 +163,9 @@ void PlayerMotion::Walk2Idle(float delTime)
 		}
 		if (m_animLug_2idle == 0.f)
 			return;
+
+		if (m_PlayingAnim == PA_walk)
+			m_moved = m_dir * m_walkSpeed;
 
 		m_chara->PlayAnim(PA_idol, m_animLug_2idle, Character::AM_None);
 		m_isWalk = false;

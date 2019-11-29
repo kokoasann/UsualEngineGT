@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Game.h"
 #include "Player/Player.h"
+#include "Enemy/Gib/Ene_Gib.h"
 
 
 Game::Game()
@@ -16,178 +17,180 @@ void Game::OnDestroy()
 bool Game::Start()
 {
 	ue::NewGO<Player>(0);
-	animclip[0].Load(L"Assets/model/gib/gib.rotation.tka");
-	animclip[0].SetLoopFlag(true);
-	animclip[1].Load(L"Assets/model/Player/player_idol.tka");
-	animclip[1].SetLoopFlag(true);
-
-	ue::CQuaternion rot;
+	ue::NewGO<Ene_Gib>(0);
 	cam = &ue::usualEngine()->GetMainCamera();
-	p1 = ue::NewGO<ue::SkinModelRender>(0);
-	p1->Init(L"Assets/model/gib.bone.cmo", animclip, 1,ue::enFbxUpAxisY);
-	p1->SetPos({ 0,-60,-1000 });
-	p1->SetSca({ 100,100,100 });
-	p1->SetIsShadowCaster(true);
-	p1->SetIsShadowReciever(true);
-
-	cc.Init(50, 100, { 0,100,-1000 }, false);
-
-	auto& anim = p1->GetAnimation();
-	anim.AddEventListener([&](const auto & clipname, const auto & eventname)
-	{
-		if (eventname.substr(eventname.size() - 2, 2) == "st")
-		{
-			if (eventname[5] == 'L')
-			{
-				m_isleftON = true;
-				m_isrightON = false;
-				count = 0;
-			}
-			else if (eventname[5] == 'R')
-			{
-				m_isleftON = false;
-				m_isrightON = true;
-				count = 0;
-			}
-		}
-	});
-	
-
-	for (auto bone : p1->GetSkinModel().GetSkeleton().GetAllBone())
-	{
-		if (Rfoot==NULL && lstrcmpW(bone->GetName(), L"IK_Bone.007_R.003") == 0)
-		{
-			Rfoot = bone;
-		}
-		else if(Lfoot == NULL && lstrcmpW(bone->GetName(), L"IK_Bone.007_L.003") == 0)
-		{
-			Lfoot = bone;
-		}
-		else if (Rwaist == NULL && lstrcmpW(bone->GetName(), L"Bone.007_R") == 0)
-		{
-			Rwaist = bone;
-		}
-	}
-	p1->SetingIK(Rfoot, Rfoot->GetParent()->GetParent()->GetParent(), 70.f);
-	p1->SetingIK(Lfoot, Lfoot->GetParent()->GetParent(), 60.f);
-	p1->SetingIK(Rfoot->GetChildren()[0], Rfoot, 10.f);
-	p1->SetingIK(Lfoot->GetChildren()[0], Lfoot, 10.f);
-
-	p1->SetMoveFunc([&](ue::CVector3 & pos)
-	{
-		return;
-		ue::CVector3 move = ue::CVector3::Zero();
-		ue::CVector3 moveR = ue::CVector3::Zero();
-		ue::CVector3 moveL = ue::CVector3::Zero();
-		if (Rfoot->IsONGround())
-		{
-			move = Rfoot->GetMove();
-		}
-		if (Lfoot->IsONGround())
-		{
-			move += Lfoot->GetMove();
-		}
-		/*if (moveR.Length() > moveL.Length())
-		{
-			move = moveR;
-		}
-		else
-		{
-			move = moveL;
-		}*/
-		if (move.Length()>0.0001f)
-		{
-			move.y = 0;
-			move *= -1;
-			//move.y *= -1;
-			//move.y += -1;
-			auto rpos = cc.Execute(1, move);
-			rpos.y -= modeloffset;
-			pos = rpos;
-			//pos += move;
-		}
-	});
-	p1->SetRotateFunc([&](auto & rot)
-	{
-		//return;
-		if (Rfoot->IsONGround())
-		{
-			auto mold = Rwaist->GetOldWorldMatrix();
-			auto mnew = Rwaist->GetBaseWorldMatrix();
-			//分改！！
-			ue::CQuaternion rold, rnew;
-			auto pos = ue::CVector3::Zero(), sca = ue::CVector3::Zero();
-			mold.CalcMatrixDecompose(pos, rold, sca);
-			mnew.CalcMatrixDecompose(pos, rnew, sca);
-
-			//バインディングポーズの
-			ue::CQuaternion rloc;
-			auto bmat = Rwaist->GetBindPoseMatrix();
-			bmat.CalcMatrixDecompose(pos, rloc, sca);
-			ue::CVector3 axis = ue::CVector3::AxisZ();
-			rloc.Multiply(axis);
-			ue::CVector3 vold = axis, vnew = axis;
-			rold.Multiply(vold);
-			rnew.Multiply(vnew);
-
-			vold.y = 0;
-			vnew.y = 0;
-
-			vold.Normalize();
-			vnew.Normalize();
-
-			float rad = vold.Dot(vnew);
-			rad = min(rad, 1);
-			rad = acos(rad);
-			
-			ue::CQuaternion add;
-			add.SetRotation(ue::CVector3::AxisY(), rad*-1);
-
-			auto fpos = Rfoot->GetWorldMatrix().GetTranslation();
-			//fpos -= Rfoot->GetMove();
-			auto mpos = p1->GetPos();
-			fpos.y = 0;
-			mpos.y = 0;
-			auto f2m = mpos - fpos;
-
-			add.Multiply(f2m);
-			auto npos = fpos + f2m;
-			auto m2n = npos - mpos;
-
-			auto rpos = cc.Execute(1, m2n);
-			rpos.y -= modeloffset;
-			p1->SetPos(rpos);
-
-			auto rot = p1->GetRot();
-			rot.Multiply(add);
-			p1->SetRot(rot);
-		}
-#if 0
-		{
-			ue::CQuaternion adrot;
-			adrot.SetRotationDeg(ue::CVector3::AxisY(), 1);
-
-			auto fpos = Rfoot->GetWorldMatrix().GetTranslation();
-			//fpos -= Rfoot->GetMove();
-			auto mpos = p1->GetPos();
-			fpos.y = 0;
-			mpos.y = 0;
-			auto f2m = mpos - fpos;
-
-			adrot.Multiply(f2m);
-			auto npos = fpos + f2m;
-			auto m2n = npos - mpos;
-
-			auto rpos = cc.Execute(1, m2n);
-			rpos.y -= modeloffset;
-			p1->SetPos(rpos);
-
-			auto rot = p1->GetRot();
-			rot.Multiply(adrot);
-			p1->SetRot(rot);
-		}
-#endif
-	});
+//	animclip[0].Load(L"Assets/model/gib/gib.rotation.tka");
+//	animclip[0].SetLoopFlag(true);
+//	animclip[1].Load(L"Assets/model/Player/player_idol.tka");
+//	animclip[1].SetLoopFlag(true);
+//
+//	ue::CQuaternion rot;
+//	
+//	p1 = ue::NewGO<ue::SkinModelRender>(0);
+//	p1->Init(L"Assets/model/gib.bone.cmo", animclip, 1,ue::enFbxUpAxisY);
+//	p1->SetPos({ 0,-60,-1000 });
+//	p1->SetSca({ 100,100,100 });
+//	p1->SetIsShadowCaster(true);
+//	p1->SetIsShadowReciever(true);
+//
+//	cc.Init(50, 100, { 0,100,-1000 }, false);
+//
+//	auto& anim = p1->GetAnimation();
+//	anim.AddEventListener([&](const auto & clipname, const auto & eventname)
+//	{
+//		if (eventname.substr(eventname.size() - 2, 2) == "st")
+//		{
+//			if (eventname[5] == 'L')
+//			{
+//				m_isleftON = true;
+//				m_isrightON = false;
+//				count = 0;
+//			}
+//			else if (eventname[5] == 'R')
+//			{
+//				m_isleftON = false;
+//				m_isrightON = true;
+//				count = 0;
+//			}
+//		}
+//	});
+//	
+//
+//	for (auto bone : p1->GetSkinModel().GetSkeleton().GetAllBone())
+//	{
+//		if (Rfoot==NULL && lstrcmpW(bone->GetName(), L"IK_Bone.007_R.003") == 0)
+//		{
+//			Rfoot = bone;
+//		}
+//		else if(Lfoot == NULL && lstrcmpW(bone->GetName(), L"IK_Bone.007_L.003") == 0)
+//		{
+//			Lfoot = bone;
+//		}
+//		else if (Rwaist == NULL && lstrcmpW(bone->GetName(), L"Bone.007_R") == 0)
+//		{
+//			Rwaist = bone;
+//		}
+//	}
+//	p1->SetingIK(Rfoot, Rfoot->GetParent()->GetParent()->GetParent(), 70.f);
+//	p1->SetingIK(Lfoot, Lfoot->GetParent()->GetParent(), 60.f);
+//	p1->SetingIK(Rfoot->GetChildren()[0], Rfoot, 10.f);
+//	p1->SetingIK(Lfoot->GetChildren()[0], Lfoot, 10.f);
+//
+//	p1->SetMoveFunc([&](ue::CVector3 & pos)
+//	{
+//		return;
+//		ue::CVector3 move = ue::CVector3::Zero();
+//		ue::CVector3 moveR = ue::CVector3::Zero();
+//		ue::CVector3 moveL = ue::CVector3::Zero();
+//		if (Rfoot->IsONGround())
+//		{
+//			move = Rfoot->GetMove();
+//		}
+//		if (Lfoot->IsONGround())
+//		{
+//			move += Lfoot->GetMove();
+//		}
+//		/*if (moveR.Length() > moveL.Length())
+//		{
+//			move = moveR;
+//		}
+//		else
+//		{
+//			move = moveL;
+//		}*/
+//		if (move.Length()>0.0001f)
+//		{
+//			move.y = 0;
+//			move *= -1;
+//			//move.y *= -1;
+//			//move.y += -1;
+//			auto rpos = cc.Execute(1, move);
+//			rpos.y -= modeloffset;
+//			pos = rpos;
+//			//pos += move;
+//		}
+//	});
+//	p1->SetRotateFunc([&](auto & rot)
+//	{
+//		//return;
+//		if (Rfoot->IsONGround())
+//		{
+//			auto mold = Rwaist->GetOldWorldMatrix();
+//			auto mnew = Rwaist->GetBaseWorldMatrix();
+//			//分改！！
+//			ue::CQuaternion rold, rnew;
+//			auto pos = ue::CVector3::Zero(), sca = ue::CVector3::Zero();
+//			mold.CalcMatrixDecompose(pos, rold, sca);
+//			mnew.CalcMatrixDecompose(pos, rnew, sca);
+//
+//			//バインディングポーズの
+//			ue::CQuaternion rloc;
+//			auto bmat = Rwaist->GetBindPoseMatrix();
+//			bmat.CalcMatrixDecompose(pos, rloc, sca);
+//			ue::CVector3 axis = ue::CVector3::AxisZ();
+//			rloc.Multiply(axis);
+//			ue::CVector3 vold = axis, vnew = axis;
+//			rold.Multiply(vold);
+//			rnew.Multiply(vnew);
+//
+//			vold.y = 0;
+//			vnew.y = 0;
+//
+//			vold.Normalize();
+//			vnew.Normalize();
+//
+//			float rad = vold.Dot(vnew);
+//			rad = min(rad, 1);
+//			rad = acos(rad);
+//			
+//			ue::CQuaternion add;
+//			add.SetRotation(ue::CVector3::AxisY(), rad*-1);
+//
+//			auto fpos = Rfoot->GetWorldMatrix().GetTranslation();
+//			//fpos -= Rfoot->GetMove();
+//			auto mpos = p1->GetPos();
+//			fpos.y = 0;
+//			mpos.y = 0;
+//			auto f2m = mpos - fpos;
+//
+//			add.Multiply(f2m);
+//			auto npos = fpos + f2m;
+//			auto m2n = npos - mpos;
+//
+//			auto rpos = cc.Execute(1, m2n);
+//			rpos.y -= modeloffset;
+//			p1->SetPos(rpos);
+//
+//			auto rot = p1->GetRot();
+//			rot.Multiply(add);
+//			p1->SetRot(rot);
+//		}
+//#if 0
+//		{
+//			ue::CQuaternion adrot;
+//			adrot.SetRotationDeg(ue::CVector3::AxisY(), 1);
+//
+//			auto fpos = Rfoot->GetWorldMatrix().GetTranslation();
+//			//fpos -= Rfoot->GetMove();
+//			auto mpos = p1->GetPos();
+//			fpos.y = 0;
+//			mpos.y = 0;
+//			auto f2m = mpos - fpos;
+//
+//			adrot.Multiply(f2m);
+//			auto npos = fpos + f2m;
+//			auto m2n = npos - mpos;
+//
+//			auto rpos = cc.Execute(1, m2n);
+//			rpos.y -= modeloffset;
+//			p1->SetPos(rpos);
+//
+//			auto rot = p1->GetRot();
+//			rot.Multiply(adrot);
+//			p1->SetRot(rot);
+//		}
+//#endif
+//	});
 
 	/*p2 = ue::NewGO<ue::SkinModelRender>(0);
 	p2->Init(L"Assets/model/Player.cmo" , animclip + 1, 1);
@@ -259,16 +262,16 @@ void Game::Update()
 	auto& pad = ue::GamePad(0);
 	//return;
 
-	auto p = p1->GetPos();
+	//auto p = p1->GetPos();
 
-	if (GetAsyncKeyState('Q'))
-	{
-		p.z += 60;
-	}
-	else if (GetAsyncKeyState('E'))
-	{
-		p.z -= 50;
-	}
+	//if (GetAsyncKeyState('Q'))
+	//{
+	//	p.z += 60;
+	//}
+	//else if (GetAsyncKeyState('E'))
+	//{
+	//	p.z -= 50;
+	//}
 	//ue::CVector3 vv;
 	//bool ON = 0;
 	//if (m_isrightON)
@@ -317,10 +320,10 @@ void Game::Update()
 	//	p += move;
 	//}
 	
-	auto grav = ue::CVector3(0, -50, 0);
+	/*auto grav = ue::CVector3(0, -50, 0);
 	p = cc.Execute(1, grav);
 	p.y -= modeloffset;
-	p1->SetPos(p);
+	p1->SetPos(p);*/
 
 
 

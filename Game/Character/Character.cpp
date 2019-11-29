@@ -21,7 +21,6 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 	{
 		if (m_actionMode != AM_Move)
 			return;
-		static bool l = 0, r = 0;
 		ue::CVector3 move = ue::CVector3::Zero();
 		if (m_footR->IsONGround())
 		{
@@ -31,19 +30,9 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 		{
 			move += m_footL->GetMove();
 		}
-		l = m_footL->IsONGround();
-		r = m_footR->IsONGround();
-		if (!l && !r)
-		{
-			/*auto add = m_footL->GetMomentum() + m_footR->GetMomentum();
-			add.y = 0;
-			m_momentum += add;*/
-		}
-		//move += m_momentum;
 
 		if (move.Length() > 0.0001f)
 		{
-
 			move.y = 0;
 			move *= -1;
 			auto rpos = m_characon.Execute(1, move);
@@ -51,7 +40,6 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 			pos = rpos;
 			m_momentum += move;
 		}
-
 	};
 	m_defaultRotateFunc = [&](auto & rot)
 	{
@@ -199,13 +187,51 @@ ue::Bone* Character::FindBone(wstr name, BoneKind bk, bool isSetingIK, int len,f
 	return resbone;
 }
 
+void Character::SetBone(ue::Bone* bone, BoneKind bk, bool isSetingIK, int len, float radius)
+{
+	if (isSetingIK)
+	{
+		ue::Bone* endbone = bone;
+		for (int i = 0; i < len; i++)
+		{
+			endbone = endbone->GetParent();
+		}
+		m_model->SetingIK(bone, endbone, radius);
+	}
+	switch (bk)
+	{
+	case BK_None:
+		m_boneList.push_back(bone);
+		break;
+	case BK_FootL:
+		m_footL = bone;
+		break;
+	case BK_FootR:
+		m_footR = bone;
+		break;
+	case BK_HandL:
+		m_handL = bone;
+		break;
+	case BK_HandR:
+		m_handR = bone;
+		break;
+	case BK_WaistL:
+		m_waistL = bone;
+		break;
+	case BK_WaistR:
+		m_waistR = bone;
+		break;
+	}
+}
+
 void Character::Update()
 {
 	if ((m_footL && !m_footL->IsONGround()) || (m_footR && !m_footR->IsONGround()))
 	{
-		auto grav = ue::CVector3(0, m_gravity, 0);
-		m_move += grav;
+		
 	}
+	auto grav = ue::CVector3(0, m_gravity, 0);
+	m_move += grav;
 	//m_move += m_momentum;
 	auto mn = m_momentum;
 	mn.Normalize();
