@@ -2,6 +2,7 @@
 #include "PlayerMotion.h"
 #include "Player.h"
 #include "Character/Character.h"
+#include "Character/CharacterConst.h"
 
 void PlayerMotion::Init(Player* player, Character* chara, ue::Camera* cam, ue::AnimationClip* anim, ue::Pad* pad)
 {
@@ -11,13 +12,17 @@ void PlayerMotion::Init(Player* player, Character* chara, ue::Camera* cam, ue::A
 	m_anim = anim;
 	m_pad = pad;
 
-	m_footL = m_chara->FindBone(L"Bone_L.003", Character::BK_FootL, true, 3, 14.f);
-	m_footR = m_chara->FindBone(L"Bone_R.003", Character::BK_FootR, true, 3, 14.f);
+	m_footL = m_chara->FindBone(L"Bone_L.003", BK_FootL, true, 3, 14.f);
+	m_footR = m_chara->FindBone(L"Bone_R.003", BK_FootR, true, 3, 14.f);
 	m_noneMF = [&](auto& pos) {return;	};
 	m_noneRF = [&](auto& rote) {return; };
 
-	m_chara->SetMoveFunc(m_noneMF);
-	m_chara->SetRotateFunc(m_noneRF);
+	//m_chara->SetMoveFunc(m_noneMF);
+	//m_chara->SetRotateFunc(m_noneRF);
+
+	m_charaMove.Init(m_chara, m_anim);
+	m_charaMove.InitBone(m_footL, m_footR);
+	
 }
 
 
@@ -30,18 +35,29 @@ void PlayerMotion::Update()
 
 	if (fabsf(stick.x) > 0.01f || fabsf(stick.y) > 0.01f)	//stick入力がある。つまり移動。
 	{
+		m_charaMove.NextPlayAnim(PA_walkFast, m_walkFastSpeed, AM_None);
+	}
+	else
+	{
+		m_charaMove.NextPlayAnim(PA_idol, 0, AM_None);
+	}
+	m_charaMove.Update();
+	return;
+
+	if (fabsf(stick.x) > 0.01f || fabsf(stick.y) > 0.01f)	//stick入力がある。つまり移動。
+	{
 		m_chara->SetIKSpeed(1.0f);
 		if (m_pad->IsPress(ue::enButtonB))		//ダッシュ
 		{
-			Move(stick, PA_dush, m_dushSpeed, Character::AM_Move);
+			Move(stick, PA_dush, m_dushSpeed, AM_Move);
 		}
 		else if (stick.Length() >= 0.5f)				//早歩き
 		{
-			Move(stick, PA_walkFast, m_walkFastSpeed, Character::AM_Move);
+			Move(stick, PA_walkFast, m_walkFastSpeed, AM_Move);
 		}
 		else														//歩き
 		{
-			Move(stick, PA_walk, 0.f, Character::AM_Move);
+			Move(stick, PA_walk, 0.f, AM_Move);
 			m_chara->SetDefaultMoveFunc();
 		}
 	}
@@ -88,7 +104,7 @@ void PlayerMotion::Move(const ue::CVector2& padStick, PlayerAnim pa, float moves
 				m_changeWalk = CW_fast2slow;
 			}
 		}
-		m_chara->PlayAnim(pa, m_animLug, ntime, (Character::ActionMode)am);
+		m_chara->PlayAnim(pa, m_animLug, ntime, (ActionMode)am);
 		m_isWalk = true;
 		//m_chara->SetAllIKRub(1.0f);
 		m_chara->SetMoveFunc(m_noneMF);
@@ -167,9 +183,9 @@ void PlayerMotion::Walk2Idle(float delTime)
 		if (m_PlayingAnim == PA_walk)
 			m_moved = m_dir * m_walkSpeed;
 
-		m_chara->PlayAnim(PA_idol, m_animLug_2idle, Character::AM_None);
+		m_chara->PlayAnim(PA_idol, m_animLug_2idle, AM_None);
 		m_isWalk = false;
-		m_chara->SetAllIKRub(0.0f);
+		//m_chara->SetAllIKRub(0.0f);
 		m_chara->SetIKOffset(ue::CVector3::Zero());
 		m_lugTime = m_animLug_2idle;
 

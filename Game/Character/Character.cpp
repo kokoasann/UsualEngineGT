@@ -248,6 +248,8 @@ void Character::Update()
 	rot.Multiply(m_rotate);
 	m_model->SetRot(rot);
 	m_rotate = ue::CQuaternion::Identity();
+	m_dir = ue::CVector3::AxisZ();
+	rot.Multiply(m_dir);
 }
 
 void Character::AddEventListener(const ue::Animation::EventListener& ev)

@@ -348,6 +348,11 @@ namespace UsualEngine
 			static const CVector3 one = { 1.0f, 1.0f, 1.0f };
 			return one;
 		}
+		char* ToString(char* str,int size)
+		{
+			sprintf_s(str,size, "x: %.4f y: %.4f z: %.4f\n", x, y, z);
+			return str;
+		}
 	};
 	/*!
 	 *@brief	4要素のベクトルクラス。
