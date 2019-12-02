@@ -143,6 +143,7 @@
   <ItemGroup>
     <ClCompile Include="Character\Character.cpp" />
     <ClCompile Include="Character\CharacterMoveMotion.cpp" />
+    <ClCompile Include="Character\CharacterRotateMotion.cpp" />
     <ClCompile Include="Enemy\Enemy.cpp" />
     <ClCompile Include="Enemy\Gib\Ene_Gib.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -158,6 +159,7 @@
   <ItemGroup>
     <ClInclude Include="Character\CharacterConst.h" />
     <ClInclude Include="Character\CharacterMoveMotion.h" />
+    <ClInclude Include="Character\CharacterRotateMotion.h" />
     <ClInclude Include="_Test\Ene_Tes.h" />
     <FxCompile Include="Assets\shader\Bloom.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
