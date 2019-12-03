@@ -1,5 +1,5 @@
 #pragma once
-
+#include "CharacterConst.h"
 /// <summary>
 /// モデルのインスタンスの所持、
 /// IKによる移動のサポート等をしているクラス
@@ -8,7 +8,7 @@
 class Character:public ue::GameObject
 {
 public:
-	/// <summary>
+	/*/// <summary>
 	/// 動きのステート
 	/// </summary>
 	enum ActionMode
@@ -30,7 +30,7 @@ public:
 		BK_HandR,
 		BK_WaistL,
 		BK_WaistR,
-	};
+	};*/
 
 	Character();
 	~Character();
@@ -205,6 +205,15 @@ public:
 	/// <summary>
 	/// 
 	/// </summary>
+	/// <returns></returns>
+	const ue::CVector3& GetDir() const
+	{
+		return m_dir;
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
 	/// <param name="bone"></param>
 	const ue::CVector3& GetIKTarget(ue::Bone* bone) const
 	{
@@ -251,6 +260,7 @@ private:
 	ue::CVector3 m_momentum = ue::CVector3::Zero();		//勢い(多分消す)
 	ue::CVector3 m_move = ue::CVector3::Zero();					//クラス外からアクセスするための移動ベクトル
 	ue::CQuaternion m_rotate = ue::CQuaternion::Identity();		//クラス外からアクセスするための回転クォータニオン
+	ue::CVector3 m_dir = ue::CVector3::AxisZ();								//向いてる方向。
 	ue::SkinModelRender::MoveFunc m_defaultMoveFunc;			//デフォルトのMoveFunc
 	ue::SkinModelRender::RotateFunc m_defaultRotateFunc;		//デフォルトのRotateFunc
 };

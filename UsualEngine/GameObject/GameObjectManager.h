@@ -16,12 +16,9 @@ namespace UsualEngine
 	public:
 		static GameObjectManager* Get()
 		{
-			static GameObjectManager* ins = NULL;
-			if (ins == NULL)
-			{
-				ins = new GameObjectManager();
-			}
-			return ins;
+			static GameObjectManager ins;
+			
+			return &ins;
 		}
 
 		template<class T>

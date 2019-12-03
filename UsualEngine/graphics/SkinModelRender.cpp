@@ -13,14 +13,15 @@ namespace UsualEngine
 		m_animation.UpdateIKTarget();						//IKのターゲットの位置を更新
 		
 		CVector3 opos = m_position;
+		if (m_isUseRotateFunc)
+		{
+			m_rotateFunc(m_rotation);				//IKとかを利用した回転の処理。足を滑らせたく無い時とか使うといいとおもう。
+		}
 		if (m_isUseMoveFunc)
 		{
 			m_moveFunc(m_position);					//IKとかを利用した移動の処理。足を滑らせたく無い時とか使うといいとおもう。
 		}
-		if (m_isUseRotateFunc)
-		{
-			m_rotateFunc(m_rotation);				//上とほぼ同じ。回転用。
-		}
+		
 
 		//3dsMaxと軸を合わせるためのバイアス。
 		CMatrix mBias = CMatrix::Identity();

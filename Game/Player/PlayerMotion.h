@@ -1,4 +1,5 @@
 #pragma once
+#include "Character/CharacterMoveMotion.h"
 /// <summary>
 /// プレイヤーの移動関係のクラス
 /// </summary>
@@ -43,6 +44,8 @@ private:
 	ue::Camera* m_camera = nullptr;
 	ue::AnimationClip* m_anim = nullptr;
 	ue::Pad* m_pad = nullptr;
+
+	CharacterMoveMotion m_charaMove;
 
 	ue::SkinModelRender::MoveFunc m_noneMF;
 	ue::SkinModelRender::RotateFunc m_noneRF;

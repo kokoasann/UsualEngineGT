@@ -25,6 +25,12 @@
     <ClCompile Include="_Test\Ene_Tes.cpp">
       <Filter>_Tes</Filter>
     </ClCompile>
+    <ClCompile Include="Character\CharacterMoveMotion.cpp">
+      <Filter>Chara</Filter>
+    </ClCompile>
+    <ClCompile Include="Character\CharacterRotateMotion.cpp">
+      <Filter>Chara</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -52,6 +58,15 @@
     </ClInclude>
     <ClInclude Include="_Test\Ene_Tes.h">
       <Filter>_Tes</Filter>
+    </ClInclude>
+    <ClInclude Include="Character\CharacterMoveMotion.h">
+      <Filter>Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="Character\CharacterConst.h">
+      <Filter>Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="Character\CharacterRotateMotion.h">
+      <Filter>Chara</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -140,6 +155,9 @@
       <Filter>Assets\Model</Filter>
     </MeshContentTask>
     <MeshContentTask Include="Assets\model\unityChan.fbx">
+      <Filter>Assets\Model</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\gib_tes\gib.bone.neck.fbx">
       <Filter>Assets\Model</Filter>
     </MeshContentTask>
   </ItemGroup>

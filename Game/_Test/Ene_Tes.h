@@ -1,19 +1,17 @@
 #pragma once
 
 #include "Enemy/Enemy.h"
-class Ene_Gib :public Enemy
+class Ene_GibTes :public Enemy
 {
 public:
 	enum GibAnim
 	{
 		GA_idol,
-		GA_walk,
-		GA_rotate,
 
 		GA_num
 	};
-	Ene_Gib();
-	~Ene_Gib();
+	Ene_GibTes();
+	~Ene_GibTes();
 	void OnDestroy() override;
 	bool Start() override;
 	void Update() override;

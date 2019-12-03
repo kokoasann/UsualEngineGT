@@ -228,10 +228,9 @@ void Character::Update()
 {
 	if ((m_footL && !m_footL->IsONGround()) || (m_footR && !m_footR->IsONGround()))
 	{
-		
+		auto grav = ue::CVector3(0, m_gravity, 0);
+		m_move += grav;
 	}
-	auto grav = ue::CVector3(0, m_gravity, 0);
-	m_move += grav;
 	//m_move += m_momentum;
 	auto mn = m_momentum;
 	mn.Normalize();
@@ -248,6 +247,9 @@ void Character::Update()
 	rot.Multiply(m_rotate);
 	m_model->SetRot(rot);
 	m_rotate = ue::CQuaternion::Identity();
+
+	m_dir = ue::CVector3::AxisZ();
+	rot.Multiply(m_dir);
 }
 
 void Character::AddEventListener(const ue::Animation::EventListener& ev)
