@@ -4,6 +4,15 @@
 
 void CharacterRotateMotion::Update()
 {
+	if (m_isComplete)
+		return;
+
+	if (m_isPlayAnim && m_isFirst)
+	{
+		m_chara->PlayAnim(m_playingAnim, 1, 0.f, m_actionMode);
+		m_isFirst = false;
+	}
+
 	switch (m_rotateMode)
 	{
 	case RM_Direct:
@@ -20,41 +29,91 @@ void CharacterRotateMotion::Update()
 
 void CharacterRotateMotion::Update_Direct()
 {
-	float t = ue::CVector3::AxisZ().Dot(m_dir);
+	float t = atan2(m_dir.x, m_dir.z);
+	//float t = ue::CVector3::AxisZ().Dot(m_dir);
 	ue::CQuaternion rot;
 	rot.SetRotation(ue::CVector3::AxisY(), t);
 	m_chara->SetRotation(rot);
-	m_rotateMode = RM_None;
+	//m_rotateMode = RM_None;
+	Complete();
 }
 
 void CharacterRotateMotion::Update_Lerp()
 {
+	
 	ue::CQuaternion add;
 	ue::CVector3 axis;
 	axis.Cross(m_oldDir, m_dir);
 
-	if (m_total < m_maxRad)
+	/*add.SetRotation(ue::CVector3::Up(), m_maxRad <= ue::CMath::PI ? m_maxRad : (m_maxRad - ue::CMath::PI)*-1.f);
+	m_chara->SetRotate(add);
+	Complete();
+	return;*/
+
+	if (m_total < fabsf(m_maxRad))
 	{
-		float len = m_maxRad - m_total;
+		float len = fabsf(m_maxRad) - m_total;
 		if (len >= m_speed)
 		{
-			add.SetRotation(axis, m_speed);
-			m_total += m_speed;
+			add.SetRotation(ue::CVector3::Up(), m_maxRad >= 0.f ? m_speed : -m_speed);
+			m_total += fabsf(m_speed);
 		}
 		else
 		{
-			add.SetRotation(axis, len);
+			add.SetRotation(ue::CVector3::Up(), m_maxRad >= 0.f ? len : -len);
 			m_total += len;
 		}
 		m_chara->SetRotate(add);
 	}
 	else
 	{
-		m_rotateMode = RM_None;
+		//m_rotateMode = RM_None;
+		Complete();
 	}
 }
 
 void CharacterRotateMotion::Update_UseIK()
 {
+	
+	auto t = m_chara->GetDir().Dot(m_dir);
+	t = acosf(t);
+	if (t < ue::CMath::DegToRad(0.001f))
+	{
+		//m_rotateMode = RM_None;
+		Complete();
+	}
+}
 
+void CharacterRotateMotion::Complete()
+{
+	m_isComplete = true;
+	if (m_isPlayAnim)
+	{
+		m_chara->PlayAnim(CHARA_IDOL_NUM, 1, 0);
+	}
+}
+
+void CharacterRotateMotion::NextRotate(const ue::CVector3& dir, PlayAnim pa, bool isPlayAnim)
+{
+	m_oldDir = m_chara->GetDir();
+	m_dir = dir;
+	m_dir.y = 0;
+	m_dir.Normalize();
+	float t = m_oldDir.Dot(m_dir);
+
+	m_maxRad = acosf(fabsf(t)<1.f?t:t/fabsf(t));
+	
+	ue::CVector3 vv;
+	vv.Cross(m_oldDir, m_dir);
+	if (vv.y < 0)
+	{
+		m_maxRad *= -1.f;
+	}
+	
+	m_playingAnim = pa;
+
+	m_total = 0.f;
+	m_isFirst = true;
+	m_isPlayAnim = isPlayAnim;
+	m_isComplete = false;
 }

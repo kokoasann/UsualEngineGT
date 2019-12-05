@@ -31,6 +31,9 @@
     <ClCompile Include="Character\CharacterRotateMotion.cpp">
       <Filter>Chara</Filter>
     </ClCompile>
+    <ClCompile Include="Character\CharacterJustFoot.cpp">
+      <Filter>Chara</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -66,6 +69,9 @@
       <Filter>Chara</Filter>
     </ClInclude>
     <ClInclude Include="Character\CharacterRotateMotion.h">
+      <Filter>Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="Character\CharacterJustFoot.h">
       <Filter>Chara</Filter>
     </ClInclude>
   </ItemGroup>

@@ -106,40 +106,6 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 	m_model->SetRotateFunc(m_defaultRotateFunc);
 }
 
-void Character::InitAnimData(ue::AnimationClip* animclip)
-{
-}
-
-void Character::InitBoneData(wstr footLname, wstr footRname, wstr handLname, wstr handRname, wstr waistLname, wstr waistRname)
-{
-	for (auto bone : m_model->GetSkinModel().GetSkeleton().GetAllBone())
-	{
-		if (footLname!=nullptr&&lstrcmpW(bone->GetName(), footLname))
-		{
-			m_footL = bone;
-		}
-		else if (footRname != nullptr && lstrcmpW(bone->GetName(), footRname))
-		{
-			m_footR = bone;
-		}
-		else if (handLname != nullptr && lstrcmpW(bone->GetName(), handLname))
-		{
-			m_handL = bone;
-		}
-		else if (handRname != nullptr && lstrcmpW(bone->GetName(), handRname))
-		{
-			m_handR = bone;
-		}
-		else if (waistLname != nullptr && lstrcmpW(bone->GetName(), waistLname))
-		{
-			m_waistL = bone;
-		}
-		else if (waistRname != nullptr && lstrcmpW(bone->GetName(), waistRname))
-		{
-			m_waistR = bone;
-		}
-	}
-}
 
 ue::Bone* Character::FindBone(wstr name, BoneKind bk, bool isSetingIK, int len,float radius)
 {
@@ -242,7 +208,7 @@ void Character::Update()
 	p += m_ccOffset;
 	m_model->SetPos(p);
 	m_move = ue::CVector3::Zero();
-
+	
 	auto rot = m_model->GetRot();
 	rot.Multiply(m_rotate);
 	m_model->SetRot(rot);
@@ -250,6 +216,8 @@ void Character::Update()
 
 	m_dir = ue::CVector3::AxisZ();
 	rot.Multiply(m_dir);
+
+	m_justFoot.Update();
 }
 
 void Character::AddEventListener(const ue::Animation::EventListener& ev)

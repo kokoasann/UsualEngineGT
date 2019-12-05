@@ -142,6 +142,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Character\Character.cpp" />
+    <ClCompile Include="Character\CharacterJustFoot.cpp" />
     <ClCompile Include="Character\CharacterMoveMotion.cpp" />
     <ClCompile Include="Character\CharacterRotateMotion.cpp" />
     <ClCompile Include="Enemy\Enemy.cpp" />
@@ -158,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Character\CharacterConst.h" />
+    <ClInclude Include="Character\CharacterJustFoot.h" />
     <ClInclude Include="Character\CharacterMoveMotion.h" />
     <ClInclude Include="Character\CharacterRotateMotion.h" />
     <ClInclude Include="_Test\Ene_Tes.h" />

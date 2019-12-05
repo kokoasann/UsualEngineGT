@@ -23,7 +23,8 @@ void CharacterMoveMotion::Update()
 	}
 	else
 	{
-		JustFoot(delTime);
+		m_chara->Start_JustFoot();
+		//JustFoot(delTime);
 	}
 }
 
@@ -33,6 +34,7 @@ void CharacterMoveMotion::Move(float delTime, PlayAnim pa, float movespeed, Acti
 	{
 		float ntime = 0.f;
 		float animLug = m_animLugBase;
+		ChangePlayingAnim(pa);
 		if (m_playingAnim != m_idolNum)
 		{
 			//これから再生するアニメーションの再生開始時間を計算。
@@ -61,8 +63,7 @@ void CharacterMoveMotion::Move(float delTime, PlayAnim pa, float movespeed, Acti
 		m_chara->PlayAnim(pa, animLug, ntime, am);
 		m_isWalk = true;
 		m_isStartJustFoot = false;
-		ChangePlayingAnim(pa);
-		m_chara->SetAllIKRub(0.0f);
+		
 		//m_chara->SetMoveFunc(m_noneMF);
 	}
 
@@ -83,6 +84,11 @@ void CharacterMoveMotion::Move(float delTime, PlayAnim pa, float movespeed, Acti
 		speed = movespeed;
 	}
 	m_oldSpeedBuff = speed;
+
+	if (AM_Move == am)
+	{
+		return;
+	}
 
 	//実際に移動。
 
@@ -129,7 +135,7 @@ void CharacterMoveMotion::Walk2Idle(float delTime)
 
 		m_chara->PlayAnim(m_idolNum, m_animLug_2idle, AM_None);
 		m_isWalk = false;
-		m_chara->SetAllIKRub(0.0f);
+		//m_chara->SetAllIKRub(0.0f);
 		m_chara->SetIKOffset(ue::CVector3::Zero());
 		m_time = m_animLug_2idle;
 
@@ -158,6 +164,7 @@ void CharacterMoveMotion::JustFoot(float delTime)
 		else
 			m_startJustFoot = JF_footR;
 		m_isStartJustFoot = true;
+		m_chara->SetAllIKRub(0.0f);
 	}
 	ue::Bone* startBone = nullptr;
 	ue::Bone* endBone = nullptr;

@@ -1,5 +1,6 @@
 #pragma once
 #include "Character/CharacterMoveMotion.h"
+#include "Character/CharacterRotateMotion.h"
 /// <summary>
 /// プレイヤーの移動関係のクラス
 /// </summary>
@@ -46,6 +47,7 @@ private:
 	ue::Pad* m_pad = nullptr;
 
 	CharacterMoveMotion m_charaMove;
+	CharacterRotateMotion m_charaRotate;
 
 	ue::SkinModelRender::MoveFunc m_noneMF;
 	ue::SkinModelRender::RotateFunc m_noneRF;

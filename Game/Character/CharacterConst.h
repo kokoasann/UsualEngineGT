@@ -2,6 +2,8 @@
 
 //namespace character
 
+#define CHARA_IDOL_NUM 0
+
 /// <summary>
 /// 動きのステート
 /// </summary>

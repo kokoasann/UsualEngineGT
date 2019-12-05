@@ -1,5 +1,6 @@
 #pragma once
 #include "CharacterConst.h"
+#include "CharacterJustFoot.h"
 /// <summary>
 /// モデルのインスタンスの所持、
 /// IKによる移動のサポート等をしているクラス
@@ -8,30 +9,6 @@
 class Character:public ue::GameObject
 {
 public:
-	/*/// <summary>
-	/// 動きのステート
-	/// </summary>
-	enum ActionMode
-	{
-		AM_None,
-		AM_Move,
-		AM_Rotate,
-	};
-
-	/// <summary>
-	/// ボーンの部位.
-	/// </summary>
-	enum BoneKind
-	{
-		BK_None,
-		BK_FootL,
-		BK_FootR,
-		BK_HandL,
-		BK_HandR,
-		BK_WaistL,
-		BK_WaistR,
-	};*/
-
 	Character();
 	~Character();
 
@@ -46,29 +23,20 @@ public:
 	/// <param name="ccheight"></param>
 	/// <param name="offset"></param>
 	void Init(ue::SkinModelRender* smr,float ccradius=0,float ccheight=0,const ue::CVector3& offset=ue::CVector3::Zero());
+
 	/// <summary>
-	/// アニメーションの初期化。(消す予定)
+	/// JustFootの初期化。
 	/// </summary>
-	/// <param name="animclip"></param>
-	void InitAnimData(ue::AnimationClip* animclip);
-	/// <summary>
-	/// ボーンの初期化。(消す予定)
-	/// </summary>
-	/// <param name="footLname"></param>
-	/// <param name="footRname"></param>
-	/// <param name="handLname"></param>
-	/// <param name="handRname"></param>
-	/// <param name="waistLname"></param>
-	/// <param name="waistRname"></param>
-	void InitBoneData
-	(
-		wstr footLname = nullptr,
-		wstr footRname = nullptr,
-		wstr handLname = nullptr,
-		wstr handRname = nullptr,
-		wstr waistLname = nullptr,
-		wstr waistRname = nullptr
-	);
+	/// <param name="offsetY">足の上げる角度の調整。キャラの方向ベクトルのyに足す。足した後にノーマライズされる playerの場合2.0f</param>
+	/// <param name="scale">足をどれだけあげるか playerの場合40.0f</param>
+	/// <param name="upSpeed">足をあげるスピード playerの場合0.4f</param>
+	/// <param name="downSpeed">足をおろすスピード playerの場合0.5f</param>
+	void Init_JustFoot(float offsetY, float scale, float upSpeed, float downSpeed)
+	{
+		m_justFoot.Init(this,offsetY, scale, upSpeed, downSpeed);
+		m_justFoot.InitBone(m_footL, m_footR);
+		m_isUseJustFoot = true;
+	}
 
 	/// <summary>
 	/// ボーンを探す
@@ -166,6 +134,16 @@ public:
 	/// <param name="start">アニメーションの始まる時間</param>
 	/// <param name="am">アニメーションによるアクションで何をさせたいか 設定しない場合は何もしない</param>
 	void PlayAnim(int anim, float lerp = 1.0f,float start = 0.0f, ActionMode am = AM_None);
+
+	/// <summary>
+	/// JustFootを開始する。
+	/// </summary>
+	void Start_JustFoot()
+	{
+		if (!m_isUseJustFoot || m_justFoot.IsStart_JustFoot())
+			return;
+		m_justFoot.Start_JustFoot();
+	}
 	
 	/// <summary>
 	/// 全てIKは、摩擦率がfになる。
@@ -200,6 +178,23 @@ public:
 	void SetRotation(const ue::CQuaternion& rot)
 	{
 		m_model->SetRot(rot);
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="am"></param>
+	void SetActionMode(ActionMode am)
+	{
+		m_actionMode = am;
+	}
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <returns></returns>
+	ActionMode GetActionMode()
+	{
+		return m_actionMode;
 	}
 
 	/// <summary>
@@ -263,4 +258,7 @@ private:
 	ue::CVector3 m_dir = ue::CVector3::AxisZ();								//向いてる方向。
 	ue::SkinModelRender::MoveFunc m_defaultMoveFunc;			//デフォルトのMoveFunc
 	ue::SkinModelRender::RotateFunc m_defaultRotateFunc;		//デフォルトのRotateFunc
+
+	CharacterJustFoot m_justFoot;				//JustFootSystem
+	bool m_isUseJustFoot = false;				//JustFootを使用する？
 };

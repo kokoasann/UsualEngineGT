@@ -105,7 +105,7 @@ private:
 	PlayAnim m_playingAnim = 0;		//今再生しているアニメーション
 	PlayAnim m_oldPlayAnim = 0;		//前に再生していたアニメーション
 	PlayAnim m_idolNum = 0;				//アニメーションのidolの番号。
-	float m_animLugBase = 0.2f;			//アイドルから歩きに変わるときにかかる時間。
+	float m_animLugBase = 0.6f;			//アイドルから歩きに変わるときにかかる時間。
 	//float m_animLug = 0.2f;
 	float m_animLug_2idle = 0.0f;			//歩きからアイドルに移り変わる時間。
 	//float m_lugTime = 0.f;
