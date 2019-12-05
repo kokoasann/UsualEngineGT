@@ -59,6 +59,7 @@ public:
 	{
 		m_isStart = true;
 		//m_chara->SetIKOffset(ue::CVector3::Zero());
+		m_isStartJustFoot = false;
 		m_isJustedEnd = false;
 		m_isJustedStart = false;
 	}

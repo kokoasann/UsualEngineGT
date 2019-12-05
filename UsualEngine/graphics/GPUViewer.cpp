@@ -24,7 +24,7 @@ namespace UsualEngine
 
 			HRESULT hr = usualEngine()->GetGraphicsEngine()->GetD3DDevice()->CreateShaderResourceView(pBuf, &desc, &srv);
 			if (FAILED(hr)) {
-				return false;
+				return nullptr;
 			}
 		}
 		return srv;
@@ -91,7 +91,7 @@ namespace UsualEngine
 
 			HRESULT hr = usualEngine()->GetGraphicsEngine()->GetD3DDevice()->CreateUnorderedAccessView(texture, &UAVDesc, &uav);
 			if (FAILED(hr)) {
-				return false;
+				return nullptr;
 			}
 		}
 		return uav;

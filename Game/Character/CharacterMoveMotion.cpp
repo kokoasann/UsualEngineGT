@@ -23,7 +23,11 @@ void CharacterMoveMotion::Update()
 	}
 	else
 	{
-		m_chara->Start_JustFoot();
+		if (m_isJustFoot)
+		{
+			m_chara->Start_JustFoot();
+			m_isJustFoot = false;
+		}
 		//JustFoot(delTime);
 	}
 }
@@ -145,6 +149,7 @@ void CharacterMoveMotion::Walk2Idle(float delTime)
 		m_isJustedStart = false;
 		//m_justTime = 0.f;
 		//m_isStartJustFoot = false;
+		m_isJustFoot = true;
 	}
 	auto move = m_moved * ((m_time) / m_animLug_2idle);
 	//m_chara->SetIKOffset(move * delTime);
@@ -222,7 +227,7 @@ void CharacterMoveMotion::ChangePlayingAnim(PlayAnim pa)
 {
 	m_oldSpeed = m_oldSpeedBuff;
 	if (m_oldPlayAnim != m_idolNum)
-		m_oldSpeed = m_oldSpeedBuff;
+		m_oldSpeed = 0.0f;
 	m_oldPlayAnim = m_playingAnim;
 	m_playingAnim = pa;
 }

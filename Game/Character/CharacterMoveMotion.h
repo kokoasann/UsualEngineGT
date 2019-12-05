@@ -137,4 +137,6 @@ private:
 	float m_justFoot_Scale = 40.f;						//足をどれだけ上げるか。
 	float m_justFoot_UpIKSpeed = 0.4f;			//足を上げるときの速度。
 	float m_justFoot_DownIKSpeed = 0.5f;		//足をおろすときの速度。
+
+	bool m_isJustFoot = false;							//justFootを行えるか？
 };

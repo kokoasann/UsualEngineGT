@@ -14,8 +14,7 @@ void CharacterJustFoot::Update_JustFoot(float delTime)
 {
 	if (!m_isStartJustFoot)//‰“‚¢‘«‚Ì•û‚©‚çæ‚É®‚¦‚é
 	{
-		
-
+		m_chara->SetIKOffset(ue::CVector3::Zero());
 		auto moveL = m_footL->GetMove().Length();
 		auto moveR = m_footR->GetMove().Length();
 
@@ -25,6 +24,7 @@ void CharacterJustFoot::Update_JustFoot(float delTime)
 			m_startJustFoot = JF_footR;
 		m_isStartJustFoot = true;
 		m_chara->SetAllIKRub(0.0f);
+		m_time = 0.f;
 	}
 	ue::Bone* startBone = nullptr;
 	ue::Bone* endBone = nullptr;
@@ -59,7 +59,6 @@ void CharacterJustFoot::Update_JustFoot(float delTime)
 			m_chara->SetIKOffset(up * m_justFoot_Scale, startBone);
 			m_chara->SetIKSpeed(m_justFoot_UpIKSpeed, startBone);
 		}
-		m_time += delTime;
 	}
 	else if (!m_isJustedEnd)//ÅŒã‚Éo‚·‘«‚Ìˆ—B
 	{
@@ -76,13 +75,13 @@ void CharacterJustFoot::Update_JustFoot(float delTime)
 		up.Normalize();
 		m_chara->SetIKOffset(up * m_justFoot_Scale, endBone);
 		m_chara->SetIKSpeed(m_justFoot_UpIKSpeed, endBone);
-		m_time += delTime;
 	}
 	else
 	{
-		if (m_time > (1.f - m_justFoot_DownIKSpeed)*5.f)
+		if (m_time > (1.f - m_justFoot_DownIKSpeed))
 		{
 			m_isStart = false;
 		}
 	}
+	m_time += delTime;
 }
