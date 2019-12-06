@@ -226,7 +226,7 @@ void CharacterMoveMotion::JustFoot(float delTime)
 void CharacterMoveMotion::ChangePlayingAnim(PlayAnim pa)
 {
 	m_oldSpeed = m_oldSpeedBuff;
-	if (m_oldPlayAnim != m_idolNum)
+	if (m_playingAnim == m_idolNum)
 		m_oldSpeed = 0.0f;
 	m_oldPlayAnim = m_playingAnim;
 	m_playingAnim = pa;
