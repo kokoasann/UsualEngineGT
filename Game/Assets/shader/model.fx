@@ -104,8 +104,6 @@ PSInput VSMain( VSInputNmTxVcTangent In )
 	psInput.Normal = normalize(mul(mWorld, In.Normal));
 	psInput.Tangent = normalize(mul(mWorld, In.Tangent));
 
-	
-
 	return psInput;
 }
 
@@ -156,6 +154,24 @@ PSInput VSMainSkin( VSInputNmTxWeights In )
     return psInput;
 }
 
+PSInputGround VSMainGround(VSInputNmTxVcTangent In)
+{
+	PSInput psInput = (PSInput)0;
+	float4 pos = mul(mWorld, In.Position);
+	psInput.Pos = pos;
+	pos = mul(mView, pos);
+	psInput.PosInView = pos;
+	pos = mul(mProj, pos);
+	psInput.PosInProj = pos;
+
+	psInput.Position = pos;
+	psInput.TexCoord = In.TexCoord;
+	psInput.Normal = normalize(mul(mWorld, In.Normal));
+	psInput.Tangent = normalize(mul(mWorld, In.Tangent));
+
+	return psInput;
+}
+
 /*///////////////////////////////////////////////////////////////////////////////////////////
 		スキンなし用の深度値入れる専用の頂点シェーダ
 *///////////////////////////////////////////////////////////////////////////////////////////
@@ -198,60 +214,45 @@ float4 PSProcess(float4 albe, PSInput In)
 	uv *= float2(0.5f, -0.5f);
 	uv += 0.5f;
 	float4 shadow = float4(1, 1, 1, 1);
-	if (isShadowReciever)
+	float sum = 0.f;
+	/*float gaus[3][3] = {
+	{1.f / 16.f,2.f / 16.f,1.f / 16.f},
+	{2.f / 16.f,4.f / 16.f,2.f / 16.f},
+	{1.f / 16.f,2.f / 16.f,1.f / 16.f}
+	};
+	int ksize = 3;
+	[unroll(ksize)]
+	for (int y = 0; y < ksize; y++)
 	{
-		float sum = 0.f;
-		/*float gaus[5][5] = {
-		{1.f / 256.f, 4.f / 256.f,	 6.f / 256.f,   4.f / 256.f,  1.f / 256.f},
-		{4.f / 256.f, 16.f / 256.f, 24.f / 256.f, 16.f / 256.f, 4.f / 256.f},
-		{6.f / 256.f, 24.f / 256.f, 36.f / 256.f, 24.f / 256.f, 6.f / 256.f},
-		{4.f / 256.f, 16.f / 256.f, 24.f / 256.f, 16.f / 256.f, 4.f / 256.f },
-		{1.f / 256.f, 4.f / 256.f,   6.f / 256.f,   4.f / 256.f,   1.f / 256.f } };*/
-		float gaus[3][3] = {
-		{1.f / 16.f,2.f / 16.f,1.f / 16.f},
-		{2.f / 16.f,4.f / 16.f,2.f / 16.f},
-		{1.f / 16.f,2.f / 16.f,1.f / 16.f}
-		};
-		int ksize = 3;
 		[unroll(ksize)]
-		for (int y = 0; y < ksize; y++)
+		for (int x = 0; x < ksize; x++)
 		{
-			[unroll(ksize)]
-			for (int x = 0; x < ksize; x++)
-			{
-				sum += GetShadow(In.Pos, shadowMap_1, float2(x - (ksize - 1) / 2, y - (ksize - 1) / 2)) * gaus[y][x];
-			}
+			sum += GetShadow(In.Pos, shadowMap_1, float2(x - (ksize - 1) / 2, y - (ksize - 1) / 2)) * gaus[y][x];
 		}
-		float scol = sum;
-		//float scol = GetShadow(In.Pos, shadowMap_1, float2(0, 0));
-		//float scol = sum / pow(ksize,2);
+	}*/
+	sum += GetShadow(In.Pos, shadowMap_1,0);
+	float scol = sum;
+	//float scol = GetShadow(In.Pos, shadowMap_1, float2(0, 0));
+	//float scol = sum / pow(ksize,2);
 
-		shadow.x = lerp(1.0f, 0.45f, scol);
-		shadow.y = lerp(1.0f, 0.4f, scol);
-		shadow.z = lerp(1.0f, 0.6f, scol);
-		//albe.xyz *= lerp(1.0f, 0.5f, GetShadow(In.Pos,shadowMap_1,float2(0,0)));
-	}
-
+	shadow.x = lerp(1.0f, 0.45f, scol);
+	shadow.y = lerp(1.0f, 0.4f, scol);
+	shadow.z = lerp(1.0f, 0.6f, scol);
+	shadow *= isShadowReciever;
 
 	float3 li = 0.f;
 	for (int i = 0; i < DLcount; i++)
 	{
 		float rad = dot(DirLights[i].dir * -1.f, In.Normal);
-		//li += max(rad, 0.2f) * DirLights[i].color;
-		if (Rad2Deg(rad) < 10.f)//影の～♪　しょ～りぃ～♪
-		{
-			li = float3(0.45f, 0.4f, 0.6f);
-			
-		}
-		else//
-		{
-			li += DirLights[i].color * shadow;
+		int k = step(10.f,degrees(rad));
 
-			float3 R = -camDir + 2 * dot(camDir, In.Normal) * In.Normal;
-			rad = dot(DirLights[i].dir, R);
-			float sp = max(0.f, rad);
-			li += pow(sp, 5);
-		}
+		li = float3(0.45f, 0.4f, 0.6f) * !k;//影が付く!
+
+		li += (DirLights[i].color * shadow)*k;//ノット影!!
+		float3 R = -camDir + 2 * dot(camDir, In.Normal) * In.Normal;
+		rad = dot(DirLights[i].dir, R);
+		float sp = max(0.f, rad);
+		li += pow(sp, 5)*k;
 	}
 	albe.xyz *= li;
 
@@ -316,37 +317,60 @@ float4 PSMain_Ground(PSInput In) : SV_Target0
 	In.TexCoord.x *= gsca.z;
 	In.TexCoord.y *= gsca.x;
 
+
+
 	//アルベドの取得
 	float4 alb = float4(0, 0, 0, 1);
-	if (groundUseTexs.x!=0)//ブレンド・S
-	{
-		float4 blend = groundBlendMap.Sample(Sampler, UV);
-		float4 alb1 = texture_1.Sample(Sampler, In.TexCoord);
-		float4 alb2 = texture_2.Sample(Sampler, In.TexCoord);
-		float len = 0.f;
-		if(groundUseTexs.w!=0)
-		{
-			float4 alb3 = texture_2.Sample(Sampler, In.TexCoord);
-			len = blend.x + blend.y + blend.z;
-			blend /= len;
-			alb1 *= blend.x;
-			alb2 *= blend.y;
-			alb3 *= blend.z;
-			alb = alb1 + alb2 + alb3;
-		}
-		else
-		{
-			len = blend.x + blend.y;
-			blend /= len;
-			alb1 *= blend.x;
-			alb2 *= blend.y;
-			alb = alb1 + alb2;
-		}
-	}
-	else
-	{
-		alb = albedoTexture.Sample(Sampler, In.TexCoord);
-	}
+	//if (groundUseTexs.x!=0)//ブレンド・S
+	//{
+	//	float4 blend = groundBlendMap.Sample(Sampler, UV);
+	//	float4 alb1 = texture_1.Sample(Sampler, In.TexCoord);
+	//	float4 alb2 = texture_2.Sample(Sampler, In.TexCoord);
+	//	float len = 0.f;
+	//	if(groundUseTexs.w!=0)
+	//	{
+	//		float4 alb3 = texture_2.Sample(Sampler, In.TexCoord);
+	//		len = blend.x + blend.y + blend.z;
+	//		blend /= len;
+	//		alb1 *= blend.x;
+	//		alb2 *= blend.y;
+	//		alb3 *= blend.z;
+	//		alb = alb1 + alb2 + alb3;
+	//	}
+	//	else
+	//	{
+	//		len = blend.x + blend.y;
+	//		blend /= len;
+	//		alb1 *= blend.x;
+	//		alb2 *= blend.y;
+	//		alb = alb1 + alb2;
+	//	}
+	//}
+	//else
+	//{
+	//	alb = albedoTexture.Sample(Sampler, In.TexCoord);
+	//}
+	float4 blend = groundBlendMap.Sample(Sampler, UV);
+	float4 alb1 = texture_1.Sample(Sampler, In.TexCoord);
+	float4 alb2 = texture_2.Sample(Sampler, In.TexCoord);
+	float len = 0.f;
+
+	len = blend.x + blend.y;
+	blend /= len;
+	alb1 *= blend.x;
+	alb2 *= blend.y;
+	alb += (alb1 + alb2) * groundUseTexs.x* !groundUseTexs.w;
+
+	float4 alb3 = texture_2.Sample(Sampler, In.TexCoord);
+	len = blend.x + blend.y + blend.z;
+	blend /= len;
+	alb1 *= blend.x;
+	alb2 *= blend.y;
+	alb3 *= blend.z;
+	alb += (alb1 + alb2 + alb3)* groundUseTexs.w;
+
+	alb += albedoTexture.Sample(Sampler, In.TexCoord)* !groundUseTexs.x;
+
 
 	float4 fcol = PSProcess(alb,In);
 

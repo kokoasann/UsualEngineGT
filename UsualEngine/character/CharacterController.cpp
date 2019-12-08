@@ -218,13 +218,13 @@ namespace UsualEngine
 						nextPosition.z = m_position.z;
 						break;*/
 					}
-					char st[255] = { 0 };
+					/*char st[255] = { 0 };
 					sprintf_s(st, "nor: x:%.4f y:%.4f z:%.4f\n", callback.hitNormal.x, callback.hitNormal.y, callback.hitNormal.z);
 					OutputDebugString(st);
 					sprintf_s(st, "hip: x:%.4f y:%.4f z:%.4f\n", callback.hitPos.x, callback.hitPos.y, callback.hitPos.z);
 					OutputDebugString(st);
 					sprintf_s(st, "pos: x:%.4f y:%.4f z:%.4f\n", nextPosition.x, nextPosition.y, nextPosition.z);
-					OutputDebugString(st);
+					OutputDebugString(st);*/
 	#endif
 				}
 				else {

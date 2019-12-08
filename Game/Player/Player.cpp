@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Player.h"
+#include "Cannon/Cannon.h"
 
 Player::Player()
 {
@@ -30,6 +31,8 @@ Player::Player()
 	m_gmList[0] = &m_camera;
 	m_gmList[1] = &m_chara;
 	m_gmList[2] = &m_motion;
+
+	m_cannonMesh.Init(L"Assets/model/CannonDummy.cmo", ue::enFbxUpAxisZ);
 }
 
 Player::~Player()
@@ -43,6 +46,13 @@ bool Player::Start()
 
 void Player::Update()
 {
+	if (ue::GamePad(0).IsTrigger(ue::enButtonX))
+	{
+		auto can = ue::NewGO<Cannon>(0);
+		
+		can->Init(m_cannonMesh, m_chara.GetPos()+ (m_chara.GetDir() * 80.f), m_chara.GetRot());
+		m_cannons.push_back(can);
+	}
 	for (auto gm : m_gmList)
 	{
 		gm->Update();

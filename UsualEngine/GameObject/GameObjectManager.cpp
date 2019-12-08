@@ -7,6 +7,7 @@ namespace UsualEngine
 {
 	GameObjectManager::GameObjectManager()
 	{
+		m_newGOBuffer.reserve(16);
 	}
 
 	GameObjectManager::~GameObjectManager()
@@ -31,6 +32,11 @@ namespace UsualEngine
 
 		usualEngine()->GetGraphicsEngine()->GetPostEffect().Render();
 		
+		for (auto& ngd : m_newGOBuffer)
+		{
+			m_gameObjectList[ngd.prio].push_back(ngd.go);
+		}
+		m_newGOBuffer.clear();
 	}
 
 	void GameObjectManager::UpdateStart()

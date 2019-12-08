@@ -43,6 +43,16 @@ struct PSInput {
 	float4 PosInProj : TEXCOORD3;		//正規化座標系での座標
 };
 
+struct PSInputGround {
+	float4 Position : SV_POSITION;
+	float3 Normal : NORMAL;
+	float3 Tangent : TANGENT;
+	float2 TexCoord : TEXCOORD0;
+	float3 Pos : TEXCOORD1;		//ワールド座標
+	float3 PosInView : TEXCOORD2;		//カメラ空間での座標
+	float4 PosInProj : TEXCOORD3;		//正規化座標系での座標
+};
+
 /*
 	深度を入れるためだけのピクセルシェーダに入力する構造体
 */

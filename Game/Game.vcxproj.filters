@@ -34,6 +34,9 @@
     <ClCompile Include="Character\CharacterJustFoot.cpp">
       <Filter>Chara</Filter>
     </ClCompile>
+    <ClCompile Include="Cannon\Cannon.cpp">
+      <Filter>Cannon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -74,6 +77,9 @@
     <ClInclude Include="Character\CharacterJustFoot.h">
       <Filter>Chara</Filter>
     </ClInclude>
+    <ClInclude Include="Cannon\Cannon.h">
+      <Filter>Cannon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">
@@ -108,6 +114,12 @@
     </Filter>
     <Filter Include="_Tes">
       <UniqueIdentifier>{fb57bdf4-8c69-4472-8f1f-d2523ec96694}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Model\Cannon">
+      <UniqueIdentifier>{c7432154-b8ed-4703-9a90-e5f66be301cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Cannon">
+      <UniqueIdentifier>{f49e54ac-bc83-4d55-9079-93cdf9eab4fb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -165,6 +177,15 @@
     </MeshContentTask>
     <MeshContentTask Include="Assets\model\gib_tes\gib.bone.neck.fbx">
       <Filter>Assets\Model</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\Cannon\Cannon.fbx">
+      <Filter>Assets\Model\Cannon</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\Cannon\Stand.fbx">
+      <Filter>Assets\Model\Cannon</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\Cannon\CannonDummy.fbx">
+      <Filter>Assets\Model\Cannon</Filter>
     </MeshContentTask>
   </ItemGroup>
 </Project>

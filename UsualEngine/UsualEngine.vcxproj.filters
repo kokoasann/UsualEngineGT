@@ -224,6 +224,9 @@
     <ClCompile Include="graphics\PostEffect\GaussianBlur.cpp">
       <Filter>Graphics\PostEffect</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\SkinModelDummy.cpp">
+      <Filter>Graphics\3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="character\CharacterController.h">
@@ -398,6 +401,9 @@
     </ClInclude>
     <ClInclude Include="graphics\PostEffect\Bloom.h">
       <Filter>Graphics\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\SkinModelDummy.h">
+      <Filter>Graphics\3D</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

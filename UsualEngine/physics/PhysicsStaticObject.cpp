@@ -33,7 +33,7 @@ namespace UsualEngine
 		rbInfo.mass = 0.0f;
 		rbInfo.pos = {0,0,0};
 		rbInfo.rot = rot;
-		rbInfo.sca = sca;
+		//rbInfo.sca = sca;
 		m_rigidBody.Create(rbInfo);
 		//„‘Ì‚ğ•¨—ƒ[ƒ‹ƒh‚É’Ç‰Á‚·‚éB
 		Physics().AddRigidBody(m_rigidBody);

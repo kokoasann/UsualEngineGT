@@ -14,6 +14,11 @@ namespace UsualEngine
 		GameObjectManager();
 		~GameObjectManager();
 	public:
+		struct NewGOData
+		{
+			GameObject* go = nullptr;
+			char prio = 0;
+		};
 		static GameObjectManager* Get()
 		{
 			static GameObjectManager ins;
@@ -63,7 +68,8 @@ namespace UsualEngine
 			o->Awake();
 			o->SetPrio(prio);
 			o->SetName(hash);
-			m_gameObjectList[prio].push_back((GameObject*)go);
+			//m_gameObjectList[prio].push_back((GameObject*)go);
+			m_newGOBuffer.push_back({ go,(char)prio });
 			if (isCheckIned && m_checkInCountList[prio]>0)
 				m_checkInCountList[prio] -= 1;
 			return go;
@@ -84,6 +90,7 @@ namespace UsualEngine
 	private:
 		static const size_t m_maxSize = 32;
 		std::array<std::vector<GameObject*>,m_maxSize> m_gameObjectList;
+		std::vector<NewGOData> m_newGOBuffer;
 		
 		std::array<int, m_maxSize> m_checkInCountList;
 		std::vector<DeadData> m_ddList;
