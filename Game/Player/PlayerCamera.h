@@ -1,10 +1,17 @@
 #pragma once
 
 class Player;
+class Cannon;
 
 class PlayerCamera :public ue::GameObject
 {
 public:
+	enum CameraMode
+	{
+		CM_Normal,
+		CM_Cannon,
+	};
+
 	//コンストラクタ
 	PlayerCamera();
 	//デストラクタ
@@ -25,6 +32,12 @@ public:
 	{
 		return m_camera;
 	}
+
+	void NormalMode()
+	{
+		m_cameraMode = CM_Normal;
+	}
+	void CannonMode(Cannon* cn);
 private:
 	ue::Camera* m_camera = nullptr;					//カメラのポインタ
 	ue::CVector3 m_pos = ue::CVector3::Zero();		//position
@@ -35,4 +48,9 @@ private:
 	ue::CVector3 m_c2t = ue::CVector3::Zero();		//カメラからターゲットのベクトル。
 	float m_offsetY = 100.f;						//カメラのターゲットとポジションをY軸にいくつ動かすか。
 	Player* m_player = nullptr;						//プレイヤーのポインタ
+
+	CameraMode m_cameraMode = CM_Normal;
+	Cannon* m_cannon = nullptr;
+	ue::Bone* m_cannonBone = nullptr;
+	ue::CVector3 m_cannonDir = ue::CVector3::Zero();
 };

@@ -7,4 +7,5 @@ namespace ue = UsualEngine;
 enum CollisionUserIndex
 {
 	CUI_Cannon = enCollisionAttr_User,
+
 };

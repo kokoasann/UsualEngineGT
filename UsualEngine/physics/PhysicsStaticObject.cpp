@@ -35,6 +35,7 @@ namespace UsualEngine
 		rbInfo.rot = rot;
 		//rbInfo.sca = sca;
 		m_rigidBody.Create(rbInfo);
+		m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_Ground);
 		//„‘Ì‚ğ•¨—ƒ[ƒ‹ƒh‚É’Ç‰Á‚·‚éB
 		Physics().AddRigidBody(m_rigidBody);
 	}

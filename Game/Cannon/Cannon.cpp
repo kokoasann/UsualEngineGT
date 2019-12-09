@@ -25,8 +25,9 @@ void Cannon::Init(const ue::SkinModel& cannonMesh, const ue::CVector3& pos, cons
 	info.rot = rot;
 	m_rigidBody.Create(info);
 	auto* body = m_rigidBody.GetBody();
-	body->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
-	body->setUserIndex(enCollisionAttr_NonHitIK);
+	//body->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
+	body->setUserIndex(enCollisionAttr_NonHitIK | CollisionUserIndex::CUI_Cannon);
+	body->setUserPointer(this);
 	ue::Physics().AddRigidBody(m_rigidBody);
 
 	m_cannon = ue::NewGO<ue::SkinModelRender>(0);
@@ -39,6 +40,12 @@ void Cannon::Init(const ue::SkinModel& cannonMesh, const ue::CVector3& pos, cons
 	m_stand->SetPos(pos);
 	m_stand->SetRot(rot);
 	m_stand->SetSca(sca);
+
+	auto efb = m_cannon->GetSkinModel().GetSkeleton().GetBone(2);
+	m_cannon->SetingIK(efb, efb->GetParent(), 10);
+	m_cannon->GetAnimation().SetIKActive(false);
+	m_pos = pos;
+	m_rot = rot;
 }
 
 bool Cannon::Start()

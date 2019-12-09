@@ -2,6 +2,23 @@
 #include "Player.h"
 #include "Cannon/Cannon.h"
 
+struct SweepResultCannon : public btCollisionWorld::ConvexResultCallback
+{
+	bool isHit = false;
+	btCollisionObject* me = nullptr;
+	Cannon* hitCannon = nullptr;
+	btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
+	{
+		if (!(convexResult.m_hitCollisionObject->getUserIndex() & CUI_Cannon))
+		{
+			return 0.0f;
+		}
+		hitCannon = (Cannon*)convexResult.m_hitCollisionObject->getUserPointer();
+		isHit = true;
+		return 1.0f;
+	}
+};
+
 Player::Player()
 {
 	m_pad = &ue::GamePad(0);
@@ -33,6 +50,8 @@ Player::Player()
 	m_gmList[2] = &m_motion;
 
 	m_cannonMesh.Init(L"Assets/model/CannonDummy.cmo", ue::enFbxUpAxisZ);
+
+	m_collider.Create(10);
 }
 
 Player::~Player()
@@ -48,10 +67,42 @@ void Player::Update()
 {
 	if (ue::GamePad(0).IsTrigger(ue::enButtonX))
 	{
-		auto can = ue::NewGO<Cannon>(0);
-		
-		can->Init(m_cannonMesh, m_chara.GetPos()+ (m_chara.GetDir() * 80.f), m_chara.GetRot());
-		m_cannons.push_back(can);
+		bool isSetting = true;
+		auto newc = m_chara.GetPos() + (m_chara.GetDir() * 80.f);
+		for (auto c:m_cannons)
+		{
+			auto cp = c->GetPos();
+			if ((newc - cp).Length() < 250.f)
+			{
+				isSetting = false;
+				break;
+			}
+		}
+		if (isSetting)
+		{
+			auto can = ue::NewGO<Cannon>(0);
+
+			can->Init(m_cannonMesh, m_chara.GetPos() + (m_chara.GetDir() * 80.f), m_chara.GetRot());
+			can->SetDir(m_chara.GetDir());
+			m_cannons.push_back(can);
+		}
+		else
+		{
+			auto pos = m_chara.GetPos();
+			auto dir = m_chara.GetDir();
+			btTransform bstart, bend;
+			bstart.setIdentity();
+			bend.setIdentity();
+			auto bpos = btVector3(pos.x, pos.y, pos.z);
+			bstart.setOrigin(bpos);
+			bend.setOrigin(bpos + (btVector3(dir.x, dir.y, dir.z) * 240));
+			SweepResultCannon sr;
+			ue::Physics().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), bstart, bend, sr);
+			if (sr.isHit)
+			{
+				
+			}
+		}
 	}
 	for (auto gm : m_gmList)
 	{

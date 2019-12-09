@@ -18,8 +18,8 @@ namespace UsualEngine
 		btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
 		{
 			if (convexResult.m_hitCollisionObject == me 
-				|| convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_Character
-				|| convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_NonHitIK)
+				|| convexResult.m_hitCollisionObject->getUserIndex() & enCollisionAttr_Character
+				|| convexResult.m_hitCollisionObject->getUserIndex() & enCollisionAttr_NonHitIK)
 			{
 				chit += 1;
 				return 0.0f;
@@ -57,7 +57,7 @@ namespace UsualEngine
 
 		btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
 		{
-			if (convexResult.m_hitCollisionObject == me || convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_Character)
+			if (convexResult.m_hitCollisionObject == me || convexResult.m_hitCollisionObject->getUserIndex() & enCollisionAttr_Character)
 			{
 				chit += 1;
 				return 0.0f;
@@ -187,6 +187,11 @@ namespace UsualEngine
 		auto currentBone = m_effectorBone->GetParent();						//作業中のボーン
 
 		auto newpos = effpos + m_offset;	//移動先のポジション
+		if (m_isSetNextTarget)
+		{
+			newpos = m_nextTarget;
+			m_isSetNextTarget = false;
+		}
 
 		auto oldpos = m_effectorBone->GetWorldMatrix().GetTranslation();	//移動前のポジション
 		if (m_isFirst)

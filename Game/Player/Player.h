@@ -2,6 +2,7 @@
 #include "Character/Character.h"
 #include "PlayerCamera.h"
 #include "PlayerMotion.h"
+#include "Physics/SphereCollider.h"
 
 class Cannon;
 
@@ -62,6 +63,7 @@ private:
 	float m_HP = 10.f;			//ヒットポイント
 	float m_AP = 10.f;			//アクションポイント
 
+	ue::SphereCollider m_collider;
 	ue::SkinModel m_cannonMesh;			//キャノンのコリジョンの作成に必要なSkinModel
 	std::vector<Cannon*> m_cannons;		//今出してるキャノンの配列。
 };

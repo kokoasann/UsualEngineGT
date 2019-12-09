@@ -124,6 +124,27 @@ namespace UsualEngine
 		{
 			m_speed = f;
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="b"></param>
+		void SetIsActive(bool b)
+		{
+			m_isActive = b;
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		bool IsActive() const
+		{
+			return m_isActive;
+		}
+		void SetNextTarget(CVector3 tar)
+		{
+			m_nextTarget = tar;
+			m_isSetNextTarget = true;
+		}
 	private:
 		bool m_isFirst = true;					//初めてか？
 		Bone* m_effectorBone=0;					//エフェクタボーン
@@ -143,6 +164,10 @@ namespace UsualEngine
 
 		bool m_isHit = false;					//当たった？
 		float m_rubbing = 1.0f;					//摩擦率、初期値は100%　滑ることはない。
+
+		bool m_isActive = true;					//動く？
+		CVector3 m_nextTarget = CVector3::Zero();
+		bool m_isSetNextTarget = false;
 	};
 
 }

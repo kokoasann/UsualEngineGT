@@ -183,7 +183,8 @@ namespace UsualEngine
 	{
 		for (auto ik : m_ik)
 		{
-			ik->UpdateTarget(m_worldMatrix);
+			if(ik->IsActive())
+				ik->UpdateTarget(m_worldMatrix);
 		}
 	}
 
@@ -191,7 +192,8 @@ namespace UsualEngine
 	{
 		for (auto ik : m_ik)
 		{
-			ik->Update(m_worldMatrix);
+			if(ik->IsActive())
+				ik->Update(m_worldMatrix);
 		}
 	}
 
@@ -249,6 +251,27 @@ namespace UsualEngine
 				if (bone == ik->GetEffectorBone())
 				{
 					ik->SetSpeed(speed);
+					return;
+				}
+			}
+		}
+	}
+	void Animation::SetIKActive(bool b,Bone* bone)
+	{
+		if (bone == nullptr)
+		{
+			for (auto ik : m_ik)
+			{
+				ik->SetIsActive(b);
+			}
+		}
+		else
+		{
+			for (auto ik : m_ik)
+			{
+				if (bone == ik->GetEffectorBone())
+				{
+					ik->SetIsActive(b);
 					return;
 				}
 			}
