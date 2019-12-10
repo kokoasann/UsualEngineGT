@@ -142,6 +142,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Cannon\Cannon.cpp" />
+    <ClCompile Include="Cannon\MortarShell.cpp" />
     <ClCompile Include="Character\Character.cpp" />
     <ClCompile Include="Character\CharacterJustFoot.cpp" />
     <ClCompile Include="Character\CharacterMoveMotion.cpp" />
@@ -160,6 +161,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cannon\Cannon.h" />
+    <ClInclude Include="Cannon\MortarShell.h" />
     <ClInclude Include="Character\CharacterConst.h" />
     <ClInclude Include="Character\CharacterJustFoot.h" />
     <ClInclude Include="Character\CharacterMoveMotion.h" />
@@ -213,6 +215,7 @@
     </MeshContentTask>
     <MeshContentTask Include="Assets\model\Cannon\Cannon.fbx" />
     <MeshContentTask Include="Assets\model\Cannon\CannonDummy.fbx" />
+    <MeshContentTask Include="Assets\model\Cannon\MortarShell.fbx" />
     <MeshContentTask Include="Assets\model\Cannon\Stand.fbx" />
     <MeshContentTask Include="Assets\model\gib\gib.bone.fbx">
       <FileType>Document</FileType>

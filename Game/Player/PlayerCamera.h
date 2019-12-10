@@ -33,10 +33,7 @@ public:
 		return m_camera;
 	}
 
-	void NormalMode()
-	{
-		m_cameraMode = CM_Normal;
-	}
+	void NormalMode();
 	void CannonMode(Cannon* cn);
 private:
 	ue::Camera* m_camera = nullptr;					//カメラのポインタ

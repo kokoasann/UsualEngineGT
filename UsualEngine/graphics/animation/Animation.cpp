@@ -214,7 +214,7 @@ namespace UsualEngine
 		//UpdateIK();
 	}
 
-	void Animation::SetIKOffset(CVector3 ofs, Bone* bone)
+	void Animation::SetIKOffset(const CVector3& ofs, Bone* bone)
 	{
 		if (bone == nullptr)
 		{
@@ -274,6 +274,17 @@ namespace UsualEngine
 					ik->SetIsActive(b);
 					return;
 				}
+			}
+		}
+	}
+	void Animation::SetIKNextTarget(const CVector3& tar, Bone* bone)
+	{
+		for (auto ik : m_ik)
+		{
+			if (bone == ik->GetEffectorBone())
+			{
+				ik->SetNextTarget(tar);
+				return;
 			}
 		}
 	}

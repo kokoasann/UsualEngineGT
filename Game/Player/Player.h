@@ -66,4 +66,6 @@ private:
 	ue::SphereCollider m_collider;
 	ue::SkinModel m_cannonMesh;			//キャノンのコリジョンの作成に必要なSkinModel
 	std::vector<Cannon*> m_cannons;		//今出してるキャノンの配列。
+
+	bool m_isSettingCannon = false;
 };

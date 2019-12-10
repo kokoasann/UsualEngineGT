@@ -100,10 +100,21 @@ void Player::Update()
 			ue::Physics().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), bstart, bend, sr);
 			if (sr.isHit)
 			{
-				
+				m_camera.CannonMode(sr.hitCannon);
+				m_isSettingCannon = true;
 			}
 		}
 	}
+	if (m_isSettingCannon)
+	{
+		if (m_pad->IsTrigger(ue::enButtonB))
+		{
+			m_camera.NormalMode();
+			m_isSettingCannon = false;
+		}
+		m_camera.Update();
+	}
+	else
 	for (auto gm : m_gmList)
 	{
 		gm->Update();

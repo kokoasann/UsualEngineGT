@@ -37,6 +37,9 @@
     <ClCompile Include="Cannon\Cannon.cpp">
       <Filter>Cannon</Filter>
     </ClCompile>
+    <ClCompile Include="Cannon\MortarShell.cpp">
+      <Filter>Cannon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -78,6 +81,9 @@
       <Filter>Chara</Filter>
     </ClInclude>
     <ClInclude Include="Cannon\Cannon.h">
+      <Filter>Cannon</Filter>
+    </ClInclude>
+    <ClInclude Include="Cannon\MortarShell.h">
       <Filter>Cannon</Filter>
     </ClInclude>
   </ItemGroup>
@@ -185,6 +191,9 @@
       <Filter>Assets\Model\Cannon</Filter>
     </MeshContentTask>
     <MeshContentTask Include="Assets\model\Cannon\CannonDummy.fbx">
+      <Filter>Assets\Model\Cannon</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\Cannon\MortarShell.fbx">
       <Filter>Assets\Model\Cannon</Filter>
     </MeshContentTask>
   </ItemGroup>

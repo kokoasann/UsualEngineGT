@@ -61,6 +61,10 @@ void PlayerCamera::Update()
 
 		campos.y += m_offsetY;
 		camtar.y += m_offsetY;
+
+		/*m_camera->SetPosition(campos);
+		m_camera->SetTarget(camtar);
+		m_camera->Update();*/
 	}
 	else
 	{
@@ -68,15 +72,16 @@ void PlayerCamera::Update()
 		float yy = pad.GetRStickYF();
 		float speed = 5.f;
 		ue::CQuaternion add;
-		ue::CQuaternion r = ue::CQuaternion::Identity();
+		ue::CQuaternion r;
 
 		add.SetRotationDeg(ue::CVector3::Up(), speed * yx);
 		add.Multiply(m_cannonDir);
 
 		auto buf = m_cannonDir;
+		auto bufadd = add;
 
-		ue::CVector3 axix = ue::CVector3::Zero();
-		axix.Cross(m_c2t, ue::CVector3::AxisY());
+		ue::CVector3 axix;
+		axix.Cross(m_cannonDir, ue::CVector3::AxisY());
 		axix.Normalize();
 		r.SetRotationDeg(axix, speed * yy);
 		add.Multiply(r);
@@ -85,10 +90,16 @@ void PlayerCamera::Update()
 		if (rad > ue::CMath::PI * 0.5f || rad < ue::CMath::PI * 0.025f)
 		{
 			m_cannonDir = buf;
+			add = bufadd;
 		}
+
+		auto ofs = m_cannonDir;
+		ofs.Cross(axix);
+
 		campos = m_cannon->GetPos();
-		campos.y += 50.f;
-		camtar = m_cannonDir;
+		campos += ofs*-100.f;
+		camtar = campos + m_cannonDir;
+		m_cannon->SetTarget(m_cannonDir);
 	}
 	
 #if 1
@@ -98,10 +109,23 @@ void PlayerCamera::Update()
 #endif
 }
 
+void PlayerCamera::NormalMode()
+{
+	m_cannon->SetActive(false);
+	m_cameraMode = CM_Normal;
+}
+
 void PlayerCamera::CannonMode(Cannon* cn)
 {
 	m_cannon = cn;
 	cn->SetIKActive(true);
 
+	auto b = cn->GetDirBone();
+	ue::CVector3 pos, sca;
+	ue::CQuaternion rot;
+	b->GetWorldMatrix().CalcMatrixDecompose(pos,rot,sca);
+	//rot.SetRotation(b->GetWorldMatrix());
+	m_cannonDir = ue::CVector3::AxisY();
+	rot.Multiply(m_cannonDir);
 	m_cameraMode = CM_Cannon;
 }

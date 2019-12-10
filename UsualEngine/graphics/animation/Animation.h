@@ -129,11 +129,13 @@ namespace UsualEngine
 			}
 		}
 		
-		void SetIKOffset(CVector3 ofs, Bone* bone = nullptr);
+		void SetIKOffset(const CVector3& ofs, Bone* bone = nullptr);
 		
 		void SetIKSpeed(float speed, Bone* bone = nullptr);
 
 		void SetIKActive(bool b, Bone* bone = nullptr);
+		
+		void SetIKNextTarget(const CVector3& tar, Bone* bone);
 		/// <summary>
 		/// 
 		/// </summary>

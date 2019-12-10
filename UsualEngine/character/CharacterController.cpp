@@ -315,5 +315,4 @@ namespace UsualEngine
 	{
 		Physics().RemoveRigidBody(m_rigidBody);
 	}
-
 }

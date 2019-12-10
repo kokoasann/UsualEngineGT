@@ -268,7 +268,7 @@ namespace UsualEngine
 			v.Set(_41, _42, _43);
 			return v;
 		}
-		void CalcMatrixDecompose(CVector3& trans, CQuaternion& rot, CVector3& scale)
+		void CalcMatrixDecompose(CVector3& trans, CQuaternion& rot, CVector3& scale) const
 		{
 			CMatrix mat = *this;
 			//s—ñ‚©‚çŠg‘å—¦‚ğæ“¾‚·‚éB

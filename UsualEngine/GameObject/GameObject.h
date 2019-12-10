@@ -30,6 +30,12 @@ namespace UsualEngine
 		virtual void Render() {};
 		virtual void PostRender() {};
 
+		void WrapOnDestroy(){}
+		void WrapStart();
+		void WrapUpdate();
+		void WrapRender();
+		void WrapPostRender();
+
 		/*
 		ゲーム側では使わない
 		FindGOとかで識別するための名前をセットする
@@ -96,6 +102,7 @@ namespace UsualEngine
 			return mIsTrashTake;
 		}
 
+		
 
 	private:
 		bool mIsStart = false;			//スタート関数呼ばれた？
