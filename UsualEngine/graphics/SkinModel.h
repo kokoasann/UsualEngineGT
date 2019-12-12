@@ -26,6 +26,10 @@ namespace UsualEngine
 		*@brief	デストラクタ。
 		*/
 		~SkinModel();
+		/// <summary>
+		/// 開放。
+		/// </summary>
+		void Release();
 
 		/*!
 		*@brief	初期化。

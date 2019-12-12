@@ -11,21 +11,32 @@ UsualEngine::GameObject::~GameObject()
 
 void UsualEngine::GameObject::WrapStart()
 {
-	if (!mIsStart && mIsActive && !mIsDead)
+	if (!m_isStartGO && m_isActiveGO && !m_isDeadGO)
 	{
-		mIsStart = Start();
+		m_isStartGO = Start();
 	}
 }
 
 void UsualEngine::GameObject::WrapUpdate()
 {
-	
+	if (m_isStartGO && m_isActiveGO && !m_isDeadGO)
+	{
+		Update();
+	}
 }
 
 void UsualEngine::GameObject::WrapRender()
 {
+	if (m_isStartGO && m_isActiveGO && !m_isDeadGO)
+	{
+		Render();
+	}
 }
 
 void UsualEngine::GameObject::WrapPostRender()
 {
+	if (m_isStartGO && m_isActiveGO && !m_isDeadGO)
+	{
+		PostRender();
+	}
 }

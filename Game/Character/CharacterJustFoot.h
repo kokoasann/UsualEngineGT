@@ -14,6 +14,15 @@ public:
 	~CharacterJustFoot(){}
 
 	/// <summary>
+	/// 開放。
+	/// </summary>
+	void Release() override;
+	/// <summary>
+	/// DeleteGOされた瞬間呼ばれる
+	/// </summary>
+	void OnDestroy() override;
+
+	/// <summary>
 	/// JustFootの初期化。
 	/// </summary>
 	/// <param name="chara">キャラクター</param>

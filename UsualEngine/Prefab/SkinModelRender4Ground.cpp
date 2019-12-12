@@ -4,6 +4,20 @@
 
 namespace UsualEngine
 {
+	void SkinModelRender4Ground::Release()
+	{
+		SkinModelRender::Release();
+		m_blendMap->Release();
+		m_groundCB.Release();
+		m_psShader.Release();
+		for (int n = 0; n < 3; n++)
+		{
+			if (m_textures[n]!=nullptr)
+			{
+				m_textures[n]->Release();
+			}
+		}
+	}
 	void SkinModelRender4Ground::InitG(const wchar_t* path, AnimationClip* anims, int animCount, EnFbxUpAxis axis)
 	{
 		Init(path, anims, animCount, axis);

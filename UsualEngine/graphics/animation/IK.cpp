@@ -203,7 +203,7 @@ namespace UsualEngine
 		{
 			oldpos = m_target;
 		}
-		if ((newpos - oldpos).Length() < 0.000001f)
+		if ((newpos - oldpos).Length() < 0.001f)
 			return;
 		
 		//oldpos.y += m_radius;

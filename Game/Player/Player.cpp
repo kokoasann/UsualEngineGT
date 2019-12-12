@@ -58,6 +58,14 @@ Player::~Player()
 {
 }
 
+void Player::Release()
+{
+}
+
+void Player::OnDestroy()
+{
+}
+
 bool Player::Start()
 {
 	return true;
@@ -115,8 +123,17 @@ void Player::Update()
 		m_camera.Update();
 	}
 	else
-	for (auto gm : m_gmList)
 	{
-		gm->Update();
+		if (m_pad->IsTrigger(ue::enButtonRB1))
+		{
+			for (auto& can : m_cannons)
+			{
+				can->Fire();
+			}
+		}
+		for (auto gm : m_gmList)
+		{
+			gm->Update();
+		}
 	}
 }

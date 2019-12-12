@@ -22,6 +22,12 @@ namespace UsualEngine
 			/// </summary>
 			DirectX::XMINT4 isUseTextures;
 		};
+		void Release() override;
+		/// <summary>
+		/// DeleteGOÇ≥ÇÍÇΩèuä‘åƒÇŒÇÍÇÈ
+		/// </summary>
+		void OnDestroy() override{}
+
 		/// <summary>
 		/// 
 		/// </summary>

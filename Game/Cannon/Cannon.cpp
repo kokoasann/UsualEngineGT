@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Cannon.h"
-
+#include "MortarShell.h"
 void Cannon::OnDestroy()
 {
 	ue::DeleteGO(m_cannon);
@@ -49,6 +49,8 @@ void Cannon::Init(const ue::SkinModel& cannonMesh, const ue::CVector3& pos, cons
 	m_pos = pos;
 	m_rot = rot;
 	m_collisionRot = rot;
+
+	m_rot.Multiply(m_dir);
 }
 
 bool Cannon::Start()
@@ -58,6 +60,8 @@ bool Cannon::Start()
 
 void Cannon::Update()
 {
+	if (!m_isDirEdit)
+		return;
 	ue::CVector3 pos, sca;
 	ue::CQuaternion rot,ofsrot;
 	const auto& mat = m_dirBone->GetWorldMatrix();
@@ -74,4 +78,10 @@ void Cannon::Update()
 	trans.setRotation({ rot.x,rot.y,rot.z,rot.w });
 	auto p = m_dirBone->GetParent()->GetWorldMatrix().GetTranslation();
 	trans.setOrigin({ p.x ,p.y ,p.z });
+}
+
+void Cannon::Fire()
+{
+	auto shell = ue::NewGO<MortarShell>(0);
+	shell->Init(m_dirBone->GetParent()->GetWorldMatrix().GetTranslation(), m_dir);
 }

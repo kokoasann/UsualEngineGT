@@ -16,6 +16,15 @@ namespace UsualEngine
 		using RotateFunc = std::function<void(CQuaternion& rot)>;
 
 		/// <summary>
+		/// 開放。
+		/// </summary>
+		void Release();
+		/// <summary>
+		/// DeleteGOされた瞬間呼ばれる
+		/// </summary>
+		void OnDestroy() override{}
+
+		/// <summary>
 		/// 更新する
 		/// </summary>
 		void Update() override;

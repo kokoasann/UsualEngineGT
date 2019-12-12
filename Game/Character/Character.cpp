@@ -7,8 +7,23 @@ Character::Character()
 
 Character::~Character()
 {
-	if(m_model)
-		ue::DeleteGO(m_model);
+	Release();
+}
+
+void Character::Release()
+{
+	ue::DeleteGO(m_model);
+	m_boneList.clear();
+	m_footL = nullptr;
+	m_footR = nullptr;
+	m_handL = nullptr;
+	m_handR = nullptr;
+	m_waistL = nullptr;
+	m_waistR = nullptr;
+}
+
+void Character::OnDestroy()
+{
 }
 
 void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, const ue::CVector3& offset)

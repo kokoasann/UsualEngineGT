@@ -9,6 +9,15 @@ public:
 	~CharacterMoveMotion(){}
 
 	/// <summary>
+	/// 開放。
+	/// </summary>
+	void Release() override{}
+	/// <summary>
+	/// DeleteGOされた瞬間呼ばれる
+	/// </summary>
+	void OnDestroy() override{}
+
+	/// <summary>
 	/// 初期化。
 	/// </summary>
 	/// <param name="chara">Characterのポインタ</param>

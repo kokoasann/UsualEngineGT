@@ -15,6 +15,10 @@ namespace UsualEngine
 		* @brief	デストラクタ。
 		*/
 		~CapsuleCollider();
+		/// <summary>
+		/// リリース!
+		/// </summary>
+		void Release();
 		/*!
 		* @brief	作成。
 		*@param[in] radius	カプセルの半径。
@@ -23,6 +27,7 @@ namespace UsualEngine
 		void Create(float radius, float height)
 		{
 			shape = new btCapsuleShape(radius, height);
+			
 			this->radius = radius;
 			this->height = height;
 		}

@@ -12,6 +12,10 @@ namespace UsualEngine
 		~LightBase() {};
 	public:
 		bool Start() override final;
+		/// <summary>
+		/// ŠJ•úB
+		/// </summary>
+		void Release() override{}
 		void OnDestroy() override final;
 
 		

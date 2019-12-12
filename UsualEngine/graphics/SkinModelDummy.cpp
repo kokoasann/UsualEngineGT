@@ -3,6 +3,10 @@
 
 namespace UsualEngine
 {
+	void SkinModelDummy::Release()
+	{
+		m_skinModel.Release();
+	}
 	void SkinModelDummy::Update()
 	{
 		m_skinModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);

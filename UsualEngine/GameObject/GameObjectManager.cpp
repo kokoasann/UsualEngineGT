@@ -45,10 +45,10 @@ namespace UsualEngine
 		{
 			for (auto go : goList)
 			{
-				if (!go->isStart() && !go->isDead())
+				if (!go->IsStart() && !go->IsDead())
 				{
 					if (go->Start())
-						go->START();
+						go->DoneStart();
 				}
 			}
 		}
@@ -59,7 +59,7 @@ namespace UsualEngine
 		if (go == nullptr)
 			return;
 		go->OnDestroy();
-		go->DEAD();
+		go->DoneDead();
 	}
 
 	void GameObjectManager::UpdateUpdate()
@@ -69,9 +69,9 @@ namespace UsualEngine
 		{
 			for (auto go : goList)
 			{
-				if (go->isStart())
+				if (go->IsStart())
 				{
-					if (!go->isDead())
+					if (!go->IsDead())
 					{
 						go->Update();
 						
@@ -88,16 +88,24 @@ namespace UsualEngine
 			}
 			Count = 0;
 		}
-
+		Count = 0;
+		int nowprio = 0;
 		for (auto& dd : m_ddList)
 		{
-			GameObject* go = m_gameObjectList[dd.prio][dd.ind];
+			if (nowprio != dd.prio)
+			{
+				Count = 0;
+				nowprio = dd.prio;
+			}
+			GameObject* go = m_gameObjectList[dd.prio][dd.ind-Count];
 			auto it = std::find(m_gameObjectList[dd.prio].begin(), m_gameObjectList[dd.prio].end(), go);
 			m_gameObjectList[dd.prio].erase(it);
 			if (go->IsTrashTake())
 				m_trashBox.push_back(go);
 			else
 				delete go;
+			Count++;
+
 		}
 		m_ddList.clear();
 	}

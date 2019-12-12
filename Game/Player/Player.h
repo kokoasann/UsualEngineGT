@@ -23,6 +23,15 @@ public:
 	Player();
 	~Player();
 
+	/// <summary>
+	/// 開放。
+	/// </summary>
+	void Release() override;
+	/// <summary>
+	/// DeleteGOされた瞬間呼ばれる
+	/// </summary>
+	void OnDestroy() override;
+
 	bool Start() override;
 	void Update() override;
 
@@ -43,22 +52,6 @@ private:
 
 	ue::AnimationClip m_anim[PA_num];		//アニメーション
 	ue::Pad* m_pad = 0;								//ゲームパッド
-	//bool m_isWalk = false;								//歩いてる?
-	//PlayerAnim m_PlayingAnim = PlayerAnim::PA_idol;	//今再生してるアニメ
-	//float m_animLug = 1.f;
-	//float m_animLug_2idle = 0.0f;
-	//float m_lugTime = 0.f;
-	//ue::CVector3 m_moved = ue::CVector3::AxisZ();
-	//ue::CVector3 m_dir = ue::CVector3::AxisZ();
-	//float m_oldSpeed = 0.0f;
-
-	//ue::SkinModelRender::MoveFunc m_walkFunc;
-	//ue::Bone* m_footL = nullptr;
-	//ue::Bone* m_footR = nullptr;
-	//bool m_isJustedL = false;
-	//bool m_isJustedR = false;
-	//float m_justTimeL = 0.f;
-	//float m_justTimeR = 0.f;
 
 	float m_HP = 10.f;			//ヒットポイント
 	float m_AP = 10.f;			//アクションポイント

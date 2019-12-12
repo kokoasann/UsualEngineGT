@@ -3,6 +3,11 @@
 
 namespace UsualEngine
 {
+	void SkinModelRender::Release()
+	{
+		m_skinModel.Release();
+		m_animation.Release();
+	}
 	void SkinModelRender::Update()
 	{
 		auto& ske = m_skinModel.GetSkeleton();

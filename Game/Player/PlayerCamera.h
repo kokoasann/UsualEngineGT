@@ -14,6 +14,11 @@ public:
 
 	//コンストラクタ
 	PlayerCamera();
+
+	/// <summary>
+	/// 開放。
+	/// </summary>
+	void Release() override;
 	//デストラクタ
 	void OnDestroy() override;
 

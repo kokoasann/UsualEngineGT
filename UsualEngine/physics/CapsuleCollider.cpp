@@ -13,6 +13,10 @@ namespace UsualEngine
 		*/
 	CapsuleCollider::~CapsuleCollider()
 	{
+		Release();
+	}
+	void CapsuleCollider::Release()
+	{
 		delete shape;
 	}
 }

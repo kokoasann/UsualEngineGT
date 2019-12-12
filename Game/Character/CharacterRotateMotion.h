@@ -17,6 +17,15 @@ public:
 	CharacterRotateMotion(){}
 	~CharacterRotateMotion(){}
 
+	/// <summary>
+	/// ŠJ•úB
+	/// </summary>
+	void Release() override{}
+	/// <summary>
+	/// DeleteGO‚³‚ê‚½uŠÔŒÄ‚Î‚ê‚é
+	/// </summary>
+	void OnDestroy() override{}
+
 
 	/// <summary>
 	/// ‰Šú‰»B

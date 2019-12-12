@@ -35,9 +35,13 @@ namespace UsualEngine
 	}
 	Skeleton::~Skeleton()
 	{
-		//ちゃんとメモリは解放しましょう。
-		for (int boneNo = 0; boneNo < m_bones.size(); boneNo++) {
-			delete m_bones[boneNo];
+		Release();
+	}
+	void Skeleton::Release()
+	{
+		for (int n = 0; n < m_bones.size(); n++)
+		{
+			delete m_bones[n];
 		}
 		//ボーン行列のストラクチャーバッファを解放。
 		if (m_boneMatrixSB != nullptr) {
@@ -47,6 +51,7 @@ namespace UsualEngine
 		if (m_boneMatrixSRV != nullptr) {
 			m_boneMatrixSRV->Release();
 		}
+		m_boneMatrixs.clear();
 	}
 	void Skeleton::UpdateBoneWorldMatrix(Bone& bone, const CMatrix& parentMatrix)
 	{

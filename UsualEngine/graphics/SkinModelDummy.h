@@ -8,6 +8,11 @@ namespace UsualEngine
 	public:
 
 		/// <summary>
+		/// 開放。
+		/// </summary>
+		void Release();
+
+		/// <summary>
 		/// 更新する
 		/// </summary>
 		void Update() override;

@@ -6,6 +6,10 @@ namespace UsualEngine
 {
 	SkinModel::~SkinModel()
 	{
+		Release();
+	}
+	void SkinModel::Release()
+	{
 		if (m_cb != nullptr) {
 			//定数バッファを解放。
 			m_cb->Release();
@@ -14,6 +18,7 @@ namespace UsualEngine
 			//サンプラステートを解放。
 			m_samplerState->Release();
 		}
+		m_skeleton.Release();
 	}
 	void SkinModel::Init(const wchar_t* filePath, EnFbxUpAxis enFbxUpAxis)
 	{

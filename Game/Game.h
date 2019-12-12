@@ -6,7 +6,13 @@ class Game :public ue::GameObject
 {
 public:
 	Game();
-
+	/// <summary>
+	/// ŠJ•úB
+	/// </summary>
+	void Release() override{}
+	/// <summary>
+	/// DeleteGO‚³‚ê‚½uŠÔŒÄ‚Î‚ê‚é
+	/// </summary>
 	void OnDestroy() override;
 	bool Start() override;
 	void Update() override;

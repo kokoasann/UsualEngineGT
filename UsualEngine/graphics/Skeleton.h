@@ -220,6 +220,8 @@ namespace UsualEngine
 		Skeleton();
 		~Skeleton();
 
+		void Release();
+
 		/*!
 		 *@brief	ボーンのローカル行列を設定。
 		 *@param[in]	boneNo		ボーン番号

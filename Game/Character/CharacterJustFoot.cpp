@@ -2,6 +2,18 @@
 #include "CharacterJustFoot.h"
 #include "Character.h"
 
+void CharacterJustFoot::Release()
+{
+	m_chara = nullptr;
+	m_footL = nullptr;
+	m_footR = nullptr;
+}
+
+void CharacterJustFoot::OnDestroy()
+{
+	Release();
+}
+
 void CharacterJustFoot::Update()
 {
 	if (!m_isStart)

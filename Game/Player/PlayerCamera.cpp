@@ -15,6 +15,10 @@ PlayerCamera::PlayerCamera()
 	m_offsetY = 200;
 }
 
+void PlayerCamera::Release()
+{
+}
+
 void PlayerCamera::OnDestroy()
 {
 }
@@ -99,6 +103,7 @@ void PlayerCamera::Update()
 		campos = m_cannon->GetPos();
 		campos += ofs*-100.f;
 		camtar = campos + m_cannonDir;
+		m_cannonDir.Normalize();
 		m_cannon->SetTarget(m_cannonDir);
 	}
 	
@@ -111,7 +116,11 @@ void PlayerCamera::Update()
 
 void PlayerCamera::NormalMode()
 {
-	m_cannon->SetActive(false);
+	if (m_cannon != nullptr)
+	{
+		m_cannon->SetActive(false);
+		m_cannon->EndDirEdit();
+	}
 	m_cameraMode = CM_Normal;
 }
 
@@ -119,6 +128,7 @@ void PlayerCamera::CannonMode(Cannon* cn)
 {
 	m_cannon = cn;
 	cn->SetIKActive(true);
+	cn->DirEdit();
 
 	auto b = cn->GetDirBone();
 	ue::CVector3 pos, sca;

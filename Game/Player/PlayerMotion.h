@@ -22,6 +22,15 @@ public:
 	PlayerMotion(){}
 	~PlayerMotion(){}
 
+	/// <summary>
+	/// ŠJ•úB
+	/// </summary>
+	void Release() override{}
+	/// <summary>
+	/// DeleteGO‚³‚ê‚½uŠÔŒÄ‚Î‚ê‚é
+	/// </summary>
+	void OnDestroy() override{}
+
 	void Init(Player* player, Character* chara, ue::Camera* cam, ue::AnimationClip* anim,ue::Pad* pad);
 
 	void Update()override;

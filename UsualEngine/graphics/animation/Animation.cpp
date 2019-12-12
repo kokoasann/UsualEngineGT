@@ -25,6 +25,7 @@ namespace UsualEngine
 			delete ik;
 		}
 		m_ik.clear();
+		//m_skeleton->Release();
 	}
 
 	void Animation::Init(SkinModel& skinModel, AnimationClip animClipList[], int numAnimClip)
