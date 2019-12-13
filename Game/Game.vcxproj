@@ -166,6 +166,7 @@
     <ClInclude Include="Character\CharacterJustFoot.h" />
     <ClInclude Include="Character\CharacterMoveMotion.h" />
     <ClInclude Include="Character\CharacterRotateMotion.h" />
+    <ClInclude Include="CollisionTag.h" />
     <ClInclude Include="_Test\Ene_Tes.h" />
     <FxCompile Include="Assets\shader\Bloom.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>

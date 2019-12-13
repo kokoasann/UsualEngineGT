@@ -9,8 +9,8 @@ MortarShell::~MortarShell()
 void MortarShell::OnDestroy()
 {
 	ue::DeleteGO(m_model);
-	ue::Physics().RemoveRigidBody(m_rigidBody);
-	m_rigidBody.Release();
+	//ue::Physics().RemoveRigidBody(m_rigidBody);
+	//m_rigidBody.Release();
 	m_collider.Release();
 	
 }
@@ -45,8 +45,8 @@ void MortarShell::Init(ue::CVector3 pos, ue::CVector3 dir)
 	info.mass = 0.f;
 	info.pos = pos;
 	info.rot = rot;
-	m_rigidBody.Create(info);
-	ue::Physics().AddRigidBody(m_rigidBody);
+	//m_rigidBody.Create(info);
+	//ue::Physics().AddRigidBody(m_rigidBody);
 }
 
 bool MortarShell::Start()
@@ -76,9 +76,9 @@ void MortarShell::Update()
 	//m_dir.z -= m_dir.z * len * dtime;
 	m_dir.y -= m_gravity * dtime;// -m_dir.y * len * dtime;
 
-	auto tr = m_rigidBody.GetBody()->getWorldTransform();
+	/*auto tr = m_rigidBody.GetBody()->getWorldTransform();
 	tr.setOrigin({ m_pos.x,m_pos.y ,m_pos.z });
-	tr.setRotation({ rot.x,rot.y ,rot.z });
+	tr.setRotation({ rot.x,rot.y ,rot.z });*/
 
 	if (m_pos.y <= 0)		//(‰¼)
 	{

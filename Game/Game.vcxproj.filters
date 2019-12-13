@@ -86,6 +86,7 @@
     <ClInclude Include="Cannon\MortarShell.h">
       <Filter>Cannon</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionTag.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">

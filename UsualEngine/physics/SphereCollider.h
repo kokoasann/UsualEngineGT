@@ -10,6 +10,11 @@ namespace UsualEngine
 		SphereCollider(){}
 		//
 		~SphereCollider();
+
+		/// <summary>
+		/// ŠJ•úB
+		/// </summary>
+		void Release();
 		
 		/// <summary>
 		/// 

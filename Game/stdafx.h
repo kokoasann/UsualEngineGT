@@ -1,11 +1,6 @@
 #pragma once
 
 #include "../UsualEngine/PreCompile.h"
-
+#include "CollisionTag.h"
 namespace ue = UsualEngine;
 
-enum CollisionUserIndex
-{
-	CUI_Cannon = enCollisionAttr_User,
-
-};

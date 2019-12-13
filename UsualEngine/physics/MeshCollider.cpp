@@ -14,6 +14,26 @@ namespace UsualEngine
 
 	}
 
+	void MeshCollider::Release()
+	{
+		auto ptr = m_meshShape.release();
+		delete ptr;
+		auto ptr1 = m_stridingMeshInterface.release();
+		delete ptr1;
+		for (auto& p : m_indexBufferArray)
+		{
+			auto rp = p.release();
+			delete rp;
+		}
+		for (auto& p : m_vertexBufferArray)
+		{
+			auto rp = p.release();
+			delete rp;
+		}
+		m_indexBufferArray.clear();
+		m_vertexBufferArray.clear();
+	}
+
 	/*!
 	 * @brief	CSkinModelからメッシュコライダーを生成。
 	 *@param[in]	model		スキンモデル。

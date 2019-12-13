@@ -5,7 +5,11 @@ namespace UsualEngine
 {
 	SphereCollider::~SphereCollider()
 	{
-		if(m_body!=nullptr)
+		Release();
+	}
+	void SphereCollider::Release()
+	{
+		if (m_body != nullptr)
 			delete m_body;
 	}
 	void SphereCollider::Create(float radius)

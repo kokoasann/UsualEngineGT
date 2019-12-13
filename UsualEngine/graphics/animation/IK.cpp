@@ -150,16 +150,22 @@ namespace UsualEngine
 	IK::IK(Bone* effector, Bone* end, float radius, bool isOnRigitBody, const CVector3& pos) :
 		m_effectorBone(effector),
 		m_endBone(end),
-		m_radius(radius)
+		m_radius(radius),
+		m_isUseRigidBody(isOnRigitBody)
 	{
 		m_collider.Create(radius);
-
-		InitRigidBody(pos);
+		if(isOnRigitBody)
+			InitRigidBody(pos);
 	}
 
 	IK::~IK()
 	{
-		
+		if (m_isUseRigidBody)
+		{
+			Physics().RemoveRigidBody(m_rigidBody);
+			m_rigidBody.Release();
+		}
+		m_collider.Release();
 	}
 
 	void IK::InitRigidBody(const CVector3& pos)
@@ -298,8 +304,8 @@ namespace UsualEngine
 		//auto o2n = m_target - oldpos;
 		m_effectorBone->SetMove(m_move);
 		m_offset = CVector3::Zero();
-
-		UpdateRigidBody(m_target);
+		if(m_isUseRigidBody)
+			UpdateRigidBody(m_target);
 	}
 
 	void IK::Update(const CMatrix& worldMat)

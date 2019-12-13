@@ -166,8 +166,10 @@ namespace UsualEngine
 		float m_rubbing = 1.0f;					//摩擦率、初期値は100%　滑ることはない。
 
 		bool m_isActive = true;					//動く？
-		CVector3 m_nextTarget = CVector3::Zero();
-		bool m_isSetNextTarget = false;
+		CVector3 m_nextTarget = CVector3::Zero();	//外部から設定された次のターゲット
+		bool m_isSetNextTarget = false;				//次のターゲットがセットされた？
+		
+		bool m_isUseRigidBody = true;				//リジッドボディーを使う？
 	};
 
 }

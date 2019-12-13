@@ -21,6 +21,11 @@ namespace UsualEngine
 		 * @brief	デストラクタ。
 		 */
 		~MeshCollider();
+
+		/// <summary>
+		/// リリース
+		/// </summary>
+		void Release();
 		/*!
 		 * @brief	CSkinModelからメッシュコライダーを生成。
 		 *@param[in]	model		スキンモデル。
