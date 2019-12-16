@@ -12,6 +12,7 @@ Ene_Gib::Ene_Gib()
 	m_animClip[GA_rotate].SetLoopFlag(true);
 
 	model->Init(L"Assets/model/gib.bone.cmo", m_animClip, GA_num, ue::enFbxUpAxisY);
+	//model->Init(L"Assets/model/gib.bone.cmo", 0,0, ue::enFbxUpAxisY);
 	model->SetSca({ 100.f,100.f, 100.f });
 	
 	m_chara.Init(model, 20, 50, {0,-30,0});
@@ -23,12 +24,18 @@ Ene_Gib::Ene_Gib()
 	m_chara.SetBone(footL->GetParent()->GetParent()->GetParent(), BK_WaistL);
 	//m_chara.FindBone(L"Bone.007_R.004", Character::BK_None, true, 2, 10);
 	//m_chara.FindBone(L"Bone.007_L.004", Character::BK_None, true, 2, 10);
+
+	//m_chara.SetActionMode(AM_None);
 	m_chara.PlayAnim(GA_rotate,1.0f, 0.f,AM_Rotate);
+	
 
 	m_charaMove.Init(&m_chara, m_animClip);
 	m_charaMove.InitBone(footL, footR);
 	m_charaMove.InitJustFoot(50.f, 700.f, 0.4f, 0.6f);
 	m_charaRotate.Init(&m_chara, CharacterRotateMotion::RM_UseIK, 0);
+
+	m_cbc = ue::NewGO<ue::CharacterBoxCollider>(0);
+	m_cbc->Init(L"Assets/model/gib/gib.ubc",&model->GetSkinModel().GetSkeleton(),100.f);
 }
 
 Ene_Gib::~Ene_Gib()

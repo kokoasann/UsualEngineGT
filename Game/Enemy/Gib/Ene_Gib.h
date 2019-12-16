@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Character/CharacterBoxCollider.h"
 #include "Enemy/Enemy.h"
 class Ene_Gib :public Enemy
 {
@@ -20,4 +20,5 @@ public:
 
 private:
 	ue::AnimationClip m_animClip[GA_num];
+	ue::CharacterBoxCollider* m_cbc;
 };

@@ -10,10 +10,11 @@ namespace UsualEngine
 		{
 			Bone* bone;
 			BoxCollider box;
-			RigidBody m_rigid;
+			RigidBody* rigid;
+			CMatrix offsetmat = CMatrix::Identity();
 		};
-		CharacterBoxCollider();
-		~CharacterBoxCollider();
+		CharacterBoxCollider() {};
+		~CharacterBoxCollider() {};
 
 		virtual void Release() override;
 		virtual void OnDestroy() override;
@@ -25,7 +26,7 @@ namespace UsualEngine
 
 	private:
 	
-		std::vector<RelationBB> m_bbs;
+		std::vector<RelationBB> m_relationBBList;
 		std::vector<BoxCollider> m_boxs;
 		std::vector<RigidBody> m_rigids;
 		bool m_isRigidBody = true;
