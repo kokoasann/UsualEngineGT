@@ -230,6 +230,9 @@
     <ClCompile Include="physics\BoxCollider.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
+    <ClCompile Include="character\CharacterBoxCollider.cpp">
+      <Filter>Character</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="character\CharacterController.h">
@@ -410,6 +413,9 @@
     </ClInclude>
     <ClInclude Include="physics\BoxCollider.h">
       <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="character\CharacterBoxCollider.h">
+      <Filter>Character</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

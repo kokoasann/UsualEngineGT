@@ -157,6 +157,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="character\CharacterBoxCollider.cpp" />
     <ClCompile Include="character\CharacterController.cpp" />
     <ClCompile Include="GameObject\GameObject.cpp" />
     <ClCompile Include="GameObject\GameObjectManager.cpp" />
@@ -218,6 +219,7 @@
     <ClCompile Include="UsualEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="character\CharacterBoxCollider.h" />
     <ClInclude Include="character\CharacterController.h" />
     <ClInclude Include="GameObject\GameObject.h" />
     <ClInclude Include="GameObject\GameObjectManager.h" />
