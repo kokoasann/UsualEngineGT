@@ -6,6 +6,7 @@ namespace UsualEngine
 	class CharacterBoxCollider:public GameObject
 	{
 	public:
+		using SettingTagFunc = std::function<int(const char* tag)>;
 		struct RelationBB
 		{
 			Bone* bone;
@@ -19,7 +20,7 @@ namespace UsualEngine
 		virtual void Release() override;
 		virtual void OnDestroy() override;
 
-		void Init(const wchar_t* path,Skeleton* skeleton, float scale,bool isRigidBody=true);
+		void Init(const wchar_t* path, Skeleton* skeleton, float scale, SettingTagFunc func = [](auto tag) {return enCollisionAttr_NonHitIK;});
 
 		bool Start() override;
 		void Update() override;

@@ -9,7 +9,7 @@ namespace UsualEngine
 	void CharacterBoxCollider::OnDestroy()
 	{
 	}
-	void CharacterBoxCollider::Init(const wchar_t* path,Skeleton* ske,float scale, bool isRigidBody)
+	void CharacterBoxCollider::Init(const wchar_t* path,Skeleton* ske,float scale, SettingTagFunc func)
 	{
 		FILE* file = _wfopen(path, L"rb");
 		if (!file)
@@ -17,8 +17,7 @@ namespace UsualEngine
 		int count = 0;
 		fread(&count, sizeof(count), 1, file);
 
-		if(isRigidBody)
-			m_rigids.resize(count);
+		m_rigids.resize(count);
 		m_boxs.resize(count);
 		m_relationBBList.resize(count);
 		for (int i = 0; i < count; i++)
@@ -27,6 +26,10 @@ namespace UsualEngine
 			fread(&len, sizeof(len), 1, file);
 			char name[255] = { 0 };
 			fread(name, sizeof(char), len+1, file);
+			char tagname[32] = { 0 };
+			fread(&len, sizeof(len), 1, file);
+			fread(&tagname, sizeof(char), len + 1, file);
+			int tag = func(tagname);
 			CVector3 vec[4];
 			fread(vec, sizeof(CVector3), 4, file);
 
@@ -55,22 +58,22 @@ namespace UsualEngine
 			//m_relationBBList[i].offsetmat.Mul(rotm, tram);
 
 			m_relationBBList[i].box.Create(sca*scale*2);
-			if (isRigidBody)
-			{
-				auto wmat = bone->GetBindPoseMatrix();
-				auto mat = m_relationBBList[i].offsetmat*wmat;
-				mat.CalcMatrixDecompose(pos, rot, sca);
+			auto wmat = bone->GetBindPoseMatrix();
+			auto mat = m_relationBBList[i].offsetmat*wmat;
+			mat.CalcMatrixDecompose(pos, rot, sca);
 
-				RigidBodyInfo info;
-				info.collider = &m_relationBBList[i].box;
-				info.mass = 0;
-				info.pos = pos;
-				info.rot = rot;
+			RigidBodyInfo info;
+			info.collider = &m_relationBBList[i].box;
+			info.mass = 0;
+			info.pos = pos;
+			info.rot = rot;
 
-				m_rigids[i].Create(info);
-				m_relationBBList[i].rigid = &m_rigids[i];
-				Physics().AddRigidBody(*m_relationBBList[i].rigid);
-			}
+			m_rigids[i].Create(info);
+			m_relationBBList[i].rigid = &m_rigids[i];
+			Physics().AddRigidBody(*m_relationBBList[i].rigid);
+
+			auto rg = m_rigids[i].GetBody();
+			rg->setUserIndex(tag);
 		}
 		fclose(file);
 	}
