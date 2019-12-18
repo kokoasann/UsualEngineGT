@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Ene_Gib.h"
 #include "Character/CharacterConst.h"
+#include "Physics/CollisionAttr.h"
 Ene_Gib::Ene_Gib()
 {
 	ue::SkinModelRender* model = ue::NewGO<ue::SkinModelRender>(0);
@@ -35,7 +36,15 @@ Ene_Gib::Ene_Gib()
 	m_charaRotate.Init(&m_chara, CharacterRotateMotion::RM_UseIK, 0);
 
 	m_cbc = ue::NewGO<ue::CharacterBoxCollider>(0);
-	m_cbc->Init(L"Assets/model/gib/gib.ubc",&model->GetSkinModel().GetSkeleton(),100.f);
+	m_cbc->Init(L"Assets/model/gib/gib.ubc", &model->GetSkinModel().GetSkeleton(), 100.f, [&](const char* tag)
+	{
+		int ind = ue::enCollisionAttr_NonHitIK;
+		if (strcmp("head", tag)==0)
+		{
+
+		}
+		return ind;
+	});
 }
 
 Ene_Gib::~Ene_Gib()
