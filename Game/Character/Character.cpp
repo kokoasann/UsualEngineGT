@@ -26,10 +26,10 @@ void Character::OnDestroy()
 {
 }
 
-void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, const ue::CVector3& offset)
+void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, const ue::CVector3& offset, bool isCharaConRigid)
 {
 	m_model = smr;
-	m_characon.Init(ccradius, ccheight, smr->GetPos(),false);
+	m_characon.Init(ccradius, ccheight, smr->GetPos(),isCharaConRigid);
 	m_ccOffset = offset;
 
 	m_defaultMoveFunc = [&](ue::CVector3 & pos)

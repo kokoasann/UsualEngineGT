@@ -34,7 +34,7 @@ void Cannon::Init(const ue::SkinModel& cannonMesh, const ue::CVector3& pos, cons
 	m_rigidBody.Create(info);
 	auto* body = m_rigidBody.GetBody();
 	//body->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
-	body->setUserIndex(enCollisionAttr_NonHitIK | CollisionUserIndex::CUI_Cannon);
+	body->setUserIndex(ue::enCollisionAttr_NonHitIK | CollisionUserIndex::CUI_Cannon);
 	body->setUserPointer(this);
 	//body->setActivationState(DISABLE_SIMULATION);
 	ue::Physics().AddRigidBody(m_rigidBody);

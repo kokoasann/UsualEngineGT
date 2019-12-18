@@ -1,5 +1,7 @@
 #pragma once
 
+namespace ue = UsualEngine;
+
 enum CollisionUserIndex
 {
 	CUI_Cannon = ue::enCollisionAttr_User,

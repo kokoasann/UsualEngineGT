@@ -31,7 +31,7 @@ public:
 	/// <param name="ccradius"></param>
 	/// <param name="ccheight"></param>
 	/// <param name="offset"></param>
-	void Init(ue::SkinModelRender* smr,float ccradius=0,float ccheight=0,const ue::CVector3& offset=ue::CVector3::Zero());
+	void Init(ue::SkinModelRender* smr, float ccradius = 0, float ccheight = 0, const ue::CVector3& offset = ue::CVector3::Zero(), bool isCharaConRigid = false);
 
 	/// <summary>
 	/// JustFoot‚Ì‰Šú‰»B
