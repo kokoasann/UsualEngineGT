@@ -70,6 +70,10 @@ namespace UsualEngine
 				//自分に衝突した。or 地面に衝突した。
 				return 0.0f;
 			}
+			if (convexResult.m_hitCollisionObject->getUserIndex() & enCollisionAttr_NonHitIK)
+			{
+				OutputDebugStringA("HIT NHK!!\n");
+			}
 			//衝突点の法線を引っ張ってくる。
 			CVector3 hitNormalTmp;
 			hitNormalTmp.Set(convexResult.m_hitNormalLocal);
@@ -159,8 +163,8 @@ namespace UsualEngine
 				}
 				//カプセルコライダーの中心座標 + 高さ*0.1の座標をposTmpに求める。
 				CVector3 posTmp = m_position;
-				//posTmp.y += m_height * 0.5f + m_radius + m_height * 0.1f;
-				posTmp.y += m_height + m_radius + m_height * 0.1f;
+				posTmp.y += m_height * 0.5f + m_radius + m_height * 0.1f;
+				//posTmp.y += m_height + m_radius + m_height * 0.1f;
 				//レイを作成。
 				btTransform start, end;
 				start.setIdentity();
@@ -180,14 +184,6 @@ namespace UsualEngine
 				if (callback.isHit) {
 					//当たった。
 					//壁。
-	#if 0
-					//こちらを有効にすると衝突解決が衝突点に戻すになる。
-					nextPosition.x = callback.hitPos.x;
-					nextPosition.z = callback.hitPos.z;
-					//法線の方向に半径分押し戻す。
-					nextPosition.x += callback.hitNormal.x * m_radius;
-					nextPosition.z += callback.hitNormal.z * m_radius;
-	#else
 					CVector3 vT0, vT1;
 					//XZ平面上での移動後の座標をvT0に、交点の座標をvT1に設定する。
 					vT0.Set(nextPosition.x, 0.0f, nextPosition.z);
@@ -214,9 +210,9 @@ namespace UsualEngine
 					if (currentDir.Dot(originalXZDir) < 0.0f) {
 						//角に入った時のキャラクタの振動を防止するために、
 						//移動先が逆向きになったら移動をキャンセルする。
-						/*nextPosition.x = m_position.x;
+						nextPosition.x = m_position.x;
 						nextPosition.z = m_position.z;
-						break;*/
+						break;
 					}
 					/*char st[255] = { 0 };
 					sprintf_s(st, "nor: x:%.4f y:%.4f z:%.4f\n", callback.hitNormal.x, callback.hitNormal.y, callback.hitNormal.z);
@@ -225,14 +221,13 @@ namespace UsualEngine
 					OutputDebugString(st);
 					sprintf_s(st, "pos: x:%.4f y:%.4f z:%.4f\n", nextPosition.x, nextPosition.y, nextPosition.z);
 					OutputDebugString(st);*/
-	#endif
 				}
 				else {
 					//どことも当たらないので終わり。
 					break;
 				}
 				loopCount++;
-				if (loopCount == 1) {
+				if (loopCount == 5) {
 					break;
 				}
 			}
@@ -303,7 +298,7 @@ namespace UsualEngine
 			btBody->setActivationState(DISABLE_DEACTIVATION);
 			btTransform& trans = btBody->getWorldTransform();
 			//剛体の位置を更新。
-			trans.setOrigin(btVector3(m_position.x, m_position.y, m_position.z));
+			trans.setOrigin(btVector3(m_position.x, m_position.y+m_height*0.5f+m_radius, m_position.z));
 			//@todo 未対応。 trans.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z));
 		}
 		return m_position;

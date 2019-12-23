@@ -80,6 +80,7 @@ namespace UsualEngine
 		void Update();
 		void UpdateStart();
 		void UpdateUpdate();
+		void UpdatePreRender();
 		void UpdateRender();
 		void UpdatePostRender();
 

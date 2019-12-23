@@ -4,6 +4,7 @@
 #include "LightManager.h"
 #include "ShadowMap.h"
 #include "PostEffect/PostEffect.h"
+#include "PreRender.h"
 
 namespace UsualEngine
 {
@@ -51,7 +52,7 @@ namespace UsualEngine
 
 		LightManager& GetLightManager()
 		{
-			return mLightManager;
+			return m_lightManager;
 		}
 
 		/// <summary>
@@ -77,6 +78,8 @@ namespace UsualEngine
 		void EndRender();
 
 		void EndPostEffect();
+
+		void PreRenderDraw();
 
 		ShadowMap& GetShadowMap()
 		{
@@ -117,6 +120,11 @@ namespace UsualEngine
 		{
 			return m_postEffect;
 		}
+
+		PreRender& GetPreRender()
+		{
+			return m_preRender;
+		}
 	private:
 		D3D_FEATURE_LEVEL		m_featureLevel;				//Direct3D デバイスのターゲットとなる機能セット。
 		ID3D11Device* m_pd3dDevice = NULL;					//D3D11デバイス。
@@ -128,14 +136,17 @@ namespace UsualEngine
 		ID3D11Texture2D* m_depthStencil = NULL;				//デプスステンシル。
 		ID3D11DepthStencilView* m_depthStencilView = NULL;	//デプスステンシルビュー。
 
-		Shader m_vsCopy;									//
-		Shader m_psCopy;									//
+		Shader m_vsCopy;									//コピー用頂点シェーダ
+		Shader m_psCopy;									//コピー用ピクセルシェーダ
+		Shader m_vsDefferd;								//デファード用頂点シェーダ
+		Shader m_psDefferd;								//デファード用ピクセルシェーダ
 		
 		ShadowMap m_shadowMap;								//シャドウマップ
-		LightManager mLightManager;							//ライトのマネージャー
+		LightManager m_lightManager;							//ライトのマネージャー
 		RenderTarget* m_nowRenderTargets[RTV_MAX] = { 0 };	//今のレンダーターゲット
 		int m_renderTargetCount = 1;						//今のレンダーターゲットの数
 
+		PreRender m_preRender;							//プレレンダー
 		PostEffect m_postEffect;							//ポストエッフェクト
 		
 		EnRenderMode m_renderMode = enRenderMode_3DModel;	//今どの工程？

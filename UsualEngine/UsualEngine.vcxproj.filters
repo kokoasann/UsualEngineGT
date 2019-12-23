@@ -61,6 +61,12 @@
     <Filter Include="Graphics\PostEffect">
       <UniqueIdentifier>{c61123f4-f6ff-4fd5-ad1a-4b794375bb5c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\Deferred">
+      <UniqueIdentifier>{f488d8e4-304b-4d1c-870c-6dc4b839c49d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\PreRender">
+      <UniqueIdentifier>{f08aed13-2a1b-4a50-824d-d5fb12ff5625}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="character\CharacterController.cpp">
@@ -232,6 +238,15 @@
     </ClCompile>
     <ClCompile Include="character\CharacterBoxCollider.cpp">
       <Filter>Character</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\GBuffer.cpp">
+      <Filter>Graphics\Deferred</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\PreRender.cpp">
+      <Filter>Graphics\PreRender</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\Wraped\WrapedFunc.cpp">
+      <Filter>Graphics\Wrap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -416,6 +431,15 @@
     </ClInclude>
     <ClInclude Include="character\CharacterBoxCollider.h">
       <Filter>Character</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\GBuffer.h">
+      <Filter>Graphics\Deferred</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\PreRender.h">
+      <Filter>Graphics\PreRender</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Wraped\WrapedFunc.h">
+      <Filter>Graphics\Wrap</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

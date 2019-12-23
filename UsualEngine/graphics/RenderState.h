@@ -18,6 +18,9 @@ namespace UsualEngine
 			return rs;
 		}
 
+		/*///////////////////////////////////////////////////////////////////////////////////////////////
+			BLEND STATE
+		*//////////////////////////////////////////////////////////////////////////////////////////////
 
 		/// <summary>
 		/// blendstate‚ÌŽí—Þ
@@ -54,6 +57,10 @@ namespace UsualEngine
 		ID3D11BlendState* GetBlendState(int kind);
 
 
+		/*////////////////////////////////////////////////////////////////////////////////////////
+			SAMPLER STATE
+		*///////////////////////////////////////////////////////////////////////////////////////
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -84,9 +91,31 @@ namespace UsualEngine
 		/// <param name="kind"></param>
 		/// <returns></returns>
 		ID3D11SamplerState* GetSamplerState(int kind);
+
+
+		/*////////////////////////////////////////////////////////////////////////////////////////
+			DEPTH STENCIL STATE
+		*///////////////////////////////////////////////////////////////////////////////////////
+
+		enum DepthStencilStateKind
+		{
+			dssSceneRender,
+			dssDeferredRender,
+			dssSpriteRender,
+		};
+		struct DepthStencilState
+		{
+			ID3D11DepthStencilState* sceneRender=0;
+			ID3D11DepthStencilState* deferredRender = 0;
+			ID3D11DepthStencilState* spriteRender = 0;
+		};
+		void InitDepthStencilState();
+		void ReleaseDepthStencilState();
+		ID3D11DepthStencilState* GetDepthStencilState(DepthStencilStateKind kind);
 	private:
 		BlendState m_blendStatePreset;				//blendstate
 		SamplerState m_samplerStatePreset;
+		DepthStencilState m_depthStencilStatePreset;
 	};
 
 	/// <summary>

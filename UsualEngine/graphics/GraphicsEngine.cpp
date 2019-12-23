@@ -1,5 +1,6 @@
 #include "PreCompile.h"
 #include "GraphicsEngine.h"
+#include "RenderState.h"
 
 namespace UsualEngine
 {
@@ -18,11 +19,12 @@ namespace UsualEngine
 		ID3D11RenderTargetView* rtvs[RTV_MAX] = {0};
 		ID3D11DepthStencilView* dsv = nullptr;
 		
-		m_renderTargetCount = targetCount;
-		memcpy(m_nowRenderTargets, rtlist, sizeof(RenderTarget*) * targetCount);
+		
 
 		if (rtlist != nullptr)
 		{
+			m_renderTargetCount = targetCount;
+			memcpy(m_nowRenderTargets, rtlist, sizeof(RenderTarget*) * targetCount);
 			dsv = rtlist[0]->GetDSV();
 			for (int i = 0; i < targetCount; i++)
 			{
@@ -53,8 +55,8 @@ namespace UsualEngine
 		//m_pd3dDeviceContext->ClearRenderTargetView(m_backBuffer, ClearColor);
 		//m_pd3dDeviceContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 		m_pd3dDeviceContext->ClearRenderTargetView(m_mainRenderTarget.GetRTV(), ClearColor);
-		m_pd3dDeviceContext->ClearRenderTargetView(m_mainRenderTarget.GetRTV(), ClearColor);
 		m_pd3dDeviceContext->ClearDepthStencilView(m_mainRenderTarget.GetDSV(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+		m_pd3dDeviceContext->OMSetDepthStencilState(RenderState::Get().GetDepthStencilState(RenderState::dssSceneRender),0);
 	}
 
 	void GraphicsEngine::EndRender()
@@ -83,6 +85,17 @@ namespace UsualEngine
 		pBackBuffer->Release();
 		srv[0] = nullptr;
 		m_pd3dDeviceContext->PSSetShaderResources(0, 1, srv);
+	}
+	void GraphicsEngine::PreRenderDraw()
+	{
+		m_preRender.Render();
+		auto& gb = m_preRender.GetGBuffer();
+		gb.SetGBuffer();
+		m_pd3dDeviceContext->PSSetShader((ID3D11PixelShader*)m_psDefferd.GetBody(), 0, 0);
+		m_pd3dDeviceContext->VSSetShader((ID3D11VertexShader*)m_vsDefferd.GetBody(), 0, 0);
+		m_pd3dDeviceContext->IASetInputLayout(m_vsDefferd.GetInputLayout());
+		m_postEffect.DrawPrimitive();
+		gb.UnSetGBuffer();
 	}
 	void GraphicsEngine::Release()
 	{
@@ -241,12 +254,15 @@ namespace UsualEngine
 		m_pd3dDeviceContext->RSSetState(m_rasterizerState);
 		
 		m_shadowMap.Init(2048, 2048);
-		mLightManager.Init();
+		m_lightManager.Init();
 
+		m_preRender.Init(FRAME_BUFFER_H, FRAME_BUFFER_W);
 		m_postEffect.Init();
 
 		m_vsCopy.Load("Assets/shader/copy.fx", "VSMain", Shader::EnType::VS);
 		m_psCopy.Load("Assets/shader/copy.fx", "PSMain", Shader::EnType::PS);
+		m_vsDefferd.Load("Assets/shader/DefferdShading.fx", "VSMain_Defferd", Shader::EnType::VS);
+		m_psDefferd.Load("Assets/shader/DefferdShading.fx", "PSMain_Defferd", Shader::EnType::PS);
 
 		InitBackBuffer();
 	}

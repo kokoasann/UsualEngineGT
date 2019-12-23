@@ -3,6 +3,7 @@
 #include "Player/Player.h"
 #include "Enemy/Gib/Ene_Gib.h"
 #include "_Test/Ene_Tes.h"
+#include "Physics/BoxCollider.h"
 
 Game::Game()
 {
@@ -19,6 +20,22 @@ bool Game::Start()
 	ue::NewGO<Player>(0);
 	ue::NewGO<Ene_Gib>(0);
 	//ue::NewGO<Ene_GibTes>(0);
+
+	ue::BoxCollider* bcp = new ue::BoxCollider(); 
+	auto& bc = *bcp;
+	bcp->Create({ 100,50,100 });
+	ue::RigidBodyInfo info;
+	info.mass = 0.f;
+	info.collider = bcp;
+	info.pos = { 500,10,0 };
+	ue::CQuaternion r;
+	r.SetRotationDeg(ue::CVector3::AxisX(), 10);
+	info.rot = r;
+	ue::RigidBody* rbp = new ue::RigidBody();
+	auto& rb = *rbp;
+	rbp->Create(info);
+	ue::Physics().AddRigidBody(*rbp);
+
 	cam = &ue::usualEngine()->GetMainCamera();
 
 	ground = ue::NewGO<ue::SMR4Ground>(0);

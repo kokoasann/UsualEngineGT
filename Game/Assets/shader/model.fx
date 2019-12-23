@@ -14,11 +14,6 @@ Texture2D<float4> albedoTexture : register(t0);
 StructuredBuffer<float4x4> boneMatrix : register(t1);
 
 /////////////////////////////////////////////////////////////
-// SamplerState
-/////////////////////////////////////////////////////////////
-sampler Sampler : register(s0);
-
-/////////////////////////////////////////////////////////////
 // 定数バッファ。
 /////////////////////////////////////////////////////////////
 /*!
@@ -208,8 +203,6 @@ PSInputDepth VSMainDepth_Skin(VSInputNmTxWeights In)
 
 float4 PSProcess(float4 albe, PSInput In)
 {
-	
-
 	float2 uv = In.PosInProj.xy / In.PosInProj.w;
 	uv *= float2(0.5f, -0.5f);
 	uv += 0.5f;
@@ -244,7 +237,7 @@ float4 PSProcess(float4 albe, PSInput In)
 	for (int i = 0; i < DLcount; i++)
 	{
 		float rad = dot(DirLights[i].dir * -1.f, In.Normal);
-		int k = step(10.f,degrees(rad));
+		int k = step(0.174533f,rad);
 
 		li = float3(0.45f, 0.4f, 0.6f) * !k;//影が付く!
 
@@ -268,13 +261,37 @@ float4 PSProcess(float4 albe, PSInput In)
 	return fcol;
 }
 
+PSOutput PSProcess_GBuffer(float4 albe,PSInput In)
+{
+	PSOutput Out = (PSOutput)0;
+	Out.diffuse = albe;
+	Out.normal = float4(In.Normal,1.0f);
+	Out.tangent = float4(In.Tangent,1.0f);
+	Out.specular = float4(0.0f,0.0f,0.0f,1.0f);
+
+	float4 shadow = float4(1, 1, 1, 1);
+	float sum = 0.f;
+	sum += GetShadow(In.Pos, shadowMap_1,0);
+	float scol = sum;
+
+	shadow.x = lerp(1.0f, 0.45f, scol);
+	shadow.y = lerp(1.0f, 0.4f, scol);
+	shadow.z = lerp(1.0f, 0.6f, scol);
+	shadow *= isShadowReciever;
+	Out.shadow = shadow;
+
+	Out.depth = length(eyepos - In.Pos.xyz);
+	return Out;
+}
+
 //--------------------------------------------------------------------------------------
 // ピクセルシェーダーのエントリ関数。
 //--------------------------------------------------------------------------------------
-float4 PSMain(PSInput In) : SV_Target0
+PSOutput PSMain(PSInput In)
 {
 	float4 albe = albedoTexture.Sample(Sampler, In.TexCoord);
-	return PSProcess(albe,In);
+	//return PSProcess(albe,In);
+	return PSProcess_GBuffer(albe,In);
 }
 
 
@@ -283,7 +300,7 @@ float4 PSMain(PSInput In) : SV_Target0
 			モデルの拡大縮小によってUVが変形することがないようになっている
 			if文多様につき改良予定(予定)
 */////////////////////////////////////////////////////////////////////////////////
-float4 PSMain_Ground(PSInput In) : SV_Target0
+PSOutput PSMain_Ground(PSInput In)
 {
 	float2 UV = In.TexCoord;
 	float3 gsca = groundScale.xyz;	//地面のスケール
@@ -359,7 +376,7 @@ float4 PSMain_Ground(PSInput In) : SV_Target0
 	blend /= len;
 	alb1 *= blend.x;
 	alb2 *= blend.y;
-	alb += (alb1 + alb2) * groundUseTexs.x* !groundUseTexs.w;
+	alb.xyz += (alb1.xyz + alb2.xyz) * groundUseTexs.x* !groundUseTexs.w;
 
 	float4 alb3 = texture_2.Sample(Sampler, In.TexCoord);
 	len = blend.x + blend.y + blend.z;
@@ -367,11 +384,12 @@ float4 PSMain_Ground(PSInput In) : SV_Target0
 	alb1 *= blend.x;
 	alb2 *= blend.y;
 	alb3 *= blend.z;
-	alb += (alb1 + alb2 + alb3)* groundUseTexs.w;
+	alb.xyz += (alb1.xyz + alb2.xyz + alb3.xyz)* groundUseTexs.w;
 
-	alb += albedoTexture.Sample(Sampler, In.TexCoord)* !groundUseTexs.x;
+	float3 albtex = albedoTexture.Sample(Sampler, In.TexCoord);
+	alb.xyz += albtex * !groundUseTexs.x;
 
-
+	/*
 	float4 fcol = PSProcess(alb,In);
 
 	float rad = acos(dot(camDir * -1.f, In.Normal));
@@ -384,8 +402,12 @@ float4 PSMain_Ground(PSInput In) : SV_Target0
 	//usulen = min(In.PosInView.y * 0.0005f, usulen);
 	fcol.xyz *= 1.f - usulen;
 	fcol.xyz += usu * usulen;
-
+	
 	return fcol;
+	*/
+
+	PSOutput Out = PSProcess_GBuffer(alb,In);
+	return Out;
 }
 
 /*///////////////////////////////////////////////////////////////////////////////

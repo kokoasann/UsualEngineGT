@@ -25,12 +25,15 @@ namespace UsualEngine
 		sprintf(str, "%.3f\n", t);
 		OutputDebugString(str);*/
 
-		UpdateRender();
+		//UpdateRender();
+		UpdatePreRender();
 		UpdatePostRender();
 
-		Physics().DebugDraw();
 
-		usualEngine()->GetGraphicsEngine()->GetPostEffect().Render();
+		auto& pe = usualEngine()->GetGraphicsEngine()->GetPostEffect();
+		pe.Render();
+
+		Physics().DebugDraw();
 		
 		for (auto& ngd : m_newGOBuffer)
 		{
@@ -108,6 +111,11 @@ namespace UsualEngine
 
 		}
 		m_ddList.clear();
+	}
+
+	void GameObjectManager::UpdatePreRender()
+	{
+		usualEngine()->GetGraphicsEngine()->PreRenderDraw();
 	}
 
 	void GameObjectManager::UpdateRender()

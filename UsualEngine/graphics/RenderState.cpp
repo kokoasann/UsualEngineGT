@@ -7,11 +7,13 @@ namespace UsualEngine
 	{
 		InitBlendState();
 		InitSamplerState();
+		InitDepthStencilState();
 	}
 	RenderState::~RenderState()
 	{
 		ReleaseBlendState();
 		ReleaseSamplerState();
+		ReleaseDepthStencilState();
 	}
 
 	void RenderState::InitBlendState()
@@ -86,6 +88,48 @@ namespace UsualEngine
 		{
 		case ssPoint: return m_samplerStatePreset.pointSampling;
 		case ssLiner: return m_samplerStatePreset.linerSampling;
+		}
+		return nullptr;
+	}
+	void RenderState::InitDepthStencilState()
+	{
+		D3D11_DEPTH_STENCIL_DESC desc;
+		ZeroMemory(&desc, sizeof(desc));
+		ID3D11Device* pd3d = usualEngine()->GetGraphicsEngine()->GetD3DDevice();
+		desc.DepthEnable = true;
+		desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+		desc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
+		desc.StencilEnable = false;
+		desc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+		desc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+		desc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+		desc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+		desc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+		desc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+		desc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+		desc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+		pd3d->CreateDepthStencilState(&desc, &m_depthStencilStatePreset.sceneRender);
+
+		desc.DepthEnable = false;
+		pd3d->CreateDepthStencilState(&desc, &m_depthStencilStatePreset.deferredRender);
+
+		desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
+		pd3d->CreateDepthStencilState(&desc, &m_depthStencilStatePreset.spriteRender);
+	}
+	void RenderState::ReleaseDepthStencilState()
+	{
+		m_depthStencilStatePreset.sceneRender->Release();
+		m_depthStencilStatePreset.deferredRender->Release();
+	}
+	ID3D11DepthStencilState* RenderState::GetDepthStencilState(DepthStencilStateKind kind)
+	{
+		switch (kind)
+		{
+		case dssSceneRender: return m_depthStencilStatePreset.sceneRender;
+		case dssDeferredRender: return m_depthStencilStatePreset.deferredRender;
+		case dssSpriteRender: return m_depthStencilStatePreset.spriteRender;
 		}
 		return nullptr;
 	}

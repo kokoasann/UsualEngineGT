@@ -41,7 +41,7 @@ namespace UsualEngine
 
 		HWND GetHwnd()
 		{
-			return mHwnd;
+			return m_hwnd;
 		}
 		GraphicsEngine* GetGraphicsEngine()
 		{
@@ -49,11 +49,11 @@ namespace UsualEngine
 		}
 		Camera& GetMainCamera()
 		{
-			return mMainCamera;
+			return m_mainCamera;
 		}
 		Camera& Get2DCamera()
 		{
-			return mCamera2D;
+			return m_camera2D;
 		}
 		Pad& GetPad(int no)
 		{
@@ -65,11 +65,11 @@ namespace UsualEngine
 			return m_physics;
 		}
 	private:
-		HWND mHwnd = 0;
+		HWND m_hwnd = 0;
 		GraphicsEngine* m_graphicsEngine = nullptr;
-		GameObjectManager* mGameObjectManager = nullptr;
-		Camera mMainCamera;
-		Camera mCamera2D;
+		GameObjectManager* m_gameObjectManager = nullptr;
+		Camera m_mainCamera;
+		Camera m_camera2D;
 		Pad m_pad[Pad::CONNECT_PAD_MAX];
 		PhysicsWorld m_physics;
 

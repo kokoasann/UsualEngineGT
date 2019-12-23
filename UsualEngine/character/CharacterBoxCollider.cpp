@@ -17,8 +17,6 @@ namespace UsualEngine
 		int count = 0;
 		fread(&count, sizeof(count), 1, file);
 
-		m_rigids.resize(count);
-		m_boxs.resize(count);
 		m_relationBBList.resize(count);
 		for (int i = 0; i < count; i++)
 		{
@@ -68,12 +66,12 @@ namespace UsualEngine
 			info.pos = pos;
 			info.rot = rot;
 
-			m_rigids[i].Create(info);
-			m_relationBBList[i].rigid = &m_rigids[i];
-			Physics().AddRigidBody(*m_relationBBList[i].rigid);
+			m_relationBBList[i].rigid.Create(info);
+			Physics().AddRigidBody(m_relationBBList[i].rigid);
 
-			auto rg = m_rigids[i].GetBody();
+			auto rg = m_relationBBList[i].rigid.GetBody();
 			rg->setUserIndex(tag);
+			rg->setActivationState(DISABLE_DEACTIVATION);
 		}
 		fclose(file);
 	}
@@ -97,12 +95,11 @@ namespace UsualEngine
 
 			mat.Mul(rbb.offsetmat,wmat);
 			mat.CalcMatrixDecompose(pos, rot, sca);
-			//pos *= 10;
-			auto rg = rbb.rigid->GetBody();
+			
+			auto rg = rbb.rigid.GetBody();
 			auto& tr = rg->getWorldTransform();
 			tr.setOrigin({ pos.x,pos.y ,pos.z });
 			tr.setRotation({ rot.x,rot.y ,rot.z,rot.w });
-			
 		}
 	}
 }

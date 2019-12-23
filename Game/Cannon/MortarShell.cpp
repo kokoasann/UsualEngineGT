@@ -1,6 +1,24 @@
 #include "stdafx.h"
 #include "MortarShell.h"
 
+
+struct SweepResultShell :public btCollisionWorld::ConvexResultCallback
+{
+public:
+	bool isHit = false;
+	int hitTag = 0;
+	// ConvexResultCallback を介して継承されました
+	virtual btScalar addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace) override
+	{
+		int ind = convexResult.m_hitCollisionObject->getUserIndex();
+		if (ind & CUI_Cannon)
+			return 0.f;
+		hitTag = ind;
+		isHit = true;
+		return 1.f;
+	}
+};
+
 MortarShell::~MortarShell()
 {
 	ue::DeleteGO(m_model);
@@ -39,7 +57,7 @@ void MortarShell::Init(ue::CVector3 pos, ue::CVector3 dir)
 	m_model->SetRot(rot);
 	m_rot = rot;
 
-	m_collider.Create(10, 15);
+	m_collider.Create(10);
 	ue::RigidBodyInfo info;
 	info.collider = &m_collider;
 	info.mass = 0.f;
@@ -57,30 +75,42 @@ bool MortarShell::Start()
 void MortarShell::Update()
 {
 	float dtime = ue::gameTime()->GetDeltaTime();
-	m_pos += m_dir*dtime;
-	m_model->SetPos(m_pos);		//ポジションの更新。
+	ue::CVector3 npos = m_pos + m_dir * dtime;
 
-	auto dir = m_dir;			//回転の更新。
-	dir.Normalize();
-	ue::CQuaternion rot;
-	ue::CVector3 ax;
-	ax.Cross(ue::CVector3::AxisZ(), dir);
-	ax.Normalize();
-	float t = ue::CVector3::AxisZ().Dot(dir);
-	rot.SetRotation(ax, acosf(fabsf(t) < 1.f ? t : t / fabsf(t)));
-	m_model->SetRot(rot);
+	if (npos.y < -500.f)
+	{
+		auto thisptr = this;
+		ue::DeleteGO(thisptr);
+		return;
+	}
 	
-	//m_oldDir = dir;
-	float len = m_dir.Length();				//加速の減衰。
-	//m_dir.x -= m_dir.x * len * dtime;
-	//m_dir.z -= m_dir.z * len * dtime;
-	m_dir.y -= m_gravity * dtime;// -m_dir.y * len * dtime;
+	btTransform start, end;
+	start.setIdentity();
+	end.setIdentity();
+	start.setOrigin({ m_pos.x,m_pos.y,m_pos.z });
+	end.setOrigin({ npos.x,npos.y,npos.z });
+	SweepResultShell res;
+	ue::Physics().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, res);
+	if (!res.isHit)
+	{
+		m_pos = npos;
+		m_model->SetPos(m_pos);		//ポジションの更新。
 
-	/*auto tr = m_rigidBody.GetBody()->getWorldTransform();
-	tr.setOrigin({ m_pos.x,m_pos.y ,m_pos.z });
-	tr.setRotation({ rot.x,rot.y ,rot.z });*/
+		auto dir = m_dir;			//回転の更新。
+		dir.Normalize();
+		ue::CQuaternion rot;
+		ue::CVector3 ax;
+		ax.Cross(ue::CVector3::AxisZ(), dir);
+		ax.Normalize();
+		float t = ue::CVector3::AxisZ().Dot(dir);
+		rot.SetRotation(ax, acosf(fabsf(t) < 1.f ? t : t / fabsf(t)));
+		m_model->SetRot(rot);
 
-	if (m_pos.y <= 0)		//(仮)
+		//m_oldDir = dir;
+		float len = m_dir.Length();				//加速の減衰。
+		m_dir.y -= m_gravity * dtime;
+	}
+	else
 	{
 		auto thisptr = this;
 		ue::DeleteGO(thisptr);

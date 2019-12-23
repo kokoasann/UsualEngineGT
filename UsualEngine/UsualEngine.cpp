@@ -23,9 +23,9 @@ namespace UsualEngine
 		InitWindow(initGS);
 		//DirectXの初期化。
 		m_graphicsEngine = new GraphicsEngine();
-		m_graphicsEngine->Init(mHwnd);
+		m_graphicsEngine->Init(m_hwnd);
 
-		mGameObjectManager = GameObjectManager::Get();
+		m_gameObjectManager = GameObjectManager::Get();
 
 		//ゲームパッドの初期化。
 		//最大４つのコントローラーを接続できるようにしましょう。
@@ -35,9 +35,9 @@ namespace UsualEngine
 		m_pad[3].Init(3);
 
 		//2Dカメラの初期化
-		mCamera2D.SetPosition({ 0,0,-500 });
-		mCamera2D.CameraModeOrth();
-		mCamera2D.Update();
+		m_camera2D.SetPosition({ 0,0,-500 });
+		m_camera2D.CameraModeOrth();
+		m_camera2D.Update();
 
 		Physics().Init();
 	}
@@ -66,7 +66,7 @@ namespace UsualEngine
 		RegisterClassEx(&wc);
 
 		// ウィンドウの作成。
-		mHwnd = CreateWindow(
+		m_hwnd = CreateWindow(
 			initGS.appName,		//使用するウィンドウクラスの名前。
 									//先ほど作成したウィンドウクラスと同じ名前にする。
 			initGS.appName,		//ウィンドウの名前。ウィンドウクラスの名前と別名でもよい。
@@ -81,7 +81,7 @@ namespace UsualEngine
 			NULL
 		);
 
-		ShowWindow(mHwnd, initGS.nCmdShow);
+		ShowWindow(m_hwnd, initGS.nCmdShow);
 	}
 
 	bool UsualEngine::DispatchWindowMessage()
@@ -124,8 +124,8 @@ namespace UsualEngine
 
 			m_graphicsEngine->GetShadowMap().Send2GPU();
 
-			mGameObjectManager->Update();
-
+			m_gameObjectManager->Update();
+			m_physics.Update();
 			lm.EndRender();
 
 			m_graphicsEngine->EndRender();

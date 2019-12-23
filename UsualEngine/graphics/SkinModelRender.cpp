@@ -71,6 +71,10 @@ namespace UsualEngine
 		m_skinModel.Init(path, axis);
 		if(anims != NULL)
 			m_animation.Init(m_skinModel, anims, animCount);
+
+		auto& pr = usualEngine()->GetGraphicsEngine()->GetPreRender();
+		auto& gb = pr.GetGBuffer();
+		gb.AddSkinModel(this);
 	}
 
 

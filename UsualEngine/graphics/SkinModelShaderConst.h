@@ -24,7 +24,15 @@ namespace UsualEngine
 		enSkinModelSRVReg_AlbedoTexture,		//!<アルベドテクスチャ。
 		enSkinModelSRVReg_BoneMatrixArray,		//!<ボーン行列の配列。
 		enSkinModelSRVReg_ShadowMap_1,			//シャドウマップ
-		enSkinModelSRVReg_ShadowMap_MAXNUM= enSkinModelSRVReg_ShadowMap_1+ MAX_SHADOW_MAP-1,			//シャドウマップ
+		enSkinModelSRVReg_ShadowMap_MAXNUM = enSkinModelSRVReg_ShadowMap_1 + MAX_SHADOW_MAP - 1,			//シャドウマップ
+
+		enSkinModelSRVReg_GDiffuseMap,		// G-Buffer用デフューズ
+		enSkinModelSRVReg_GSpecularMap,		// G-Buffer用スペキュラ
+		enSkinModelSRVReg_GDepthMap,			// G-Buffer用デプス
+		enSkinModelSRVReg_GNormalMap,		// G-Buffer用ノーマル
+		enSkinModelSRVReg_GShadowMap,		// G-Buffer用シャドウ
+		enSkinModelSRVReg_GTangentMap,		// G-Buffer用タンジェント
+
 		enSkinModelSRVReg_DirectionLight=100,		//ディレクションライト
 		enSkinModelSRVReg_BlendMap,			//テクスチャとテクスチャを混ぜるためのテクスチャ
 		enSkinModelSRVReg_Textur_1,				//多目的テクスチャ(たぶん)

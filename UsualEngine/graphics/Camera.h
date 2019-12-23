@@ -153,6 +153,14 @@ namespace UsualEngine
 			return m_right;
 		}
 		
+		float GetFar()
+		{
+			return m_far;
+		}
+		float GetNear()
+		{
+			return m_near;
+		}
 	private:
 		CMatrix	m_viewMatrix = CMatrix::Identity();		//ビュー行列。
 		CMatrix m_projMatrix = CMatrix::Identity();		//プロジェクション行列。

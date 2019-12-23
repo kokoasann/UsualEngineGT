@@ -167,6 +167,7 @@
     <ClCompile Include="graphics\animation\IK.cpp" />
     <ClCompile Include="graphics\Camera.cpp" />
     <ClCompile Include="graphics\ConstantBuffer.cpp" />
+    <ClCompile Include="graphics\GBuffer.cpp" />
     <ClCompile Include="graphics\GPUViewer.cpp" />
     <ClCompile Include="graphics\GraphicsEngine.cpp" />
     <ClCompile Include="graphics\IndexBuffer.cpp" />
@@ -177,6 +178,7 @@
     <ClCompile Include="graphics\PostEffect\Bloom.cpp" />
     <ClCompile Include="graphics\PostEffect\GaussianBlur.cpp" />
     <ClCompile Include="graphics\PostEffect\PostEffect.cpp" />
+    <ClCompile Include="graphics\PreRender.cpp" />
     <ClCompile Include="graphics\Primitive.cpp" />
     <ClCompile Include="graphics\RenderState.cpp" />
     <ClCompile Include="graphics\RenderTarget.cpp" />
@@ -195,6 +197,7 @@
     <ClCompile Include="graphics\StructuredBuffer.cpp" />
     <ClCompile Include="graphics\VertexBuffer.cpp" />
     <ClCompile Include="graphics\Wraped\ViewPort.cpp" />
+    <ClCompile Include="graphics\Wraped\WrapedFunc.cpp" />
     <ClCompile Include="HID\Pad.cpp" />
     <ClCompile Include="level\Level.cpp" />
     <ClCompile Include="level\MapChip.cpp" />
@@ -229,6 +232,7 @@
     <ClInclude Include="graphics\animation\IK.h" />
     <ClInclude Include="graphics\Camera.h" />
     <ClInclude Include="graphics\ConstantBuffer.h" />
+    <ClInclude Include="graphics\GBuffer.h" />
     <ClInclude Include="graphics\GPUViewer.h" />
     <ClInclude Include="graphics\GraphicsEngine.h" />
     <ClInclude Include="graphics\IndexBuffer.h" />
@@ -239,6 +243,7 @@
     <ClInclude Include="graphics\PostEffect\Bloom.h" />
     <ClInclude Include="graphics\PostEffect\GaussianBlur.h" />
     <ClInclude Include="graphics\PostEffect\PostEffect.h" />
+    <ClInclude Include="graphics\PreRender.h" />
     <ClInclude Include="graphics\Primitive.h" />
     <ClInclude Include="graphics\RenderState.h" />
     <ClInclude Include="graphics\RenderTarget.h" />
@@ -258,6 +263,7 @@
     <ClInclude Include="graphics\StructuredBuffer.h" />
     <ClInclude Include="graphics\VertexBuffer.h" />
     <ClInclude Include="graphics\Wraped\ViewPort.h" />
+    <ClInclude Include="graphics\Wraped\WrapedFunc.h" />
     <ClInclude Include="HID\Pad.h" />
     <ClInclude Include="level\Level.h" />
     <ClInclude Include="level\MapChip.h" />

@@ -38,10 +38,10 @@ Ene_Gib::Ene_Gib()
 	m_cbc = ue::NewGO<ue::CharacterBoxCollider>(0);
 	m_cbc->Init(L"Assets/model/gib/gib.ubc", &model->GetSkinModel().GetSkeleton(), 100.f, [&](const char* tag)
 	{
-		int ind = ue::enCollisionAttr_NonHitIK;
+		int ind = ue::enCollisionAttr_NonHitIK|CUI_Monster;
 		if (strcmp("head", tag)==0)
 		{
-
+			ind |= MT_Head;
 		}
 		return ind;
 	});
