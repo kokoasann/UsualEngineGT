@@ -1,5 +1,6 @@
 #pragma once
 #include "GBuffer.h"
+#include "PostEffect/SoftShadow.h"
 
 namespace UsualEngine
 {
@@ -14,7 +15,19 @@ namespace UsualEngine
 		{
 			return m_gBuffer;
 		}
+		SoftShadow* GetSoftShadow()
+		{
+			return &m_softShadow;
+		}
+		void SendDeferrdConstBuffer();
 	private:
+		struct ConstantBufferData
+		{
+			CVector4 camDir = CVector4::Zero();
+		};
 		GBuffer m_gBuffer;
+		SoftShadow m_softShadow;
+		ConstantBufferData m_cbData;
+		ConstantBuffer m_constBuffer;
 	};
 }

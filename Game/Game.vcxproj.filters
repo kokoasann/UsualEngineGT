@@ -128,6 +128,9 @@
     <Filter Include="Cannon">
       <UniqueIdentifier>{f49e54ac-bc83-4d55-9079-93cdf9eab4fb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Sprite\Gradation">
+      <UniqueIdentifier>{44530d23-79d1-4abe-b997-919b74367bec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\model.fx">
@@ -164,6 +167,9 @@
     </ImageContentTask>
     <ImageContentTask Include="Assets\model\block\tuti.png">
       <Filter>Assets\Model\StagePreset\texture</Filter>
+    </ImageContentTask>
+    <ImageContentTask Include="Assets\sprite\Gradation\Deferred_Grad.png">
+      <Filter>Assets\Sprite\Gradation</Filter>
     </ImageContentTask>
   </ItemGroup>
   <ItemGroup>

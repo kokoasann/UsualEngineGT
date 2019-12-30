@@ -70,10 +70,10 @@ namespace UsualEngine
 				//自分に衝突した。or 地面に衝突した。
 				return 0.0f;
 			}
-			if (convexResult.m_hitCollisionObject->getUserIndex() & enCollisionAttr_NonHitIK)
+			/*if (convexResult.m_hitCollisionObject->getUserIndex() & enCollisionAttr_NonHitIK)
 			{
 				OutputDebugStringA("HIT NHK!!\n");
-			}
+			}*/
 			//衝突点の法線を引っ張ってくる。
 			CVector3 hitNormalTmp;
 			hitNormalTmp.Set(convexResult.m_hitNormalLocal);

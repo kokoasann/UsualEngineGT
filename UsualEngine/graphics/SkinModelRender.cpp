@@ -62,6 +62,10 @@ namespace UsualEngine
 		}
 
 		m_skinModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
+
+		auto& pr = usualEngine()->GetGraphicsEngine()->GetPreRender();
+		auto& gb = pr.GetGBuffer();
+		gb.AddSkinModel(this);
 		
 		m_isRenderingOK = true;
 	}
@@ -72,9 +76,7 @@ namespace UsualEngine
 		if(anims != NULL)
 			m_animation.Init(m_skinModel, anims, animCount);
 
-		auto& pr = usualEngine()->GetGraphicsEngine()->GetPreRender();
-		auto& gb = pr.GetGBuffer();
-		gb.AddSkinModel(this);
+		
 	}
 
 

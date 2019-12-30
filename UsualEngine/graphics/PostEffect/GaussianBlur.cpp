@@ -62,10 +62,11 @@ namespace UsualEngine
 			0.0f, 0.0f, 0.0f, 0.0f
 		};
 		
-		RenderTarget* oldRT[4] = {0};
+		RenderTarget* oldRT[7] = {0};
 		int oldNum = 0;
 		gEngine->OMGetRenderTargets(oldNum, oldRT);
-		D3D11_VIEWPORT oldvpl[4];
+		D3D11_VIEWPORT oldvpl[4]={0};
+		//D3D11_VIEWPORT* oldvpl=0;
 		unsigned int oldnumvpl = 0;
 		devcon->RSGetViewports(&oldnumvpl, oldvpl);
 
@@ -83,6 +84,7 @@ namespace UsualEngine
 		devcon->PSSetConstantBuffers(0, 1, &m_cb.GetBody());
 		devcon->VSSetShader((ID3D11VertexShader*)m_vsXBlur.GetBody(),0,0);
 		devcon->PSSetShader((ID3D11PixelShader*)m_psBlur.GetBody(), 0, 0);
+		devcon->IASetInputLayout(m_vsXBlur.GetInputLayout());
 		D3D11_VIEWPORT vpl[] = { { 0.f, 0.f, m_renderTargetX.GetWidth(), m_renderTargetX.GetHeight() } };
 		devcon->RSSetViewports(1, vpl);
 		primitive->Draw();
@@ -90,7 +92,7 @@ namespace UsualEngine
 		rtl[0] = &m_renderTargetY;
 		gEngine->OMSetRenderTarget(1, rtl);
 		m_bp.offset.x = 0.f;
-		m_bp.offset.y = 16.f / m_renderTargetX.GetWidth();
+		m_bp.offset.y = 16.f / m_renderTargetX.GetHeight();
 		devcon->UpdateSubresource(m_cb.GetBody(), 0, 0, &m_bp, 0, 0);
 		devcon->ClearRenderTargetView(m_renderTargetY.GetRTV(), clearColor);
 		devcon->VSSetShaderResources(0, 1, &m_renderTargetX.GetSRV());
@@ -98,12 +100,13 @@ namespace UsualEngine
 		devcon->PSSetConstantBuffers(0, 1, &m_cb.GetBody());
 		devcon->VSSetShader((ID3D11VertexShader*)m_vsYBlur.GetBody(), 0, 0);
 		devcon->PSSetShader((ID3D11PixelShader*)m_psBlur.GetBody(), 0, 0);
+		devcon->IASetInputLayout(m_vsYBlur.GetInputLayout());
 		vpl[0] = { 0.f, 0.f, (float)m_renderTargetY.GetWidth(), (float)m_renderTargetY.GetHeight() };
 		devcon->RSSetViewports(1, vpl);
 		primitive->Draw();
 
 		gEngine->OMSetRenderTarget(oldNum, oldRT);
-		devcon->RSSetViewports(oldnumvpl, oldvpl);
+		//devcon->RSSetViewports(oldnumvpl, oldvpl);
 
 		return m_renderTargetY.GetSRV();
 	}

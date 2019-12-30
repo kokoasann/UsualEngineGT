@@ -87,7 +87,7 @@ namespace UsualEngine
 		{
 			go->Render();
 		}
-
+		m_modelList.clear();
 		ge->OMSetRenderTarget(oldRTcount, oldRT);
 	}
 }

@@ -150,5 +150,7 @@ namespace UsualEngine
 		PostEffect m_postEffect;							//ポストエッフェクト
 		
 		EnRenderMode m_renderMode = enRenderMode_3DModel;	//今どの工程？
+
+		ID3D11ShaderResourceView* m_speculaGradation=nullptr;
 	};
 }

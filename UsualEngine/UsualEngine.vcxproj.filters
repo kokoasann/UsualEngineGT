@@ -248,6 +248,9 @@
     <ClCompile Include="graphics\Wraped\WrapedFunc.cpp">
       <Filter>Graphics\Wrap</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\PostEffect\SoftShadow.cpp">
+      <Filter>Graphics\PostEffect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="character\CharacterController.h">
@@ -440,6 +443,9 @@
     </ClInclude>
     <ClInclude Include="graphics\Wraped\WrapedFunc.h">
       <Filter>Graphics\Wrap</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\PostEffect\SoftShadow.h">
+      <Filter>Graphics\PostEffect</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

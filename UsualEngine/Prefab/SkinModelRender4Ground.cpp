@@ -21,11 +21,12 @@ namespace UsualEngine
 	void SkinModelRender4Ground::InitG(const wchar_t* path, AnimationClip* anims, int animCount, EnFbxUpAxis axis)
 	{
 		Init(path, anims, animCount, axis);
-		
+		m_vsShader.Load("Assets/shader/model.fx", "VSMain_Ground", Shader::EnType::VS);
 		m_psShader.Load("Assets/shader/model.fx","PSMain_Ground",Shader::EnType::PS);
 		GetSkinModel().FindMaterial([&](ModelEffect* mate)
 		{
 			mate->SetPSShader(m_psShader);
+			mate->SetVSShader(m_vsShader);
 		});
 		m_groundCB.Create(&m_goundData, sizeof(m_goundData));
 	}

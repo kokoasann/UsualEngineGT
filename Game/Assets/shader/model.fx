@@ -13,6 +13,7 @@ Texture2D<float4> albedoTexture : register(t0);
 //ボーン行列
 StructuredBuffer<float4x4> boneMatrix : register(t1);
 
+
 /////////////////////////////////////////////////////////////
 // 定数バッファ。
 /////////////////////////////////////////////////////////////
@@ -31,14 +32,32 @@ cbuffer VSPSCb : register(b0){
 float GetShadow(float3 wpos,Texture2D<float4> tex, float2 offset)
 {
 	float shadow = 0.f;
+	float depth = 0.f;
+	float isShadow = 0.f;
+	float isInUV = 0.f;
 	[unroll(MAX_SHADOWMAP)]
 	for(int i = 0; i < MAX_SHADOWMAP;i++)
 	{
 		float4 posinLVP = mul(mLVP[i], float4(wpos, 1));
 		posinLVP.xyz /= posinLVP.w;
 
-		float depth = min(posinLVP.z / posinLVP.w, 1.0f);
+		float depthbuf = min(posinLVP.z / posinLVP.w, 1.0f);
 		float2 smuv = float2(0.5f, -0.5f) * posinLVP.xy + float2(0.5f, 0.5f);
+
+		float isInUVbuf = (1.0f-step(1.f,smuv.x)) * (1.0f-step(1.f,smuv.y)) * (1.0f-step(smuv.x,0.f)) * (1.0f-step(smuv.y,0.f));
+		float2 pix = float2(ligPixSize[i].x * offset.x, ligPixSize[i].y * offset.y);
+
+		float shadowbuf = 0.f;
+		float is_inuvbuf_shadow_isuv = isInUVbuf * (1.0f - isShadow) * (1.0f-isInUV);
+		shadowbuf += shadowMap_1.Sample(Sampler, smuv + pix * 0.5f).r * is_inuvbuf_shadow_isuv * (1.0f-abs(sign(0-i)));
+		shadowbuf += shadowMap_2.Sample(Sampler, smuv + pix * 0.5f).r * is_inuvbuf_shadow_isuv * (1.0f-abs(sign(1-i)));
+		shadowbuf += shadowMap_3.Sample(Sampler, smuv + pix * 0.5f).r * is_inuvbuf_shadow_isuv * (1.0f-abs(sign(2-i)));
+		float isShadowbuf = (1.0f-step(depthbuf,shadowbuf + depthoffset[i]))*isInUVbuf*sign(shadowbuf);
+		//depth += depthbuf * isShadowbuf;
+		shadow += shadowbuf*(1.0f-isShadow)* isShadowbuf;
+		isShadow = sign(isShadow+isShadowbuf);
+		isInUV = sign(isInUV+isInUVbuf);
+		/*
 		if (smuv.x < 1.f && smuv.y < 1.f && smuv.x > 0.f && smuv.y > 0.f)
 		{
 			float2 pix = float2(ligPixSize[i].x * offset.x, ligPixSize[i].y * offset.y);
@@ -54,14 +73,13 @@ float GetShadow(float3 wpos,Texture2D<float4> tex, float2 offset)
 			{
 				shadow = shadowMap_3.Sample(Sampler, smuv + pix / 2).r;
 			}
-
-			if (depth > shadow.r + depthoffset[i])
-			{
-				return 1.f;
-			}
-		}
+			int isShadow = !step(depth,shadow.r + depthoffset[i]);
+			return float2(1.f*isShadow,(depth-shadow)*isShadow);
+		}*/
 	}
-	return 0.f;
+	//int isShadow = !step(depth,shadow.r + depthoffset[i]);
+	return float2(1.f*isShadow,(depth-shadow)*isShadow);
+	//return float2(0.f,0.f);
 }
 
 /*!
@@ -149,9 +167,9 @@ PSInput VSMainSkin( VSInputNmTxWeights In )
     return psInput;
 }
 
-PSInputGround VSMainGround(VSInputNmTxVcTangent In)
+PSInputGround VSMain_Ground(VSInputNmTxVcTangent In)
 {
-	PSInput psInput = (PSInput)0;
+	PSInputGround psInput = (PSInputGround)0;
 	float4 pos = mul(mWorld, In.Position);
 	psInput.Pos = pos;
 	pos = mul(mView, pos);
@@ -163,6 +181,11 @@ PSInputGround VSMainGround(VSInputNmTxVcTangent In)
 	psInput.TexCoord = In.TexCoord;
 	psInput.Normal = normalize(mul(mWorld, In.Normal));
 	psInput.Tangent = normalize(mul(mWorld, In.Tangent));
+
+	float ax=abs(In.Normal.x),ay=abs(In.Normal.y),az=abs(In.Normal.z);
+	psInput.NormalFlag.x = step(ay,ax)*step(az,ax);
+	psInput.NormalFlag.y = step(ax,ay)*step(az,ay);
+	psInput.NormalFlag.z = step(ay,az)*step(ax,az)*step(0,In.Normal.z);
 
 	return psInput;
 }
@@ -267,20 +290,11 @@ PSOutput PSProcess_GBuffer(float4 albe,PSInput In)
 	Out.diffuse = albe;
 	Out.normal = float4(In.Normal,1.0f);
 	Out.tangent = float4(In.Tangent,1.0f);
-	Out.specular = float4(0.0f,0.0f,0.0f,1.0f);
+	Out.specular = float4(In.Pos,1.0f);			//スペキュラマップ
+	Out.depth = In.Position.z / In.Position.w;
 
-	float4 shadow = float4(1, 1, 1, 1);
-	float sum = 0.f;
-	sum += GetShadow(In.Pos, shadowMap_1,0);
-	float scol = sum;
-
-	shadow.x = lerp(1.0f, 0.45f, scol);
-	shadow.y = lerp(1.0f, 0.4f, scol);
-	shadow.z = lerp(1.0f, 0.6f, scol);
-	shadow *= isShadowReciever;
-	Out.shadow = shadow;
-
-	Out.depth = length(eyepos - In.Pos.xyz);
+	float2 sdw = GetShadow(In.Pos, shadowMap_1,0);
+	Out.shadow = float4(sdw,Out.depth.x*sdw.x,1);//x:影の有無 y:未使用 z:深度値(多分使わない) w:未使用.
 	return Out;
 }
 
@@ -298,15 +312,16 @@ PSOutput PSMain(PSInput In)
 /*/////////////////////////////////////////////////////////////////////////////////
 		地面用。
 			モデルの拡大縮小によってUVが変形することがないようになっている
-			if文多様につき改良予定(予定)
 */////////////////////////////////////////////////////////////////////////////////
-PSOutput PSMain_Ground(PSInput In)
+PSOutput PSMain_Ground(PSInputGround In)
 {
 	float2 UV = In.TexCoord;
 	float3 gsca = groundScale.xyz;	//地面のスケール
 
+	/*
 	float3 orig = normalize(mul(groundDir,In.Normal));//回転をなくす
 
+	
 	In.TexCoord *= 2.f;
 
 	float x = abs(orig.x);
@@ -333,8 +348,24 @@ PSOutput PSMain_Ground(PSInput In)
 	}
 	In.TexCoord.x *= gsca.z;
 	In.TexCoord.y *= gsca.x;
+	*/
 
+	float2 uvs=float2(0,0);
 
+	//Z Axis
+	uvs.x += UV.x * gsca.z * In.NormalFlag.z;
+	uvs.y += UV.y * gsca.y * In.NormalFlag.z;
+
+	//X Axis
+	uvs.x += UV.x * gsca.z * In.NormalFlag.x;
+	uvs.y += UV.y * gsca.y * In.NormalFlag.x;
+
+	//Y Axis
+	uvs.x += UV.x * gsca.y * In.NormalFlag.y;
+	uvs.y += UV.y * gsca.x * In.NormalFlag.y;
+
+	uvs += UV.xy * gsca.xz * !(In.NormalFlag.x + In.NormalFlag.y + In.NormalFlag.z);
+	//uvs *= 2.0f;
 
 	//アルベドの取得
 	float4 alb = float4(0, 0, 0, 1);
@@ -368,8 +399,8 @@ PSOutput PSMain_Ground(PSInput In)
 	//	alb = albedoTexture.Sample(Sampler, In.TexCoord);
 	//}
 	float4 blend = groundBlendMap.Sample(Sampler, UV);
-	float4 alb1 = texture_1.Sample(Sampler, In.TexCoord);
-	float4 alb2 = texture_2.Sample(Sampler, In.TexCoord);
+	float4 alb1 = texture_1.Sample(Sampler, uvs);
+	float4 alb2 = texture_2.Sample(Sampler, uvs);
 	float len = 0.f;
 
 	len = blend.x + blend.y;
@@ -378,7 +409,7 @@ PSOutput PSMain_Ground(PSInput In)
 	alb2 *= blend.y;
 	alb.xyz += (alb1.xyz + alb2.xyz) * groundUseTexs.x* !groundUseTexs.w;
 
-	float4 alb3 = texture_2.Sample(Sampler, In.TexCoord);
+	float4 alb3 = texture_2.Sample(Sampler, uvs);
 	len = blend.x + blend.y + blend.z;
 	blend /= len;
 	alb1 *= blend.x;
@@ -386,7 +417,7 @@ PSOutput PSMain_Ground(PSInput In)
 	alb3 *= blend.z;
 	alb.xyz += (alb1.xyz + alb2.xyz + alb3.xyz)* groundUseTexs.w;
 
-	float3 albtex = albedoTexture.Sample(Sampler, In.TexCoord);
+	float3 albtex = albedoTexture.Sample(Sampler, uvs);
 	alb.xyz += albtex * !groundUseTexs.x;
 
 	/*
@@ -405,8 +436,8 @@ PSOutput PSMain_Ground(PSInput In)
 	
 	return fcol;
 	*/
-
-	PSOutput Out = PSProcess_GBuffer(alb,In);
+	
+	PSOutput Out = PSProcess_GBuffer(alb,(PSInput)In);
 	return Out;
 }
 

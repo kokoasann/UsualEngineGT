@@ -78,21 +78,21 @@ float4 PSMain(PS_BlurInput In):SV_Target0
 {
 	float4 Color;
 	Color  = weight[0].x * (srcTex.Sample(Sampler, In.tex0)
-						+ srcTex.Sample(Sampler, In.tex7 + offset));
+						+ srcTex.Sample(Sampler, In.tex7 + offset.xy));
 	Color += weight[0].y * (srcTex.Sample(Sampler, In.tex1)
-						+ srcTex.Sample(Sampler, In.tex6 + offset));
+						+ srcTex.Sample(Sampler, In.tex6 + offset.xy));
 	Color += weight[0].z * (srcTex.Sample(Sampler, In.tex2)
-						+ srcTex.Sample(Sampler, In.tex5 + offset));
+						+ srcTex.Sample(Sampler, In.tex5 + offset.xy));
 	Color += weight[0].w * (srcTex.Sample(Sampler, In.tex3)
-						+ srcTex.Sample(Sampler, In.tex4 + offset));
+						+ srcTex.Sample(Sampler, In.tex4 + offset.xy));
 	Color += weight[1].x * (srcTex.Sample(Sampler, In.tex4)
-						+ srcTex.Sample(Sampler, In.tex3 + offset));
+						+ srcTex.Sample(Sampler, In.tex3 + offset.xy));
 	Color += weight[1].y * (srcTex.Sample(Sampler, In.tex5)
-						+ srcTex.Sample(Sampler, In.tex2 + offset));
+						+ srcTex.Sample(Sampler, In.tex2 + offset.xy));
 	Color += weight[1].z * (srcTex.Sample(Sampler, In.tex6)
-						+ srcTex.Sample(Sampler, In.tex1 + offset));
+						+ srcTex.Sample(Sampler, In.tex1 + offset.xy));
 	Color += weight[1].w * (srcTex.Sample(Sampler, In.tex7)
-						+ srcTex.Sample(Sampler, In.tex0 + offset));
+						+ srcTex.Sample(Sampler, In.tex0 + offset.xy));
 	//return float4(0,0,1,1);
 	return float4(Color.xyz, 1.0f);
 }

@@ -89,8 +89,22 @@ namespace UsualEngine
 	void GraphicsEngine::PreRenderDraw()
 	{
 		m_preRender.Render();
+		//Physics().DebugDraw();
+		auto sdw = m_preRender.GetSoftShadow()->Draw();
 		auto& gb = m_preRender.GetGBuffer();
+		m_preRender.SendDeferrdConstBuffer();
+		D3D11_VIEWPORT viewport;
+		viewport.Width = FRAME_BUFFER_W;
+		viewport.Height = FRAME_BUFFER_H;
+		viewport.TopLeftX = 0;
+		viewport.TopLeftY = 0;
+		viewport.MinDepth = 0.0f;
+		viewport.MaxDepth = 1.0f;
+		m_pd3dDeviceContext->RSSetViewports(1, &viewport);
 		gb.SetGBuffer();
+		ID3D11ShaderResourceView* srv[] = { sdw };
+		m_pd3dDeviceContext->PSSetShaderResources(enSkinModelSRVReg_Textur_1, 1, &m_speculaGradation);
+		//m_pd3dDeviceContext->PSSetShaderResources(enSkinModelSRVReg_GShadowMap, 1, &sdw);
 		m_pd3dDeviceContext->PSSetShader((ID3D11PixelShader*)m_psDefferd.GetBody(), 0, 0);
 		m_pd3dDeviceContext->VSSetShader((ID3D11VertexShader*)m_vsDefferd.GetBody(), 0, 0);
 		m_pd3dDeviceContext->IASetInputLayout(m_vsDefferd.GetInputLayout());
@@ -263,6 +277,9 @@ namespace UsualEngine
 		m_psCopy.Load("Assets/shader/copy.fx", "PSMain", Shader::EnType::PS);
 		m_vsDefferd.Load("Assets/shader/DefferdShading.fx", "VSMain_Defferd", Shader::EnType::VS);
 		m_psDefferd.Load("Assets/shader/DefferdShading.fx", "PSMain_Defferd", Shader::EnType::PS);
+
+		std::wstring st = L"Assets/sprite/Deferred_Grad.dds";
+		m_speculaGradation =  SpriteDataManager::Get()->Load(st);
 
 		InitBackBuffer();
 	}

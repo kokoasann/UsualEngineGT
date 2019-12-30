@@ -56,6 +56,7 @@ struct PSInputGround {
 	float3 Pos : TEXCOORD1;		//ワールド座標
 	float3 PosInView : TEXCOORD2;		//カメラ空間での座標
 	float4 PosInProj : TEXCOORD3;		//正規化座標系での座標
+	int4 NormalFlag : TEXCOORD4;
 };
 
 /*
@@ -99,6 +100,9 @@ cbuffer LightCB : register(b1)
 	int DLcount : packoffset(c0.w);			//ディレクションライトの数
 	float4 screenSize : packoffset(c1);		//スクリーンのサイズ
 }
+
+
+
 
 
 /*////////////////////////////////////////////////////////////////////////////////////////

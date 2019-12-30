@@ -44,6 +44,7 @@ namespace UsualEngine
 	private:
 		ConstantBuffer m_groundCB;		//定数バッファ
 		GroundCB m_goundData;			//定数バッファの中身。
+		Shader m_vsShader;
 		Shader m_psShader;
 		ID3D11ShaderResourceView* m_blendMap = nullptr;
 		ID3D11ShaderResourceView* m_textures[3] = {nullptr};

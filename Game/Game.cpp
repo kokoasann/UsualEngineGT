@@ -40,6 +40,8 @@ bool Game::Start()
 
 	ground = ue::NewGO<ue::SMR4Ground>(0);
 	ground->InitG(L"Assets/model/dun.cmo", 0, 0, ue::enFbxUpAxisZ);
+	ground->SetIsShadowCaster(true);
+	ground->SetIsShadowReciever(true);
 	//ground->SetSca(ue::CVector3{30, 0.1f, 10});
 	ground->SetSca(ue::CVector3{30, 30.f, 10});
 	//ground->SetPos({ 0,-100,0 });
@@ -57,18 +59,21 @@ bool Game::Start()
 	ground->SetSca(ue::CVector3{ 7, 9.2f, 7 });
 	ground->SetPos({0,0,-20000 });
 	ground->SetIsShadowCaster(true);
+	ground->SetIsShadowReciever(true);
 
 	ground = ue::NewGO<ue::SMR4Ground>(0);
 	ground->InitG(L"Assets/model/octagon.cmo", 0, 0, ue::enFbxUpAxisZ);
 	ground->SetSca(ue::CVector3{ 1.5, 2.2f, 1.5 });
 	ground->SetPos({ -1500,0,-10000 });
 	ground->SetIsShadowCaster(true);
+	ground->SetIsShadowReciever(true);
 
 	ground = ue::NewGO<ue::SMR4Ground>(0);
 	ground->InitG(L"Assets/model/octagon.cmo", 0, 0, ue::enFbxUpAxisZ);
 	ground->SetSca(ue::CVector3{ 0.4, 1.2f, 0.4 });
 	ground->SetPos({ 700,0,-3000 });
 	ground->SetIsShadowCaster(true);
+	ground->SetIsShadowReciever(true);
 
 	light = ue::NewGO<ue::LightDirection>(0);
 	light->SetDir(ue::CVector3{ -0.3f,-1,-0.2f });

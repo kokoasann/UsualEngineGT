@@ -26,6 +26,10 @@ namespace UsualEngine
 		void SetGBuffer();
 		void UnSetGBuffer();
 		void Draw();
+		RenderTarget* GetGBuffer(GBufferIndex ind)
+		{
+			return &m_gBuffer[ind];
+		}
 	private:
 		RenderTarget m_gBuffer[GB_Num];
 		std::vector<GameObject*> m_modelList;
