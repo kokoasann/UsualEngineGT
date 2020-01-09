@@ -67,6 +67,9 @@ bool Ene_Gib::Start()
 void Ene_Gib::Update()
 {
 
+	if (GetKeyState('z'))
+	{
 
+	}
 	UpdateComponent();
 }
