@@ -101,6 +101,8 @@ namespace UsualEngine
 		{
 			return m_ik[num];
 		}
+
+		void SetIKMode(int mode, Bone* bone = nullptr);
 		
 		/// <summary>
 		/// 
@@ -116,18 +118,12 @@ namespace UsualEngine
 				}
 			}
 		}
-
+		
 		/// <summary>
 		/// アニメーションの保持するIKの摩擦率をセットする
 		/// </summary>
 		/// <param name="f">1~0がいいと思う。</param>
-		void SetIKRub(float f)
-		{
-			for (auto ik : m_ik)
-			{
-				ik->SetRubbing(f);
-			}
-		}
+		void SetIKRub(float f, Bone* bone = nullptr);
 		
 		void SetIKOffset(const CVector3& ofs, Bone* bone = nullptr);
 		

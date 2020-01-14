@@ -32,11 +32,8 @@ public:
 	/// </summary>
 	/// <param name="footL">左</param>
 	/// <param name="footR">右</param>
-	void InitBone(ue::Bone* footL, ue::Bone* footR)
-	{
-		m_footL = footL;
-		m_footR = footR;
-	}
+	void InitBone(ue::Bone* footL, ue::Bone* footR);
+	
 	/// <summary>
 	/// JustFootの初期化。
 	/// JustFootとは?:  歩いてから止まった時に大抵の場合足の位置がずれるので、

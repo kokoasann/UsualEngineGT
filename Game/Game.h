@@ -38,6 +38,7 @@ private:
 	float modeloffset = 30.f;
 
 	ue::PhysicsStaticObject pso;
+	ue::PhysicsStaticObject pso2;
 
 	ue::LightDirection* light = 0;
 };

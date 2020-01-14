@@ -8,6 +8,11 @@ namespace UsualEngine
 	class IK
 	{
 	public:
+		enum IKMode
+		{
+			enMode_Normal,
+			enMode_Foot,		//footIK
+		};
 		/// <summary>
 		/// 使用するIKの種類。
 		/// </summary>
@@ -53,6 +58,15 @@ namespace UsualEngine
 		/// </summary>
 		/// <param name="pos"></param>
 		void UpdateRigidBody(const CVector3& pos);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="mode"></param>
+		void SetIKMode(IKMode mode)
+		{
+			m_ikMode = mode;
+		}
 
 		/// <summary>
 		/// 
@@ -150,7 +164,8 @@ namespace UsualEngine
 		Bone* m_effectorBone=0;					//エフェクタボーン
 		Bone* m_endBone=0;						//エンドボーン
 		float m_radius = 0.f;					//コライダーの半径。
-		int m_usingIK = enUSE_CCD;				//使用するIKの種類。
+		UseIK m_usingIK = enUSE_CCD;				//使用するIKの種類。
+		IKMode m_ikMode = enMode_Normal;		//IKのモード
 
 		SphereCollider m_collider;				//コライダー
 		RigidBody m_rigidBody;					//リジッドボディ

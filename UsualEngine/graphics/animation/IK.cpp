@@ -239,6 +239,7 @@ namespace UsualEngine
 				float rad = norm.Dot(meri);
 				target = newpos + sr.hitNormal * (-rad + m_radius);
 				m_rubTarget = target;
+
 			}
 			else if (!m_isHit)
 			{
@@ -272,6 +273,24 @@ namespace UsualEngine
 			}
 		}
 
+		if (!m_isHit && m_ikMode == enMode_Foot)
+		{
+			if ((newpos.y - oldpos.y) < 0)
+			{
+				bstart.setOrigin(btVector3(target.x, target.y, target.z));
+
+				bend.setOrigin(btVector3(target.x, target.y + -1 +(m_radius*-2.f + newpos.y-oldpos.y)*1.5f, target.z));
+				SweepResultIK srf;
+				srf.startPos = target;
+				srf.me = m_rigidBody.GetBody();
+				Physics().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), bstart, bend, srf);
+				if (srf.isHit)
+				{
+					target = srf.hitPos;
+					target.y += m_radius;
+				}
+			}
+		}
 		/*SweepResultIK_Wall sr_w;
 		Physics().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), bstart, bend, sr_w);
 		if (sr_w.isHit)

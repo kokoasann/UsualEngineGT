@@ -291,7 +291,7 @@ PSOutput PSProcess_GBuffer(float4 albe,PSInput In)
 	Out.normal = float4(In.Normal,1.0f);
 	Out.tangent = float4(In.Tangent,1.0f);
 	Out.specular = float4(In.Pos,1.0f);			//スペキュラマップ
-	Out.depth = In.Position.z / In.Position.w;
+	Out.depth = In.PosInProj.z / In.PosInProj.w;
 
 	float2 sdw = GetShadow(In.Pos, shadowMap_1,0);
 	Out.shadow = float4(sdw,Out.depth.x*sdw.x,1);//x:影の有無 y:未使用 z:深度値(多分使わない) w:未使用.

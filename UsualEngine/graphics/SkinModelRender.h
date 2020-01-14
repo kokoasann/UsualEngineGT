@@ -187,9 +187,9 @@ namespace UsualEngine
 		/// アニメーションの保持する全てのIKの摩擦率をセットする
 		/// </summary>
 		/// <param name="f">1~0がおすすめ。この範囲外の値を設定すると面白い動きをしてしまう可能性がありますのでご注意ください。</param>
-		void SetAllIKRub(float f)
+		void SetIKRub(float f,Bone* bone)
 		{
-			m_animation.SetIKRub(f);
+			m_animation.SetIKRub(f,bone);
 		}
 	private:
 		SkinModel m_skinModel;	//siknModel

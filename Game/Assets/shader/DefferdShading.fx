@@ -82,9 +82,10 @@ float4 PSMain_Defferd(DefferdPSInput In):SV_TARGET0
     col.xyz *= li;
 
     
-    float4 usu = lerp(float4(0.8f, 0.88f, 1.f,1.f),float4(0.f,0.f,0.f,0.f),min(depth*2000,1));
+    float4 usu = lerp(float4(0.8f, 0.88f, 1.f,1.f),float4(0.f,0.f,0.f,0.f),min(lerp(1,0,pow(depth,2000)),1));
     col.xyz *= 1.f-usu.w;
     col.xyz += usu;
     
+    //return float4(sha.x, sha.x, sha.x,1);
     return col;
 }

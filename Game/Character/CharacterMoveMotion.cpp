@@ -9,6 +9,14 @@
 // 75% 歩くときや走るときのモーションの左足を出し始めて左足が地に付くまでのちょうど真ん中の位置。
 #define ANM_75PER 0.75f
 
+void CharacterMoveMotion::InitBone(ue::Bone* footL, ue::Bone* footR)
+{
+	m_footL = footL;
+	m_footR = footR;
+	m_chara->GetAnimation().SetIKMode(ue::IK::enMode_Foot, footL);
+	m_chara->GetAnimation().SetIKMode(ue::IK::enMode_Foot, footR);
+}
+
 void CharacterMoveMotion::Update()
 {
 	float delTime = ue::gameTime()->GetDeltaTime();
@@ -169,7 +177,7 @@ void CharacterMoveMotion::JustFoot(float delTime)
 		else
 			m_startJustFoot = JF_footR;
 		m_isStartJustFoot = true;
-		m_chara->SetAllIKRub(0.0f);
+		m_chara->SetIKRub(0.0f);
 	}
 	ue::Bone* startBone = nullptr;
 	ue::Bone* endBone = nullptr;

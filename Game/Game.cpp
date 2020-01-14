@@ -54,6 +54,23 @@ bool Game::Start()
 	pso.CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(),ground->GetSca());
 	//ground->SetRot(rot);
 
+
+	ground = ue::NewGO<ue::SMR4Ground>(0);
+	ground->InitG(L"Assets/model/dun.cmo", 0, 0, ue::enFbxUpAxisZ);
+	ground->SetIsShadowCaster(true);
+	ground->SetIsShadowReciever(true);
+	//ground->SetSca(ue::CVector3{30, 0.1f, 10});
+	ground->SetSca(ue::CVector3{ 1, 0.03f, 1 });
+	//ground->SetPos({ 0,-100,0 });
+	ground->SetPos({ 0,0,700 });
+	ue::CQuaternion rot;
+	rot.SetRotationDeg(ue::CVector3::AxisX(), -10);
+	ground->SetRot(rot);
+	ground->SetBlendMap(L"Assets/sprite/map.dds");
+	ground->SetTexture(0, L"Assets/sprite/kusa.dds");
+	ground->SetTexture(1, L"Assets/sprite/tuti.dds");
+	pso2.CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(), ground->GetSca());
+
 	ground = ue::NewGO<ue::SMR4Ground>(0);
 	ground->InitG(L"Assets/model/octagon.cmo", 0, 0, ue::enFbxUpAxisZ);
 	ground->SetSca(ue::CVector3{ 7, 9.2f, 7 });

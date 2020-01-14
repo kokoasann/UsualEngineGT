@@ -33,7 +33,7 @@ namespace UsualEngine
 		auto& pe = usualEngine()->GetGraphicsEngine()->GetPostEffect();
 		pe.Render();
 
-		//Physics().DebugDraw();
+		Physics().DebugDraw();
 		
 		for (auto& ngd : m_newGOBuffer)
 		{

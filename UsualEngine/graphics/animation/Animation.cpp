@@ -215,6 +215,50 @@ namespace UsualEngine
 		//UpdateIK();
 	}
 
+	void Animation::SetIKMode(int mode, Bone* bone)
+	{
+		if (bone == nullptr)
+		{
+			for (auto ik : m_ik)
+			{
+				ik->SetIKMode((IK::IKMode)mode);
+			}
+		}
+		else
+		{
+			for (auto ik : m_ik)
+			{
+				if (bone == ik->GetEffectorBone())
+				{
+					ik->SetIKMode((IK::IKMode)mode);
+					return;
+				}
+			}
+		}
+	}
+
+	void Animation::SetIKRub(float f, Bone* bone)
+	{
+		if (bone == nullptr)
+		{
+			for (auto ik : m_ik)
+			{
+				ik->SetRubbing(f);
+			}
+		}
+		else
+		{
+			for (auto ik : m_ik)
+			{
+				if (bone == ik->GetEffectorBone())
+				{
+					ik->SetRubbing(f);
+					return;
+				}
+			}
+		}
+	}
+
 	void Animation::SetIKOffset(const CVector3& ofs, Bone* bone)
 	{
 		if (bone == nullptr)

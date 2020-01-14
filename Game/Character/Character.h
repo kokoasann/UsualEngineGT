@@ -158,9 +158,9 @@ public:
 	/// 全てIKは、摩擦率がfになる。
 	/// </summary>
 	/// <param name="f">1~0がオヌヌメ。この範囲外を指定すると、多分変になる。真実を知りたくばやってみるがいい。</param>
-	void SetAllIKRub(float f)
+	void SetIKRub(float f,ue::Bone* bone=nullptr)
 	{
-		m_model->SetAllIKRub(f);
+		m_model->SetIKRub(f,bone);
 	}
 	/// <summary>
 	/// 引数moveの分だけ移動する
@@ -244,7 +244,7 @@ public:
 	/// SkinModelRenderの所持するAnimationを持ってくる
 	/// </summary>
 	/// <returns></returns>
-	const ue::Animation& GetAnimation() const
+	ue::Animation& GetAnimation() const
 	{
 		return m_model->GetAnimation();
 	}

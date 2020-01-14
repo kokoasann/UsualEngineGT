@@ -39,7 +39,7 @@ Player::Player()
 	model->SetIsShadowCaster(true);
 	model->SetIsShadowReciever(true);
 	m_camera.Init(this);
-	m_chara.Init(model, 20, 40, {0,-2.f,0},true);
+	m_chara.Init(model, 20, 40, {0,-2.f,0},false);
 
 	m_motion.Init(this, &m_chara, m_camera.GetCamera(), m_anim,m_pad);
 
