@@ -60,9 +60,9 @@ bool Game::Start()
 	ground->SetIsShadowCaster(true);
 	ground->SetIsShadowReciever(true);
 	//ground->SetSca(ue::CVector3{30, 0.1f, 10});
-	ground->SetSca(ue::CVector3{ 1, 0.03f, 1 });
+	ground->SetSca(ue::CVector3{ 1, 1, 1 });
 	//ground->SetPos({ 0,-100,0 });
-	ground->SetPos({ 0,0,700 });
+	ground->SetPos({ 0,-900,700 });
 	ue::CQuaternion rot;
 	rot.SetRotationDeg(ue::CVector3::AxisX(), -10);
 	ground->SetRot(rot);

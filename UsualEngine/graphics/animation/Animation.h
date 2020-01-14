@@ -92,10 +92,11 @@ namespace UsualEngine
 		/// <param name="end"></param>
 		/// <param name="radius"></param>
 		/// <param name="modelPos"></param>
-		void SetingIK(Bone* effector, Bone* end,float radius,bool isCreateRigitBody,const CVector3& modelPos)
+		IK* SetingIK(Bone* effector, Bone* end,float radius,bool isCreateRigitBody,const CVector3& modelPos)
 		{
 			IK* ik = new IK(effector, end, radius, isCreateRigitBody, modelPos);
 			m_ik.push_back(ik);
+			return ik;
 		}
 		IK* GetIK(int num)
 		{
@@ -132,6 +133,8 @@ namespace UsualEngine
 		void SetIKActive(bool b, Bone* bone = nullptr);
 		
 		void SetIKNextTarget(const CVector3& tar, Bone* bone);
+
+		void SetIKGravity(float g, Bone* bone = nullptr);
 		/// <summary>
 		/// 
 		/// </summary>

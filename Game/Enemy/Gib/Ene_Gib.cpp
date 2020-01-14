@@ -19,20 +19,26 @@ Ene_Gib::Ene_Gib()
 	model->SetSca({ 100.f,100.f, 100.f });
 	
 	m_chara.Init(model, 20, 50, {0,-30,0});
+
 	auto footR = m_chara.FindBone(L"IK_Bone.007_R.003", BK_FootR, true, 3, 60);
 	auto footL = m_chara.FindBone(L"IK_Bone.007_L.003", BK_FootL, true, 3, 60);
-	//m_chara.SetBone(footR->GetChildren()[0], BK_None, true, 2, 10);
-	//m_chara.SetBone(footL->GetChildren()[0], BK_None, true, 2, 10);
+	m_chara.SetBone(footR->GetChildren()[0], BK_None, true, 2, 10);
+	m_chara.SetBone(footL->GetChildren()[0], BK_None, true, 2, 10);
+	//m_chara.SetBone(footR, BK_FootR, true, 3, 60);
+	//m_chara.SetBone(footL, BK_FootL, true, 3, 60);
 	m_chara.SetBone(footR->GetParent()->GetParent()->GetParent(), BK_WaistR);
 	m_chara.SetBone(footL->GetParent()->GetParent()->GetParent(), BK_WaistL);
 	//m_chara.FindBone(L"Bone.007_R.004", Character::BK_None, true, 2, 10);
 	//m_chara.FindBone(L"Bone.007_L.004", Character::BK_None, true, 2, 10);
+	ue::Animation& anim = m_chara.GetAnimation();
+	anim.SetIKGravity(980.f, footR);
+	anim.SetIKGravity(980.f, footL);
 
 	//m_chara.SetActionMode(AM_None);
 	//m_chara.PlayAnim(GA_rotate,1.0f, 0.f,AM_Rotate);
 	m_chara.PlayAnim(GA_walk, 1.0f, 0.f, AM_Move);
-	//m_chara.SetIKRub(0, footR->GetChildren()[0]);
-	//m_chara.SetIKRub(0, footL->GetChildren()[0]);
+	m_chara.SetIKRub(0, footR->GetChildren()[0]);
+	m_chara.SetIKRub(0, footL->GetChildren()[0]);
 
 
 	m_charaMove.Init(&m_chara, m_animClip);
