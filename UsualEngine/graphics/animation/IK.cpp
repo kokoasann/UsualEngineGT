@@ -327,6 +327,9 @@ namespace UsualEngine
 			}
 		}
 
+		/*
+		ˆÚ“®‹——£‚ÌŒvZ‚Æ‚©‚»‚Ì•Ó‚ª‚Ü‚¿‚ª‚Á‚Ä‚éB
+		*/
 		
 		//m_rubTarget += (target-oldpos)*m_speed;
 		m_target += (target- nowpos)*m_speed;
