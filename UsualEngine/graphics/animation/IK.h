@@ -193,6 +193,8 @@ namespace UsualEngine
 
 		float m_gravity = 0.0f;					// 重力。
 		float m_timer = 0.0f;					//重力用のタイマー
+		bool m_isNextGravity = false;
+		float m_gravitPow = 0.0f;				
 	};
 
 }

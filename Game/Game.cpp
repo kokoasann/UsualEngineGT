@@ -64,7 +64,7 @@ bool Game::Start()
 	//ground->SetPos({ 0,-100,0 });
 	ground->SetPos({ 0,-900,700 });
 	ue::CQuaternion rot;
-	rot.SetRotationDeg(ue::CVector3::AxisX(), -10);
+	rot.SetRotationDeg(ue::CVector3::AxisX(), -20);
 	ground->SetRot(rot);
 	ground->SetBlendMap(L"Assets/sprite/map.dds");
 	ground->SetTexture(0, L"Assets/sprite/kusa.dds");

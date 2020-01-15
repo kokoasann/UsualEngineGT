@@ -31,8 +31,11 @@ Ene_Gib::Ene_Gib()
 	//m_chara.FindBone(L"Bone.007_R.004", Character::BK_None, true, 2, 10);
 	//m_chara.FindBone(L"Bone.007_L.004", Character::BK_None, true, 2, 10);
 	ue::Animation& anim = m_chara.GetAnimation();
-	anim.SetIKGravity(980.f, footR);
-	anim.SetIKGravity(980.f, footL);
+	float v = 12.5f;
+	anim.SetIKGravity(9.8f*v, footR);
+	anim.SetIKGravity(9.8f*v, footL);
+	anim.SetIKGravity(9.8f * v, footR->GetChildren()[0]);
+	anim.SetIKGravity(9.8f * v, footL->GetChildren()[0]);
 
 	//m_chara.SetActionMode(AM_None);
 	//m_chara.PlayAnim(GA_rotate,1.0f, 0.f,AM_Rotate);

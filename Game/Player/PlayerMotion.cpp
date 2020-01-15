@@ -19,6 +19,10 @@ void PlayerMotion::Init(Player* player, Character* chara, ue::Camera* cam, ue::A
 
 	//m_chara->SetMoveFunc(m_noneMF);
 	//m_chara->SetRotateFunc(m_noneRF);
+	auto& anime = m_chara->GetAnimation();
+	float v = 5.f;
+	anime.SetIKGravity(9.8f*v, m_footL);
+	anime.SetIKGravity(9.8f*v, m_footR);
 
 	m_charaMove.Init(m_chara, m_anim);
 	m_charaMove.InitBone(m_footL, m_footR);

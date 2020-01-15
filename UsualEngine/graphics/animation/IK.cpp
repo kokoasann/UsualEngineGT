@@ -209,9 +209,21 @@ namespace UsualEngine
 		{
 			oldpos = m_target;
 		}
-		if ((newpos - oldpos).Length() < 0.001f)
-			return;
+
 		
+		m_timer = gameTime()->GetDeltaTime();
+		if ((newpos.y - oldpos.y) <= 0.001f)
+		{
+			m_gravitPow += m_gravity * m_timer;
+		}
+		else
+		{
+			m_gravitPow = m_gravity * m_timer;
+		}
+		newpos.y -= m_gravitPow;
+
+		if ((newpos - oldpos).Length() < 0.0001f)
+			return;
 		//oldpos.y += m_radius;
 
 		SweepResultIK sr;
@@ -278,29 +290,7 @@ namespace UsualEngine
 				m_effectorBone->SetMomentum(CVector3::Zero());
 			}
 		}
-
-		if (!m_isHit && m_ikMode == enMode_Foot && abs(m_gravity) > 0.01f)
-		{
-			if ((newpos.y - oldpos.y) <= 0.f)
-			{
-				bstart.setOrigin(btVector3(target.x, target.y, target.z));
-				m_timer += gameTime()->GetDeltaTime();
-				bend.setOrigin(btVector3(target.x, target.y - m_gravity*m_timer, target.z));
-				SweepResultIK srf;
-				srf.startPos = target;
-				srf.me = m_rigidBody.GetBody();
-				Physics().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), bstart, bend, srf);
-				if (srf.isHit)
-				{
-					target = srf.hitPos;
-					target.y += m_radius;
-				}
-			}
-		}
-		else
-		{
-			m_timer = 0.0f;
-		}
+		
 		/*SweepResultIK_Wall sr_w;
 		Physics().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), bstart, bend, sr_w);
 		if (sr_w.isHit)
