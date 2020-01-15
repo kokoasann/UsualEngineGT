@@ -333,4 +333,25 @@ namespace UsualEngine
 			}
 		}
 	}
+	void Animation::SetIKGravity(float g, Bone* bone)
+	{
+		if (bone == nullptr)
+		{
+			for (auto ik : m_ik)
+			{
+				ik->SetGravity(g);
+			}
+		}
+		else
+		{
+			for (auto ik : m_ik)
+			{
+				if (bone == ik->GetEffectorBone())
+				{
+					ik->SetGravity(g);
+					return;
+				}
+			}
+		}
+	}
 }

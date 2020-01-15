@@ -159,6 +159,11 @@ namespace UsualEngine
 			m_nextTarget = tar;
 			m_isSetNextTarget = true;
 		}
+
+		void SetGravity(float grav)
+		{
+			m_gravity = grav;
+		}
 	private:
 		bool m_isFirst = true;					//初めてか？
 		Bone* m_effectorBone=0;					//エフェクタボーン
@@ -185,6 +190,9 @@ namespace UsualEngine
 		bool m_isSetNextTarget = false;				//次のターゲットがセットされた？
 		
 		bool m_isUseRigidBody = true;				//リジッドボディーを使う？
+
+		float m_gravity = 0.0f;					// 重力。
+		float m_timer = 0.0f;					//重力用のタイマー
 	};
 
 }

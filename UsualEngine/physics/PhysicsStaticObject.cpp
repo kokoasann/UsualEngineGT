@@ -32,7 +32,7 @@ namespace UsualEngine
 		rbInfo.collider = &m_meshCollider; //剛体に形状(コライダー)を設定する。
 		rbInfo.mass = 0.0f;
 		rbInfo.pos = {0,0,0};
-		rbInfo.rot = rot;
+		rbInfo.rot = CQuaternion::Identity();
 		//rbInfo.sca = sca;
 		m_rigidBody.Create(rbInfo);
 		m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_Ground);

@@ -13,8 +13,10 @@ void CharacterMoveMotion::InitBone(ue::Bone* footL, ue::Bone* footR)
 {
 	m_footL = footL;
 	m_footR = footR;
-	m_chara->GetAnimation().SetIKMode(ue::IK::enMode_Foot, footL);
-	m_chara->GetAnimation().SetIKMode(ue::IK::enMode_Foot, footR);
+	ue::Animation& anim = m_chara->GetAnimation();
+	anim.SetIKMode(ue::IK::enMode_Foot, footL);
+	anim.SetIKMode(ue::IK::enMode_Foot, footR);
+	
 }
 
 void CharacterMoveMotion::Update()

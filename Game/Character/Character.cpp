@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Character.h"
 
+#define DEBUG_SHOW_IK 0
+
 Character::Character()
 {
 }
@@ -141,7 +143,7 @@ ue::Bone* Character::FindBone(wstr name, BoneKind bk, bool isSetingIK, int len,f
 		{
 			endbone = endbone->GetParent();
 		}
-		m_model->SetingIK(resbone, endbone, radius,false);
+		m_model->SetingIK(resbone, endbone, radius, DEBUG_SHOW_IK);
 	}
 
 	switch (bk)
@@ -177,7 +179,7 @@ void Character::SetBone(ue::Bone* bone, BoneKind bk, bool isSetingIK, int len, f
 		{
 			endbone = endbone->GetParent();
 		}
-		m_model->SetingIK(bone, endbone, radius);
+		m_model->SetingIK(bone, endbone, radius, DEBUG_SHOW_IK);
 	}
 	switch (bk)
 	{
