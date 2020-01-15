@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Character.h"
 
-#define DEBUG_SHOW_IK 0
+#define DEBUG_SHOW_IK 1
 
 Character::Character()
 {
