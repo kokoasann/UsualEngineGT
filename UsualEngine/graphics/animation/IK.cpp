@@ -257,7 +257,13 @@ namespace UsualEngine
 			}
 			else
 			{
-				target.Lerp(m_rubbing, m_rubTarget, m_target);
+				auto norm = sr.hitNormal;
+				norm.Normalize();
+				auto meri = newpos - sr.hitPos;
+
+				float rad = norm.Dot(meri);
+				auto ntarget = newpos + sr.hitNormal * (-rad + m_radius);
+				target.Lerp(m_rubbing, ntarget, m_target);
 			}
 		}
 		else
@@ -273,13 +279,13 @@ namespace UsualEngine
 			}
 		}
 
-		if (!m_isHit && m_ikMode == enMode_Foot)
+		if (!m_isHit && m_ikMode == enMode_Foot && abs(m_gravity) > 0.01f)
 		{
-			if ((newpos.y - oldpos.y) < 0)
+			if ((newpos.y - oldpos.y) <= 0.f)
 			{
 				bstart.setOrigin(btVector3(target.x, target.y, target.z));
-
-				bend.setOrigin(btVector3(target.x, target.y + -1 +(m_radius*-2.f + newpos.y-oldpos.y)*1.5f, target.z));
+				m_timer += gameTime()->GetDeltaTime();
+				bend.setOrigin(btVector3(target.x, target.y - m_gravity*m_timer, target.z));
 				SweepResultIK srf;
 				srf.startPos = target;
 				srf.me = m_rigidBody.GetBody();
@@ -290,6 +296,10 @@ namespace UsualEngine
 					target.y += m_radius;
 				}
 			}
+		}
+		else
+		{
+			m_timer = 0.0f;
 		}
 		/*SweepResultIK_Wall sr_w;
 		Physics().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), bstart, bend, sr_w);
