@@ -330,16 +330,23 @@ namespace UsualEngine
 		auto effpos = effmat.GetTranslation();
 		auto currentBone = m_effectorBone->GetParent();						//作業中のボーン
 		
-		auto newpos = effpos + m_offset;	//移動先のポジション
+		CVector3 newpos;	//移動先のポジション
 		if (m_isSetNextTarget)
 		{
 			newpos = m_nextTarget;
 			m_isSetNextTarget = false;
 		}
+		else
+			newpos = effpos + m_offset;
 
-		auto oldpos = m_effectorBone->GetWorldMatrix().GetTranslation();	//移動前のポジション
+		auto move = newpos - m_oldNewTarget;
+		//移動量を持ってきて前のポジションに加算したらうまくいかない
+		//newpos = m_target + move;
+
+		CVector3 oldpos;	//移動前のポジション
 		if (m_isFirst)
 		{
+			oldpos = m_effectorBone->GetWorldMatrix().GetTranslation();
 			oldpos += worldMat.GetTranslation();
 			m_isFirst = false;
 		}
@@ -348,24 +355,23 @@ namespace UsualEngine
 			oldpos = m_target;
 		}
 
-
+		//重力処理。
 		m_timer = gameTime()->GetDeltaTime();
-		if ((newpos.y - m_oldNewTarget.y) <= m_radius*0.05f)
+		if ((effpos.y - m_oldNewTarget.y) <= m_radius*0.05f)	//下に移動している
 		{
 			m_gravitPow += m_gravity * m_timer;
 		}
-		else
+		else	//上に移動している
 		{
 			if(m_gravitPow>0.f)
 				m_gravitPow -= 2.f*m_gravity * m_timer;
-			
-
 			m_gravitPow = 0.f;
 		}
-		newpos.y -= m_gravitPow;
+		newpos.y -= m_gravitPow;		//プラスグラビティ(マイナス)
 
-		if ((newpos - oldpos).Length() < 0.0001f)
-			return;
+		if ((newpos - oldpos).Length() < FLT_EPSILON)		//ほんまに移動してんのか？
+			return;	//移動してないやん！！
+
 		//oldpos.y += m_radius;
 		CVector3 nowpos = oldpos;
 		CVector3 target;
