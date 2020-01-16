@@ -4,6 +4,9 @@
 #include "GameObject/GameObjectManager.h"
 
 #include "system/system.h"
+#if _DEBUG
+#include "Debug/DebugSwitch.h"
+#endif
 
 namespace UsualEngine
 {
@@ -112,6 +115,8 @@ namespace UsualEngine
 			{
 				pad.Update();
 			}
+
+			DebugSwitchUpdate();
 
 			m_graphicsEngine->BegineRender();
 			m_graphicsEngine->GetShadowMap().Update();

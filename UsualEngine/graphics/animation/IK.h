@@ -37,6 +37,8 @@ namespace UsualEngine
 		/// </summary>
 		/// <param name="worldMat">モデルのワールドマトリクス</param>
 		void UpdateTarget(const CMatrix& worldMat);
+		void UpdateTarget_Normal(const CMatrix& worldMat);
+		void UpdateTarget_Foot(const CMatrix& worldMat);
 		/// <summary>
 		/// IKの更新。
 		/// </summary>
@@ -195,6 +197,7 @@ namespace UsualEngine
 		float m_timer = 0.0f;					//重力用のタイマー
 		bool m_isNextGravity = false;
 		float m_gravitPow = 0.0f;				
+		CVector3 m_oldNewTarget = CVector3::Zero();	
 	};
 
 }

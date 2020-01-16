@@ -45,7 +45,9 @@ static const int RTV_MAX = 8;
 //#include "physics/CapsuleCollider.h"
 //#include "physics/PhysicsStaticObject.h"
 
-
+#if _DEBUG
+#include "Debug/DebugSwitch.h"
+#endif
 
 #include "util/Util.h"
 

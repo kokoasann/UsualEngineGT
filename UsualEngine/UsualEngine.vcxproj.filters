@@ -67,6 +67,9 @@
     <Filter Include="Graphics\PreRender">
       <UniqueIdentifier>{f08aed13-2a1b-4a50-824d-d5fb12ff5625}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Debug">
+      <UniqueIdentifier>{dd6fd741-0fb1-437a-9c4f-6e0b59291c92}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="character\CharacterController.cpp">
@@ -250,6 +253,9 @@
     </ClCompile>
     <ClCompile Include="graphics\PostEffect\SoftShadow.cpp">
       <Filter>Graphics\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\DebugSwitch.cpp">
+      <Filter>Debug</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -446,6 +452,9 @@
     </ClInclude>
     <ClInclude Include="graphics\PostEffect\SoftShadow.h">
       <Filter>Graphics\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug\DebugSwitch.h">
+      <Filter>Debug</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

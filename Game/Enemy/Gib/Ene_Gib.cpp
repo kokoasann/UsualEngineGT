@@ -31,7 +31,7 @@ Ene_Gib::Ene_Gib()
 	//m_chara.FindBone(L"Bone.007_R.004", Character::BK_None, true, 2, 10);
 	//m_chara.FindBone(L"Bone.007_L.004", Character::BK_None, true, 2, 10);
 	ue::Animation& anim = m_chara.GetAnimation();
-	float v = 12.5f;
+	float v = 14.5f;
 	anim.SetIKGravity(9.8f*v, footR);
 	anim.SetIKGravity(9.8f*v, footL);
 	anim.SetIKGravity(9.8f * v, footR->GetChildren()[0]);
@@ -59,6 +59,19 @@ Ene_Gib::Ene_Gib()
 		}
 		return ind;
 	});
+
+	std::function<void()> f = [&]() 
+	{
+		auto& cam = ue::usualEngine()->GetMainCamera();
+		//cam.CameraModeOrth();
+		auto v = m_chara.GetPos();
+		v.y += 300;
+		cam.SetTarget(v);
+		v.x += 1300;
+		cam.SetPosition(v);
+		cam.Update();
+	};
+	ue::DebugSwitchAddRadio(ue::DebugSwitchNewSwitch('Z', 0, f));
 }
 
 Ene_Gib::~Ene_Gib()
@@ -78,7 +91,7 @@ bool Ene_Gib::Start()
 
 void Ene_Gib::Update()
 {
-
+	
 	if (GetKeyState('z'))
 	{
 

@@ -17,7 +17,7 @@ void Game::OnDestroy()
 
 bool Game::Start()
 {
-	ue::NewGO<Player>(0);
+	//ue::NewGO<Player>(0);
 	ue::NewGO<Ene_Gib>(0);
 	//ue::NewGO<Ene_GibTes>(0);
 
@@ -60,7 +60,7 @@ bool Game::Start()
 	ground->SetIsShadowCaster(true);
 	ground->SetIsShadowReciever(true);
 	//ground->SetSca(ue::CVector3{30, 0.1f, 10});
-	ground->SetSca(ue::CVector3{ 1, 1, 1 });
+	ground->SetSca(ue::CVector3{ 1, 1, 50 });
 	//ground->SetPos({ 0,-100,0 });
 	ground->SetPos({ 0,-900,700 });
 	ue::CQuaternion rot;

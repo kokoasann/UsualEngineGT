@@ -48,7 +48,7 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 			move += m_footL->GetMove();
 		}
 
-		if (move.Length() > 0.0001f)
+		if (move.Length() > FLT_EPSILON)
 		{
 			move.y = 0;
 			move *= -1;

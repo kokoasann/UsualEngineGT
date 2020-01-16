@@ -17,6 +17,41 @@ namespace UsualEngine
 
 		btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
 		{
+			if (convexResult.m_hitCollisionObject == me
+				|| convexResult.m_hitCollisionObject->getUserIndex() & enCollisionAttr_Character
+				|| convexResult.m_hitCollisionObject->getUserIndex() & enCollisionAttr_NonHitIK)
+			{
+				chit += 1;
+				return 0.0f;
+			}
+			isHit = true;
+			CVector3 hitp = *(CVector3*)&convexResult.m_hitPointLocal;
+			CVector3 div = startPos - hitp;
+			float dis = div.Length();
+			if (dis < dist)
+			{
+				hitNormal = *(CVector3*)&convexResult.m_hitNormalLocal;
+				hitNormal.Normalize();
+				hitPos = *(CVector3*)&convexResult.m_hitPointLocal;
+				dist = dis;
+			}
+			return 0.0f;
+		}
+	};
+
+	//IK用の当たり判定のやつ
+	struct SweepResultIK_Floor : public btCollisionWorld::ConvexResultCallback
+	{
+		bool isHit = false;
+		CVector3 hitPos = CVector3::Zero();
+		CVector3 startPos = CVector3::Zero();
+		CVector3 hitNormal = CVector3::Zero();
+		float dist = FLT_MAX;
+		btCollisionObject* me = nullptr;
+		int chit = 0;
+
+		btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
+		{
 			if (convexResult.m_hitCollisionObject == me 
 				|| convexResult.m_hitCollisionObject->getUserIndex() & enCollisionAttr_Character
 				|| convexResult.m_hitCollisionObject->getUserIndex() & enCollisionAttr_NonHitIK)
@@ -26,6 +61,7 @@ namespace UsualEngine
 			}
 			CVector3 norm;
 			norm.Set(convexResult.m_hitNormalLocal);
+			norm.Normalize();
 			auto rad = fabsf(acosf(norm.Dot(CVector3::Up())));
 			if (rad < CMath::PI * 0.3f)
 			{
@@ -57,15 +93,18 @@ namespace UsualEngine
 
 		btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
 		{
-			if (convexResult.m_hitCollisionObject == me || convexResult.m_hitCollisionObject->getUserIndex() & enCollisionAttr_Character)
+			if (convexResult.m_hitCollisionObject == me
+				|| convexResult.m_hitCollisionObject->getUserIndex() & enCollisionAttr_Character
+				|| convexResult.m_hitCollisionObject->getUserIndex() & enCollisionAttr_NonHitIK)
 			{
 				chit += 1;
 				return 0.0f;
 			}
 			CVector3 norm;
 			norm.Set(convexResult.m_hitNormalLocal);
+			norm.Normalize();
 			auto rad = fabsf(acosf(norm.Dot(CVector3::Up())));
-			if (rad >= CMath::PI * 0.3f)
+			if (rad >= CMath::PI * 0.3f && rad < CMath::PI * 0.85f)
 			{
 				isHit = true;
 				CVector3 hitp = *(CVector3*)& convexResult.m_hitPointLocal;
@@ -188,6 +227,19 @@ namespace UsualEngine
 
 	void IK::UpdateTarget(const CMatrix& worldMat)
 	{
+		switch (m_ikMode)
+		{
+		case enMode_Normal:
+			UpdateTarget_Normal(worldMat);
+			break;
+		case enMode_Foot:
+			UpdateTarget_Foot(worldMat);
+			break;
+		}
+	}
+
+	void IK::UpdateTarget_Normal(const CMatrix& worldMat)
+	{
 		auto effmat = GetBoneWorldMatrix(m_effectorBone, worldMat);
 		auto effpos = effmat.GetTranslation();
 		auto currentBone = m_effectorBone->GetParent();						//作業中のボーン
@@ -209,16 +261,106 @@ namespace UsualEngine
 		{
 			oldpos = m_target;
 		}
+		if ((newpos - oldpos).Length() < FLT_EPSILON)
+			return;
 
+		SweepResultIK sr;
+		sr.startPos = oldpos;
+		sr.me = m_rigidBody.GetBody();
+
+		btTransform bstart, bend;
+		bstart.setIdentity();
+		bend.setIdentity();
+
+		bstart.setOrigin(btVector3(oldpos.x, oldpos.y, oldpos.z));
+		bend.setOrigin(btVector3(newpos.x, newpos.y, newpos.z));
+
+		CVector3 target = newpos;//ターゲット
+		Physics().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), bstart, bend, sr);
+		if (sr.isHit)
+		{
+			auto norm = sr.hitNormal;
+			norm.Normalize();
+			auto meri = newpos - sr.hitPos;
+			if (!m_isHit)
+			{
+				m_effectorBone->SetIsONGround(true);
+
+				float rad = norm.Dot(meri);
+				auto ntarget = newpos + sr.hitNormal * (-rad + m_radius);
+				target = sr.hitPos + sr.hitNormal * (m_radius);
+				target.Lerp(m_rubbing, ntarget, target);
+				m_rubTarget = ntarget;
+			}
+			else
+			{
+				float rad = norm.Dot(meri);
+				auto ntarget = newpos + sr.hitNormal * (-rad + m_radius);
+				target.Lerp(m_rubbing, ntarget, m_target);
+			}
+		}
+		else
+		{
+			m_effectorBone->SetIsONGround(false);
+			if (m_isHit)
+			{
+				m_effectorBone->SetMomentum(newpos - oldpos);
+			}
+			else
+			{
+				m_effectorBone->SetMomentum(CVector3::Zero());
+			}
+		}
+
+		m_target += (target - oldpos) * m_speed;
+
+		m_isHit = sr.isHit;
+		m_move = newpos - m_target;
+		//auto o2n = m_target - oldpos;
+		m_effectorBone->SetMove(m_move);
+		m_offset = CVector3::Zero();
+		if (m_isUseRigidBody)
+			UpdateRigidBody(m_target);
+	}
+
+
+	void IK::UpdateTarget_Foot(const CMatrix& worldMat)
+	{
+		auto effmat = GetBoneWorldMatrix(m_effectorBone, worldMat);
+		auto effpos = effmat.GetTranslation();
+		auto currentBone = m_effectorBone->GetParent();						//作業中のボーン
 		
+		auto newpos = effpos + m_offset;	//移動先のポジション
+		if (m_isSetNextTarget)
+		{
+			newpos = m_nextTarget;
+			m_isSetNextTarget = false;
+		}
+
+		auto oldpos = m_effectorBone->GetWorldMatrix().GetTranslation();	//移動前のポジション
+		if (m_isFirst)
+		{
+			oldpos += worldMat.GetTranslation();
+			m_isFirst = false;
+		}
+		else
+		{
+			oldpos = m_target;
+		}
+
+
 		m_timer = gameTime()->GetDeltaTime();
-		if ((newpos.y - oldpos.y) <= 0.001f)
+		if ((newpos.y - m_oldNewTarget.y) <= m_radius*0.05f)
 		{
 			m_gravitPow += m_gravity * m_timer;
 		}
 		else
 		{
-			m_gravitPow = m_gravity * m_timer;
+			if(m_gravitPow>0.f)
+				m_gravitPow -= 2.f*m_gravity * m_timer;
+			
+
+			m_gravitPow = 0.f;
 		}
 		newpos.y -= m_gravitPow;
 
@@ -230,11 +372,12 @@ namespace UsualEngine
 		btTransform bstart, bend;
 		bstart.setIdentity();
 		bend.setIdentity();
+		bool isHitGround = false;
 
-		SweepResultIK sr;
+
 		if (fabsf(oldpos.y - newpos.y) > FLT_EPSILON)
 		{
-
+			SweepResultIK_Floor sr;
 			sr.startPos = oldpos;
 			sr.me = m_rigidBody.GetBody();
 
@@ -273,6 +416,7 @@ namespace UsualEngine
 					//float rad = norm.Dot(meri);
 					//auto ntarget = newpos + sr.hitNormal * (-rad + m_radius);
 					//target.Lerp(m_rubbing, ntarget, m_target);
+					target = oldpos;
 					target.y = sr.hitPos.y + m_radius;
 				}
 			}
@@ -288,10 +432,11 @@ namespace UsualEngine
 					m_effectorBone->SetMomentum(CVector3::Zero());
 				}
 			}
+			isHitGround = sr.isHit;
 		}
 		else
 		{
-			sr.isHit = m_isHit;
+			isHitGround = m_isHit;
 		}
 
 		if ((CVector3{ oldpos.x, 0.f, oldpos.z } -CVector3{ newpos.x, 0.f, newpos.z }).Length() > FLT_EPSILON)
@@ -302,10 +447,11 @@ namespace UsualEngine
 			newpos.y = target.y;
 			SweepResultIK_Wall sr_w;
 			sr_w.me = m_rigidBody.GetBody();
+			sr_w.startPos = CVector3(oldpos.x, target.y, oldpos.z);
 			Physics().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), bstart, bend, sr_w);
 			if (sr_w.isHit)
 			{
-				m_effectorBone->SetIsONGround(true);
+				//m_effectorBone->SetIsONGround(true);
 
 				auto norm = sr_w.hitNormal;
 				norm.Normalize();
@@ -313,39 +459,36 @@ namespace UsualEngine
 
 				float rad = norm.Dot(meri);
 				auto ntar = newpos + sr_w.hitNormal * (-rad + m_radius);
-				if(sr.isHit)
+				if (isHitGround)
 					target.Lerp(m_rubbing, ntar, target);
 				else
 					target = ntar;
 			}
 			else
 			{
-				if(sr.isHit)
-					target.Lerp(m_rubbing,newpos,target);
+				if (isHitGround)
+					target.Lerp(m_rubbing, newpos, target);
 				else
 					target = newpos;
 			}
 		}
 
-		/*
-		移動距離の計算とかその辺がまちがってる。
-		*/
-		
+
 		//m_rubTarget += (target-oldpos)*m_speed;
-		m_target += (target- nowpos)*m_speed;
+		m_target += (target - nowpos) * m_speed;
 		/*auto e2e = GetLengthEffector2End(m_effectorBone, m_endBone);
 		auto t2e = (m_target - GetBoneWorldMatrix(m_endBone, worldMat).GetTranslation()).Length();
 		if (e2e+e2e*0.3+m_radius*2 < t2e)
 		{
 			m_target = newpos;
 		}*/
-
-		m_isHit = sr.isHit;
-		m_move = nowpos -m_target;
+		m_oldNewTarget = effpos;
+		m_isHit = isHitGround;
+		m_move = newpos - m_target;
 		//auto o2n = m_target - oldpos;
 		m_effectorBone->SetMove(m_move);
 		m_offset = CVector3::Zero();
-		if(m_isUseRigidBody)
+		if (m_isUseRigidBody)
 			UpdateRigidBody(m_target);
 	}
 
