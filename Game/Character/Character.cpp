@@ -50,7 +50,7 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 
 		if (move.Length() > FLT_EPSILON)
 		{
-			move.y = 0;
+			//move.y = 0;
 			move *= -1;
 			auto rpos = m_characon.Execute(1, move);
 			rpos += m_ccOffset;

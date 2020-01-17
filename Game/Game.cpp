@@ -96,7 +96,7 @@ bool Game::Start()
 	light->SetDir(ue::CVector3{ -0.3f,-1,-0.2f });
 	//light->SetCol(ue::CVector3::One()* 5.f);
 
-	campos = { 400,20,0 };
+	campos = { 1400,20,0 };
 	//campos = { 0,3000,2000 };
 	cam->SetPosition(campos);
 	cam->SetTarget({ 0,20,0 });
