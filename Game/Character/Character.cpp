@@ -39,16 +39,18 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 		if (m_actionMode != AM_Move)
 			return;
 		ue::CVector3 move = ue::CVector3::Zero();
-		if (m_footR->IsONGround())
+		bool isR = m_footR->IsONGround();
+		bool isL = m_footL->IsONGround();
+		if (isR)
 		{
 			move += m_footR->GetMove();
 		}
-		if (m_footL->IsONGround())
+		if (isL)
 		{
 			move += m_footL->GetMove();
 		}
 
-		if (move.Length() > FLT_EPSILON)
+		if (move.Length() > FLT_EPSILON && !(isR && isL))
 		{
 			//move.y = 0;
 			move *= -1;
@@ -63,7 +65,7 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 		if (m_actionMode != AM_Rotate)
 			return;
 
-		if (m_footR->IsONGround())
+		if (m_footR->IsONGround() &&  !m_footL->IsONGround())
 		{
 			auto mold = m_waistR->GetOldWorldMatrix();
 			auto mnew = m_waistR->GetBaseWorldMatrix();
@@ -107,6 +109,8 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 			add.Multiply(f2m);
 			auto npos = fpos + f2m;
 			auto m2n = npos - mpos;
+
+			m2n.y -= m_footR->GetMove().y;
 
 			auto rpos = m_characon.Execute(1, m2n);
 			rpos += m_ccOffset;

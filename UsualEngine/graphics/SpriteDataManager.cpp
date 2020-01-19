@@ -9,6 +9,10 @@ namespace UsualEngine
 	}
 	void SpriteDataManager::Release()
 	{
+		for(auto it = mDatas.begin();it != mDatas.end();it++)
+		{
+			it->second->Release();
+		}
 		mDatas.clear();
 		
 	}

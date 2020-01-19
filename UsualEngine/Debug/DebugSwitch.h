@@ -15,6 +15,12 @@ namespace UsualEngine
 				delete s;
 			for (auto s : m_checkButton)
 				delete s;
+			for (auto it = m_radioBoxs.begin(); it != m_radioBoxs.end(); it++)
+			{
+				for (auto s : it->second->box)
+					delete s;
+				delete it->second;
+			}
 		}
 
 		static DebugSwitch* Instance()
@@ -36,6 +42,10 @@ namespace UsualEngine
 			bool isPushed = false;
 			std::function<void()> m_func;
 		};
+		struct SRadioBox
+		{
+			std::vector<SSwitch*> box;
+		};
 
 		void Update();
 
@@ -47,10 +57,19 @@ namespace UsualEngine
 		{
 			m_checkButton.push_back(s);
 		}
+		void NewRadioBox(const char* name)
+		{
+			m_radioBoxs.insert({ name, new SRadioBox() });
+		}
+		void AddRadioBoxButton(const char* name, SSwitch* s)
+		{
+			auto it = m_radioBoxs.find(name);
+			it->second->box.push_back(s);
+		}
 	private:
 		std::vector<SSwitch*> m_radioButton;
 		std::vector<SSwitch*> m_checkButton;
-
+		std::map<std::string, SRadioBox*> m_radioBoxs;
 	};
 #endif
 
@@ -60,7 +79,7 @@ namespace UsualEngine
 		DebugSwitch::Instance()->Update();
 #endif
 	}
-	static DebugSwitch::SSwitch* DebugSwitchNewSwitch(char k1, char k2, std::function<void()>& func)
+	static void* DebugSwitchNewSwitch(char k1, char k2, std::function<void()>& func)
 	{
 #if _DEBUG
 		return new DebugSwitch::SSwitch(k1, k2,func);
@@ -69,23 +88,31 @@ namespace UsualEngine
 #endif
 	}
 
-	static void DebugSwitchAddCheck(DebugSwitch::SSwitch* s)
+	static void DebugSwitchAddCheck(void* s)
 	{
 #if _DEBUG
-		DebugSwitch::Instance()->AddCheckButton(s);
+		DebugSwitch::Instance()->AddCheckButton(reinterpret_cast<DebugSwitch::SSwitch*>(s));
 #endif
 	}
 
-	static void DebugSwitchAddRadio(DebugSwitch::SSwitch* s)
+	static void DebugSwitchAddRadio(void* s)
 	{
 #if _DEBUG
-		DebugSwitch::Instance()->AddRadioButton(s);
+		DebugSwitch::Instance()->AddRadioButton(reinterpret_cast<DebugSwitch::SSwitch*>(s));
 #endif
 	}
 
+	static void DebugSwitchNewRadioBox(const char* name)
+	{
+#if _DEBUG
+		DebugSwitch::Instance()->NewRadioBox(name);
+#endif
+	}
 
-#define DEBUG_SWITCH_NEW_SWITCH(k1,k2,func) DebugSwitchNewSwitch(k1,k2,func)
-#define DEBUG_SWITCH_ADD_CHECK(s) DebugSwitchAddCheck(s)
-#define DEBUG_SWITCH_ADD_RADIO(s) DebugSwitchAddRadio(s)
-
+	static void DebugSwitchAddRadioBoxButton(const char* name, void* s)
+	{
+#if _DEBUG
+		DebugSwitch::Instance()->AddRadioBoxButton(name, reinterpret_cast<DebugSwitch::SSwitch*>(s));
+#endif
+	}
 }

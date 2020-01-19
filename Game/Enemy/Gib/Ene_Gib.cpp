@@ -38,8 +38,9 @@ Ene_Gib::Ene_Gib()
 	anim.SetIKGravity(9.8f * v, footL->GetChildren()[0]);
 
 	//m_chara.SetActionMode(AM_None);
-	//m_chara.PlayAnim(GA_rotate,1.0f, 0.f,AM_Rotate);
-	m_chara.PlayAnim(GA_walk, 1.0f, 0.f, AM_Move);
+	m_chara.PlayAnim(GA_rotate,1.0f, 0.f,AM_Rotate);
+	//m_chara.PlayAnim(GA_walk, 1.0f, 0.f, AM_Move);
+
 	m_chara.SetIKRub(0, footR->GetChildren()[0]);
 	m_chara.SetIKRub(0, footL->GetChildren()[0]);
 
@@ -72,6 +73,23 @@ Ene_Gib::Ene_Gib()
 		cam.Update();
 	};
 	ue::DebugSwitchAddRadio(ue::DebugSwitchNewSwitch('Z', 0, f));
+
+	f = [&]()
+	{
+		m_chara.PlayAnim(GA_walk, 1.0f, 0.f, AM_Move);
+	};
+	ue::DebugSwitchNewRadioBox("gibMove");
+	ue::DebugSwitchAddRadioBoxButton("gibMove", ue::DebugSwitchNewSwitch('C', 0, f));
+	f = [&]()
+	{
+		m_chara.PlayAnim(GA_rotate, 1.0f, 0.f, AM_Rotate);
+	};
+	ue::DebugSwitchAddRadioBoxButton("gibMove", ue::DebugSwitchNewSwitch('V', 0, f));
+	f = [&]()
+	{
+		m_chara.SetActionMode(AM_None);
+	};
+	ue::DebugSwitchAddRadioBoxButton("gibMove", ue::DebugSwitchNewSwitch('B', 0, f));
 }
 
 Ene_Gib::~Ene_Gib()

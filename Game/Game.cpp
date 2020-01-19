@@ -62,7 +62,7 @@ bool Game::Start()
 	//ground->SetSca(ue::CVector3{30, 0.1f, 10});
 	ground->SetSca(ue::CVector3{ 1, 1, 50 });
 	//ground->SetPos({ 0,-100,0 });
-	ground->SetPos({ 0,-900,700 });
+	ground->SetPos({ 0,-900,400 });
 	ue::CQuaternion rot;
 	rot.SetRotationDeg(ue::CVector3::AxisX(), -20);
 	ground->SetRot(rot);
@@ -96,12 +96,50 @@ bool Game::Start()
 	light->SetDir(ue::CVector3{ -0.3f,-1,-0.2f });
 	//light->SetCol(ue::CVector3::One()* 5.f);
 
-	campos = { 1400,20,0 };
+	campos = { -9400,3120,0 };
 	//campos = { 0,3000,2000 };
 	cam->SetPosition(campos);
 	cam->SetTarget({ 0,20,0 });
 	cam->Update();
 	
+	std::function<void()> f = [&]()
+	{
+		auto cam = &ue::usualEngine()->GetMainCamera();
+		auto& pad = ue::GamePad(0);
+		//return;
+
+		ue::CQuaternion add = ue::CQuaternion::Identity();
+
+		auto camtar = cam->GetTarget();
+
+		static ue::CVector3 ofs = { 0,0,-200 };
+
+		float speed = 30.f;
+		campos += cam->GetForward() * speed * pad.GetLStickYF();
+		campos += cam->GetRight() * speed * pad.GetLStickXF();
+
+
+		float yx = pad.GetRStickXF();
+		float yy = pad.GetRStickYF();
+		speed = 5.f;
+		ue::CQuaternion r = ue::CQuaternion::Identity();
+		add.SetRotationDeg(ue::CVector3::Up(), speed * yx);
+		//camrot.Multiply(add);
+		add.Multiply(ofs);
+
+		ue::CVector3 axix = ue::CVector3::Zero();
+		axix.Cross(ofs, ue::CVector3::AxisY());
+		axix.Normalize();
+		r.SetRotationDeg(axix, speed * yy);
+		add.Multiply(r);
+		add.Multiply(ofs);
+
+		camtar = campos + ofs;
+		cam->SetPosition(campos);
+		cam->SetTarget(camtar);
+		cam->Update();
+	};
+	ue::DebugSwitchAddRadio(ue::DebugSwitchNewSwitch('Z', VK_SHIFT, f));
 	return true;
 }
 

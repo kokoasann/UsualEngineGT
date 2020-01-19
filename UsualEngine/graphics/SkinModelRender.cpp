@@ -14,7 +14,7 @@ namespace UsualEngine
 
 		m_animation.Update(gameTime()->GetDeltaTime());		//アニメーションの更新。
 		
-		//ske.UpdateBase(CMatrix::Identity());				//回転のためのスケルトン更新。
+		ske.UpdateBase(CMatrix::Identity());				//回転のためのスケルトン更新。
 		m_animation.UpdateIKTarget();						//IKのターゲットの位置を更新
 		
 		CVector3 opos = m_position;

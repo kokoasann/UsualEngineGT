@@ -238,6 +238,11 @@ namespace UsualEngine
 		}
 	}
 
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="worldMat"></param>
 	void IK::UpdateTarget_Normal(const CMatrix& worldMat)
 	{
 		auto effmat = GetBoneWorldMatrix(m_effectorBone, worldMat);
@@ -323,6 +328,7 @@ namespace UsualEngine
 			UpdateRigidBody(m_target);
 	}
 
+
 	/// <summary>
 	/// 
 	/// </summary>
@@ -332,6 +338,13 @@ namespace UsualEngine
 		auto effmat = GetBoneWorldMatrix(m_effectorBone, worldMat);
 		auto effpos = effmat.GetTranslation();
 		auto currentBone = m_effectorBone->GetParent();						//作業中のボーン
+
+		auto imat = worldMat;
+		imat.v[3].x = 0.0f;
+		imat.v[3].y = 0.0f;
+		imat.v[3].z = 0.0f;
+		effmat = GetBoneWorldMatrix(m_effectorBone, imat);
+		auto orgpos = effmat.GetTranslation()+m_offset;
 		
 		CVector3 newpos;	//移動先のポジション
 		if (m_isSetNextTarget)
@@ -341,15 +354,12 @@ namespace UsualEngine
 		}
 		else
 			newpos = effpos + m_offset;
-		if (m_timer <= 0.5f)
+
+		if (m_timer <= 0.5f)		//ボーンの移動量からターゲットを求めるやつ
 		{
-			auto imat = worldMat;
-			imat.v[3].x = 0.0f;
-			imat.v[3].y = 0.0f;
-			imat.v[3].z = 0.0f;
-			effmat = GetBoneWorldMatrix(m_effectorBone, imat);
-			effpos = effmat.GetTranslation();
-			auto move = (effpos+m_offset) - m_oldNewTarget;
+			//effmat = GetBoneWorldMatrix(m_effectorBone, imat);
+			//effpos = effmat.GetTranslation();
+			//auto move = (effpos+m_offset) - m_oldNewTarget;
 			//newpos = m_target + move;
 		}
 		else
@@ -361,7 +371,7 @@ namespace UsualEngine
 		CVector3 oldpos;	//移動前のポジション
 		if (m_isFirst)
 		{
-			oldpos = m_effectorBone->GetWorldMatrix().GetTranslation();
+			oldpos = m_effectorBone->GetBindPoseMatrix().GetTranslation();
 			oldpos += worldMat.GetTranslation();
 			m_isFirst = false;
 		}
@@ -372,14 +382,14 @@ namespace UsualEngine
 
 		//重力処理。
 		float time = gameTime()->GetDeltaTime();
-		if ((effpos.y - m_oldNewTarget.y) <= m_radius*0.05f && !m_effectorBone->IsONGround())	//下に移動している
+		if ((orgpos.y - m_oldNewTarget.y) <= m_radius*0.05f && !m_effectorBone->IsONGround())	//下に移動している
 		{
 			m_gravitPow += m_gravity * time;
 		}
 		else	//上に移動している
 		{
 			if(m_gravitPow>0.f)
-				m_gravitPow -= 2.f*m_gravity * time;
+				m_gravitPow -= 2.f*m_gravitPow * time;
 			m_gravitPow = 0.f;
 		}
 		newpos.y -= m_gravitPow;		//プラスグラビティ(マイナス)
@@ -388,14 +398,15 @@ namespace UsualEngine
 			return;	//移動してないやん！！
 
 		//oldpos.y += m_radius;
-		CVector3 nowpos = oldpos;
-		CVector3 target;
-		btTransform bstart, bend;
+		CVector3 nowpos = oldpos;		//正直いらない
+		CVector3 target = oldpos;							//真の移動先。
+		btTransform bstart, bend;			
 		bstart.setIdentity();
 		bend.setIdentity();
-		bool isHitGround = false;
+		bool isHitGround = false;			//地面に当たった？
 
-		if (fabsf(oldpos.y - newpos.y) > FLT_EPSILON)
+
+		if (fabsf(orgpos.y - m_oldNewTarget.y) > FLT_EPSILON)
 		{
 			SweepResultIK_Floor sr;
 			sr.startPos = oldpos;
@@ -405,17 +416,16 @@ namespace UsualEngine
 			//bend.setOrigin(btVector3(newpos.x, newpos.y, newpos.z));
 			bend.setOrigin(btVector3(oldpos.x, newpos.y, oldpos.z));
 
-			target = newpos;//ターゲット
+			//target = newpos;//ターゲット
 			Physics().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), bstart, bend, sr);
 			if (sr.isHit)
 			{
-				m_effectorBone->SetIsONGround(true);
 				target = oldpos;
 				target.y = sr.hitPos.y + m_radius;
 			}
 			else
 			{
-				m_effectorBone->SetIsONGround(false);
+				target.y = newpos.y;
 				if (m_isHit)
 				{
 					m_effectorBone->SetMomentum(newpos - nowpos);
@@ -425,19 +435,22 @@ namespace UsualEngine
 					m_effectorBone->SetMomentum(CVector3::Zero());
 				}
 			}
+			m_effectorBone->SetIsONGround(sr.isHit);
 			isHitGround = sr.isHit;
 		}
 		else
 		{
+			m_effectorBone->SetIsONGround(m_isHit);
 			isHitGround = m_isHit;
 		}
 
-		if ((CVector3{ oldpos.x, 0.f, oldpos.z } -CVector3{ newpos.x, 0.f, newpos.z }).Length() > FLT_EPSILON)
+		if ((CVector3( oldpos.x, 0.f, oldpos.z) -CVector3( newpos.x, 0.f, newpos.z )).Length() > FLT_EPSILON)
 		{
 			//壁の判定。
 			bstart.setOrigin(btVector3(oldpos.x, target.y, oldpos.z));
 			bend.setOrigin(btVector3(newpos.x, target.y, newpos.z));
-			newpos.y = target.y;
+			CVector3 newpos2 = newpos;
+			newpos2.y = target.y;
 			SweepResultIK_Wall sr_w;
 			sr_w.me = m_rigidBody.GetBody();
 			sr_w.startPos = CVector3(oldpos.x, target.y, oldpos.z);
@@ -448,10 +461,10 @@ namespace UsualEngine
 
 				auto norm = sr_w.hitNormal;
 				norm.Normalize();
-				auto meri = newpos - sr_w.hitPos;
+				auto meri = newpos2 - sr_w.hitPos;
 
 				float rad = norm.Dot(meri);
-				auto ntar = newpos + sr_w.hitNormal * (-rad + m_radius);
+				auto ntar = newpos2 + sr_w.hitNormal * (-rad + m_radius);
 				if (isHitGround)
 					target.Lerp(m_rubbing, ntar, target);
 				else
@@ -460,21 +473,58 @@ namespace UsualEngine
 			else
 			{
 				if (isHitGround)
-					target.Lerp(m_rubbing, newpos, target);
+					target.Lerp(m_rubbing, newpos2, target);
 				else
-					target = newpos;
+					target = newpos2;
 			}
 		}
+
+#if 0
+		if (fabsf(orgpos.y - m_oldNewTarget.y) > m_radius * 0.05f && fabsf(target.y - newpos.y) > FLT_EPSILON)
+		{
+			SweepResultIK_Floor sr;
+			sr.startPos = target;
+			sr.me = m_rigidBody.GetBody();
+
+			bstart.setOrigin(btVector3(target.x, target.y, target.z));
+			bend.setOrigin(btVector3(target.x, newpos.y, target.z));
+
+			//target = newpos;//ターゲット
+			Physics().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), bstart, bend, sr);
+			if (sr.isHit)
+			{
+				target.y = sr.hitPos.y + m_radius;
+			}
+			else
+			{
+				target.y = newpos.y;
+				if (m_isHit)
+				{
+					m_effectorBone->SetMomentum(newpos - nowpos);
+				}
+				else
+				{
+					m_effectorBone->SetMomentum(CVector3::Zero());
+				}
+			}
+			m_effectorBone->SetIsONGround(sr.isHit);
+			isHitGround = sr.isHit;
+		}
+#endif
 
 
 		//m_rubTarget += (target-oldpos)*m_speed;
 		m_target += (target - nowpos) * m_speed;
 
-		m_oldNewTarget = effpos+m_offset;
+		//m_oldNewTarget = effpos+m_offset;
+		
 		m_isHit = isHitGround;
 		//newpos.y += m_gravitPow;
-		m_move = newpos - m_target;
+		auto wpos = worldMat.GetTranslation();
+		m_move = (orgpos+m_offset) - (m_target-wpos);
+		//m_move = (effpos + m_offset) - m_target;
 		m_effectorBone->SetMove(m_move);
+		m_oldNewTarget = orgpos;
 		m_offset = CVector3::Zero();
 		if (m_isUseRigidBody)
 			UpdateRigidBody(m_target);
