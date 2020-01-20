@@ -3,6 +3,8 @@
 
 #include "util/Util.h"
 
+#include "Debug/Debug.h"
+
 namespace UsualEngine
 {
 	GameObjectManager::GameObjectManager()
@@ -33,7 +35,8 @@ namespace UsualEngine
 		auto& pe = usualEngine()->GetGraphicsEngine()->GetPostEffect();
 		pe.Render();
 
-		Physics().DebugDraw();
+		if(Debug::Instance().debugState.isPhysicsDebugDraw)
+			Physics().DebugDraw();
 		
 		for (auto& ngd : m_newGOBuffer)
 		{

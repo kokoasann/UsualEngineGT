@@ -50,8 +50,14 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 			move += m_footL->GetMove();
 		}
 
-		if (move.Length() > FLT_EPSILON && !(isR && isL))
+		if (move.Length() > FLT_EPSILON)
 		{
+			if(isR && isL)
+			{
+				move.x = 0.0f;
+				move.z = 0.0f;
+				move.y /= 2.0f;
+			}
 			//move.y = 0;
 			move *= -1;
 			auto rpos = m_characon.Execute(1, move);
@@ -59,6 +65,7 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 			pos = rpos;
 			m_momentum += move;
 		}
+		
 	};
 	m_defaultRotateFunc = [&](auto & rot)
 	{

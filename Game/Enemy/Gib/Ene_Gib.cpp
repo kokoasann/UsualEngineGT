@@ -31,26 +31,25 @@ Ene_Gib::Ene_Gib()
 	//m_chara.FindBone(L"Bone.007_R.004", Character::BK_None, true, 2, 10);
 	//m_chara.FindBone(L"Bone.007_L.004", Character::BK_None, true, 2, 10);
 	ue::Animation& anim = m_chara.GetAnimation();
-	float v = 50.5f;
+	float v = 25.5f;
 	anim.SetIKGravity(9.8f*v, footR);
 	anim.SetIKGravity(9.8f*v, footL);
 	anim.SetIKGravity(9.8f * v, footR->GetChildren()[0]);
 	anim.SetIKGravity(9.8f * v, footL->GetChildren()[0]);
 
 	//m_chara.SetActionMode(AM_None);
-	m_chara.PlayAnim(GA_rotate,1.0f, 0.f,AM_Rotate);
-	//m_chara.PlayAnim(GA_walk, 1.0f, 0.f, AM_Move);
+	//m_chara.PlayAnim(GA_rotate,1.0f, 0.f,AM_Rotate);
+	m_chara.PlayAnim(GA_walk, 1.0f, 0.f, AM_Move);
 
 	m_chara.SetIKRub(0, footR->GetChildren()[0]);
 	m_chara.SetIKRub(0, footL->GetChildren()[0]);
-
 
 	m_charaMove.Init(&m_chara, m_animClip);
 	m_charaMove.InitBone(footL, footR);
 	m_charaMove.InitJustFoot(50.f, 700.f, 0.4f, 0.6f);
 	m_charaRotate.Init(&m_chara, CharacterRotateMotion::RM_UseIK, 0);
 
-	m_cbc = ue::NewGO<ue::CharacterBoxCollider>(0);
+	/*m_cbc = ue::NewGO<ue::CharacterBoxCollider>(0);
 	m_cbc->Init(L"Assets/model/gib/gib.ubc", &model->GetSkinModel().GetSkeleton(), 100.f, [&](const char* tag)
 	{
 		int ind = ue::enCollisionAttr_NonHitIK|CUI_Monster;
@@ -59,26 +58,39 @@ Ene_Gib::Ene_Gib()
 			ind |= MT_Head;
 		}
 		return ind;
-	});
+	});*/
 
 	std::function<void()> f = [&]() 
 	{
 		auto& cam = ue::usualEngine()->GetMainCamera();
 		//cam.CameraModeOrth();
 		auto v = m_chara.GetPos();
-		v.y += 300;
+		v.y += 600;
 		cam.SetTarget(v);
-		v.x += 1300;
+		v.x += 1600;
 		cam.SetPosition(v);
 		cam.Update();
 	};
 	ue::DebugSwitchAddRadio(ue::DebugSwitchNewSwitch('Z', 0, f));
-
+	f = [&]()
+	{
+		auto& cam = ue::usualEngine()->GetMainCamera();
+		
+		auto v = m_chara.GetPos();
+		v.y += 30;
+		cam.SetTarget(v);
+		v.y += 80;
+		v.x += 600;
+		cam.SetPosition(v);
+		cam.Update();
+	};
+	ue::DebugSwitchAddRadio(ue::DebugSwitchNewSwitch('Z', VK_CONTROL, f));
+	
+	ue::DebugSwitchNewRadioBox("gibMove");
 	f = [&]()
 	{
 		m_chara.PlayAnim(GA_walk, 1.0f, 0.f, AM_Move);
 	};
-	ue::DebugSwitchNewRadioBox("gibMove");
 	ue::DebugSwitchAddRadioBoxButton("gibMove", ue::DebugSwitchNewSwitch('C', 0, f));
 	f = [&]()
 	{
@@ -87,7 +99,7 @@ Ene_Gib::Ene_Gib()
 	ue::DebugSwitchAddRadioBoxButton("gibMove", ue::DebugSwitchNewSwitch('V', 0, f));
 	f = [&]()
 	{
-		m_chara.SetActionMode(AM_None);
+		m_chara.PlayAnim(GA_idol, 1.0f, 0.f, AM_None);
 	};
 	ue::DebugSwitchAddRadioBoxButton("gibMove", ue::DebugSwitchNewSwitch('B', 0, f));
 }

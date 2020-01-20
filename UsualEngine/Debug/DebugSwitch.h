@@ -9,6 +9,7 @@ namespace UsualEngine
 	private:
 		DebugSwitch(){}
 	public:
+		static std::function<void()> nullFunc;
 		~DebugSwitch() 
 		{
 			for (auto s : m_radioButton)
@@ -31,16 +32,34 @@ namespace UsualEngine
 
 		struct SSwitch
 		{
-			SSwitch(char k1, char k2, std::function<void()>& func)
+			SSwitch(char k1, char k2, std::function<void()>& update)
 			{
 				key1 = k1;
 				key2 = k2;
-				m_func = func;
+				updateFunc = update;
+			}
+			SSwitch(char k1, char k2, std::function<void()>& on, std::function<void()>& off)
+			{
+				key1 = k1;
+				key2 = k2;
+				triggerOnFunc = on;
+				triggerOffFunc = off;
+			}
+			SSwitch(char k1, char k2, std::function<void()>& update, std::function<void()>& on, std::function<void()>& off)
+			{
+				key1 = k1;
+				key2 = k2;
+				updateFunc = update;
+				triggerOnFunc = on;
+				triggerOffFunc = off;
 			}
 			char key1 = 0;
 			char key2 = 0;
 			bool isPushed = false;
-			std::function<void()> m_func;
+			bool oldFrameIsPushed = false;
+			std::function<void()> updateFunc = nullFunc;
+			std::function<void()> triggerOnFunc = nullFunc;
+			std::function<void()> triggerOffFunc = nullFunc;
 		};
 		struct SRadioBox
 		{
@@ -79,10 +98,29 @@ namespace UsualEngine
 		DebugSwitch::Instance()->Update();
 #endif
 	}
-	static void* DebugSwitchNewSwitch(char k1, char k2, std::function<void()>& func)
+
+	static void* DebugSwitchNewSwitch(char k1, char k2, std::function<void()>& update)
 	{
 #if _DEBUG
-		return new DebugSwitch::SSwitch(k1, k2,func);
+		return new DebugSwitch::SSwitch(k1, k2, update);
+#else
+		return nullptr;
+#endif
+	}
+
+	static void* DebugSwitchNewSwitch(char k1, char k2, std::function<void()>& on, std::function<void()>& off)
+	{
+#if _DEBUG
+		return new DebugSwitch::SSwitch(k1, k2, on,off);
+#else
+		return nullptr;
+#endif
+	}
+
+	static void* DebugSwitchNewSwitch(char k1, char k2, std::function<void()>& update, std::function<void()>& on, std::function<void()>& off)
+	{
+#if _DEBUG
+		return new DebugSwitch::SSwitch(k1, k2, update, on, off);
 #else
 		return nullptr;
 #endif

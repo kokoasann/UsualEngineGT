@@ -6,6 +6,8 @@ cbuffer DefferdCB:register(b0)
     float4 camDir;
 }
 
+
+
 struct DefferdVSInput
 {
     float4 pos : SV_POSITION;
@@ -82,10 +84,34 @@ float4 PSMain_Defferd(DefferdPSInput In):SV_TARGET0
     col.xyz *= li;
 
     
-    float4 usu = lerp(float4(0.8f, 0.88f, 1.f,1.f),float4(0.f,0.f,0.f,0.f),min(lerp(1,0,pow(depth,2000)),1));
+    float4 usu = lerp(float4(0.8f, 0.88f, 1.f,1.f),float4(0.f,0.f,0.f,0.f),min(lerp(1,0,pow(depth,6000)),1));
     col.xyz *= 1.f-usu.w;
     col.xyz += usu;
     
     //return float4(sha.x, sha.x, sha.x,1);
     return col;
+}
+
+
+/*
+        以下、デバッグ用。
+*/
+float4 PSMain_Diffuse(DefferdPSInput In) :SV_TARGET0
+{
+    return gDiffuseMap.Sample(Sampler,In.uv);
+}
+float4 PSMain_Normal(DefferdPSInput In) : SV_TARGET0
+{
+    return gNormalMap.Sample(Sampler,In.uv);
+}
+float4 PSMain_Depth(DefferdPSInput In) : SV_TARGET0
+{
+    float dp = gDepthMap.Sample(Sampler,In.uv);
+    dp = pow(dp, 2000);
+    return float4(dp, dp, dp, 1.0f);
+}
+float4 PSMain_Shadow(DefferdPSInput In) :SV_TARGET0
+{
+    float s = gShadowMap.Sample(Sampler,In.uv);
+    return float4(s, s, s, 1.0f);
 }

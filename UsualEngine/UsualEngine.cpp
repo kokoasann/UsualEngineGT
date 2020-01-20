@@ -7,6 +7,7 @@
 #if _DEBUG
 #include "Debug/DebugSwitch.h"
 #endif
+#include "Debug/Debug.h"
 
 namespace UsualEngine
 {
@@ -43,6 +44,7 @@ namespace UsualEngine
 		m_camera2D.Update();
 
 		Physics().Init();
+		Debug::Instance().InitDebugSwitch();
 	}
 
 	void UsualEngine::InitWindow(InitGameState initGS)

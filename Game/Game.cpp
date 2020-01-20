@@ -21,7 +21,7 @@ bool Game::Start()
 	ue::NewGO<Ene_Gib>(0);
 	//ue::NewGO<Ene_GibTes>(0);
 
-	ue::BoxCollider* bcp = new ue::BoxCollider(); 
+	/*ue::BoxCollider* bcp = new ue::BoxCollider(); 
 	auto& bc = *bcp;
 	bcp->Create({ 100,50,100 });
 	ue::RigidBodyInfo info;
@@ -34,7 +34,7 @@ bool Game::Start()
 	ue::RigidBody* rbp = new ue::RigidBody();
 	auto& rb = *rbp;
 	rbp->Create(info);
-	ue::Physics().AddRigidBody(*rbp);
+	ue::Physics().AddRigidBody(*rbp);*/
 
 	cam = &ue::usualEngine()->GetMainCamera();
 
@@ -54,14 +54,13 @@ bool Game::Start()
 	pso.CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(),ground->GetSca());
 	//ground->SetRot(rot);
 
-
+#if 1
+	//デバッグ用のスロープ
 	ground = ue::NewGO<ue::SMR4Ground>(0);
 	ground->InitG(L"Assets/model/dun.cmo", 0, 0, ue::enFbxUpAxisZ);
 	ground->SetIsShadowCaster(true);
 	ground->SetIsShadowReciever(true);
-	//ground->SetSca(ue::CVector3{30, 0.1f, 10});
-	ground->SetSca(ue::CVector3{ 1, 1, 50 });
-	//ground->SetPos({ 0,-100,0 });
+	ground->SetSca(ue::CVector3{ 30, 1, 50 });
 	ground->SetPos({ 0,-900,400 });
 	ue::CQuaternion rot;
 	rot.SetRotationDeg(ue::CVector3::AxisX(), -20);
@@ -70,6 +69,7 @@ bool Game::Start()
 	ground->SetTexture(0, L"Assets/sprite/kusa.dds");
 	ground->SetTexture(1, L"Assets/sprite/tuti.dds");
 	pso2.CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(), ground->GetSca());
+#endif
 
 	ground = ue::NewGO<ue::SMR4Ground>(0);
 	ground->InitG(L"Assets/model/octagon.cmo", 0, 0, ue::enFbxUpAxisZ);

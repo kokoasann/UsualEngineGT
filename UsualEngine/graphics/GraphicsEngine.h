@@ -140,6 +140,12 @@ namespace UsualEngine
 		Shader m_psCopy;									//コピー用ピクセルシェーダ
 		Shader m_vsDefferd;								//デファード用頂点シェーダ
 		Shader m_psDefferd;								//デファード用ピクセルシェーダ
+#if _DEBUG
+		Shader m_psDefferd_Diffuse;						//デファード用ピクセルシェーダ(デバック用)
+		Shader m_psDefferd_Normal;						//デファード用ピクセルシェーダ(デバック用)
+		Shader m_psDefferd_Depth;						//デファード用ピクセルシェーダ(デバック用)
+		Shader m_psDefferd_Shadow;						//デファード用ピクセルシェーダ(デバック用)
+#endif
 		
 		ShadowMap m_shadowMap;								//シャドウマップ
 		LightManager m_lightManager;							//ライトのマネージャー

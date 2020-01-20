@@ -355,18 +355,18 @@ namespace UsualEngine
 		else
 			newpos = effpos + m_offset;
 
-		if (m_timer <= 0.5f)		//ボーンの移動量からターゲットを求めるやつ
-		{
-			//effmat = GetBoneWorldMatrix(m_effectorBone, imat);
-			//effpos = effmat.GetTranslation();
-			//auto move = (effpos+m_offset) - m_oldNewTarget;
-			//newpos = m_target + move;
-		}
-		else
-		{
-			m_timer = 0.0f;
-		}
-		m_timer += gameTime()->GetDeltaTime();
+		//if (m_timer <= 0.5f)		//ボーンの移動量からターゲットを求めるやつ
+		//{
+		//	//effmat = GetBoneWorldMatrix(m_effectorBone, imat);
+		//	//effpos = effmat.GetTranslation();
+		//	//auto move = (effpos+m_offset) - m_oldNewTarget;
+		//	//newpos = m_target + move;
+		//}
+		//else
+		//{
+		//	m_timer = 0.0f;
+		//}
+		//m_timer += gameTime()->GetDeltaTime();
 
 		CVector3 oldpos;	//移動前のポジション
 		if (m_isFirst)
@@ -382,7 +382,7 @@ namespace UsualEngine
 
 		//重力処理。
 		float time = gameTime()->GetDeltaTime();
-		if ((orgpos.y - m_oldNewTarget.y) <= m_radius*0.05f && !m_effectorBone->IsONGround())	//下に移動している
+		if ((orgpos.y - m_oldNewTarget.y) <= m_radius*0.05f)	//下に移動している
 		{
 			m_gravitPow += m_gravity * time;
 		}
@@ -444,6 +444,7 @@ namespace UsualEngine
 			isHitGround = m_isHit;
 		}
 
+
 		if ((CVector3( oldpos.x, 0.f, oldpos.z) -CVector3( newpos.x, 0.f, newpos.z )).Length() > FLT_EPSILON)
 		{
 			//壁の判定。
@@ -479,7 +480,7 @@ namespace UsualEngine
 			}
 		}
 
-#if 0
+#if 1
 		if (fabsf(orgpos.y - m_oldNewTarget.y) > m_radius * 0.05f && fabsf(target.y - newpos.y) > FLT_EPSILON)
 		{
 			SweepResultIK_Floor sr;

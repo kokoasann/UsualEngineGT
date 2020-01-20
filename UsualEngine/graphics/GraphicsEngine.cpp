@@ -2,6 +2,10 @@
 #include "GraphicsEngine.h"
 #include "RenderState.h"
 
+#if _DEBUG
+#include "Debug/Debug.h"
+#endif
+
 namespace UsualEngine
 {
 	GraphicsEngine::GraphicsEngine()
@@ -105,7 +109,30 @@ namespace UsualEngine
 		ID3D11ShaderResourceView* srv[] = { sdw };
 		m_pd3dDeviceContext->PSSetShaderResources(enSkinModelSRVReg_Textur_1, 1, &m_speculaGradation);
 		//m_pd3dDeviceContext->PSSetShaderResources(enSkinModelSRVReg_GShadowMap, 1, &sdw);
+
+#if _DEBUG
+		switch (Debug::Instance().gbufferDraw)
+		{
+		case Debug::gdDefault:
+			m_pd3dDeviceContext->PSSetShader((ID3D11PixelShader*)m_psDefferd.GetBody(), 0, 0);
+			break;
+		case Debug::gdDiffuse:
+			m_pd3dDeviceContext->PSSetShader((ID3D11PixelShader*)m_psDefferd_Diffuse.GetBody(), 0, 0);
+			break;
+		case Debug::gdNormal:
+			m_pd3dDeviceContext->PSSetShader((ID3D11PixelShader*)m_psDefferd_Normal.GetBody(), 0, 0);
+			break;
+		case Debug::gdDepth:
+			m_pd3dDeviceContext->PSSetShader((ID3D11PixelShader*)m_psDefferd_Depth.GetBody(), 0, 0);
+			break;
+		case Debug::gdShadow:
+			m_pd3dDeviceContext->PSSetShader((ID3D11PixelShader*)m_psDefferd_Shadow.GetBody(), 0, 0);
+			break;
+		}
+#else
 		m_pd3dDeviceContext->PSSetShader((ID3D11PixelShader*)m_psDefferd.GetBody(), 0, 0);
+#endif
+
 		m_pd3dDeviceContext->VSSetShader((ID3D11VertexShader*)m_vsDefferd.GetBody(), 0, 0);
 		m_pd3dDeviceContext->IASetInputLayout(m_vsDefferd.GetInputLayout());
 		m_postEffect.DrawPrimitive();
@@ -277,6 +304,13 @@ namespace UsualEngine
 		m_psCopy.Load("Assets/shader/copy.fx", "PSMain", Shader::EnType::PS);
 		m_vsDefferd.Load("Assets/shader/DefferdShading.fx", "VSMain_Defferd", Shader::EnType::VS);
 		m_psDefferd.Load("Assets/shader/DefferdShading.fx", "PSMain_Defferd", Shader::EnType::PS);
+
+#if _DEBUG
+		m_psDefferd_Diffuse.Load("Assets/shader/DefferdShading.fx", "PSMain_Diffuse", Shader::EnType::PS);
+		m_psDefferd_Normal.Load("Assets/shader/DefferdShading.fx", "PSMain_Normal", Shader::EnType::PS);
+		m_psDefferd_Depth.Load("Assets/shader/DefferdShading.fx", "PSMain_Depth", Shader::EnType::PS);
+		m_psDefferd_Shadow.Load("Assets/shader/DefferdShading.fx", "PSMain_Shadow", Shader::EnType::PS);
+#endif
 
 		std::wstring st = L"Assets/sprite/Deferred_Grad.dds";
 		m_speculaGradation =  SpriteDataManager::Get()->Load(st);
