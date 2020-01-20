@@ -49,7 +49,7 @@ Ene_Gib::Ene_Gib()
 	m_charaMove.InitJustFoot(50.f, 700.f, 0.4f, 0.6f);
 	m_charaRotate.Init(&m_chara, CharacterRotateMotion::RM_UseIK, 0);
 
-	/*m_cbc = ue::NewGO<ue::CharacterBoxCollider>(0);
+	m_cbc = ue::NewGO<ue::CharacterBoxCollider>(0);
 	m_cbc->Init(L"Assets/model/gib/gib.ubc", &model->GetSkinModel().GetSkeleton(), 100.f, [&](const char* tag)
 	{
 		int ind = ue::enCollisionAttr_NonHitIK|CUI_Monster;
@@ -58,7 +58,7 @@ Ene_Gib::Ene_Gib()
 			ind |= MT_Head;
 		}
 		return ind;
-	});*/
+	});
 
 	std::function<void()> f = [&]() 
 	{

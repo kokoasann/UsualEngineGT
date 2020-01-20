@@ -741,7 +741,7 @@ namespace UsualEngine
 
 				auto rad = min(1, toEffector.Dot(toTarget));			//二つのベクトルの角度(ラッドウィンプス)
 				rad = acos(rad);
-				float deg = CMath::RadToDeg(rad);
+				//float deg = CMath::RadToDeg(rad);
 
 				if (1 || rad > 0.000001f)
 				{
