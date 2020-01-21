@@ -170,6 +170,11 @@ public:
 	{
 		m_move = move;
 	}
+	void SetPos(ue::CVector3& pos)
+	{
+		m_characon.SetPosition(pos);
+		m_model->SetPos(pos);
+	}
 	/// <summary>
 	/// ˆø”rot‚Ì•ª‚¾‚¯‰ñ“]‚·‚é
 	/// </summary>
