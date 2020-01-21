@@ -57,13 +57,25 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 				move.x = 0.0f;
 				move.z = 0.0f;
 				move.y /= 2.0f;
+				/*if (m_footL->GetWorldMatrix().GetTranslation().y < m_footR->GetWorldMatrix().GetTranslation().y)
+				{
+					pos.y = m_footL->GetWorldMatrix().GetTranslation().y;
+				}
+				else
+				{
+					pos.y = m_footR->GetWorldMatrix().GetTranslation().y;
+				}*/
 			}
-			//move.y = 0;
-			move *= -1;
-			auto rpos = m_characon.Execute(1, move);
-			rpos += m_ccOffset;
-			pos = rpos;
-			m_momentum += move;
+			//else
+			{
+				//move.y = 0;
+				move *= -1;
+				auto rpos = m_characon.Execute(1, move);
+				rpos += m_ccOffset;
+				pos = rpos;
+				//pos += move;
+				m_momentum += move;
+			}
 		}
 		
 	};
@@ -122,6 +134,7 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 			auto rpos = m_characon.Execute(1, m2n);
 			rpos += m_ccOffset;
 			m_model->SetPos(rpos);
+			//m_model->SetPos(m_model->GetPos() + m2n * ue::gameTime()->GetDeltaTime());
 
 			auto rot = m_model->GetRot();
 			rot.Multiply(add);

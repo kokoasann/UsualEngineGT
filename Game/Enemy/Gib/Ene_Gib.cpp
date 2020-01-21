@@ -18,7 +18,7 @@ Ene_Gib::Ene_Gib()
 	//model->Init(L"Assets/model/gib.bone.cmo", 0,0, ue::enFbxUpAxisY);
 	model->SetSca({ 100.f,100.f, 100.f });
 	
-	m_chara.Init(model, 20, 50, {0,-30,0});
+	m_chara.Init(model, 20, 50, {0,-30,0},false);
 
 	auto footR = m_chara.FindBone(L"IK_Bone.007_R.003", BK_FootR, true, 3, 60);	//‘«
 	auto footL = m_chara.FindBone(L"IK_Bone.007_L.003", BK_FootL, true, 3, 60);
@@ -85,6 +85,14 @@ Ene_Gib::Ene_Gib()
 		cam.Update();
 	};
 	ue::DebugSwitchAddRadio(ue::DebugSwitchNewSwitch('Z', VK_CONTROL, f));
+
+	f = [&]()
+	{
+		ue::CVector3 zero = ue::CVector3::Zero();
+		zero.y += 10;
+		m_chara.SetPos(zero);
+	};
+	ue::DebugSwitchAddCheck(ue::DebugSwitchNewSwitch('X', 0, f, f));
 	
 	ue::DebugSwitchNewRadioBox("gibMove");
 	f = [&]()
