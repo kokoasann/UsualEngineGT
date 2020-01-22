@@ -168,6 +168,14 @@ namespace UsualEngine
 			m_pd3dDevice->Release();
 			m_pd3dDevice = NULL;
 		}
+		if (m_spriteBatch != NULL) {
+			delete m_spriteBatch;
+			m_spriteBatch = NULL;
+		}
+		if (m_spriteFont != NULL) {
+			delete m_spriteFont;
+			m_spriteFont = NULL;
+		}
 	}
 	void GraphicsEngine::Init(HWND hWnd)
 	{
@@ -314,6 +322,10 @@ namespace UsualEngine
 
 		std::wstring st = L"Assets/sprite/Deferred_Grad.dds";
 		m_speculaGradation =  SpriteDataManager::Get()->Load(st);
+
+		//font用のクラスの初期化。
+		m_spriteBatch = new DirectX::SpriteBatch(m_pd3dDeviceContext);
+		m_spriteFont = new DirectX::SpriteFont(m_pd3dDevice, L"Assets/font/mgothi.spritefont");
 
 		InitBackBuffer();
 	}

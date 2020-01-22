@@ -120,10 +120,30 @@ namespace UsualEngine
 		{
 			return m_postEffect;
 		}
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
 		PreRender& GetPreRender()
 		{
 			return m_preRender;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		DirectX::SpriteBatch* GetSpriteBatch()
+		{
+			return m_spriteBatch;
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		DirectX::SpriteFont* GetSpriteFont()
+		{
+			return m_spriteFont;
 		}
 	private:
 		D3D_FEATURE_LEVEL		m_featureLevel;				//Direct3D デバイスのターゲットとなる機能セット。
@@ -157,6 +177,8 @@ namespace UsualEngine
 		
 		EnRenderMode m_renderMode = enRenderMode_3DModel;	//今どの工程？
 
-		ID3D11ShaderResourceView* m_speculaGradation=nullptr;
+		ID3D11ShaderResourceView* m_speculaGradation=nullptr;		//トゥーンシェード用のグラデーションマップ
+		DirectX::SpriteBatch* m_spriteBatch = nullptr;							//スプライトバッチ
+		DirectX::SpriteFont* m_spriteFont = nullptr;								//スプライトフォント
 	};
 }

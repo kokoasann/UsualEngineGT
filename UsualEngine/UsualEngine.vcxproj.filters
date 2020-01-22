@@ -70,6 +70,9 @@
     <Filter Include="Debug">
       <UniqueIdentifier>{dd6fd741-0fb1-437a-9c4f-6e0b59291c92}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\2D\Font">
+      <UniqueIdentifier>{b0ffadaa-8c69-4c82-bf08-cb2c0550db42}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="character\CharacterController.cpp">
@@ -259,6 +262,9 @@
     </ClCompile>
     <ClCompile Include="Debug\Debug.cpp">
       <Filter>Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\Font\Font.cpp">
+      <Filter>Graphics\2D\Font</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -461,6 +467,9 @@
     </ClInclude>
     <ClInclude Include="Debug\Debug.h">
       <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\Font\Font.h">
+      <Filter>Graphics\2D\Font</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
