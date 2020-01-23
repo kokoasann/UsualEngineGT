@@ -208,7 +208,7 @@ void Game::PostRender()
 {
 	m_font.Begin();
 
-	m_font.Draw(L"TEST", { 0,0 }, { 0,0,0,1 }, 0, 1);
+	//m_font.Draw(L"TEST", { 0,0 }, { 0,0,0,1 }, 0, 1);
 
 	m_font.End();
 }

@@ -27,7 +27,7 @@ void CharacterMoveMotion::Update()
 		m_chara->SetIKSpeed(1.0f);
 		Move(delTime, m_doPlayAnim, m_speed, m_actionMode);
 	}
-	else if(m_time > 0.f && !m_isStartJustFoot)
+	else if(m_time > 0.f)// && !m_isStartJustFoot)
 	{
 		Walk2Idle(delTime);
 	}
@@ -76,9 +76,8 @@ void CharacterMoveMotion::Move(float delTime, PlayAnim pa, float movespeed, Acti
 		}
 		m_chara->PlayAnim(pa, animLug, ntime, am);
 		m_isWalk = true;
-		m_isStartJustFoot = false;
+		//m_isStartJustFoot = false;
 		
-		//m_chara->SetMoveFunc(m_noneMF);
 	}
 
 	//スピードの計算。
@@ -154,11 +153,11 @@ void CharacterMoveMotion::Walk2Idle(float delTime)
 		m_time = m_animLug_2idle;
 
 		
-		//m_chara->SetMoveFunc(m_noneMF);
-		m_isJustedEnd = false;
-		m_isJustedStart = false;
-		//m_justTime = 0.f;
-		//m_isStartJustFoot = false;
+	//m_chara->SetMoveFunc(m_noneMF);
+		//m_isJustedEnd = false;
+		//m_isJustedStart = false;
+	//m_justTime = 0.f;
+	//m_isStartJustFoot = false;
 		m_isJustFoot = true;
 	}
 	auto move = m_moved * ((m_time) / m_animLug_2idle);
@@ -166,7 +165,7 @@ void CharacterMoveMotion::Walk2Idle(float delTime)
 	m_chara->SetMove(move);
 	m_time -= delTime;
 }
-
+#if 0
 void CharacterMoveMotion::JustFoot(float delTime)
 {
 	if (!m_isStartJustFoot)//遠い足の方から先に整える
@@ -232,7 +231,7 @@ void CharacterMoveMotion::JustFoot(float delTime)
 		m_time += delTime;
 	}
 }
-
+#endif
 void CharacterMoveMotion::ChangePlayingAnim(PlayAnim pa)
 {
 	m_oldSpeed = m_oldSpeedBuff;

@@ -37,16 +37,17 @@ Ene_Gib::Ene_Gib()
 	anim.SetIKGravity(9.8f * v, footR->GetChildren()[0]);
 	anim.SetIKGravity(9.8f * v, footL->GetChildren()[0]);
 
-	//m_chara.SetActionMode(AM_None);
+	m_chara.SetActionMode(AM_None);
 	//m_chara.PlayAnim(GA_rotate,1.0f, 0.f,AM_Rotate);
-	m_chara.PlayAnim(GA_walk, 1.0f, 0.f, AM_Move);
+	//m_chara.PlayAnim(GA_walk, 1.0f, 0.f, AM_Move);
 
 	m_chara.SetIKRub(0, footR->GetChildren()[0]);
 	m_chara.SetIKRub(0, footL->GetChildren()[0]);
+	m_chara.Init_JustFoot(50.f, 700.f, 0.4f, 0.6f);
 
 	m_charaMove.Init(&m_chara, m_animClip);
 	m_charaMove.InitBone(footL, footR);
-	m_charaMove.InitJustFoot(50.f, 700.f, 0.4f, 0.6f);
+	m_charaMove.InitJustFoot(5.f, 10.f, 10.4f, 2.6f);
 	m_charaRotate.Init(&m_chara, CharacterRotateMotion::RM_UseIK, 0);
 
 	m_cbc = ue::NewGO<ue::CharacterBoxCollider>(0);
@@ -97,7 +98,8 @@ Ene_Gib::Ene_Gib()
 	ue::DebugSwitchNewRadioBox("gibMove");
 	f = [&]()
 	{
-		m_chara.PlayAnim(GA_walk, 1.0f, 0.f, AM_Move);
+		//m_chara.PlayAnim(GA_walk, 1.0f, 0.f, AM_Move);
+		m_charaMove.NextPlayAnim(GA_walk, 1, AM_Move);
 	};
 	ue::DebugSwitchAddRadioBoxButton("gibMove", ue::DebugSwitchNewSwitch('C', 0, f));
 	f = [&]()
@@ -107,7 +109,8 @@ Ene_Gib::Ene_Gib()
 	ue::DebugSwitchAddRadioBoxButton("gibMove", ue::DebugSwitchNewSwitch('V', 0, f));
 	f = [&]()
 	{
-		m_chara.PlayAnim(GA_idol, 1.0f, 0.f, AM_None);
+		//m_chara.PlayAnim(GA_idol, 1.0f, 0.f, AM_None);
+		m_charaMove.NextPlayAnim(GA_idol, 0, AM_None);
 	};
 	ue::DebugSwitchAddRadioBoxButton("gibMove", ue::DebugSwitchNewSwitch('B', 0, f));
 }
@@ -129,10 +132,5 @@ bool Ene_Gib::Start()
 
 void Ene_Gib::Update()
 {
-	
-	if (GetKeyState('z'))
-	{
-
-	}
 	UpdateComponent();
 }
