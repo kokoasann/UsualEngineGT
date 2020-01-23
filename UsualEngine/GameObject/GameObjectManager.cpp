@@ -35,9 +35,11 @@ namespace UsualEngine
 		auto& pe = usualEngine()->GetGraphicsEngine()->GetPostEffect();
 		pe.Render();
 
-		if(Debug::Instance().debugState.isPhysicsDebugDraw)
+		if (Debug::Instance().debugState.isPhysicsDebugDraw)
+		{
 			Physics().DebugDraw();
-		
+		}
+
 		for (auto& ngd : m_newGOBuffer)
 		{
 			m_gameObjectList[ngd.prio].push_back(ngd.go);

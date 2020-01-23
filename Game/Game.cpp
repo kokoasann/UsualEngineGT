@@ -203,3 +203,12 @@ void Game::Update()
 	//sprintf_s(st, "x:%.3f y:%.3f z:%.3f\n", v.x,v.y,v.z);
 	//OutputDebugString(st);
 }
+
+void Game::PostRender()
+{
+	m_font.Begin();
+
+	m_font.Draw(L"TEST", { 0,0 }, { 0,0,0,1 }, 0, 1);
+
+	m_font.End();
+}

@@ -30,6 +30,11 @@ namespace UsualEngine
 			float v[2];
 		};
 
+		void Add(const CVector2& v1, const CVector2& v2)
+		{
+			x = v1.x + v2.x;
+			y = v1.y + v2.y;
+		}
 		void Scale(float v)
 		{
 			x *= v;

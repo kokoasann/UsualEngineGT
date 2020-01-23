@@ -16,6 +16,8 @@ public:
 	void OnDestroy() override;
 	bool Start() override;
 	void Update() override;
+
+	void PostRender() override;
 private:
 	ue::AnimationClip animclip[5];
 	ue::SkinModelRender* p1 = 0;
@@ -41,4 +43,6 @@ private:
 	ue::PhysicsStaticObject pso2;
 
 	ue::LightDirection* light = 0;
+
+	ue::Font m_font;
 };

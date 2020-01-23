@@ -119,12 +119,54 @@ namespace UsualEngine
 	};
 
 	/// <summary>
+		/// blendstateを集めた構造体
+		/// </summary>
+	struct BlendState
+	{
+		static ID3D11BlendState* disable;	//無効
+		static ID3D11BlendState* trans;		//半透明
+		static ID3D11BlendState* add;		//加算
+		
+		static void Init();
+		static void Release();
+	};
+
+	struct SamplerState
+	{
+		static ID3D11SamplerState* pointSampling;
+		static ID3D11SamplerState* linerSampling;
+
+		static void Init();
+		static void Release();
+	};
+
+	struct DepthStencilState
+	{
+		static ID3D11DepthStencilState* sceneRender;
+		static ID3D11DepthStencilState* deferredRender;
+		static ID3D11DepthStencilState* spriteRender;
+
+		static void Init();
+		static void Release();
+	};
+
+	struct RasterizerState
+	{
+		static ID3D11RasterizerState* sceneRender;
+		static ID3D11RasterizerState* spriteRender;
+
+		static void Init();
+		static void Release();
+	};
+
+	/// <summary>
 	/// アルファブレンド無効のBlendStateをかえす
 	/// </summary>
 	/// <returns></returns>
 	static ID3D11BlendState* BlendState_Disable()
 	{
-		return RenderState::Get().GetBlendState(RenderState::bsDisable);
+		//return RenderState::Get().GetBlendState(RenderState::bsDisable);
+		return BlendState::disable;
 	}
 	/// <summary>
 	/// 半透明合成のBlendStateをかえす
@@ -132,7 +174,8 @@ namespace UsualEngine
 	/// <returns></returns>
 	static ID3D11BlendState* BlendState_Trans()
 	{
-		return RenderState::Get().GetBlendState(RenderState::bsTrans);
+		//return RenderState::Get().GetBlendState(RenderState::bsTrans);
+		return BlendState::trans;
 	}
 	/// <summary>
 	/// 加算合成のBlendStateをかえす
@@ -140,7 +183,8 @@ namespace UsualEngine
 	/// <returns></returns>
 	static ID3D11BlendState* BlendState_Add()
 	{
-		return RenderState::Get().GetBlendState(RenderState::bsAdd);
+		//return RenderState::Get().GetBlendState(RenderState::bsAdd);
+		return BlendState::add;
 	}
 
 
@@ -150,7 +194,8 @@ namespace UsualEngine
 	/// <returns></returns>
 	static ID3D11SamplerState* SamplerState_Point()
 	{
-		return RenderState::Get().GetSamplerState(RenderState::ssPoint);
+		//return RenderState::Get().GetSamplerState(RenderState::ssPoint);
+		return SamplerState::pointSampling;
 	}
 	/// <summary>
 	/// 線形補完のサンプラステート
@@ -158,6 +203,7 @@ namespace UsualEngine
 	/// <returns></returns>
 	static ID3D11SamplerState* SamplerState_Liner()
 	{
-		return RenderState::Get().GetSamplerState(RenderState::ssLiner);
+		//return RenderState::Get().GetSamplerState(RenderState::ssLiner);
+		return SamplerState::linerSampling;
 	}
 }

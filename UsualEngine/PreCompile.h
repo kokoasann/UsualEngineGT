@@ -6,6 +6,8 @@ namespace UsualEngine
 }
 const float FRAME_BUFFER_W = 1280.0f;				//フレームバッファの幅。
 const float FRAME_BUFFER_H = 720.0f;				//フレームバッファの高さ。
+const float SPRITE_SPACE_SCREEN_W = 1280.0f;
+const float SPRITE_SPACE_SCREEN_H = 720.0f;
 
 static const int MAX_BONE = 512;	//!<ボーンの最大数。
 
@@ -64,7 +66,7 @@ static const int RTV_MAX = 8;
 #include "graphics/Shader.h"
 #include "graphics/SpriteDataManager.h"
 #include "graphics/Sprite.h"
-
+#include "graphics/Font/Font.h"
 
 #include "graphics/SkinModelShaderConst.h"
 #include "graphics/SkinModel.h"
