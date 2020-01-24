@@ -349,7 +349,8 @@ namespace UsualEngine
 		CVector3 newpos;	//移動先のポジション
 		if (m_isSetNextTarget)
 		{
-			newpos = m_nextTarget;
+			newpos = m_nextTarget + m_offset;
+			orgpos = newpos;
 			m_isSetNextTarget = false;
 		}
 		else
@@ -399,11 +400,11 @@ namespace UsualEngine
 
 		//oldpos.y += m_radius;
 		CVector3 nowpos = oldpos;		//正直いらない
-		CVector3 target = oldpos;							//真の移動先。
+		CVector3 target = oldpos;		//真の移動先。
 		btTransform bstart, bend;			
 		bstart.setIdentity();
 		bend.setIdentity();
-		bool isHitGround = false;			//地面に当たった？
+		bool isHitGround = false;		//地面に当たった？
 
 
 		if (fabsf(orgpos.y - m_oldNewTarget.y) > FLT_EPSILON)

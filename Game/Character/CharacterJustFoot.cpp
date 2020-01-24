@@ -24,20 +24,6 @@ void CharacterJustFoot::Update()
 
 void CharacterJustFoot::Update_JustFoot(float delTime)
 {
-	if (!m_isStartJustFoot)//遠い足の方から先に整える
-	{
-		m_chara->SetIKOffset(ue::CVector3::Zero());
-		auto moveL = m_footL->GetMove().Length();
-		auto moveR = m_footR->GetMove().Length();
-
-		if (moveL > moveR)
-			m_startJustFoot = JF_footL;
-		else
-			m_startJustFoot = JF_footR;
-		m_isStartJustFoot = true;
-		//m_chara->SetIKRub(0.0f);
-		m_time = 0.f;
-	}
 	ue::Bone* startBone = nullptr;
 	ue::Bone* endBone = nullptr;
 
@@ -53,9 +39,12 @@ void CharacterJustFoot::Update_JustFoot(float delTime)
 		break;
 	}
 
+	const auto& pos = m_chara->GetPos();
+
+
 	if (!m_isJustedStart)//最初に出す足の処理。
 	{
-		auto move = startBone->GetMove().Length();
+		/*auto move = startBone->GetMove().Length();
 		if (m_time > 0.2f || move < 10.f)
 		{
 			m_isJustedStart = true;
@@ -70,30 +59,115 @@ void CharacterJustFoot::Update_JustFoot(float delTime)
 			up.Normalize();
 			m_chara->SetIKOffset(up * m_justFoot_Scale, startBone);
 			m_chara->SetIKSpeed(m_justFoot_UpIKSpeed, startBone);
+		}*/
+
+		if (!m_isUped)
+		{
+			auto up = m_chara->GetDir() * -1.f;
+			up.y += m_justFoot_OffsetY;
+			up.Normalize();
+			up *= delTime * m_justFoot_UpIKSpeed;
+			m_nowUP += up;
+			m_chara->SetIKOffset(m_nowUP, startBone);
+			if (m_nowUP.y >= m_justFoot_Scale)
+			{
+				m_isUped = true;
+			}
+		}
+		else
+		{
+			/*auto up = m_chara->GetDir() * -1.f;
+			up.y += m_justFoot_OffsetY;
+			up.Normalize();
+			up *= delTime * m_justFoot_UpIKSpeed;
+			m_nowUP -= up;
+			m_chara->SetIKOffset(m_nowUP, startBone);*/
+			m_chara->SetIKSpeed(0.2f, startBone);
+			if (startBone->IsONGround())
+			{
+				m_isUped = false;
+				m_nowUP = ue::CVector3::Zero();
+				m_isJustedStart = true;
+			}
 		}
 	}
 	else if (!m_isJustedEnd)//最後に出す足の処理。
 	{
-		auto move = endBone->GetMove().Length();
-		if (m_time > 0.1f || move < 10.f)
+		//auto move = endBone->GetMove().Length();
+		//if (m_time > 0.1f || move < 10.f)
+		//{
+		//	m_isJustedEnd = true;
+		//	m_chara->SetIKSpeed(m_justFoot_DownIKSpeed, endBone);
+		//	m_time = 0.f;
+		//	//m_isStart = false;
+		//}
+		//auto up = m_chara->GetDir() * -1.f;
+		//up.y += m_justFoot_OffsetY;
+		//up.Normalize();
+		//m_chara->SetIKOffset(up * m_justFoot_Scale, endBone);
+		//m_chara->SetIKSpeed(m_justFoot_UpIKSpeed, endBone);
+
+		if (!m_isUped)
 		{
-			m_isJustedEnd = true;
-			m_chara->SetIKSpeed(m_justFoot_DownIKSpeed, endBone);
-			m_time = 0.f;
-			//m_isStart = false;
+			auto up = m_chara->GetDir() * -1.f;
+			up.y += m_justFoot_OffsetY;
+			up.Normalize();
+			up *= delTime * m_justFoot_UpIKSpeed;
+			m_nowUP += up;
+			m_chara->SetIKOffset(m_nowUP, endBone);
+			if (m_nowUP.y >= m_justFoot_Scale)
+			{
+				m_isUped = true;
+			}
 		}
-		auto up = m_chara->GetDir() * -1.f;
-		up.y += m_justFoot_OffsetY;
-		up.Normalize();
-		m_chara->SetIKOffset(up * m_justFoot_Scale, endBone);
-		m_chara->SetIKSpeed(m_justFoot_UpIKSpeed, endBone);
+		else
+		{
+			/*auto up = m_chara->GetDir() * -1.f;
+			up.y += m_justFoot_OffsetY;
+			up.Normalize();
+			up *= delTime * m_justFoot_UpIKSpeed;
+			m_nowUP -= up;
+			m_chara->SetIKOffset(m_nowUP, endBone);*/
+			m_chara->SetIKSpeed(0.2f, endBone);
+			if (endBone->IsONGround())
+			{
+				m_isUped = false;
+				m_nowUP = ue::CVector3::Zero();
+				m_isJustedEnd = true;
+			}
+		}
 	}
 	else
 	{
-		if (m_time > (1.f - m_justFoot_DownIKSpeed))
+		//if (m_time > (1.f - m_justFoot_DownIKSpeed))
 		{
 			m_isStart = false;
 		}
 	}
 	m_time += delTime;
+}
+
+void CharacterJustFoot::Start_JustFoot()
+{
+	m_isStart = true;
+	//m_chara->SetIKOffset(ue::CVector3::Zero());
+	m_isStartJustFoot = false;
+	m_isJustedEnd = false;
+	m_isJustedStart = false;
+
+	//if (!m_isStartJustFoot)//遠い足の方から先に整える
+	{
+		m_chara->SetIKOffset(ue::CVector3::Zero());
+		auto moveL = m_footL->GetMove().Length();
+		auto moveR = m_footR->GetMove().Length();
+
+		if (moveL > moveR)
+			m_startJustFoot = JF_footL;
+		else
+			m_startJustFoot = JF_footR;
+		//m_isStartJustFoot = true;
+		//m_chara->SetIKRub(0.0f);
+		m_time = 0.f;
+	}
+	
 }

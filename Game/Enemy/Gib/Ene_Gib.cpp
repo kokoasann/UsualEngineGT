@@ -43,11 +43,11 @@ Ene_Gib::Ene_Gib()
 
 	m_chara.SetIKRub(0, footR->GetChildren()[0]);
 	m_chara.SetIKRub(0, footL->GetChildren()[0]);
-	m_chara.Init_JustFoot(50.f, 700.f, 0.4f, 0.6f);
+	m_chara.Init_JustFoot(2.f, 500.f, 700.f, 900.f);
 
 	m_charaMove.Init(&m_chara, m_animClip);
 	m_charaMove.InitBone(footL, footR);
-	m_charaMove.InitJustFoot(5.f, 10.f, 10.4f, 2.6f);
+	//m_charaMove.InitJustFoot(5.f, 10.f, 10.4f, 2.6f);
 	m_charaRotate.Init(&m_chara, CharacterRotateMotion::RM_UseIK, 0);
 
 	m_cbc = ue::NewGO<ue::CharacterBoxCollider>(0);

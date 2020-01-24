@@ -64,14 +64,7 @@ public:
 	/// <summary>
 	///	この関数を呼ぶことでJustFootが開始される
 	/// </summary>
-	void Start_JustFoot()
-	{
-		m_isStart = true;
-		//m_chara->SetIKOffset(ue::CVector3::Zero());
-		m_isStartJustFoot = false;
-		m_isJustedEnd = false;
-		m_isJustedStart = false;
-	}
+	void Start_JustFoot();
 
 	bool IsStart_JustFoot() const
 	{
@@ -85,7 +78,7 @@ private:
 	
 	ue::Bone* m_footL = nullptr;			//左足のボーン
 	ue::Bone* m_footR = nullptr;			//右足のボーン
-	bool m_isJustedEnd = false;			//justFootのEnd足が終わったか
+	bool m_isJustedEnd = false;				//justFootのEnd足が終わったか
 	bool m_isJustedStart = false;			//justFootのstart足が終わったか
 	//float m_justTime = 0.f;
 	enum EJustFoot
@@ -93,10 +86,13 @@ private:
 		JF_footL,		//左足から調整する。
 		JF_footR		//右足から調整する。
 	};
-	EJustFoot m_startJustFoot = JF_footL;			//どちらの足が先か
-	bool m_isStartJustFoot = false;					//歩きからアイドルになって初めてJustFootが呼ばれるときにだけ作動するifを制御するためのフラグ
-	float m_justFoot_OffsetY = 2.f;					//足の上げる角度の調整。
-	float m_justFoot_Scale = 40.f;						//足をどれだけ上げるか。
+	EJustFoot m_startJustFoot = JF_footL;		//どちらの足が先か
+	bool m_isStartJustFoot = false;				//歩きからアイドルになって初めてJustFootが呼ばれるときにだけ作動するifを制御するためのフラグ
+	float m_justFoot_OffsetY = 2.f;				//足の上げる角度の調整。
+	float m_justFoot_Scale = 40.f;				//足をどれだけ上げるか。
 	float m_justFoot_UpIKSpeed = 0.4f;			//足を上げるときの速度。
 	float m_justFoot_DownIKSpeed = 0.5f;		//足をおろすときの速度。
+
+	ue::CVector3 m_nowUP = ue::CVector3::Zero();							//今、どれだけ上がっているか。
+	bool m_isUped = false;
 };
