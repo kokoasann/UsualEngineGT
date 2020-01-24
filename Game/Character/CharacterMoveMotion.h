@@ -45,10 +45,10 @@ public:
 	/// <param name="downSpeed">足をおろすスピード playerの場合0.5f</param>
 	void InitJustFoot(float offsetY, float scale, float upSpeed, float downSpeed)
 	{
-		m_justFoot_OffsetY = offsetY;
+		/*m_justFoot_OffsetY = offsetY;
 		m_justFoot_Scale = scale;
 		m_justFoot_UpIKSpeed = upSpeed;
-		m_justFoot_DownIKSpeed = downSpeed;
+		m_justFoot_DownIKSpeed = downSpeed;*/
 	}
 	//更新
 	void Update()override;
@@ -129,6 +129,7 @@ private:
 
 	ue::Bone* m_footL = nullptr;			//左足のボーン
 	ue::Bone* m_footR = nullptr;			//右足のボーン
+	/*
 	bool m_isJustedEnd = false;			//justFootのEnd足が終わったか
 	bool m_isJustedStart = false;			//justFootのstart足が終わったか
 	//float m_justTime = 0.f;
@@ -143,6 +144,6 @@ private:
 	float m_justFoot_Scale = 40.f;						//足をどれだけ上げるか。
 	float m_justFoot_UpIKSpeed = 0.4f;			//足を上げるときの速度。
 	float m_justFoot_DownIKSpeed = 0.5f;		//足をおろすときの速度。
-
+	*/
 	bool m_isJustFoot = false;							//justFootを行えるか？
 };

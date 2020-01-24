@@ -35,7 +35,7 @@ void CharacterJustFoot::Update_JustFoot(float delTime)
 		else
 			m_startJustFoot = JF_footR;
 		m_isStartJustFoot = true;
-		m_chara->SetIKRub(0.0f);
+		//m_chara->SetIKRub(0.0f);
 		m_time = 0.f;
 	}
 	ue::Bone* startBone = nullptr;
