@@ -7,8 +7,9 @@ Player* Enemy::m_player = 0;
 Enemy::Enemy()
 {
 	AddComponent(&m_chara);
-	AddComponent(&m_charaRotate);
-	AddComponent(&m_charaMove);
+	//AddComponent(&m_charaRotate);
+	//AddComponent(&m_charaMove);
+	AddComponent(&m_charaMotion);
 }
 
 Enemy::~Enemy()

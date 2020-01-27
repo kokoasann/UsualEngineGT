@@ -6,16 +6,16 @@ class CharacterMoveMotion :public ue::GameObject
 public:
 	using PlayAnim = unsigned int;	//再生するアニメーションの番号。intじゃわかりずらいので別名定義。
 	CharacterMoveMotion(){}
-	~CharacterMoveMotion(){}
+	virtual ~CharacterMoveMotion() {}
 
 	/// <summary>
 	/// 開放。
 	/// </summary>
-	void Release() override{}
+	void Release() override;
 	/// <summary>
 	/// DeleteGOされた瞬間呼ばれる
 	/// </summary>
-	void OnDestroy() override{}
+	void OnDestroy() override;
 
 	/// <summary>
 	/// 初期化。
@@ -96,6 +96,8 @@ public:
 		m_speed = speed;
 		m_actionMode = am;
 	}
+
+	void BreakAnim();
 private:
 	Character* m_chara = nullptr;					//外身。
 	ue::AnimationClip* m_anim = nullptr;		//アニメーションクリップ
@@ -103,8 +105,6 @@ private:
 	ActionMode m_actionMode = AM_None;				//IKでの移動をさせたくない場合はAM_None　詳細はActionModeを参照。
 	PlayAnim m_doPlayAnim = 0;									//次に再生するアニメーション
 
-	//static ue::SkinModelRender::MoveFunc m_noneMF;		
-	//static ue::SkinModelRender::RotateFunc m_noneRF;
 	float m_time = 0.f;							//時間。汎用タイマー
 	bool m_isWalk = false;						//歩いているかそうでないか
 
@@ -129,21 +129,5 @@ private:
 
 	ue::Bone* m_footL = nullptr;			//左足のボーン
 	ue::Bone* m_footR = nullptr;			//右足のボーン
-	/*
-	bool m_isJustedEnd = false;			//justFootのEnd足が終わったか
-	bool m_isJustedStart = false;			//justFootのstart足が終わったか
-	//float m_justTime = 0.f;
-	enum EJustFoot
-	{
-		JF_footL,		//左足から調整する。
-		JF_footR		//右足から調整する。
-	};
-	EJustFoot m_startJustFoot = JF_footL;			//どちらの足が先か
-	bool m_isStartJustFoot = false;					//歩きからアイドルになって初めてJustFootが呼ばれるときにだけ作動するifを制御するためのフラグ
-	float m_justFoot_OffsetY = 2.f;					//足の上げる角度の調整。
-	float m_justFoot_Scale = 40.f;						//足をどれだけ上げるか。
-	float m_justFoot_UpIKSpeed = 0.4f;			//足を上げるときの速度。
-	float m_justFoot_DownIKSpeed = 0.5f;		//足をおろすときの速度。
-	*/
 	bool m_isJustFoot = false;							//justFootを行えるか？
 };

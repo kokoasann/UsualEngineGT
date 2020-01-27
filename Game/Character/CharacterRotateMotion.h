@@ -20,11 +20,11 @@ public:
 	/// <summary>
 	/// 開放。
 	/// </summary>
-	void Release() override{}
+	void Release() override;
 	/// <summary>
 	/// DeleteGOされた瞬間呼ばれる
 	/// </summary>
-	void OnDestroy() override{}
+	void OnDestroy() override;
 
 
 	/// <summary>
@@ -98,6 +98,7 @@ public:
 	/// <param name="isPlayAnim"></param>
 	void NextRotate(const ue::CVector3& dir, PlayAnim pa, bool isPlayAnim = false);
 	
+	void BreakRotate();
 private:
 	Character* m_chara = nullptr;					//キャラクター
 
