@@ -40,6 +40,9 @@
     <ClCompile Include="Cannon\MortarShell.cpp">
       <Filter>Cannon</Filter>
     </ClCompile>
+    <ClCompile Include="Character\CharacterMotionController.cpp">
+      <Filter>Chara</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -87,6 +90,9 @@
       <Filter>Cannon</Filter>
     </ClInclude>
     <ClInclude Include="CollisionTag.h" />
+    <ClInclude Include="Character\CharacterMotionController.h">
+      <Filter>Chara</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">

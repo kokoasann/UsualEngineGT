@@ -2,6 +2,30 @@
 #include "CharacterRotateMotion.h"
 #include "Character.h"
 
+void CharacterRotateMotion::Release()
+{
+	m_chara = nullptr;
+
+	m_actionMode = AM_None;
+	m_rotateMode = RM_None;
+	m_playingAnim = 0;
+
+	m_isPlayAnim = false;
+	m_isFirst = true;
+	m_isComplete = false;
+	m_total = 0.f;
+	m_maxRad = 0.f;
+	m_speed = ue::CMath::DegToRad(5.f);
+	m_threshold = 0.0001f;
+	m_dir = ue::CVector3::AxisZ();
+	m_oldDir = m_dir;
+}
+
+void CharacterRotateMotion::OnDestroy()
+{
+	Release();
+}
+
 void CharacterRotateMotion::Update()
 {
 	if (m_isComplete)
@@ -9,6 +33,10 @@ void CharacterRotateMotion::Update()
 
 	if (m_isPlayAnim && m_isFirst)
 	{
+		if (RM_UseIK)
+			m_actionMode = AM_Rotate;
+		else
+			m_actionMode = AM_None;
 		m_chara->PlayAnim(m_playingAnim, 1, 0.f, m_actionMode);
 		m_isFirst = false;
 	}
@@ -74,7 +102,6 @@ void CharacterRotateMotion::Update_Lerp()
 
 void CharacterRotateMotion::Update_UseIK()
 {
-	
 	auto t = m_chara->GetDir().Dot(m_dir);
 	t = acosf(t);
 	if (t < ue::CMath::DegToRad(0.001f))
@@ -86,10 +113,11 @@ void CharacterRotateMotion::Update_UseIK()
 
 void CharacterRotateMotion::Complete()
 {
-	m_isComplete = true;
-	if (m_isPlayAnim)
+	if (!m_isComplete)
 	{
-		m_chara->PlayAnim(CHARA_IDOL_NUM, 1, 0);
+		if(m_isPlayAnim)
+			m_chara->PlayAnim(CHARA_IDOL_NUM, 1, 0);
+		m_isComplete = true;
 	}
 }
 
@@ -116,4 +144,9 @@ void CharacterRotateMotion::NextRotate(const ue::CVector3& dir, PlayAnim pa, boo
 	m_isFirst = true;
 	m_isPlayAnim = isPlayAnim;
 	m_isComplete = false;
+}
+
+void CharacterRotateMotion::BreakRotate()
+{
+	Complete();
 }

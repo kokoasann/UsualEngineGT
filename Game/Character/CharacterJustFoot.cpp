@@ -88,7 +88,9 @@ void CharacterJustFoot::Update_JustFoot(float delTime)
 				m_isUped = false;
 				m_nowUP = ue::CVector3::Zero();
 				m_isJustedStart = true;
+				m_chara->SetIKSpeed(1.f, startBone);
 			}
+
 		}
 	}
 	else if (!m_isJustedEnd)//ÅŒã‚Éo‚·‘«‚Ìˆ—B
@@ -134,6 +136,7 @@ void CharacterJustFoot::Update_JustFoot(float delTime)
 				m_isUped = false;
 				m_nowUP = ue::CVector3::Zero();
 				m_isJustedEnd = true;
+				m_chara->SetIKSpeed(1.f, endBone);
 			}
 		}
 	}

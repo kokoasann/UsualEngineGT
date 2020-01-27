@@ -9,6 +9,41 @@
 // 75% 歩くときや走るときのモーションの左足を出し始めて左足が地に付くまでのちょうど真ん中の位置。
 #define ANM_75PER 0.75f
 
+void CharacterMoveMotion::Release()
+{
+	m_chara = nullptr;
+	m_anim = nullptr;
+	m_actionMode = AM_None;
+	m_doPlayAnim = 0;
+
+	m_time = 0.f;
+	m_isWalk = false;
+
+	m_playingAnim = 0;
+	m_oldPlayAnim = 0;
+	m_idolNum = 0;
+	m_animLugBase = 0.6f;
+	
+	m_animLug_2idle = 0.0f;
+	
+	m_moved = ue::CVector3::AxisZ();
+	
+	m_speed = 0.f;
+	m_oldSpeedBuff = 0.0f;
+	m_oldSpeed = 0.0f;
+	
+	m_changeWalk = CW_slow2fast;
+
+	m_footL = nullptr;
+	m_footR = nullptr;
+	m_isJustFoot = false;
+}
+
+void CharacterMoveMotion::OnDestroy()
+{
+	Release();
+}
+
 void CharacterMoveMotion::InitBone(ue::Bone* footL, ue::Bone* footR)
 {
 	m_footL = footL;
@@ -16,7 +51,6 @@ void CharacterMoveMotion::InitBone(ue::Bone* footL, ue::Bone* footR)
 	ue::Animation& anim = m_chara->GetAnimation();
 	anim.SetIKMode(ue::IK::enMode_Foot, footL);
 	anim.SetIKMode(ue::IK::enMode_Foot, footR);
-	
 }
 
 void CharacterMoveMotion::Update()
@@ -27,7 +61,7 @@ void CharacterMoveMotion::Update()
 		m_chara->SetIKSpeed(1.0f);
 		Move(delTime, m_doPlayAnim, m_speed, m_actionMode);
 	}
-	else if(m_time > 0.f)// && !m_isStartJustFoot)
+	else if(m_time > 0.f && !m_isJustFoot)
 	{
 		Walk2Idle(delTime);
 	}
@@ -76,8 +110,6 @@ void CharacterMoveMotion::Move(float delTime, PlayAnim pa, float movespeed, Acti
 		}
 		m_chara->PlayAnim(pa, animLug, ntime, am);
 		m_isWalk = true;
-		//m_isStartJustFoot = false;
-		
 	}
 
 	//スピードの計算。
@@ -146,10 +178,11 @@ void CharacterMoveMotion::Walk2Idle(float delTime)
 		ChangePlayingAnim(m_idolNum);
 		m_moved = m_chara->GetDir() * m_oldSpeed;
 
-		m_chara->PlayAnim(m_idolNum, m_animLug_2idle, AM_None);
+		m_chara->PlayAnim(m_idolNum, m_animLug_2idle);
+		//m_chara->PlayAnim(m_idolNum, 0, AM_None);
 		m_isWalk = false;
 		//m_chara->SetAllIKRub(0.0f);
-		m_chara->SetIKOffset(ue::CVector3::Zero());
+		//m_chara->SetIKOffset(ue::CVector3::Zero());
 		m_time = m_animLug_2idle;
 
 		
@@ -239,4 +272,13 @@ void CharacterMoveMotion::ChangePlayingAnim(PlayAnim pa)
 		m_oldSpeed = 0.0f;
 	m_oldPlayAnim = m_playingAnim;
 	m_playingAnim = pa;
+}
+
+void CharacterMoveMotion::BreakAnim()
+{
+	m_speed = 0.0f;
+	m_time = 0.0f;
+
+	m_doPlayAnim = m_idolNum;
+	ChangePlayingAnim(m_idolNum);
 }

@@ -2,6 +2,7 @@
 #include "Character/Character.h"
 #include "Character/CharacterMoveMotion.h"
 #include "Character/CharacterRotateMotion.h"
+#include "Character/CharacterMotionController.h"
 
 #define ENEMY_MAX_COMPONENT 5
 //エネミーのHPとかAPとかの型。
@@ -43,8 +44,9 @@ public:
 	}
 protected:
 	Character m_chara;
-	CharacterMoveMotion m_charaMove;
-	CharacterRotateMotion m_charaRotate;
+	//CharacterMoveMotion m_charaMove;
+	//CharacterRotateMotion m_charaRotate;
+	CharacterMotionController m_charaMotion;
 	ue::GameObject* m_components[ENEMY_MAX_COMPONENT];
 	int m_componentCount = 0;
 
