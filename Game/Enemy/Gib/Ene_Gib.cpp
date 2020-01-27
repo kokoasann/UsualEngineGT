@@ -98,8 +98,8 @@ Ene_Gib::Ene_Gib()
 	ue::DebugSwitchNewRadioBox("gibMove");
 	f = [&]()
 	{
-		//m_chara.PlayAnim(GA_walk, 1.0f, 0.f, AM_Move);
-		m_charaMove.NextPlayAnim(GA_walk, 1, AM_Move);
+		m_chara.PlayAnim(GA_walk, 1.0f, 0.f, AM_Move);
+		//m_charaMove.NextPlayAnim(GA_walk, 1, AM_Move);
 	};
 	ue::DebugSwitchAddRadioBoxButton("gibMove", ue::DebugSwitchNewSwitch('C', 0, f));
 	f = [&]()
@@ -109,8 +109,8 @@ Ene_Gib::Ene_Gib()
 	ue::DebugSwitchAddRadioBoxButton("gibMove", ue::DebugSwitchNewSwitch('V', 0, f));
 	f = [&]()
 	{
-		//m_chara.PlayAnim(GA_idol, 1.0f, 0.f, AM_None);
-		m_charaMove.NextPlayAnim(GA_idol, 0, AM_None);
+		m_chara.PlayAnim(GA_idol, 1.0f, 0.f, AM_None);
+		//m_charaMove.NextPlayAnim(GA_idol, 0, AM_None);
 	};
 	ue::DebugSwitchAddRadioBoxButton("gibMove", ue::DebugSwitchNewSwitch('B', 0, f));
 }
