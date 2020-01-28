@@ -96,6 +96,7 @@ namespace UsualEngine
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <returns></returns>
 		Bone* GetEndBone() const
 		{
 			return m_endBone;
@@ -103,9 +104,18 @@ namespace UsualEngine
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <returns></returns>
 		const CVector3& GetTarget() const
 		{
 			return m_target;
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		const CVector3& GetOldTarget() const
+		{
+			return m_oldTarget;
 		}
 		/// <summary>
 		/// 摩擦率をゲット
@@ -166,6 +176,11 @@ namespace UsualEngine
 		{
 			m_gravity = grav;
 		}
+
+		const CVector3& GetAnimMove() const
+		{
+			return m_animMove;
+		}
 	private:
 		bool m_isFirst = true;					//初めてか？
 		Bone* m_effectorBone=0;					//エフェクタボーン
@@ -179,8 +194,10 @@ namespace UsualEngine
 
 		CVector3 m_offset = CVector3::Zero();
 		CVector3 m_target = CVector3::Zero();			//IKのターゲット
+		CVector3 m_oldTarget = CVector3::Zero();		//old IKのターゲット
 		CVector3 m_rubTarget = CVector3::Zero();		//擦った先のポジション。
 		CVector3 m_move = CVector3::Zero();			//移動ベクトル
+		CVector3 m_animMove = CVector3::Zero();
 		bool m_isUseLocalTarget = 1;
 		float m_speed = 1.f;					//次のターゲットに移動するときの速度(%)。1なら1フレームで移動する。0なら動かない。
 

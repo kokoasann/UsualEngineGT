@@ -131,6 +131,14 @@ namespace UsualEngine
 		{
 			m_isONGround = b;
 		}
+		bool IsDown() const
+		{
+			return m_isDown;
+		}
+		void SetIsDown(bool b)
+		{
+			m_isDown = b;
+		}
 
 
 		void SetMove(CVector3 v)
@@ -209,6 +217,7 @@ namespace UsualEngine
 		CVector3 m_move = CVector3::Zero();			//ボーンの移動ベクトル
 		CVector3 m_momentum = CVector3::Zero();		//勢い。
 		bool m_isONGround = false;
+		bool m_isDown = false;
 	};
 	/*!
 	 *@brief	スケルトン。
