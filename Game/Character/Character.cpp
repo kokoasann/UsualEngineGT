@@ -56,7 +56,7 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 			{
 				move.x = 0.0f;
 				move.z = 0.0f;
-				move.y /= 2.0f;
+				move.y = 0.0f;
 				/*if (m_footL->GetWorldMatrix().GetTranslation().y < m_footR->GetWorldMatrix().GetTranslation().y)
 				{
 					pos.y = m_footL->GetWorldMatrix().GetTranslation().y;
@@ -68,11 +68,37 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 			}
 			//else
 			{
+				if (!isR && m_footR->IsDown())
+				{
+					move.y += m_footR->GetMove().y;
+					//pos.y = m_footRIK->GetTarget().y;
+				}
+				else if (!isL && m_footL->IsDown())
+				{
+					move.y += m_footL->GetMove().y;
+					//pos.y = m_footLIK->GetTarget().y;
+				}
+				
 				//move.y = 0;
+
 				move *= -1;
+				if (isR && isL)
+				{
+					if (m_footLIK->GetTarget().y < m_footRIK->GetTarget().y)
+					{
+						move.y = m_footLIK->GetTarget().y - m_footLIK->GetOldTarget().y;
+					}
+					else
+					{
+						move.y = m_footRIK->GetTarget().y - m_footRIK->GetOldTarget().y;
+					}
+				}
 				auto rpos = m_characon.Execute(1, move);
 				rpos += m_ccOffset;
 				pos = rpos;
+
+				
+				
 				//pos += move;
 				m_momentum += move;
 			}
@@ -148,7 +174,7 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 }
 
 
-ue::Bone* Character::FindBone(wstr name, BoneKind bk, bool isSetingIK, int len,float radius)
+ue::Bone* Character::FindBone(wstr name, BoneKind bk, bool isSetingIK, int len,float radius,ue::IK** ik)
 {
 	ue::Bone* resbone = nullptr;
 	bool isGet = false;
@@ -160,6 +186,7 @@ ue::Bone* Character::FindBone(wstr name, BoneKind bk, bool isSetingIK, int len,f
 			break;
 		}
 	}
+	ue::IK* ikres = nullptr;
 	if (isSetingIK)
 	{
 		ue::Bone* endbone = resbone;
@@ -167,16 +194,22 @@ ue::Bone* Character::FindBone(wstr name, BoneKind bk, bool isSetingIK, int len,f
 		{
 			endbone = endbone->GetParent();
 		}
-		m_model->SetingIK(resbone, endbone, radius, DEBUG_SHOW_IK);
+		ikres = m_model->SetingIK(resbone, endbone, radius, DEBUG_SHOW_IK);
+		if (ik != nullptr)
+		{
+			*ik = ikres;
+		}
 	}
 
 	switch (bk)
 	{
 	case BK_FootL:
 		m_footL = resbone;
+		m_footLIK = ikres;
 		break;
 	case BK_FootR:
 		m_footR = resbone;
+		m_footRIK = ikres;
 		break;
 	case BK_HandL:
 		m_handL = resbone;
@@ -194,8 +227,9 @@ ue::Bone* Character::FindBone(wstr name, BoneKind bk, bool isSetingIK, int len,f
 	return resbone;
 }
 
-void Character::SetBone(ue::Bone* bone, BoneKind bk, bool isSetingIK, int len, float radius)
+void Character::SetBone(ue::Bone* bone, BoneKind bk, bool isSetingIK, int len, float radius, ue::IK** ik)
 {
+	ue::IK* ikres = nullptr;
 	if (isSetingIK)
 	{
 		ue::Bone* endbone = bone;
@@ -203,7 +237,11 @@ void Character::SetBone(ue::Bone* bone, BoneKind bk, bool isSetingIK, int len, f
 		{
 			endbone = endbone->GetParent();
 		}
-		m_model->SetingIK(bone, endbone, radius, DEBUG_SHOW_IK);
+		ikres = m_model->SetingIK(bone, endbone, radius, DEBUG_SHOW_IK);
+		if (ik != nullptr)
+		{
+			*ik = ikres;
+		}
 	}
 	switch (bk)
 	{
@@ -212,9 +250,11 @@ void Character::SetBone(ue::Bone* bone, BoneKind bk, bool isSetingIK, int len, f
 		break;
 	case BK_FootL:
 		m_footL = bone;
+		m_footLIK = ikres;
 		break;
 	case BK_FootR:
 		m_footR = bone;
+		m_footRIK = ikres;
 		break;
 	case BK_HandL:
 		m_handL = bone;

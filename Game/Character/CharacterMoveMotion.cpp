@@ -178,8 +178,8 @@ void CharacterMoveMotion::Walk2Idle(float delTime)
 		ChangePlayingAnim(m_idolNum);
 		m_moved = m_chara->GetDir() * m_oldSpeed;
 
-		m_chara->PlayAnim(m_idolNum, m_animLug_2idle);
-		//m_chara->PlayAnim(m_idolNum, 0, AM_None);
+		//m_chara->PlayAnim(m_idolNum, m_animLug_2idle);
+		m_chara->PlayAnim(m_idolNum, 1.f,AM_None);
 		m_isWalk = false;
 		//m_chara->SetAllIKRub(0.0f);
 		//m_chara->SetIKOffset(ue::CVector3::Zero());

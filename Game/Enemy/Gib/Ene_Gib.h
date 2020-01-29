@@ -21,4 +21,5 @@ public:
 private:
 	ue::AnimationClip m_animClip[GA_num];
 	ue::CharacterBoxCollider* m_cbc;
+
 };

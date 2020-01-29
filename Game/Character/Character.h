@@ -1,6 +1,7 @@
 #pragma once
 #include "CharacterConst.h"
 #include "CharacterJustFoot.h"
+
 /// <summary>
 /// モデルのインスタンスの所持、
 /// IKによる移動のサポート等をしているクラス
@@ -56,7 +57,7 @@ public:
 	/// <param name="len">IKする範囲</param>
 	/// <param name="radius">IKするときのコライダーの大きさ</param>
 	/// <returns></returns>
-	ue::Bone* FindBone(wstr name,BoneKind bk=BK_None,bool isSetingIK=false,int len=0,float radius=10.f);
+	ue::Bone* FindBone(wstr name,BoneKind bk=BK_None,bool isSetingIK=false,int len=0,float radius=10.f,ue::IK** ik=nullptr);
 	/// <summary>
 	/// ボーンをセットする。
 	/// </summary>
@@ -65,7 +66,7 @@ public:
 	/// <param name="isSetingIK">IKをする？</param>
 	/// <param name="len">IKする範囲</param>
 	/// <param name="radius">IKするときのコライダーの大きさ</param>
-	void SetBone(ue::Bone* bone, BoneKind bk = BK_None,bool isSetingIK = false, int len = 0, float radius = 10.f);
+	void SetBone(ue::Bone* bone, BoneKind bk = BK_None, bool isSetingIK = false, int len = 0, float radius = 10.f, ue::IK** ik = nullptr);
 
 	/// <summary>
 	/// 更新。
@@ -261,6 +262,10 @@ private:
 	ue::Bone* m_handR = nullptr;				//右手のボーン
 	ue::Bone* m_waistL = nullptr;				//左腰のボーン
 	ue::Bone* m_waistR = nullptr;				//右腰のボーン
+
+	ue::IK* m_footLIK = nullptr;				//左足IK
+	ue::IK* m_footRIK = nullptr;				//右足IK
+
 	std::vector<ue::Bone*> m_boneList;			//ボーンのリスト
 	ue::CharacterController m_characon;			//キャラコン
 	ue::CVector3 m_ccOffset;					//キャラコンのオフセット(基本的にy軸だけ)
