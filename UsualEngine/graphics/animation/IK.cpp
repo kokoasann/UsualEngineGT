@@ -369,6 +369,7 @@ namespace UsualEngine
 		//}
 		//m_timer += gameTime()->GetDeltaTime();
 
+		m_oldTarget = m_target;
 		CVector3 oldpos;	//移動前のポジション
 		if (m_isFirst)
 		{
@@ -381,17 +382,20 @@ namespace UsualEngine
 			oldpos = m_target;
 		}
 
+		m_animMove = orgpos - m_oldNewTarget;
 		//重力処理。
 		float time = gameTime()->GetDeltaTime();
-		if ((orgpos.y - m_oldNewTarget.y) <= m_radius*0.05f)	//下に移動している
+		if ((m_animMove.y) <= m_radius*0.05f)	//下に移動している
 		{
 			m_gravitPow += m_gravity * time;
+			m_effectorBone->SetIsDown(true);
 		}
 		else	//上に移動している
 		{
 			if(m_gravitPow>0.f)
 				m_gravitPow -= 2.f*m_gravitPow * time;
 			m_gravitPow = 0.f;
+			m_effectorBone->SetIsDown(false);
 		}
 		newpos.y -= m_gravitPow;		//プラスグラビティ(マイナス)
 
