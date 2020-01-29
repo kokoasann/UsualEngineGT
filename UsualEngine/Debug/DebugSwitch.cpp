@@ -8,6 +8,9 @@ namespace UsualEngine
 
 	void DebugSwitch::Update()
 	{
+		if (usualEngine()->GetHwnd() != GetForegroundWindow())
+			return;
+
 		for (auto s : m_checkButton)
 		{
 			if (GetAsyncKeyState(s->key1) & 0x8000 && (s->key2 == 0 || (GetAsyncKeyState(s->key2) & 0x8000)))

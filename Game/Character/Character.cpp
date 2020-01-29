@@ -93,6 +93,7 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 						move.y = m_footRIK->GetTarget().y - m_footRIK->GetOldTarget().y;
 					}
 				}
+				
 				auto rpos = m_characon.Execute(1, move);
 				rpos += m_ccOffset;
 				pos = rpos;

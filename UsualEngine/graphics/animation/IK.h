@@ -166,13 +166,13 @@ namespace UsualEngine
 		{
 			return m_isActive;
 		}
-		void SetNextTarget(CVector3 tar)
+		void SetNextTarget(const CVector3& tar)
 		{
 			m_nextTarget = tar;
 			m_isSetNextTarget = true;
 		}
 
-		void SetGravity(float grav)
+		void SetGravity(const float grav)
 		{
 			m_gravity = grav;
 		}

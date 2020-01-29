@@ -392,8 +392,6 @@ namespace UsualEngine
 		}
 		else	//ã‚ÉˆÚ“®‚µ‚Ä‚¢‚é
 		{
-			if(m_gravitPow>0.f)
-				m_gravitPow -= 2.f*m_gravitPow * time;
 			m_gravitPow = 0.f;
 			m_effectorBone->SetIsDown(false);
 		}
