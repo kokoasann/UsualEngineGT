@@ -266,6 +266,9 @@
     <ClCompile Include="graphics\Font\Font.cpp">
       <Filter>Graphics\2D\Font</Filter>
     </ClCompile>
+    <ClCompile Include="Debug\DebugLog.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="character\CharacterController.h">
@@ -470,6 +473,9 @@
     </ClInclude>
     <ClInclude Include="graphics\Font\Font.h">
       <Filter>Graphics\2D\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug\DebugLog.h">
+      <Filter>Debug</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

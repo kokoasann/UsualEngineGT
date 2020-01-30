@@ -44,7 +44,7 @@ namespace UsualEngine
 			break;
 		}
 
-		m_spriteFont->DrawString(m_spriteBatch, text, position.vec, color, rot, DirectX::XMFLOAT2(pivot.x,pivot.y), sca, DirectX::SpriteEffects_None);
+		m_spriteFont->DrawString(m_spriteBatch, text, position.vec, color, rot, DirectX::XMFLOAT2(piv.x,piv.y), sca, DirectX::SpriteEffects_None);
 	}
 	void Font::DrawFrame(const wchar_t* text, const CVector2& pos, const CVector4& color, float rot, float sca, const CVector2& pivot)
 	{

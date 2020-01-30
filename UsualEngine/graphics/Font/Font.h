@@ -108,6 +108,6 @@ namespace UsualEngine
 		CMatrix m_scaleMat = CMatrix::Identity();			//
 		FontDrawType m_fontDrawType = FT_None;				//つける飾り
 		CVector4 m_fontEffectColor = CVector4::CVector4(0.0f, 0.0f, 0.0f, 1.0f);	//飾りの色。
-		float m_fontEffectOffset = 5.0f;					//飾りのオフセット
+		float m_fontEffectOffset = 1.0f;					//飾りのオフセット
 	};
 }

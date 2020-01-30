@@ -39,6 +39,7 @@ namespace UsualEngine
 		{
 			Physics().DebugDraw();
 		}
+		Debug::Instance().DrawLog();
 
 		for (auto& ngd : m_newGOBuffer)
 		{

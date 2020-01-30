@@ -162,6 +162,7 @@
     <ClCompile Include="character\CharacterBoxCollider.cpp" />
     <ClCompile Include="character\CharacterController.cpp" />
     <ClCompile Include="Debug\Debug.cpp" />
+    <ClCompile Include="Debug\DebugLog.cpp" />
     <ClCompile Include="Debug\DebugSwitch.cpp" />
     <ClCompile Include="GameObject\GameObject.cpp" />
     <ClCompile Include="GameObject\GameObjectManager.cpp" />
@@ -232,6 +233,7 @@
     <ClInclude Include="character\CharacterBoxCollider.h" />
     <ClInclude Include="character\CharacterController.h" />
     <ClInclude Include="Debug\Debug.h" />
+    <ClInclude Include="Debug\DebugLog.h" />
     <ClInclude Include="Debug\DebugSwitch.h" />
     <ClInclude Include="GameObject\GameObject.h" />
     <ClInclude Include="GameObject\GameObjectManager.h" />

@@ -1,4 +1,5 @@
 #pragma once
+#include "DebugLog.h"
 
 namespace UsualEngine
 {
@@ -27,7 +28,14 @@ namespace UsualEngine
 			gdShadow,
 		};
 		GBufferDraw gbufferDraw = gdDefault;
+
+		void DebugPrint(const wchar_t* str);
+		void DrawLog();
 	private:
-		
+		DebugLog m_log;
 	};
+	static void DebugPrint(const wchar_t* str)
+	{
+		Debug::Instance().DebugPrint(str);
+	}
 }
