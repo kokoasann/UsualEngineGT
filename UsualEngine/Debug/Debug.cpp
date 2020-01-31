@@ -25,26 +25,31 @@ namespace UsualEngine
 		on = [&]()
 		{
 			gbufferDraw = gdDefault;
+			DebugPrint(L"デフォルト");
 		};
 		DebugSwitchAddRadioBoxButton("GBufferDraw", DebugSwitchNewSwitch(VK_F2, 0, on,DebugSwitch::nullFunc));
 		on = [&]()
 		{
 			gbufferDraw = gdDiffuse;
+			DebugPrint(L"G-Buffer ディフューズ");
 		};
 		DebugSwitchAddRadioBoxButton("GBufferDraw", DebugSwitchNewSwitch(VK_F3, 0, on, DebugSwitch::nullFunc));
 		on = [&]()
 		{
 			gbufferDraw = gdNormal;
+			DebugPrint(L"G-Buffer 法線");
 		};
 		DebugSwitchAddRadioBoxButton("GBufferDraw", DebugSwitchNewSwitch(VK_F4, 0, on, DebugSwitch::nullFunc));
 		on = [&]()
 		{
 			gbufferDraw = gdDepth;
+			DebugPrint(L"G-Buffer 深度値");
 		};
 		DebugSwitchAddRadioBoxButton("GBufferDraw", DebugSwitchNewSwitch(VK_F5, 0, on, DebugSwitch::nullFunc));
 		on = [&]()
 		{
 			gbufferDraw = gdShadow;
+			DebugPrint(L"G-Buffer 影");
 		};
 		DebugSwitchAddRadioBoxButton("GBufferDraw", DebugSwitchNewSwitch(VK_F6, 0, on, DebugSwitch::nullFunc));
 #endif

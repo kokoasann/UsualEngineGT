@@ -38,6 +38,9 @@ namespace UsualEngine
 		{
 			if (GetAsyncKeyState(s->key1) & 0x8000 && (s->key2 == 0 || (GetAsyncKeyState(s->key2) & 0x8000)))
 			{
+				if (s->oldFrameIsPushed)
+					continue;
+				s->oldFrameIsPushed = true;
 				if (sw != nullptr && sw->key2 == 0 && s->key2 != 0)
 				{
 					sw = s;
@@ -46,6 +49,10 @@ namespace UsualEngine
 				}
 				sw = s;
 				s->isPushed = true;
+			}
+			else
+			{
+				s->oldFrameIsPushed = false;
 			}
 		}
 		if (sw != nullptr)
@@ -70,6 +77,7 @@ namespace UsualEngine
 				{
 					if (s->oldFrameIsPushed)
 						continue;
+					s->oldFrameIsPushed = true;
 					if (sw != nullptr && sw->key2 == 0 && s->key2 != 0)
 					{
 						sw = s;
@@ -78,6 +86,10 @@ namespace UsualEngine
 					}
 					sw = s;
 					s->isPushed = true;
+				}
+				else
+				{
+					s->oldFrameIsPushed = false;
 				}
 			}
 			if (sw != nullptr)
