@@ -120,6 +120,7 @@ Ene_Gib::Ene_Gib()
 		m_charaMotion.PlayIdol();
 	};
 	ue::DebugSwitchAddRadioBoxButton("gibMove", ue::DebugSwitchNewSwitch('B', 0, f));
+
 }
 
 Ene_Gib::~Ene_Gib()

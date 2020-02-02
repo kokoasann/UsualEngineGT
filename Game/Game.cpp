@@ -94,6 +94,9 @@ bool Game::Start()
 
 	light = ue::NewGO<ue::LightDirection>(0);
 	light->SetDir(ue::CVector3{ -0.3f,-1,-0.2f });
+	light = ue::NewGO<ue::LightDirection>(0);
+	light->SetDir(ue::CVector3(1.f, 0.0f, 0.f));
+	light->SetCol({ 0.3f,0.0f,0.f,1.0f });
 	//light->SetCol(ue::CVector3::One()* 5.f);
 
 	campos = { -9400,3120,0 };

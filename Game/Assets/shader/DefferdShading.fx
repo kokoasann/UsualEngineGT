@@ -33,24 +33,49 @@ float4 PSMain_Defferd(DefferdPSInput In):SV_TARGET0
     float3 normal = gNormalMap.Sample(Sampler,In.uv);
     float4 col = diffuse;
     float depth = gDepthMap.Sample(Sampler,In.uv);
+
+
+    float3 R = -camDir.xyz + 2 * dot(camDir.xyz, normal) * normal;
+    float rad = dot(DirLights[0].dir, R);
+    float sp = max(0.f, rad);
+    float4 spGradation = texture_1.Sample(Sampler,float2(lerp(1.f,0.f,sp),1.f));  //グラデーションマップ(明かり用)
     
-    float3 li = 0.f;
-    float dotshadow = 0.f;
-	for (int i = 0; i < DLcount; i++)
+    float3 li = float3(0.f,0.f,0.f);
+    float4 depthShadow = gShadowMap.Sample(Sampler,In.uv);
+    float shadow = 0.f;
+    float3 foundation = 0.f;
+    //最初のライトはデプスシャドウで使っているライトなので別でか処理する
+    {
+        float rad = dot(DirLights[0].dir * -1.f, normal);
+        float threshold = 0.174533f;                        //いずれ未来の自分が改善してくれているはず!
+		float k = step(threshold,rad);
+        //shadow = 1.0f-k;
+        //shadow += depthShadow.x*k;
+        float sha = 1.0f-k;
+        sha += depthShadow.x*k;
+
+        //li += DirLights[0].color.xyz*k;
+        float3 lig = DirLights[0].color.xyz*k;
+        foundation = lerp(float3(0.f,0.f,0.f),float3(0.45f, 0.4f, 0.6f),sha) + (lig+lig*spGradation.x)*(1.0f-sha);
+    }
+	for (int i = 1; i < DLcount; i++)
 	{
         float rad = dot(DirLights[i].dir * -1.f, normal);
         float threshold = 0.174533f;                        //いずれ未来の自分が改善してくれているはず!
 		float k = step(threshold,rad);
         
-
-		//li = float3(0.45f, 0.4f, 0.6f) * !k;//影が付く!
-        //li += float3(1.f,1.f,1.f)*k;
-        dotshadow = 1.0f-k;
+        //shadow += (1.0f-k)*(1.0f-shadow);
+        //li += DirLights[i].color.xyz*k;
+        float sha = (1.0f-k)*(1.0f-shadow);
+        float3 lig = DirLights[i].color.xyz*k;
+        foundation += lerp(float3(0.f,0.f,0.f),float3(0.45f, 0.4f, 0.6f),sha) + (lig+lig*spGradation.x)*(1.0f-sha);
     }
-    
-    float3 pos = gSpecularMap.Sample(Sampler,In.uv);
+    //foundation = lerp(float3(0.f,0.f,0.f),float3(0.45f, 0.4f, 0.6f),shadow);
+    //col.xyz *= foundation + (li + li * spGradation.x)*(1.0f-shadow);
+    col.xyz *= foundation;
 
     #if 0
+    float3 pos = gSpecularMap.Sample(Sampler,In.uv);
     float3 v = pos-eyepos;
     v=normalize(v);
 	float r = dot(v,normal);
@@ -60,35 +85,19 @@ float4 PSMain_Defferd(DefferdPSInput In):SV_TARGET0
 	float sp = max(0,dot(DirLights[0].dir,v));
     #endif
 
-    float3 R = -camDir.xyz + 2 * dot(camDir.xyz, normal) * normal;
-    float rad = dot(DirLights[0].dir, R);
-    float sp = max(0.f, rad);
-    float4 spGradation = texture_1.Sample(Sampler,float2(lerp(1.f,0.f,sp),1.f));  //グラデーションマップ(明かり用)
-    
+    //depthShadow.x = min(depthShadow.x+shadow,1.f);
+    ////depthShadow.x = texture_1.Sample(Sampler,float2(lerp(1.f,0.f,depthShadow.x),0.f)).x;  //グラデーションマップ(影用)
+    //li = lerp(float3(0.f,0.f,0.f),float3(0.45f, 0.4f, 0.6f),depthShadow.x);
 
-    float4 sha = gShadowMap.Sample(Sampler,In.uv);
+    //li += (DirLights[0].color.xyz + DirLights[0].color.xyz * spGradation.x)*(1.f-depthShadow.x);
     
-    
-    /*
-    float r = min(10,sha2.y);
-    r/=10;
-    float s =lerp(sha,sha2,r);*/
-    //s = lerp(0,1,sha);
-    sha.x = min(sha.x+dotshadow,1.f);
-    //sha.x = texture_1.Sample(Sampler,float2(lerp(1.f,0.f,sha.x),0.f)).x;  //グラデーションマップ(影用)
-    li = lerp(float3(0.f,0.f,0.f),float3(0.45f, 0.4f, 0.6f),sha.x);
-    //li.xyz *= step(sha.z,depth);
-    //col.xyz *= li;
-
-    li += (DirLights[0].color.xyz + DirLights[0].color.xyz * spGradation.x)*(1.f-sha.x);
-    col.xyz *= li;
 
     
     float4 usu = lerp(float4(0.8f, 0.88f, 1.f,1.f),float4(0.f,0.f,0.f,0.f),min(lerp(1,0,pow(depth,6000)),1));
     col.xyz *= 1.f-usu.w;
     col.xyz += usu;
     
-    //return float4(sha.x, sha.x, sha.x,1);
+    //return float4(depthShadow.x, depthShadow.x, depthShadow.x,1);
     return col;
 }
 

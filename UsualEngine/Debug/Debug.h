@@ -34,6 +34,10 @@ namespace UsualEngine
 	private:
 		DebugLog m_log;
 	};
+	/// <summary>
+	/// デバッグプリント
+	/// </summary>
+	/// <param name="str"></param>
 	static void DebugPrint(const wchar_t* str)
 	{
 		Debug::Instance().DebugPrint(str);

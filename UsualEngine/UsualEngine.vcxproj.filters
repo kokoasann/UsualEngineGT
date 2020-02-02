@@ -269,6 +269,9 @@
     <ClCompile Include="Debug\DebugLog.cpp">
       <Filter>Debug</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\LightPoint.cpp">
+      <Filter>Graphics\Light</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="character\CharacterController.h">
@@ -476,6 +479,9 @@
     </ClInclude>
     <ClInclude Include="Debug\DebugLog.h">
       <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\LightPoint.h">
+      <Filter>Graphics\Light</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

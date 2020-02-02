@@ -180,6 +180,7 @@
     <ClCompile Include="graphics\LightBase.cpp" />
     <ClCompile Include="graphics\LightDirection.cpp" />
     <ClCompile Include="graphics\LightManager.cpp" />
+    <ClCompile Include="graphics\LightPoint.cpp" />
     <ClCompile Include="graphics\LightStruct.cpp" />
     <ClCompile Include="graphics\PostEffect\Bloom.cpp" />
     <ClCompile Include="graphics\PostEffect\GaussianBlur.cpp" />
@@ -251,6 +252,7 @@
     <ClInclude Include="graphics\LightBase.h" />
     <ClInclude Include="graphics\LightDirection.h" />
     <ClInclude Include="graphics\LightManager.h" />
+    <ClInclude Include="graphics\LightPoint.h" />
     <ClInclude Include="graphics\LightStruct.h" />
     <ClInclude Include="graphics\PostEffect\Bloom.h" />
     <ClInclude Include="graphics\PostEffect\GaussianBlur.h" />

@@ -25,15 +25,20 @@ namespace UsualEngine
 			return;
 		m_font.Begin();
 		int count = 0;
-		Log logs[32] = { 0 };
-		for (auto p : m_printList)
+		Log* logs[32] = { 0 };
+		for (auto& p : m_printList)
 		{
-			logs[count++] = p;
+			logs[count++] = &p;
 		}
-		count = 0;
+
 		auto pos = m_originPos;
-		for (auto it = &logs[m_printList.size()-1]; count < m_printList.size(); it--, count++)
+		m_font.Draw(logs[m_printList.size()-1]->log,pos, m_fontColor, 0.f, m_firstFontSize, { 0.f,1.f });
+		pos.y -= m_firstFontSpace;
+		count = 2;
+		
+		for (int i = m_printList.size()-count; i >= 0; i--)
 		{
+			auto it = logs[i];
 			m_font.Draw(it->log, pos, m_fontColor, 0.f, m_fontSize, {0.f,1.f});
 			pos.y -= m_fontSpace;
 		}

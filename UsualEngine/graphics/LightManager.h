@@ -21,18 +21,13 @@ namespace UsualEngine
 		LightManager();
 		~LightManager();
 	public:
-		
-
-		//こいつのインスタンスをゲット！！
-		LightManager* Get()
-		{
-			static LightManager* ins = NULL;
-			if (ins == NULL)
-			{
-				ins = new LightManager();
-			}
-			return ins;
-		}
+		////こいつのインスタンスをゲット！！
+		//static LightManager* Get()
+		//{
+		//	static LightManager ins;
+		//	
+		//	return &ins;
+		//}
 
 		//初期化
 		void Init();
@@ -58,7 +53,21 @@ namespace UsualEngine
 		//描画終了
 		void EndRender();
 
-
+		/// <summary>
+		/// 0番目のディレクションライトを返す
+		/// </summary>
+		/// <returns></returns>
+		LightDirection* GetMainLightDirection()
+		{
+			if (mCDirLight.size() > 0)
+			{
+				return mCDirLight[0];
+			}
+			else
+			{
+				return nullptr;
+			}
+		}
 		//ライトのパラメータの構造体
 		struct LightParam
 		{

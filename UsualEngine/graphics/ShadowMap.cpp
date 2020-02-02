@@ -40,6 +40,11 @@ namespace UsualEngine
 	}
 	void ShadowMap::Update()
 	{
+		auto dirlight = usualEngine()->GetGraphicsEngine()->GetLightManager().GetMainLightDirection();
+		if (dirlight != nullptr)
+			m_lightDirection = dirlight->GetDir();
+		else
+			m_lightDirection = CVector3::Up();
 		Camera& MainCamera = usualEngine()->GetMainCamera();
 		//m_lightHeight = MainCamera.GetPosition().y + 500.f;
 		//シーンをレンダリング使用としているカメラを使って、ライトカメラの回転を求める。
