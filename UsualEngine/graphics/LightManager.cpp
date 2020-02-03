@@ -95,6 +95,15 @@ namespace UsualEngine
 			cunt++;
 		}
 		m_lightParam.DLCount = cunt;
+		cunt = 0;
+		for (auto L : m_cPointLight)
+		{
+			if (!L->IsActive())
+				continue;
+			m_sPntLights[cunt] = L->GetBody();
+			cunt++;
+		}
+		m_lightParam.PLCount = cunt;
 		m_lightParam.eyePos = usualEngine()->GetMainCamera().GetPosition();
 		m_lightParam.screen.x = 0;
 		m_lightParam.screen.y = 0;

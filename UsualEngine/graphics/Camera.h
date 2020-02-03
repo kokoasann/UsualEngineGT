@@ -171,7 +171,7 @@ namespace UsualEngine
 		CVector3 m_right = CVector3::Right();			// 右方向。
 		float m_viewAngle = CMath::DegToRad(60.0f);		//画角。
 		float m_aspect = 1.f;							//アス比
-		float m_far = 10000.0f;							//遠い平面までの距離。
+		float m_far = 1000.0f;							//遠い平面までの距離。
 		float m_near = 1.0f;							//近平面までの距離。
 
 		float m_width = 1280.0f;						//横

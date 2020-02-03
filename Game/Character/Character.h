@@ -270,7 +270,7 @@ private:
 	ue::CharacterController m_characon;			//キャラコン
 	ue::CVector3 m_ccOffset;					//キャラコンのオフセット(基本的にy軸だけ)
 	ActionMode m_actionMode = AM_Move;			//なんの動きをしているか
-	float m_gravity = -200.0f;					//重力。
+	float m_gravity = -20.0f;					//重力。
 	ue::CVector3 m_momentum = ue::CVector3::Zero();		//勢い(多分消す)
 	ue::CVector3 m_move = ue::CVector3::Zero();					//クラス外からアクセスするための移動ベクトル
 	ue::CQuaternion m_rotate = ue::CQuaternion::Identity();		//クラス外からアクセスするための回転クォータニオン

@@ -75,10 +75,10 @@ namespace UsualEngine
 		//ライトのパラメータの構造体
 		struct LightParam
 		{
+			CVector4 screen;						//スクリーンのサイズ
 			CVector3 eyePos = CVector3::Zero();		//メインカメラの位置
 			int DLCount = 0;						//ディレクションライトの数
 			int PLCount = 0;						//ポイントライトの数。
-			CVector4 screen;						//スクリーンのサイズ
 		};
 	private:
 		LightParam m_lightParam;						//ライトの情報

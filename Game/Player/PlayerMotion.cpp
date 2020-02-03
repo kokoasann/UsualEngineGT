@@ -12,15 +12,15 @@ void PlayerMotion::Init(Player* player, Character* chara, ue::Camera* cam, ue::A
 	m_anim = anim;
 	m_pad = pad;
 
-	m_footL = m_chara->FindBone(L"Bone_L.003", BK_FootL, true, 3, 10.f);
-	m_footR = m_chara->FindBone(L"Bone_R.003", BK_FootR, true, 3, 10.f);
+	m_footL = m_chara->FindBone(L"Bone_L.003", BK_FootL, true, 3, 1.f);
+	m_footR = m_chara->FindBone(L"Bone_R.003", BK_FootR, true, 3, 1.f);
 	m_noneMF = [&](auto& pos) {return;	};
 	m_noneRF = [&](auto& rote) {return; };
 
 	//m_chara->SetMoveFunc(m_noneMF);
 	//m_chara->SetRotateFunc(m_noneRF);
 	auto& anime = m_chara->GetAnimation();
-	float v = 50.f;
+	float v = 5.f;
 	anime.SetIKGravity(9.8f*v, m_footL);
 	anime.SetIKGravity(9.8f*v, m_footR);
 
@@ -28,7 +28,7 @@ void PlayerMotion::Init(Player* player, Character* chara, ue::Camera* cam, ue::A
 	m_charaMove.InitBone(m_footL, m_footR);
 
 	m_charaRotate.Init(m_chara,CharacterRotateMotion::RM_Lerp,15.f);
-	m_chara->Init_JustFoot(2.f, 40.f, 0.4f, 0.5f);
+	m_chara->Init_JustFoot(2.f, 4.f, 0.04f, 0.05f);
 }
 
 

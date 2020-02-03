@@ -104,10 +104,10 @@ StructuredBuffer<SPointLight> PntLights : register(t51);
 
 cbuffer LightCB : register(b1)
 {
-	float3 eyepos : packoffset(c0);			//視点
-	int DLcount : packoffset(c0.w);			//ディレクションライトの数
-	int PLcount : packoffset(c1.x);			//ポイントライトの数
-	float4 screenSize : packoffset(c1.yzw);		//スクリーンのサイズ
+	float4 screenSize : packoffset(c0);		//スクリーンのサイズ
+	float3 eyepos : packoffset(c1);			//視点
+	int DLcount : packoffset(c1.w);			//ディレクションライトの数
+	int PLcount : packoffset(c2.x);			//ポイントライトの数
 }
 
 

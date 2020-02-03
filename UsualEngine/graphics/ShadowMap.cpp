@@ -33,7 +33,7 @@ namespace UsualEngine
 		m_shadowCBEntity.depthoffset.y = 0.001f;
 		m_shadowCBEntity.depthoffset.z = 0.002f;
 
-		m_lightHeight = 5000.f;
+		m_lightHeight = 500.f;
 
 		m_lightDirection = { -0.3f,-1,-0.2f };
 		m_lightDirection.Normalize();
@@ -99,7 +99,7 @@ namespace UsualEngine
 		CVector3 cameraUp;
 		cameraUp.Cross(MainCamera.GetRight(), MainCamera.GetForward());
 
-		float shadowAriaTable[3] = { 0.5f,0.1f,2.5f };
+		float shadowAriaTable[3] = { 0.5f,1.0f,2.5f };
 		//float shadowAriaTable[3] = { 0.4f,0.8f,1.6f };
 		//float shadowAriaTable[3] = { 1,0.5f,0.25f };
 

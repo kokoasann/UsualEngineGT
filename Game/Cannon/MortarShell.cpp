@@ -40,7 +40,7 @@ void MortarShell::Init(ue::CVector3 pos, ue::CVector3 dir)
 	m_oldDir = dir;
 	m_model = ue::NewGO<ue::SkinModelRender>(0);
 	m_model->Init(L"Assets/model/MortarShell.cmo", 0, 0, ue::enFbxUpAxisY);
-	m_model->SetSca(ue::CVector3::One() * 20.f);
+	m_model->SetSca(ue::CVector3::One() * 2.f);
 	m_model->SetPos(pos);
 
 	auto nonY = dir;

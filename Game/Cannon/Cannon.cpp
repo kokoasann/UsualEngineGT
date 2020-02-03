@@ -16,7 +16,7 @@ void Cannon::OnDestroy()
 
 void Cannon::Init(const ue::SkinModel& cannonMesh, const ue::CVector3& pos, const ue::CQuaternion& rot)
 {
-	ue::CVector3 sca = ue::CVector3::One() * 20.f;
+	ue::CVector3 sca = ue::CVector3::One() * 2.f;
 	ue::CMatrix scam;
 	scam.MakeScaling(sca);
 

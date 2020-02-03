@@ -35,11 +35,11 @@ Player::Player()
 	ue::SkinModelRender* model = ue::NewGO<ue::SkinModelRender>(0);
 	model->Init(L"Assets/model/Player.cmo",m_anim,PA_num,ue::enFbxUpAxisY);
 	model->SetPos({ 0,100,0 });
-	model->SetSca(ue::CVector3::One()*20.f);
+	model->SetSca(ue::CVector3::One()*2.f);
 	model->SetIsShadowCaster(true);
 	model->SetIsShadowReciever(true);
 	m_camera.Init(this);
-	m_chara.Init(model, 20, 40, {0,-2.f,0},false);
+	m_chara.Init(model, 2, 4, {0,-0.2f,0},false);
 
 	m_motion.Init(this, &m_chara, m_camera.GetCamera(), m_anim,m_pad);
 
