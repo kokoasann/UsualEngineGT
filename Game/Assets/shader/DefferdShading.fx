@@ -3,10 +3,16 @@
 
 cbuffer DefferdCB:register(b0)
 {
-    float4 camDir;
+    float4x4 mViewProjInv;
+    float3 camDir;
 }
 
-
+float3 GetWorldPosition(float2 uv,float depth,float4x4 mVPI)
+{
+    float4 projPos = float4(uv*2.0f-float2(1.0f,1.0f),depth,1.0f);
+    float4 pos = mul(mVPI,projPos);
+    return pos.xyz / pos.w;
+}
 
 struct DefferdVSInput
 {
@@ -34,13 +40,15 @@ float4 PSMain_Defferd(DefferdPSInput In):SV_TARGET0
     float4 col = diffuse;
     float depth = gDepthMap.Sample(Sampler,In.uv);
 
+    float3 worldPos = GetWorldPosition(In.uv,depth,mViewProjInv);
+
 
     float3 R = -camDir.xyz + 2 * dot(camDir.xyz, normal) * normal;
     float rad = dot(DirLights[0].dir, R);
     float sp = max(0.f, rad);
     float4 spGradation = texture_1.Sample(Sampler,float2(lerp(1.f,0.f,sp),1.f));  //グラデーションマップ(明かり用)
     
-    float3 li = float3(0.f,0.f,0.f);
+    //float3 li = float3(0.f,0.f,0.f);
     float4 depthShadow = gShadowMap.Sample(Sampler,In.uv);
     float shadow = 0.f;
     float3 foundation = 0.f;
@@ -58,6 +66,7 @@ float4 PSMain_Defferd(DefferdPSInput In):SV_TARGET0
         float3 lig = DirLights[0].color.xyz*k;
         foundation = lerp(float3(0.f,0.f,0.f),float3(0.45f, 0.4f, 0.6f),sha) + (lig+lig*spGradation.x)*(1.0f-sha);
     }
+    //残りのディレクションライトの処理。
 	for (int i = 1; i < DLcount; i++)
 	{
         float rad = dot(DirLights[i].dir * -1.f, normal);
@@ -70,8 +79,21 @@ float4 PSMain_Defferd(DefferdPSInput In):SV_TARGET0
         float3 lig = DirLights[i].color.xyz*k;
         foundation += lerp(float3(0.f,0.f,0.f),float3(0.45f, 0.4f, 0.6f),sha) + (lig+lig*spGradation.x)*(1.0f-sha);
     }
-    //foundation = lerp(float3(0.f,0.f,0.f),float3(0.45f, 0.4f, 0.6f),shadow);
-    //col.xyz *= foundation + (li + li * spGradation.x)*(1.0f-shadow);
+    for(int i=0;i<PLcount;i++)
+    {
+        float3 lendir = worldPos - PntLights[i].pos;
+        float3 dir = normalize(lendir);
+        float rad = dot(dir * -1.f, normal);
+        float threshold = 0.174533f;                        //いずれ未来の自分が改善してくれているはず!
+		float k = step(threshold,rad);
+        
+        float len = length(lendir);
+
+        float sha = (1.0f-k)*(1.0f-shadow);
+        float3 lig = PntLights[i].color.xyz*k;
+        foundation += lerp(float3(0.f,0.f,0.f),float3(0.45f, 0.4f, 0.6f),sha) + (lig+lig*spGradation.x)*(1.0f-sha);
+    }
+
     col.xyz *= foundation;
 
     #if 0

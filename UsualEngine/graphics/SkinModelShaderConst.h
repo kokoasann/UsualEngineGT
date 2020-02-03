@@ -33,8 +33,9 @@ namespace UsualEngine
 		enSkinModelSRVReg_GShadowMap,		// G-Buffer用シャドウ
 		enSkinModelSRVReg_GTangentMap,		// G-Buffer用タンジェント
 
-		enSkinModelSRVReg_DirectionLight=100,		//ディレクションライト
-		enSkinModelSRVReg_BlendMap,			//テクスチャとテクスチャを混ぜるためのテクスチャ
+		enSkinModelSRVReg_DirectionLight=50,		//ディレクションライト
+		enSkinModelSRVReg_PointLight,		//ポイントライト
+		enSkinModelSRVReg_BlendMap=101,			//テクスチャとテクスチャを混ぜるためのテクスチャ
 		enSkinModelSRVReg_Textur_1,				//多目的テクスチャ(たぶん)
 		enSkinModelSRVReg_Textur_2,				//多目的テクスチャ(たぶん)
 		enSkinModelSRVReg_Textur_3,				//多目的テクスチャ(たぶん)

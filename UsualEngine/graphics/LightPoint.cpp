@@ -4,5 +4,7 @@
 
 namespace UsualEngine
 {
-
+	void LightPoint::Update()
+	{
+	}
 }

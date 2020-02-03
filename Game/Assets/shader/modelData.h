@@ -92,13 +92,22 @@ struct SDirectionLight
 	float4 color;		//色
 };
 
-StructuredBuffer<SDirectionLight> DirLights : register(t100);
+StructuredBuffer<SDirectionLight> DirLights : register(t50);
+
+struct SPointLight
+{
+	float3 pos;
+	float4 color;
+};
+
+StructuredBuffer<SPointLight> PntLights : register(t51);
 
 cbuffer LightCB : register(b1)
 {
 	float3 eyepos : packoffset(c0);			//視点
 	int DLcount : packoffset(c0.w);			//ディレクションライトの数
-	float4 screenSize : packoffset(c1);		//スクリーンのサイズ
+	int PLcount : packoffset(c1.x);			//ポイントライトの数
+	float4 screenSize : packoffset(c1.yzw);		//スクリーンのサイズ
 }
 
 

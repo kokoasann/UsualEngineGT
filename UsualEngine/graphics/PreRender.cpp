@@ -19,7 +19,9 @@ namespace UsualEngine
 		auto& cam = usualEngine()->GetMainCamera();
 		auto dir = cam.GetTarget() - cam.GetPosition();
 		dir.Normalize();
-		m_cbData.camDir = { dir.x, dir.y ,dir.z, 1.0f };
+		m_cbData.camDir = dir;
+		m_cbData.mViewProj.Mul(cam.GetViewMatrix(), cam.GetProjectionMatrix());
+		m_cbData.mViewProj.Inverse(m_cbData.mViewProj);
 		auto dc = usualEngine()->GetGraphicsEngine()->GetD3DDeviceContext();
 		dc->UpdateSubresource(m_constBuffer.GetBody(), 0, 0, &m_cbData, 0, 0);
 		dc->PSSetConstantBuffers(0, 1, &m_constBuffer.GetBody());

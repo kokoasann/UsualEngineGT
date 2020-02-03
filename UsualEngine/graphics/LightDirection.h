@@ -19,35 +19,35 @@ namespace UsualEngine
 		//本体をゲット
 		SDirectionLight& GetBody()
 		{
-			return mLight;
+			return m_light;
 		}
 
 		//光の指す方をセットする
 		void SetDir(CVector3 dir)
 		{
-			mLight.dir = dir;
+			m_light.dir = dir;
 		}
 
 		//輝きの導く方をゲットする
 		CVector3 GetDir()
 		{
-			return mLight.dir;
+			return m_light.dir;
 		}
 
 
 		//光の色をセットする
 		void SetCol(CVector4 col)
 		{
-			mLight.color = col;
+			m_light.color = col;
 		}
 
 		//光の色をゲットする
 		CVector4 GetCol()
 		{
-			return mLight.color;
+			return m_light.color;
 		}
 
 	private:
-		SDirectionLight mLight;		//DirectionLightの構造体
+		SDirectionLight m_light;		//DirectionLightの構造体
 	};
 }

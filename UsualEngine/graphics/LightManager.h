@@ -8,8 +8,10 @@
 namespace UsualEngine
 {
 #define MAX_DIRLIGHT 8
+#define MAX_PNTLIGHT 32
 	class LightBase;
 	class LightDirection;
+	class LightPoint;
 
 	/*
 	ライトを管理するやつ
@@ -32,7 +34,9 @@ namespace UsualEngine
 		//初期化
 		void Init();
 
-		void InitDirectionStructuredBuffet();
+		void InitDirectionStructuredBuffer();
+
+		void InitPointStructuredBuffer();
 
 		/*
 		ライト追加
@@ -59,9 +63,9 @@ namespace UsualEngine
 		/// <returns></returns>
 		LightDirection* GetMainLightDirection()
 		{
-			if (mCDirLight.size() > 0)
+			if (m_cDirLight.size() > 0)
 			{
-				return mCDirLight[0];
+				return m_cDirLight[0];
 			}
 			else
 			{
@@ -73,13 +77,17 @@ namespace UsualEngine
 		{
 			CVector3 eyePos = CVector3::Zero();		//メインカメラの位置
 			int DLCount = 0;						//ディレクションライトの数
+			int PLCount = 0;						//ポイントライトの数。
 			CVector4 screen;						//スクリーンのサイズ
 		};
 	private:
-		LightParam mLightParam;						//ライトの情報
-		ConstantBuffer mLightParamCB;				//ライトパラメータの定数バッファ
-		std::vector<LightDirection*> mCDirLight;	//ディレクションライトのリスト
-		SDirectionLight mSDirLights[MAX_DIRLIGHT];	//ディレクションライト構造体のリスト
-		StructuredBuffer mDirLightSB;				//ディレクションライトのStructuredBuffer
+		LightParam m_lightParam;						//ライトの情報
+		ConstantBuffer m_lightParamCB;				//ライトパラメータの定数バッファ
+		std::vector<LightDirection*> m_cDirLight;	//ディレクションライトのリスト
+		SDirectionLight m_sDirLights[MAX_DIRLIGHT];	//ディレクションライト構造体のリスト
+		StructuredBuffer m_dirLightSB;				//ディレクションライトのStructuredBuffer
+		std::vector<LightPoint*> m_cPointLight;
+		SPointLight m_sPntLights[MAX_PNTLIGHT];
+		StructuredBuffer m_pntLightSB;
 	};
 }

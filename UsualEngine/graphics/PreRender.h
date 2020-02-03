@@ -23,7 +23,8 @@ namespace UsualEngine
 	private:
 		struct ConstantBufferData
 		{
-			CVector4 camDir = CVector4::Zero();
+			CMatrix mViewProj = CMatrix::Identity();
+			CVector3 camDir = CVector3::Zero();
 		};
 		GBuffer m_gBuffer;
 		SoftShadow m_softShadow;
