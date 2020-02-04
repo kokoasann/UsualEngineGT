@@ -92,6 +92,7 @@ static const int RTV_MAX = 8;
 #include "graphics/SpriteRender.h"
 #include "graphics/LightBase.h"
 #include "graphics/LightDirection.h"
+#include "graphics/LightPoint.h"
 
 #include "character/CharacterController.h"
 
