@@ -36,6 +36,10 @@ bool Game::Start()
 	rbp->Create(info);
 	ue::Physics().AddRigidBody(*rbp);*/
 
+	auto BG = ue::NewGO < ue::SkinModelRender>(0);
+	BG->Init(L"Assets/model/BackGroundTest.cmo");
+	BG->SetSca(ue::CVector3::One() * 50);
+
 	cam = &ue::usualEngine()->GetMainCamera();
 
 	ground = ue::NewGO<ue::SMR4Ground>(0);
@@ -43,9 +47,9 @@ bool Game::Start()
 	ground->SetIsShadowCaster(true);
 	ground->SetIsShadowReciever(true);
 	//ground->SetSca(ue::CVector3{30, 0.1f, 10});
-	ground->SetSca(ue::CVector3{30, 30.f, 10});
+	ground->SetSca(ue::CVector3{30, 30.f, 10}/10);
 	//ground->SetPos({ 0,-100,0 });
-	ground->SetPos({ 0,-100*300,0 });
+	ground->SetPos(ue::CVector3{ 0,-100*300,0 }/10);
 	rot.SetRotationDeg(ue::CVector3::AxisZ(), 90);
 	ground->SetBlendMap(L"Assets/sprite/map.dds");
 	ground->SetTexture(0, L"Assets/sprite/kusa.dds");
@@ -60,8 +64,8 @@ bool Game::Start()
 	ground->InitG(L"Assets/model/dun.cmo", 0, 0, ue::enFbxUpAxisZ);
 	ground->SetIsShadowCaster(true);
 	ground->SetIsShadowReciever(true);
-	ground->SetSca(ue::CVector3{ 30, 1, 50 });
-	ground->SetPos({ 0,-900,400 });
+	ground->SetSca(ue::CVector3{ 30, 1, 50 }/10);
+	ground->SetPos(ue::CVector3{ 0,-900,400 }/10);
 	ue::CQuaternion rot;
 	rot.SetRotationDeg(ue::CVector3::AxisX(), -20);
 	ground->SetRot(rot);
@@ -73,36 +77,41 @@ bool Game::Start()
 
 	ground = ue::NewGO<ue::SMR4Ground>(0);
 	ground->InitG(L"Assets/model/octagon.cmo", 0, 0, ue::enFbxUpAxisZ);
-	ground->SetSca(ue::CVector3{ 7, 9.2f, 7 });
-	ground->SetPos({0,0,-20000 });
+	ground->SetSca(ue::CVector3{ 7, 9.2f, 7 }/10);
+	ground->SetPos(ue::CVector3{0,0,-20000 }/10);
 	ground->SetIsShadowCaster(true);
 	ground->SetIsShadowReciever(true);
 
 	ground = ue::NewGO<ue::SMR4Ground>(0);
 	ground->InitG(L"Assets/model/octagon.cmo", 0, 0, ue::enFbxUpAxisZ);
-	ground->SetSca(ue::CVector3{ 1.5, 2.2f, 1.5 });
-	ground->SetPos({ -1500,0,-10000 });
+	ground->SetSca(ue::CVector3{ 1.5, 2.2f, 1.5 }/10);
+	ground->SetPos(ue::CVector3{ -1500,0,-10000 }/10);
 	ground->SetIsShadowCaster(true);
 	ground->SetIsShadowReciever(true);
 
 	ground = ue::NewGO<ue::SMR4Ground>(0);
 	ground->InitG(L"Assets/model/octagon.cmo", 0, 0, ue::enFbxUpAxisZ);
-	ground->SetSca(ue::CVector3{ 0.4, 1.2f, 0.4 });
-	ground->SetPos({ 700,0,-3000 });
+	ground->SetSca(ue::CVector3{ 0.4, 1.2f, 0.4 }/10);
+	ground->SetPos(ue::CVector3{ 700,0,-3000 }/10);
 	ground->SetIsShadowCaster(true);
 	ground->SetIsShadowReciever(true);
 
 	light = ue::NewGO<ue::LightDirection>(0);
 	light->SetDir(ue::CVector3{ -0.3f,-1,-0.2f });
-	light = ue::NewGO<ue::LightDirection>(0);
+	light->SetCol(ue::CVector3::One()/ 5.f);
+	/*light = ue::NewGO<ue::LightDirection>(0);
 	light->SetDir(ue::CVector3(1.f, 0.0f, 0.f));
-	light->SetCol({ 0.3f,0.0f,0.f,1.0f });
-	//light->SetCol(ue::CVector3::One()* 5.f);
+	light->SetCol({ 0.3f,0.0f,0.f,1.0f });*/
+	
 
-	campos = { -9400,3120,0 };
+	auto plig = ue::NewGO < ue::LightPoint>(0);
+	plig->SetPos({ 0,1,-100 });
+	plig->SetCol(ue::CVector3{ 0.2,0.002,0.2}*500);
+
+	campos = { -940,312,0 };
 	//campos = { 0,3000,2000 };
 	cam->SetPosition(campos);
-	cam->SetTarget({ 0,20,0 });
+	cam->SetTarget({ 0,2,0 });
 	cam->Update();
 	
 	std::function<void()> f = [&]()

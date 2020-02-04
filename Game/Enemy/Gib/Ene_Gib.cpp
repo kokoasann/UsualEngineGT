@@ -16,12 +16,12 @@ Ene_Gib::Ene_Gib()
 	model->SetIsShadowReciever(true);
 	model->SetIsShadowCaster(true);
 	//model->Init(L"Assets/model/gib.bone.cmo", 0,0, ue::enFbxUpAxisY);
-	model->SetSca({ 100.f,100.f, 100.f });
+	model->SetSca({ 10.f,10.f, 10.f });
 	
-	m_chara.Init(model, 20, 50, {0,-30,0},false);
+	m_chara.Init(model, 2, 5, {0,-3,0},false);
 
-	auto footR = m_chara.FindBone(L"IK_Bone.007_R.003", BK_FootR, true, 3, 60);	//‘«
-	auto footL = m_chara.FindBone(L"IK_Bone.007_L.003", BK_FootL, true, 3, 60);
+	auto footR = m_chara.FindBone(L"IK_Bone.007_R.003", BK_FootR, true, 3, 6);	//‘«
+	auto footL = m_chara.FindBone(L"IK_Bone.007_L.003", BK_FootL, true, 3, 6);
 	//m_chara.SetBone(footR->GetChildren()[0], BK_None, true, 2, 10);					//‘«æ
 	//m_chara.SetBone(footL->GetChildren()[0], BK_None, true, 2, 10);
 	//m_chara.SetBone(footR, BK_FootR, true, 3, 60);
@@ -31,7 +31,7 @@ Ene_Gib::Ene_Gib()
 	//m_chara.FindBone(L"Bone.007_R.004", Character::BK_None, true, 2, 10);
 	//m_chara.FindBone(L"Bone.007_L.004", Character::BK_None, true, 2, 10);
 	ue::Animation& anim = m_chara.GetAnimation();
-	float v = 25.5f;
+	float v = 2.55f;
 	anim.SetIKGravity(9.8f*v, footR);
 	anim.SetIKGravity(9.8f*v, footL);
 	anim.SetIKGravity(9.8f * v, footR->GetChildren()[0]);
@@ -43,7 +43,7 @@ Ene_Gib::Ene_Gib()
 
 	m_chara.SetIKRub(0, footR->GetChildren()[0]);
 	m_chara.SetIKRub(0, footL->GetChildren()[0]);
-	m_chara.Init_JustFoot(2.f, 500.f, 700.f, 900.f);
+	m_chara.Init_JustFoot(2.f, 50.f, 70.f, 90.f);
 
 	m_charaMotion.Init(&m_chara, m_animClip);
 	m_charaMotion.InitMove(footL, footR);
@@ -55,7 +55,7 @@ Ene_Gib::Ene_Gib()
 	//m_charaRotate.Init(&m_chara, CharacterRotateMotion::RM_UseIK, 0);
 
 	m_cbc = ue::NewGO<ue::CharacterBoxCollider>(0);
-	m_cbc->Init(L"Assets/model/gib/gib.ubc", &model->GetSkinModel().GetSkeleton(), 100.f, [&](const char* tag)
+	m_cbc->Init(L"Assets/model/gib/gib.ubc", &model->GetSkinModel().GetSkeleton(), 10.f, [&](const char* tag)
 	{
 		int ind = ue::enCollisionAttr_NonHitIK|CUI_Monster;
 		if (strcmp("head", tag)==0)

@@ -137,6 +137,9 @@
     <Filter Include="Assets\Sprite\Gradation">
       <UniqueIdentifier>{44530d23-79d1-4abe-b997-919b74367bec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Model\BackGroundTest">
+      <UniqueIdentifier>{1ac0196a-9214-4475-a4ae-54dac0402372}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\model.fx">
@@ -211,6 +214,9 @@
     </MeshContentTask>
     <MeshContentTask Include="Assets\model\Cannon\MortarShell.fbx">
       <Filter>Assets\Model\Cannon</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\BackGroundTest\BackGroundTest.fbx">
+      <Filter>Assets\Model\BackGroundTest</Filter>
     </MeshContentTask>
   </ItemGroup>
 </Project>

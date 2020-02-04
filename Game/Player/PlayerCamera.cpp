@@ -6,13 +6,13 @@
 PlayerCamera::PlayerCamera()
 {
 	m_camera = &ue::usualEngine()->GetMainCamera();
-	m_p2cLen = 840.f;
-	m_c2tLen = 60.f;
+	m_p2cLen = 84.f;
+	m_c2tLen = 6.f;
 	m_p2c = { 0.f,0,-15 };
 	m_p2c.Normalize();
 	m_c2t = { 0.f,0,7 };
 	m_c2t.Normalize();
-	m_offsetY = 200;
+	m_offsetY = 20;
 }
 
 void PlayerCamera::Release()

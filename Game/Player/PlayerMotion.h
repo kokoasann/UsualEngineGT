@@ -92,7 +92,7 @@ private:
 	EJustFoot m_startJustFoot = JF_footL;
 	bool m_isStartJustFoot = false;
 
-	float m_walkSpeed = 150.f;
-	float m_walkFastSpeed = 500.f;
-	float m_dushSpeed = 800.f;
+	float m_walkSpeed = 15.f;
+	float m_walkFastSpeed = 50.f;
+	float m_dushSpeed = 80.f;
 };
