@@ -556,7 +556,7 @@ PSOutput PSMain_GroundBlendThree(PSInputGround In)
 	alb1 *= blendThreeColor.x;
 	alb2 *= blendThreeColor.y;
 	alb3 *= blendThreeColor.z;
-	alb.xyz += (alb1.xyz + alb2.xyz);
+	alb.xyz += (alb1.xyz + alb2.xyz + alb3.xyz);
 
 	//スペキュラーマップのサンプリング
 	float specul1 = specularMap_1.Sample(Sampler,uvs).x*groundUseSpes.y;

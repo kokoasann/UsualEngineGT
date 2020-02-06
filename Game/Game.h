@@ -41,6 +41,7 @@ private:
 
 	ue::PhysicsStaticObject pso;
 	ue::PhysicsStaticObject pso2;
+	ue::PhysicsStaticObject wpso[9];
 
 	ue::LightDirection* light = 0;
 

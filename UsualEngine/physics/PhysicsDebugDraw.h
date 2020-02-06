@@ -44,7 +44,7 @@ namespace UsualEngine
 		Primitive m_primi;
 		Shader m_vs;
 		Shader m_ps;
-		static const unsigned int MAX_VERTEX = 100000;
+		static const unsigned int MAX_VERTEX = 500000;
 		std::array<CVector4, MAX_VERTEX> m_vertexBuffer;
 		int m_numLine = 0;
 

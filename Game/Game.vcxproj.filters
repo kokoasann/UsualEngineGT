@@ -140,6 +140,12 @@
     <Filter Include="Assets\Model\BackGroundTest">
       <UniqueIdentifier>{1ac0196a-9214-4475-a4ae-54dac0402372}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\world">
+      <UniqueIdentifier>{13c4fcd5-e29e-4e5b-aa14-417133af36fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\world\pre">
+      <UniqueIdentifier>{e7e097d6-ab09-4e33-8c92-6226f36aeebf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\model.fx">
@@ -189,6 +195,15 @@
     <ImageContentTask Include="Assets\model\block\kusa_spe.png">
       <Filter>Assets\Model\StagePreset\texture</Filter>
     </ImageContentTask>
+    <ImageContentTask Include="Assets\model\block\iwa_spe.png">
+      <Filter>Assets\Model\StagePreset\texture</Filter>
+    </ImageContentTask>
+    <ImageContentTask Include="Assets\model\block\iwa.png">
+      <Filter>Assets\Model\StagePreset\texture</Filter>
+    </ImageContentTask>
+    <ImageContentTask Include="Assets\model\world\pre\worldBlend.png">
+      <Filter>Assets\world\pre</Filter>
+    </ImageContentTask>
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Assets\model\block\dun.fbx">
@@ -223,6 +238,33 @@
     </MeshContentTask>
     <MeshContentTask Include="Assets\model\BackGroundTest\BackGroundTest.fbx">
       <Filter>Assets\Model\BackGroundTest</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\world\pre\map3C.fbx">
+      <Filter>Assets\world\pre</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\world\pre\map1A.fbx">
+      <Filter>Assets\world\pre</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\world\pre\map1B.fbx">
+      <Filter>Assets\world\pre</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\world\pre\map1C.fbx">
+      <Filter>Assets\world\pre</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\world\pre\map2A.fbx">
+      <Filter>Assets\world\pre</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\world\pre\map2B.fbx">
+      <Filter>Assets\world\pre</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\world\pre\map2C.fbx">
+      <Filter>Assets\world\pre</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\world\pre\map3A.fbx">
+      <Filter>Assets\world\pre</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\world\pre\map3B.fbx">
+      <Filter>Assets\world\pre</Filter>
     </MeshContentTask>
   </ItemGroup>
 </Project>
