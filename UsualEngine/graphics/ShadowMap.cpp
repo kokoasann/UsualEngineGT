@@ -29,9 +29,9 @@ namespace UsualEngine
 		}
 		m_shadowCB.Create(&m_shadowCBEntity, sizeof(m_shadowCBEntity));
 		
-		m_shadowCBEntity.depthoffset.x = 0.0003f;
-		m_shadowCBEntity.depthoffset.y = 0.001f;
-		m_shadowCBEntity.depthoffset.z = 0.002f;
+		m_shadowCBEntity.depthoffset.x = 0.003f;
+		m_shadowCBEntity.depthoffset.y = 0.05f;
+		m_shadowCBEntity.depthoffset.z = 0.1f;
 
 		m_lightHeight = 500.f;
 

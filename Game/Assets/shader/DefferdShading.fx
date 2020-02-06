@@ -39,6 +39,7 @@ float4 PSMain_Defferd(DefferdPSInput In):SV_TARGET0
     float3 normal = gNormalMap.Sample(Sampler,In.uv);
     float4 col = diffuse;
     float depth = gDepthMap.Sample(Sampler,In.uv);
+    float specular = gSpecularMap.Sample(Sampler,In.uv);
 
     float3 worldPos = GetWorldPosition(In.uv,depth,mViewProjInv);
 
@@ -63,7 +64,8 @@ float4 PSMain_Defferd(DefferdPSInput In):SV_TARGET0
         float3 lig = DirLights[0].color.xyz*k;
 
         float sp = max(0.f,dot(DirLights[0].dir, R));
-        float4 spGradation = texture_1.Sample(Sampler,float2(lerp(1.f,0.f,sp),1.f));  //グラデーションマップ(明かり用)
+        sp *= specular;
+        float4 spGradation = texture_1.Sample(Sampler,float2(lerp(1.f,0.f,sp),0.f));  //グラデーションマップ(明かり用)
 
         foundation = (lig+lig*spGradation.x)*(1.0f-sha);
         shadow = sha;
@@ -81,7 +83,8 @@ float4 PSMain_Defferd(DefferdPSInput In):SV_TARGET0
         float3 lig = DirLights[i].color.xyz*k;
 
         float sp = max(0.f,dot(DirLights[i].dir, R));
-        float4 spGradation = texture_1.Sample(Sampler,float2(lerp(1.f,0.f,sp),1.f));  //グラデーションマップ(明かり用)
+        sp *= specular;
+        float4 spGradation = texture_1.Sample(Sampler,float2(lerp(1.f,0.f,sp),0.f));  //グラデーションマップ(明かり用)
 
         foundation += (lig+lig*spGradation.x)*(1.0f-sha);
         shadow += -1.0f * (shadow * (1.0f-sha));
@@ -97,28 +100,42 @@ float4 PSMain_Defferd(DefferdPSInput In):SV_TARGET0
 		float k = step(threshold,rad);
         
         float len = length(lendir);
-        float ligPow = max(0.0f,rad) / (1.0f + len);
+        float ligPow = max(0.0f,rad) / (1.0f + len);    // V / 1+len
+        ligPow *= 10.f;
+        ligPow = max(0,min(1.f,ligPow));
+        ligPow *= specular;
 
         float sha = (1.0f-k);
-        float3 lig = (PntLights[i].color.xyz/(1.0f + len));
 
+        float colorPow = length(PntLights[i].color.xyz);
+        float4 spGradation = texture_1.Sample(Sampler,float2(lerp(1.f,0.f,ligPow),1.f));  //グラデーションマップ(明かり用)
+        float3 lig = (PntLights[i].color.xyz*(spGradation.x));
         
-        float sp = max(0.f,dot(dir, R));
-        float4 spGradation = texture_1.Sample(Sampler,float2(lerp(1.f,0.f,sp),1.f));  //グラデーションマップ(明かり用)
+        float3 w2p = PntLights[i].pos - worldPos;
+        float3 e2w = worldPos - eyepos;
+        w2p = normalize(w2p);
+        e2w = normalize(e2w);
+        float3 w2pRef =  w2p + 2.0f * dot(w2p,normal) + normal;
+        float refDote2w = dot(w2pRef,e2w);
+        float sp = max(0,refDote2w);
 
-        foundation += (lig);
-        shadow += -1.0f * (shadow * (1.0f-sha));
+        //float sp = max(0.f,dot(dir, R));
+        sp *= specular;
+        spGradation = texture_1.Sample(Sampler,float2(lerp(1.f,0.f,sp),1.f));  //グラデーションマップ(明かり用)
+
+        foundation += lig+lig*spGradation.x;
+        //shadow += -1.0f * (shadow * (1.0f-sha));
     }
     //col.xyz *= float3(0.45f, 0.4f, 0.6f)*shadow;
-    col.xyz *= foundation;
+    col.xyz *= float3(0.45f, 0.4f, 0.6f) + foundation;
 
     #if 0
-    float3 pos = gSpecularMap.Sample(Sampler,In.uv);
-    float3 v = pos-eyepos;
+    
+    float3 v = worldPos-eyepos;
     v=normalize(v);
 	float r = dot(v,normal);
-	pos += normal*r*2.f;
-    v = pos-eyepos;
+	worldPos += normal*r*2.f;
+    v = worldPos-eyepos;
     v=normalize(v);
 	float sp = max(0,dot(DirLights[0].dir,v));
     #endif

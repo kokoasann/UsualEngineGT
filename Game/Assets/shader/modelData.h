@@ -112,6 +112,19 @@ cbuffer LightCB : register(b1)
 
 
 
+/*////////////////////////////////////////////////////////////////////////////////////////
+	スペキュラー
+*//////////////////////////////////////////////////////////////////////////////////////////
+Texture2D<float4> specularMap:register(t39);
+Texture2D<float4> specularMap_1:register(t40);
+Texture2D<float4> specularMap_2:register(t41);
+Texture2D<float4> specularMap_3:register(t42);
+
+
+/*////////////////////////////////////////////////////////////////////////////////////////
+	スペキュラー
+*//////////////////////////////////////////////////////////////////////////////////////////
+Texture2D<float4> hightMap_1:register(t43);
 
 
 /*////////////////////////////////////////////////////////////////////////////////////////
@@ -150,6 +163,12 @@ cbuffer GroundCB : register(b5)
 	float4 groundScale;				//スケール
 	float4x4 groundDir;					//回転マトリクス
 	int4 groundUseTexs;
+	int4 groundUseSpes;
+}
+cbuffer GroundCB_VS:register(b6)
+{
+	int isUseHightMap:packoffset(c0.x);	//ハイトマップを使う？
+	float hightScale:packoffset(c0.y);	//ハイトマップの値のスケール
 }
 Texture2D<float4> groundBlendMap:register(t101);
 

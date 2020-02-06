@@ -183,6 +183,12 @@
     <ImageContentTask Include="Assets\sprite\Gradation\Deferred_Grad.png">
       <Filter>Assets\Sprite\Gradation</Filter>
     </ImageContentTask>
+    <ImageContentTask Include="Assets\model\block\tuti_spe.png">
+      <Filter>Assets\Model\StagePreset\texture</Filter>
+    </ImageContentTask>
+    <ImageContentTask Include="Assets\model\block\kusa_spe.png">
+      <Filter>Assets\Model\StagePreset\texture</Filter>
+    </ImageContentTask>
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Assets\model\block\dun.fbx">

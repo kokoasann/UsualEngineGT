@@ -54,6 +54,8 @@ bool Game::Start()
 	ground->SetBlendMap(L"Assets/sprite/map.dds");
 	ground->SetTexture(0, L"Assets/sprite/kusa.dds");
 	ground->SetTexture(1, L"Assets/sprite/tuti.dds");
+	ground->SetSpecularMap(ue::SMR4Ground::tkGrass, L"Assets/sprite/kusa_spe.dds", L"grass");
+	ground->SetSpecularMap(ue::SMR4Ground::tkTuti, L"Assets/sprite/tuti_spe.dds", L"gaia");
 
 	pso.CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(),ground->GetSca());
 	//ground->SetRot(rot);
@@ -72,6 +74,8 @@ bool Game::Start()
 	ground->SetBlendMap(L"Assets/sprite/map.dds");
 	ground->SetTexture(0, L"Assets/sprite/kusa.dds");
 	ground->SetTexture(1, L"Assets/sprite/tuti.dds");
+	ground->SetSpecularMap(ue::SMR4Ground::tkGrass, L"Assets/sprite/kusa_spe.dds", L"grass");
+	ground->SetSpecularMap(ue::SMR4Ground::tkTuti, L"Assets/sprite/tuti_spe.dds", L"gaia");
 	pso2.CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(), ground->GetSca());
 #endif
 
@@ -81,6 +85,8 @@ bool Game::Start()
 	ground->SetPos(ue::CVector3{0,0,-20000 }/10);
 	ground->SetIsShadowCaster(true);
 	ground->SetIsShadowReciever(true);
+	ground->SetSpecularMap(ue::SMR4Ground::tkGrass, L"Assets/sprite/kusa_spe.dds",L"grass");
+	ground->SetSpecularMap(ue::SMR4Ground::tkTuti, L"Assets/sprite/tuti_spe.dds",L"gaia");
 
 	ground = ue::NewGO<ue::SMR4Ground>(0);
 	ground->InitG(L"Assets/model/octagon.cmo", 0, 0, ue::enFbxUpAxisZ);
@@ -88,6 +94,8 @@ bool Game::Start()
 	ground->SetPos(ue::CVector3{ -1500,0,-10000 }/10);
 	ground->SetIsShadowCaster(true);
 	ground->SetIsShadowReciever(true);
+	ground->SetSpecularMap(ue::SMR4Ground::tkGrass, L"Assets/sprite/kusa_spe.dds", L"grass");
+	ground->SetSpecularMap(ue::SMR4Ground::tkTuti, L"Assets/sprite/tuti_spe.dds", L"gaia");
 
 	ground = ue::NewGO<ue::SMR4Ground>(0);
 	ground->InitG(L"Assets/model/octagon.cmo", 0, 0, ue::enFbxUpAxisZ);
@@ -95,18 +103,20 @@ bool Game::Start()
 	ground->SetPos(ue::CVector3{ 700,0,-3000 }/10);
 	ground->SetIsShadowCaster(true);
 	ground->SetIsShadowReciever(true);
+	ground->SetSpecularMap(ue::SMR4Ground::tkGrass, L"Assets/sprite/kusa_spe.dds", L"grass");
+	ground->SetSpecularMap(ue::SMR4Ground::tkTuti, L"Assets/sprite/tuti_spe.dds", L"gaia");
 
 	light = ue::NewGO<ue::LightDirection>(0);
 	light->SetDir(ue::CVector3{ -0.3f,-1,-0.2f });
-	light->SetCol(ue::CVector3::One()/ 5.f);
+	light->SetCol(ue::CVector3::One()/ 3.5f);
 	/*light = ue::NewGO<ue::LightDirection>(0);
 	light->SetDir(ue::CVector3(1.f, 0.0f, 0.f));
 	light->SetCol({ 0.3f,0.0f,0.f,1.0f });*/
 	
 
-	auto plig = ue::NewGO < ue::LightPoint>(0);
+	static auto plig = ue::NewGO < ue::LightPoint>(0);
 	plig->SetPos({ 0,1,-100 });
-	plig->SetCol(ue::CVector3{ 0.2,0.002,0.2}*500);
+	plig->SetCol(ue::CVector3{ 0.6,0.25,0.08}*50);
 
 	campos = { -940,312,0 };
 	//campos = { 0,3000,2000 };
@@ -152,6 +162,33 @@ bool Game::Start()
 		cam->Update();
 	};
 	ue::DebugSwitchAddRadio(ue::DebugSwitchNewSwitch('Z', VK_SHIFT, f));
+
+	f = [&]()
+	{
+		static bool isUp = true;
+		if (plig->GetPos().y >= 200 && isUp)
+		{
+			isUp = false;
+			ue::DebugPrint(L"ポイントライトDOWN！");
+		}
+		else if(plig->GetPos().y <= 1 && !isUp)
+		{
+			isUp = true;
+			ue::DebugPrint(L"ポイントライトUP！");
+		}
+		auto pos = plig->GetPos();
+		if (isUp)
+		{
+			pos.y += 80.0f * ue::gameTime()->GetDeltaTime();
+			plig->SetPos(pos);
+		}
+		else
+		{
+			pos.y -= 80.0f * ue::gameTime()->GetDeltaTime();
+			plig->SetPos(pos);
+		}
+	};
+	ue::DebugSwitchAddCheck(ue::DebugSwitchNewSwitch('P', 0, f));
 	return true;
 }
 

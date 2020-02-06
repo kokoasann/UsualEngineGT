@@ -47,9 +47,7 @@ static const int RTV_MAX = 8;
 //#include "physics/CapsuleCollider.h"
 //#include "physics/PhysicsStaticObject.h"
 
-#if _DEBUG
-#include "Debug/DebugSwitch.h"
-#endif
+
 
 #include "util/Util.h"
 
@@ -98,6 +96,13 @@ static const int RTV_MAX = 8;
 
 #include "graphics/SkinModelRender.h"
 #include "Prefab/SkinModelRender4Ground.h"
+
+#if _DEBUG
+//#include "Debug/DebugLog.h"
+
+#include "Debug/Debug.h"
+#include "Debug/DebugSwitch.h"
+#endif
 namespace UsualEngine
 {
 	using SMR4Ground = SkinModelRender4Ground;

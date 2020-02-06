@@ -18,7 +18,7 @@ namespace UsualEngine
 		Shader m_psToDepth;						//深度値用のピクセルシェーダ
 		bool isSkining;
 		ID3D11ShaderResourceView* m_albedoTex = nullptr;
-
+		ID3D11ShaderResourceView* m_specularMap = nullptr;
 	public:
 		ModelEffect()
 		{
@@ -43,6 +43,10 @@ namespace UsualEngine
 		void SetAlbedoTexture(ID3D11ShaderResourceView* tex)
 		{
 			m_albedoTex = tex;
+		}
+		void SetSpecularMap(ID3D11ShaderResourceView* tex)
+		{
+			m_specularMap = tex;
 		}
 		void SetMatrialName(const wchar_t* matName)
 		{

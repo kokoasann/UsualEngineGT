@@ -15,7 +15,8 @@ namespace UsualEngine
 		enSkinModelCBReg_Material,	//!<マテリアルパラメータ。
 		enSkinModelCBReg_Shadow,	//!<影。
 		enSkinModelCBReg_GBuffer,	//!<G-Buffer。
-		enSkinModelCBReg_Ground,	//地面用の定数バッファ
+		enSkinModelCBReg_Ground_PS,	//地面用の定数バッファ
+		enSkinModelCBReg_Ground_VS,	//地面用の定数バッファ
 	};
 	/*!
 	 *@brief	SRVのレジスタ番号。
@@ -26,12 +27,19 @@ namespace UsualEngine
 		enSkinModelSRVReg_ShadowMap_1,			//シャドウマップ
 		enSkinModelSRVReg_ShadowMap_MAXNUM = enSkinModelSRVReg_ShadowMap_1 + MAX_SHADOW_MAP - 1,			//シャドウマップ
 
-		enSkinModelSRVReg_GDiffuseMap,		// G-Buffer用デフューズ
+		enSkinModelSRVReg_GDiffuseMap = 5,		// G-Buffer用デフューズ
 		enSkinModelSRVReg_GSpecularMap,		// G-Buffer用スペキュラ
 		enSkinModelSRVReg_GDepthMap,			// G-Buffer用デプス
 		enSkinModelSRVReg_GNormalMap,		// G-Buffer用ノーマル
 		enSkinModelSRVReg_GShadowMap,		// G-Buffer用シャドウ
-		enSkinModelSRVReg_GTangentMap,		// G-Buffer用タンジェント
+		enSkinModelSRVReg_GTangentMap,		// G-Buffer用タンジェント 
+
+		enSkinModelSRVReg_Specular = 39,
+		enSkinModelSRVReg_Specular_1,
+		enSkinModelSRVReg_Specular_2,
+		enSkinModelSRVReg_Specular_3,
+
+		enSkinModelSRVReg_HightMap_1 = enSkinModelSRVReg_Specular_3 + 1,
 
 		enSkinModelSRVReg_DirectionLight=50,		//ディレクションライト
 		enSkinModelSRVReg_PointLight,		//ポイントライト

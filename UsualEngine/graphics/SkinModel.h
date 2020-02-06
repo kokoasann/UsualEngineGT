@@ -149,6 +149,8 @@ namespace UsualEngine
 		{
 			return m_enFbxUpAxis;
 		}
+
+		void SetSpecularMap(const wchar_t* path);
 	private:
 		/*!
 		*@brief	サンプラステートの初期化。
@@ -172,6 +174,7 @@ namespace UsualEngine
 			CMatrix mProj;
 			CVector3 camDir;
 			int isShadowReciever;
+			int isUseSpecularMap = 0;
 		};
 		EnFbxUpAxis			m_enFbxUpAxis = enFbxUpAxisZ;	//!<FBXの上方向。
 		ID3D11Buffer* m_cb = nullptr;					//!<定数バッファ。
@@ -179,6 +182,8 @@ namespace UsualEngine
 		CMatrix				m_worldMatrix;					//!<ワールド行列。
 		DirectX::Model* m_modelDx;						//!<DirectXTKが提供するモデルクラス。
 		ID3D11SamplerState* m_samplerState = nullptr;		//!<サンプラステート。
+
+		ID3D11ShaderResourceView* m_specularMap = nullptr;
 
 		bool m_isShadowCaster = false;					//影を落とす
 		bool m_isShadowReciever = true;				//影が落ちる

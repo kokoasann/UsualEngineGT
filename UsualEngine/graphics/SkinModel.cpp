@@ -77,6 +77,11 @@ namespace UsualEngine
 		//作成。
 		usualEngine()->GetGraphicsEngine()->GetD3DDevice()->CreateBuffer(&bufferDesc, NULL, &m_cb);
 	}
+	void SkinModel::SetSpecularMap(const wchar_t* path)
+	{
+		std::wstring p = path;
+		m_specularMap = SpriteDataManager::Get()->Load(p);
+	}
 	void SkinModel::InitSamplerState()
 	{
 		if (m_samplerState != nullptr)
@@ -144,11 +149,14 @@ namespace UsualEngine
 		camdir.Normalize();
 		vsCb.camDir =camdir;
 		vsCb.isShadowReciever = m_isShadowReciever;
+		vsCb.isUseSpecularMap = m_specularMap != nullptr;
 
 		d3dDeviceContext->UpdateSubresource(m_cb, 0, nullptr, &vsCb, 0, 0);
 		//定数バッファをGPUに転送。
 		d3dDeviceContext->VSSetConstantBuffers(enSkinModelCBReg_VSPS, 1, &m_cb);
 		d3dDeviceContext->PSSetConstantBuffers(enSkinModelCBReg_VSPS, 1, &m_cb);
+
+		d3dDeviceContext->PSSetShaderResources(enSkinModelSRVReg_Specular_1, 1, &m_specularMap);
 		//サンプラステートを設定。
 		d3dDeviceContext->PSSetSamplers(0, 1, &m_samplerState);
 		//ボーン行列をGPUに転送。

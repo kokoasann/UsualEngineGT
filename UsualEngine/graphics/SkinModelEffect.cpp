@@ -23,6 +23,8 @@ namespace UsualEngine
 		}
 		
 		deviceContext->PSSetShaderResources(enSkinModelSRVReg_AlbedoTexture, 1, &m_albedoTex);
+		if(m_specularMap!=nullptr)
+			deviceContext->PSSetShaderResources(enSkinModelSRVReg_Specular, 1, &m_specularMap);
 
 	}
 }

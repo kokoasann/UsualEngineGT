@@ -267,6 +267,10 @@
   <ItemGroup>
     <ImageContentTask Include="Assets\sprite\Gradation\Deferred_Grad.png" />
   </ItemGroup>
+  <ItemGroup>
+    <ImageContentTask Include="Assets\model\block\kusa_spe.png" />
+    <ImageContentTask Include="Assets\model\block\tuti_spe.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="$(VCTargetsPath)\BuildCustomizations\ImageContentTask.targets" />
