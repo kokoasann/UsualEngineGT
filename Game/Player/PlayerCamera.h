@@ -55,4 +55,6 @@ private:
 	Cannon* m_cannon = nullptr;
 	ue::Bone* m_cannonBone = nullptr;
 	ue::CVector3 m_cannonDir = ue::CVector3::Zero();
+
+	bool m_isCameraOff = false;
 };

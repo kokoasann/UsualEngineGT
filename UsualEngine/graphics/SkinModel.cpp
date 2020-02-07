@@ -156,7 +156,7 @@ namespace UsualEngine
 		d3dDeviceContext->VSSetConstantBuffers(enSkinModelCBReg_VSPS, 1, &m_cb);
 		d3dDeviceContext->PSSetConstantBuffers(enSkinModelCBReg_VSPS, 1, &m_cb);
 
-		d3dDeviceContext->PSSetShaderResources(enSkinModelSRVReg_Specular_1, 1, &m_specularMap);
+		//d3dDeviceContext->PSSetShaderResources(enSkinModelSRVReg_Specular_1, 1, &m_specularMap);
 		//サンプラステートを設定。
 		d3dDeviceContext->PSSetSamplers(0, 1, &m_samplerState);
 		//ボーン行列をGPUに転送。

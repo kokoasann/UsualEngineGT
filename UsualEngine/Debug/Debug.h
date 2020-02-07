@@ -26,6 +26,7 @@ namespace UsualEngine
 			gdNormal,
 			gdDepth,
 			gdShadow,
+			gdSpecular,
 		};
 		GBufferDraw gbufferDraw = gdDefault;
 

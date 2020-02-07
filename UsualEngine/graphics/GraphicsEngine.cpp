@@ -128,6 +128,9 @@ namespace UsualEngine
 		case Debug::gdShadow:
 			m_pd3dDeviceContext->PSSetShader((ID3D11PixelShader*)m_psDefferd_Shadow.GetBody(), 0, 0);
 			break;
+		case Debug::gdSpecular:
+			m_pd3dDeviceContext->PSSetShader((ID3D11PixelShader*)m_psDefferd_Specular.GetBody(), 0, 0);
+			break;
 		}
 #else
 		m_pd3dDeviceContext->PSSetShader((ID3D11PixelShader*)m_psDefferd.GetBody(), 0, 0);
@@ -323,6 +326,7 @@ namespace UsualEngine
 		m_psDefferd_Normal.Load("Assets/shader/DefferdShading.fx", "PSMain_Normal", Shader::EnType::PS);
 		m_psDefferd_Depth.Load("Assets/shader/DefferdShading.fx", "PSMain_Depth", Shader::EnType::PS);
 		m_psDefferd_Shadow.Load("Assets/shader/DefferdShading.fx", "PSMain_Shadow", Shader::EnType::PS);
+		m_psDefferd_Specular.Load("Assets/shader/DefferdShading.fx", "PSMain_Specular", Shader::EnType::PS);
 #endif
 
 		std::wstring st = L"Assets/sprite/Deferred_Grad.dds";

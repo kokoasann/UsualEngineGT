@@ -472,7 +472,7 @@ PSOutput PSMain_Ground(PSInputGround In)
 	return Out;
 }
 
-float2 UVChanger(float2 UV,float3 groundScale,float3 NormalFlag,float offset)
+float2 UVChanger(float2 UV,float3 groundScale,int4 NormalFlag,float offset)
 {
 	float2 uvs=float2(0,0);
 
@@ -503,7 +503,7 @@ PSOutput PSMain_GroundDefault(PSInputGround In)
 	float2 UV = In.TexCoord;
 	float3 gsca = groundScale.xyz;	//地面のスケール
 
-	float2 uvs = UVChanger(UV,gsca,In.NormalFlag,5.0f);
+	float2 uvs = UVChanger(UV,gsca,In.NormalFlag,5.0f*0.333333f);
 
 	//アルベドの取得
 	float4 alb = float4(0, 0, 0, 1);
@@ -537,7 +537,7 @@ PSOutput PSMain_GroundBlendThree(PSInputGround In)
 	float2 UV = In.TexCoord;
 	float3 gsca = groundScale.xyz;	//地面のスケール
 
-	float2 uvs = UVChanger(UV,gsca,In.NormalFlag,5.0f);
+	float2 uvs = UVChanger(UV,gsca,In.NormalFlag,5.0f*10);
 
 	//アルベドの取得
 	float4 alb = float4(0, 0, 0, 1);
@@ -549,7 +549,7 @@ PSOutput PSMain_GroundBlendThree(PSInputGround In)
 	float4 alb3 = texture_3.Sample(Sampler, uvs);
 	float len = 0.f;
 
-	//ブレンド(テクスチャ2枚)
+	//ブレンド(テクスチャ3枚)
 	len = blend.x + blend.y + blend.z;
 	float3 blendThreeColor = blend.xyz;
 	blendThreeColor /= len;

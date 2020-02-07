@@ -165,6 +165,7 @@ namespace UsualEngine
 		Shader m_psDefferd_Normal;						//デファード用ピクセルシェーダ(デバック用)
 		Shader m_psDefferd_Depth;						//デファード用ピクセルシェーダ(デバック用)
 		Shader m_psDefferd_Shadow;						//デファード用ピクセルシェーダ(デバック用)
+		Shader m_psDefferd_Specular;					//デファード用ピクセルシェーダ(デバック用)
 #endif
 		
 		ShadowMap m_shadowMap;								//シャドウマップ

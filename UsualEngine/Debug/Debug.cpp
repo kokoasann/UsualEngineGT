@@ -52,6 +52,12 @@ namespace UsualEngine
 			DebugPrint(L"G-Buffer ‰e");
 		};
 		DebugSwitchAddRadioBoxButton("GBufferDraw", DebugSwitchNewSwitch(VK_F6, 0, on, DebugSwitch::nullFunc));
+		on = [&]()
+		{
+			gbufferDraw = gdSpecular;
+			DebugPrint(L"G-Buffer ƒXƒyƒLƒ…ƒ‰");
+		};
+		DebugSwitchAddRadioBoxButton("GBufferDraw", DebugSwitchNewSwitch(VK_F7, 0, on, DebugSwitch::nullFunc));
 #endif
 	}
 	void Debug::DebugPrint(const wchar_t* str)

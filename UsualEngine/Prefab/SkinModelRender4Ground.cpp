@@ -177,8 +177,8 @@ namespace UsualEngine
 		m_groundData.isUseTextures.w = isUseTex[3];
 
 		m_groundData.isUseSpecular.x = isUseSpe[0];
-		m_groundData.isUseSpecular.z = isUseSpe[1];
-		m_groundData.isUseSpecular.y = isUseSpe[2];
+		m_groundData.isUseSpecular.y = isUseSpe[1];
+		m_groundData.isUseSpecular.z = isUseSpe[2];
 		m_groundData.isUseSpecular.w = isUseSpe[3];
 
 		//PS用の定数バッファを送信。

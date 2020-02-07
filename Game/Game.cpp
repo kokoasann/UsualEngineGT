@@ -17,7 +17,7 @@ void Game::OnDestroy()
 
 bool Game::Start()
 {
-	//ue::NewGO<Player>(0);
+	ue::NewGO<Player>(0);
 	ue::NewGO<Ene_Gib>(0);
 	//ue::NewGO<Ene_GibTes>(0);
 
@@ -42,25 +42,28 @@ bool Game::Start()
 
 	cam = &ue::usualEngine()->GetMainCamera();
 
-	ground = ue::NewGO<ue::SMR4Ground>(0);
-	ground->InitG(L"Assets/model/dun.cmo", 0, 0, ue::enFbxUpAxisZ);
-	ground->SetIsShadowCaster(true);
-	ground->SetIsShadowReciever(true);
-	//ground->SetSca(ue::CVector3{30, 0.1f, 10});
-	ground->SetSca(ue::CVector3{30, 30.f, 10}/10);
-	//ground->SetPos({ 0,-100,0 });
-	ground->SetPos(ue::CVector3{ 0,-100*300,0 }/10);
-	rot.SetRotationDeg(ue::CVector3::AxisZ(), 90);
-	ground->SetBlendMap(L"Assets/sprite/map.dds");
-	ground->SetTexture(0, L"Assets/sprite/kusa.dds");
-	ground->SetTexture(1, L"Assets/sprite/tuti.dds");
-	ground->SetSpecularMap(ue::SMR4Ground::tkGrass, L"Assets/sprite/kusa_spe.dds", L"grass");
-	ground->SetSpecularMap(ue::SMR4Ground::tkTuti, L"Assets/sprite/tuti_spe.dds", L"gaia");
+	//ground = ue::NewGO<ue::SMR4Ground>(0);
+	//ground->InitG(L"Assets/model/dun.cmo", 0, 0, ue::enFbxUpAxisZ);
+	//ground->SetIsShadowCaster(true);
+	//ground->SetIsShadowReciever(true);
+	////ground->SetSca(ue::CVector3{30, 0.1f, 10});
+	//ground->SetSca(ue::CVector3{30, 30.f, 10}/10);
+	////ground->SetPos({ 0,-100,0 });
+	//ground->SetPos(ue::CVector3{ 0,-100*300,0 }/10);
+	//rot.SetRotationDeg(ue::CVector3::AxisZ(), 90);
+	//ground->SetBlendMap(L"Assets/sprite/map.dds");
+	//ground->SetTexture(0, L"Assets/sprite/kusa.dds");
+	//ground->SetTexture(1, L"Assets/sprite/tuti.dds");
+	//ground->SetSpecularMap(ue::SMR4Ground::tkGrass, L"Assets/sprite/kusa_spe.dds", L"grass");
+	//ground->SetSpecularMap(ue::SMR4Ground::tkTuti, L"Assets/sprite/tuti_spe.dds", L"gaia");
 
-	pso.CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(),ground->GetSca());
+	//pso.CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(),ground->GetSca());
 	//ground->SetRot(rot);
 
 	{
+		float sca = 0.04;
+		ue::CVector3 pos = { 0,-7600*sca,0 };
+		ue::CVector3 scal = ue::CVector3::One() * sca;
 		ground = ue::NewGO<ue::SMR4Ground>(0);
 		ground->InitG(L"Assets/model/map1A.cmo", 0, 0, ue::enFbxUpAxisZ, ue::SMR4Ground::gtBlendThree);
 		ground->SetIsShadowCaster(true);
@@ -72,6 +75,8 @@ bool Game::Start()
 		ground->SetSpecularMap(ue::SMR4Ground::tkGrass, L"Assets/sprite/kusa_spe.dds", L"grass");
 		ground->SetSpecularMap(ue::SMR4Ground::tkTuti, L"Assets/sprite/tuti_spe.dds", L"gaia");
 		ground->SetSpecularMap(ue::SMR4Ground::tkOther, L"Assets/sprite/iwa_spe.dds", L"");
+		ground->SetPos(pos);
+		ground->SetSca(scal);
 		wpso[0].CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(), ground->GetSca());
 
 		ground = ue::NewGO<ue::SMR4Ground>(0);
@@ -85,6 +90,8 @@ bool Game::Start()
 		ground->SetSpecularMap(ue::SMR4Ground::tkGrass, L"Assets/sprite/kusa_spe.dds", L"grass");
 		ground->SetSpecularMap(ue::SMR4Ground::tkTuti, L"Assets/sprite/tuti_spe.dds", L"gaia");
 		ground->SetSpecularMap(ue::SMR4Ground::tkOther, L"Assets/sprite/iwa_spe.dds", L"");
+		ground->SetPos(pos);
+		ground->SetSca(scal);
 		wpso[1].CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(), ground->GetSca());
 
 		ground = ue::NewGO<ue::SMR4Ground>(0);
@@ -98,6 +105,8 @@ bool Game::Start()
 		ground->SetSpecularMap(ue::SMR4Ground::tkGrass, L"Assets/sprite/kusa_spe.dds", L"grass");
 		ground->SetSpecularMap(ue::SMR4Ground::tkTuti, L"Assets/sprite/tuti_spe.dds", L"gaia");
 		ground->SetSpecularMap(ue::SMR4Ground::tkOther, L"Assets/sprite/iwa_spe.dds", L"");
+		ground->SetPos(pos);
+		ground->SetSca(scal);
 		wpso[2].CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(), ground->GetSca());
 
 		ground = ue::NewGO<ue::SMR4Ground>(0);
@@ -111,6 +120,8 @@ bool Game::Start()
 		ground->SetSpecularMap(ue::SMR4Ground::tkGrass, L"Assets/sprite/kusa_spe.dds", L"grass");
 		ground->SetSpecularMap(ue::SMR4Ground::tkTuti, L"Assets/sprite/tuti_spe.dds", L"gaia");
 		ground->SetSpecularMap(ue::SMR4Ground::tkOther, L"Assets/sprite/iwa_spe.dds", L"");
+		ground->SetPos(pos);
+		ground->SetSca(scal);
 		wpso[3].CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(), ground->GetSca());
 
 		ground = ue::NewGO<ue::SMR4Ground>(0);
@@ -124,6 +135,8 @@ bool Game::Start()
 		ground->SetSpecularMap(ue::SMR4Ground::tkGrass, L"Assets/sprite/kusa_spe.dds", L"grass");
 		ground->SetSpecularMap(ue::SMR4Ground::tkTuti, L"Assets/sprite/tuti_spe.dds", L"gaia");
 		ground->SetSpecularMap(ue::SMR4Ground::tkOther, L"Assets/sprite/iwa_spe.dds", L"");
+		ground->SetPos(pos);
+		ground->SetSca(scal);
 		wpso[4].CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(), ground->GetSca());
 
 		ground = ue::NewGO<ue::SMR4Ground>(0);
@@ -137,6 +150,8 @@ bool Game::Start()
 		ground->SetSpecularMap(ue::SMR4Ground::tkGrass, L"Assets/sprite/kusa_spe.dds", L"grass");
 		ground->SetSpecularMap(ue::SMR4Ground::tkTuti, L"Assets/sprite/tuti_spe.dds", L"gaia");
 		ground->SetSpecularMap(ue::SMR4Ground::tkOther, L"Assets/sprite/iwa_spe.dds", L"");
+		ground->SetPos(pos);
+		ground->SetSca(scal);
 		wpso[5].CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(), ground->GetSca());
 
 		ground = ue::NewGO<ue::SMR4Ground>(0);
@@ -150,6 +165,8 @@ bool Game::Start()
 		ground->SetSpecularMap(ue::SMR4Ground::tkGrass, L"Assets/sprite/kusa_spe.dds", L"grass");
 		ground->SetSpecularMap(ue::SMR4Ground::tkTuti, L"Assets/sprite/tuti_spe.dds", L"gaia");
 		ground->SetSpecularMap(ue::SMR4Ground::tkOther, L"Assets/sprite/iwa_spe.dds", L"");
+		ground->SetPos(pos);
+		ground->SetSca(scal);
 		wpso[6].CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(), ground->GetSca());
 
 		ground = ue::NewGO<ue::SMR4Ground>(0);
@@ -163,6 +180,8 @@ bool Game::Start()
 		ground->SetSpecularMap(ue::SMR4Ground::tkGrass, L"Assets/sprite/kusa_spe.dds", L"grass");
 		ground->SetSpecularMap(ue::SMR4Ground::tkTuti, L"Assets/sprite/tuti_spe.dds", L"gaia");
 		ground->SetSpecularMap(ue::SMR4Ground::tkOther, L"Assets/sprite/iwa_spe.dds", L"");
+		ground->SetPos(pos);
+		ground->SetSca(scal);
 		wpso[7].CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(), ground->GetSca());
 
 		ground = ue::NewGO<ue::SMR4Ground>(0);
@@ -176,9 +195,11 @@ bool Game::Start()
 		ground->SetSpecularMap(ue::SMR4Ground::tkGrass, L"Assets/sprite/kusa_spe.dds", L"grass");
 		ground->SetSpecularMap(ue::SMR4Ground::tkTuti, L"Assets/sprite/tuti_spe.dds", L"gaia");
 		ground->SetSpecularMap(ue::SMR4Ground::tkOther, L"Assets/sprite/iwa_spe.dds", L"");
+		ground->SetPos(pos);
+		ground->SetSca(scal);
 		wpso[8].CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(), ground->GetSca());
 	}
-#if 1
+#if 0
 	//デバッグ用のスロープ
 	ground = ue::NewGO<ue::SMR4Ground>(0);
 	ground->InitG(L"Assets/model/dun.cmo", 0, 0, ue::enFbxUpAxisZ);
@@ -254,14 +275,15 @@ bool Game::Start()
 
 		static ue::CVector3 ofs = { 0,0,-200 };
 
-		float speed = 30.f;
+		float dtime = ue::gameTime()->GetDeltaTime();
+		float speed = 30.f * dtime;
 		campos += cam->GetForward() * speed * pad.GetLStickYF();
 		campos += cam->GetRight() * speed * pad.GetLStickXF();
 
 
 		float yx = pad.GetRStickXF();
 		float yy = pad.GetRStickYF();
-		speed = 5.f;
+		speed = 180.f * dtime;
 		ue::CQuaternion r = ue::CQuaternion::Identity();
 		add.SetRotationDeg(ue::CVector3::Up(), speed * yx);
 		//camrot.Multiply(add);

@@ -26,6 +26,18 @@ void PlayerCamera::OnDestroy()
 void PlayerCamera::Init(Player* p)
 {
 	m_player = p;
+
+#if _DEBUG
+	std::function<void()> on = [&]()
+	{
+		m_isCameraOff = true;
+	};
+	std::function<void()> off = [&]()
+	{
+		m_isCameraOff = false;
+	};
+	ue::DebugSwitchAddRadio(ue::DebugSwitchNewSwitch('Z', VK_HOME, on, off));
+#endif
 }
 
 bool PlayerCamera::Start()
@@ -107,7 +119,14 @@ void PlayerCamera::Update()
 		m_cannon->SetTarget(m_cannonDir);
 	}
 	
-#if 1
+#if _DEBUG
+	if (m_isCameraOff)
+	{
+		m_camera->SetPosition(campos);
+		m_camera->SetTarget(camtar);
+		m_camera->Update();
+	}
+#else
 	m_camera->SetPosition(campos);
 	m_camera->SetTarget(camtar);
 	m_camera->Update();

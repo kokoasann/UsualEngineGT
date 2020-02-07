@@ -111,6 +111,7 @@ float4 PSMain_Defferd(DefferdPSInput In):SV_TARGET0
         float4 spGradation = texture_1.Sample(Sampler,float2(lerp(1.f,0.f,ligPow),1.f));  //グラデーションマップ(明かり用)
         float3 lig = (PntLights[i].color.xyz*(spGradation.x));
         
+        //反射
         float3 w2p = PntLights[i].pos - worldPos;
         float3 e2w = worldPos - eyepos;
         w2p = normalize(w2p);
@@ -148,7 +149,7 @@ float4 PSMain_Defferd(DefferdPSInput In):SV_TARGET0
     
 
     
-    float4 usu = lerp(float4(0.8f, 0.88f, 1.f,1.f),float4(0.f,0.f,0.f,0.f),min(lerp(1,0,pow(depth,6000)),1));
+    float4 usu = lerp(float4(0.8f, 0.88f, 1.f,1.f),float4(0.f,0.f,0.f,0.f),min(lerp(1,0,pow(depth,800)),1));
     col.xyz *= 1.f-usu.w;
     col.xyz += usu;
     
@@ -178,4 +179,9 @@ float4 PSMain_Shadow(DefferdPSInput In) :SV_TARGET0
 {
     float s = gShadowMap.Sample(Sampler,In.uv);
     return float4(s, s, s, 1.0f);
+}
+float4 PSMain_Specular(DefferdPSInput In):SV_Target0
+{
+    float s = gSpecularMap.Sample(Sampler,In.uv);
+    return float4(s,s,s,1.0f);
 }
