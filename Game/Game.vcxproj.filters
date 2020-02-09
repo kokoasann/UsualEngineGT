@@ -146,6 +146,9 @@
     <Filter Include="Assets\world\pre">
       <UniqueIdentifier>{e7e097d6-ab09-4e33-8c92-6226f36aeebf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Model\weed">
+      <UniqueIdentifier>{9d623486-8e66-4320-b139-68a9d58fbdcc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\model.fx">
@@ -265,6 +268,9 @@
     </MeshContentTask>
     <MeshContentTask Include="Assets\model\world\pre\map3B.fbx">
       <Filter>Assets\world\pre</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\weed\weed.fbx">
+      <Filter>Assets\Model\weed</Filter>
     </MeshContentTask>
   </ItemGroup>
 </Project>

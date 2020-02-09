@@ -21,6 +21,76 @@ bool Game::Start()
 	ue::NewGO<Ene_Gib>(0);
 	//ue::NewGO<Ene_GibTes>(0);
 
+	{
+		ue::CVector3 sca = ue::CVector3(0.05, 0.05, 0.05);
+		ue::CMatrix mat;
+		mat.MakeScaling(sca);
+		
+		ue::SkinModelRender* skinmodel = ue::NewGO<ue::SkinModelRender>(0);
+		skinmodel->Init(L"Assets/model/dun.cmo", 0, 0);
+		auto& ssss = skinmodel->GetSkinModel();
+		ssss.InitInstancing(2);
+		mat.v[3] = { 10,50,0,1 };
+		ssss.SetInstanceData(0,mat);
+		mat.v[3] = { 100,50,0,1 };
+		ssss.SetInstanceData(1, mat);
+	}
+
+	
+	ue::SkinModelRender* weedSM = ue::NewGO<ue::SkinModelRender>(0);
+	weedSM->Init(L"Assets/model/weed.cmo", 0, 0, ue::enFbxUpAxisY);
+	weedSM->SetIsShadowCaster(true);
+	weedSM->SetIsShadowReciever(true);
+	auto& weedSMs = weedSM->GetSkinModel();
+	weedSMs.InitInstancing(3864);
+
+	int grCount = 0;
+	int weedinst = 0;
+	ue::Level level;
+	level.Init(L"Assets/level/level_test.tkl", [&](ue::LevelObjectData& obj)->bool
+	{
+			if (wcscmp(obj.name, L"map1A")==0 ||
+				wcscmp(obj.name, L"map2A") == 0 ||
+				wcscmp(obj.name, L"map3A") == 0 || 
+				wcscmp(obj.name, L"map1B") == 0 ||
+				wcscmp(obj.name, L"map2B") == 0 ||
+				wcscmp(obj.name, L"map3B") == 0 ||
+				wcscmp(obj.name, L"map1C") == 0 ||
+				wcscmp(obj.name, L"map2C") == 0 ||
+				wcscmp(obj.name, L"map3C") == 0)
+			{
+				float sca = 0.04;
+				ue::CVector3 pos = { 0,-7600 * sca,0 };
+				ue::CVector3 scal = ue::CVector3::One() * sca;
+				std::wstring path = L"Assets/model/";
+				path += obj.name;
+				path += L".cmo";
+				ground = ue::NewGO<ue::SMR4Ground>(0);
+				ground->InitG(path.c_str(), 0, 0, ue::enFbxUpAxisZ, ue::SMR4Ground::gtBlendThree);
+				ground->SetIsShadowCaster(true);
+				ground->SetIsShadowReciever(true);
+				ground->SetBlendMap(L"Assets/sprite/worldBlend.dds");
+				ground->SetTexture(0, L"Assets/sprite/kusa.dds");
+				ground->SetTexture(1, L"Assets/sprite/tuti.dds");
+				ground->SetTexture(2, L"Assets/sprite/iwa.dds");
+				ground->SetSpecularMap(ue::SMR4Ground::tkGrass, L"Assets/sprite/kusa_spe.dds", L"grass");
+				ground->SetSpecularMap(ue::SMR4Ground::tkTuti, L"Assets/sprite/tuti_spe.dds", L"gaia");
+				ground->SetSpecularMap(ue::SMR4Ground::tkOther, L"Assets/sprite/iwa_spe.dds", L"");
+				ground->SetPos(pos);
+				ground->SetSca(scal);
+				wpso[grCount++].CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(), ground->GetSca());
+			}
+			else if(wcscmp(obj.name,L"weed")==0)
+			{
+				ue::CMatrix mat;
+				mat.MakeScaling(obj.scale);
+				mat.v[3] = ue::CVector4(obj.position)*120;
+				mat.v[3].w = 1;
+				weedSMs.SetInstanceData(weedinst, mat);
+				weedinst++;
+			}
+			return true;
+	});
 	/*ue::BoxCollider* bcp = new ue::BoxCollider(); 
 	auto& bc = *bcp;
 	bcp->Create({ 100,50,100 });
@@ -59,7 +129,7 @@ bool Game::Start()
 
 	//pso.CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(),ground->GetSca());
 	//ground->SetRot(rot);
-
+	if(false)
 	{
 		float sca = 0.04;
 		ue::CVector3 pos = { 0,-7600*sca,0 };

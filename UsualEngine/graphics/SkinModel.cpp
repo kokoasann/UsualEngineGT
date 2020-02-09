@@ -18,6 +18,11 @@ namespace UsualEngine
 			//サンプラステートを解放。
 			m_samplerState->Release();
 		}
+		if (m_isInstancing)
+		{
+			delete[] m_instancingData;
+			m_instancingDataSB.Release();
+		}
 		m_skeleton.Release();
 	}
 	void SkinModel::Init(const wchar_t* filePath, EnFbxUpAxis enFbxUpAxis)
@@ -35,6 +40,27 @@ namespace UsualEngine
 		m_modelDx = g_skinModelDataManager.Load(filePath, m_skeleton);
 
 		m_enFbxUpAxis = enFbxUpAxis;
+	}
+	void SkinModel::InitInstancing(unsigned int maxInstance)
+	{
+		m_instancingData = new CMatrix[maxInstance];
+		D3D11_BUFFER_DESC desc;
+		ZeroMemory(&desc, sizeof(desc));
+		desc.ByteWidth = sizeof(CMatrix) * maxInstance;
+		desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+		desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
+		desc.StructureByteStride = sizeof(CMatrix);
+		m_instancingDataSB.Create(m_instancingData, desc);
+		m_maxInstance = maxInstance;
+
+		for (auto& meshs : m_modelDx->meshes)
+		{
+			for (std::unique_ptr<DirectX::ModelMeshPart>& mesh : meshs->meshParts)
+			{
+				ModelEffect* eff = reinterpret_cast<ModelEffect*>(mesh->effect.get());
+				eff->Instancing();
+			}
+		}
 	}
 	void SkinModel::InitSkeleton(const wchar_t* filePath)
 	{
@@ -162,6 +188,11 @@ namespace UsualEngine
 		//ボーン行列をGPUに転送。
 		m_skeleton.SendBoneMatrixArrayToGPU();
 
+		if (m_maxInstance > 0)
+		{
+			d3dDeviceContext->UpdateSubresource(m_instancingDataSB.GetBody(),0,0, m_instancingData,0,0);
+			d3dDeviceContext->VSSetShaderResources(enSkinModelSRVReg_InstancingData, 1, &m_instancingDataSB.GetSRV());
+		}
 
 		//描画。
 		m_modelDx->Draw(
@@ -169,7 +200,10 @@ namespace UsualEngine
 			state,
 			m_worldMatrix,
 			viewMatrix,
-			projMatrix
+			projMatrix,
+			0,
+			0,
+			m_maxInstance > 0 ? m_maxInstance : 1
 		);
 	}
 }

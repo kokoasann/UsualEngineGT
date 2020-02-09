@@ -10,14 +10,22 @@ namespace UsualEngine
 		switch (renderMode)
 		{
 		case enRenderMode_3DModel:
-			deviceContext->VSSetShader((ID3D11VertexShader*)m_pVSShader->GetBody(), NULL, 0);
+			if(m_isInstancing)
+				deviceContext->VSSetShader((ID3D11VertexShader*)m_vsInstancing.GetBody(), NULL, 0);
+			else
+				deviceContext->VSSetShader((ID3D11VertexShader*)m_pVSShader->GetBody(), NULL, 0);
+
 			deviceContext->PSSetShader((ID3D11PixelShader*)m_pPSShader->GetBody(), NULL, 0);
 			/*
 			ここで落ちた場合はどちらかのシェーダのインスタンスが死んでる可能性があるぞっ！
 			*/
 			break;
 		case enRenderMode_ShadowMap:
-			deviceContext->VSSetShader((ID3D11VertexShader*)m_vsToDepth.GetBody(), NULL, 0);
+			if (m_isInstancing)
+				deviceContext->VSSetShader((ID3D11VertexShader*)m_vsInstancingToDepth.GetBody(), NULL, 0);
+			else
+				deviceContext->VSSetShader((ID3D11VertexShader*)m_vsToDepth.GetBody(), NULL, 0);
+
 			deviceContext->PSSetShader((ID3D11PixelShader*)m_psToDepth.GetBody(), NULL, 0);
 			break;
 		}

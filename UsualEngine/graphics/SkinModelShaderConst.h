@@ -34,6 +34,8 @@ namespace UsualEngine
 		enSkinModelSRVReg_GShadowMap,		// G-Buffer用シャドウ
 		enSkinModelSRVReg_GTangentMap,		// G-Buffer用タンジェント 
 
+		enSkinModelSRVReg_InstancingData = 11,	//インスタンシング用のデータ
+
 		enSkinModelSRVReg_Specular = 39,
 		enSkinModelSRVReg_Specular_1,
 		enSkinModelSRVReg_Specular_2,

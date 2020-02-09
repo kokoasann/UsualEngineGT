@@ -12,13 +12,13 @@ namespace UsualEngine
 	};
 	Sprite::Sprite()
 	{
-		mVS.Load("Assets/shader/sprite.fx", "VSMain", Shader::EnType::VS);
-		mPS.Load("Assets/shader/sprite.fx", "PSMain", Shader::EnType::PS);
+		m_vs.Load("Assets/shader/sprite.fx", "VSMain", Shader::EnType::VS);
+		m_ps.Load("Assets/shader/sprite.fx", "PSMain", Shader::EnType::PS);
 	}
 	void Sprite::Init(const wchar_t* path, CVector2 size)
 	{
 		std::wstring st = path;
-		mTextuer = SpriteDataManager::Get()->Load(st);
+		m_textuer = SpriteDataManager::Get()->Load(st);
 
 		mSize = size;
 		CVector2 hsize = size/2;
@@ -42,9 +42,9 @@ namespace UsualEngine
 			}
 		};
 		short index[] = { 0,1,2,3 };
-		mPrimitive.Cteate(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP, 4, sizeof(SimpleVertex), topo, 4, IndexBuffer::e16bit, index);
+		m_primitive.Cteate(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP, 4, sizeof(SimpleVertex), topo, 4, IndexBuffer::e16bit, index);
 
-		mCB.Create(nullptr, sizeof(CBData));
+		m_constBuffer.Create(nullptr, sizeof(CBData));
 
 		//mVS.Load
 	}
@@ -84,14 +84,14 @@ namespace UsualEngine
 		cb.MulCol = mMulCol;
 
 		ID3D11DeviceContext* dev = usualEngine()->GetGraphicsEngine()->GetD3DDeviceContext();
-		dev->UpdateSubresource(mCB.GetBody(), 0, NULL, &cb, 0, 0);
-		dev->VSSetConstantBuffers(0, 1, &mCB.GetBody());
-		dev->PSSetConstantBuffers(0, 1, &mCB.GetBody());
-		dev->PSSetShaderResources(0, 1, &mTextuer);
-		dev->IASetInputLayout(mVS.GetInputLayout());
-		dev->VSSetShader((ID3D11VertexShader*)mVS.GetBody(), NULL, 0);
-		dev->PSSetShader((ID3D11PixelShader*)mPS.GetBody(), NULL, 0);
+		dev->UpdateSubresource(m_constBuffer.GetBody(), 0, NULL, &cb, 0, 0);
+		dev->VSSetConstantBuffers(0, 1, &m_constBuffer.GetBody());
+		dev->PSSetConstantBuffers(0, 1, &m_constBuffer.GetBody());
+		dev->PSSetShaderResources(0, 1, &m_textuer);
+		dev->IASetInputLayout(m_vs.GetInputLayout());
+		dev->VSSetShader((ID3D11VertexShader*)m_vs.GetBody(), NULL, 0);
+		dev->PSSetShader((ID3D11PixelShader*)m_ps.GetBody(), NULL, 0);
 
-		mPrimitive.Draw();
+		m_primitive.Draw();
 	}
 }

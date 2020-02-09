@@ -37,6 +37,8 @@ namespace UsualEngine
 		*@param[in] enFbxUpAxis		fbxの上軸。デフォルトはenFbxUpAxisZ。
 		*/
 		void Init(const wchar_t* filePath, EnFbxUpAxis enFbxUpAxis = enFbxUpAxisZ);
+
+		void InitInstancing(unsigned int maxInstance);
 		/*!
 		*@brief	モデルをワールド座標系に変換するためのワールド行列を更新する。
 		*@param[in]	position	モデルの座標。
@@ -151,6 +153,11 @@ namespace UsualEngine
 		}
 
 		void SetSpecularMap(const wchar_t* path);
+
+		void SetInstanceData(unsigned int num,const CMatrix& mat)
+		{
+			m_instancingData[num] = mat;
+		}
 	private:
 		/*!
 		*@brief	サンプラステートの初期化。
@@ -187,6 +194,12 @@ namespace UsualEngine
 
 		bool m_isShadowCaster = false;					//影を落とす
 		bool m_isShadowReciever = true;				//影が落ちる
+
+		bool m_isInstancing = false;
+		unsigned int m_maxInstance = 0;
+		unsigned int m_numInstance = 0;
+		CMatrix* m_instancingData = nullptr;
+		StructuredBuffer m_instancingDataSB;
 	};
 
 }

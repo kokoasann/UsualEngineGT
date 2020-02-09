@@ -16,15 +16,18 @@ namespace UsualEngine
 		Shader m_psShader;
 		Shader m_vsToDepth;						//深度値用の頂点シェーダ
 		Shader m_psToDepth;						//深度値用のピクセルシェーダ
-		bool isSkining;
+		Shader m_vsInstancing;
+		Shader m_vsInstancingToDepth;
+		bool isSkining = false;
 		ID3D11ShaderResourceView* m_albedoTex = nullptr;
 		ID3D11ShaderResourceView* m_specularMap = nullptr;
+		bool m_isInstancing = false;
 	public:
 		ModelEffect()
 		{
 			m_psShader.Load("Assets/shader/model.fx", "PSMain", Shader::EnType::PS);
 			m_psToDepth.Load("Assets/shader/model.fx", "PSMain_Depth", Shader::EnType::PS);
-
+			
 			m_pPSShader = &m_psShader;
 		}
 		virtual ~ModelEffect()
@@ -75,6 +78,11 @@ namespace UsualEngine
 		{
 			m_pPSShader = &shader;
 		}
+
+		void Instancing()
+		{
+			m_isInstancing = true;
+		}
 	};
 	/*!
 	*@brief
@@ -86,6 +94,8 @@ namespace UsualEngine
 		{
 			m_vsShader.Load("Assets/shader/model.fx", "VSMain", Shader::EnType::VS);
 			m_vsToDepth.Load("Assets/shader/model.fx", "VSMainDepth", Shader::EnType::VS);
+			m_vsInstancing.Load("Assets/shader/Instancing.fx", "VSMain_NonSkin_Instancing", Shader::EnType::VS);
+			m_vsInstancingToDepth.Load("Assets/shader/Instancing.fx", "VSMain_DepthNonSkin_Instancing", Shader::EnType::VS);
 			m_pVSShader = &m_vsShader;
 			isSkining = false;
 		}
@@ -102,7 +112,8 @@ namespace UsualEngine
 			GetCurrentDirectoryW(256, hoge);
 			m_vsShader.Load("Assets/shader/model.fx", "VSMainSkin", Shader::EnType::VS);
 			m_vsToDepth.Load("Assets/shader/model.fx", "VSMainDepth_Skin", Shader::EnType::VS);
-			//m_vsToDepth.Load("Assets/shader/model.fx", "VSMainSkin", Shader::EnType::VS);
+			m_vsInstancing.Load("Assets/shader/Instancing.fx", "VSMain_Skin_Instancing", Shader::EnType::VS);
+			m_vsInstancingToDepth.Load("Assets/shader/Instancing.fx", "VSMain_DepthSkin_Instancing", Shader::EnType::VS);
 			m_pVSShader = &m_vsShader;
 			isSkining = true;
 		}

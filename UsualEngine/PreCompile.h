@@ -96,7 +96,7 @@ static const int RTV_MAX = 8;
 
 #include "graphics/SkinModelRender.h"
 #include "Prefab/SkinModelRender4Ground.h"
-
+#include "level/Level.h"
 #if _DEBUG
 //#include "Debug/DebugLog.h"
 
