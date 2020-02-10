@@ -26,15 +26,22 @@ namespace UsualEngine
 		virtual void Awake() {};
 		//スタート関数　戻り値がfalseの場合は次のフレームでもっかい呼ばれる
 		virtual bool Start() { return true; };
+
+		//スタート関数でtrueが返ってきた次のフレームから毎フレーム呼ばれるようになる。 Updateの前に呼ばれる
+		virtual void PreUpdate() {};
 		//スタート関数でtrueが返ってきた次のフレームから毎フレーム呼ばれるようになる。
 		virtual void Update() {};
+		//スタート関数でtrueが返ってきた次のフレームから毎フレーム呼ばれるようになる。Updateの後に呼ばれる。
+		virtual void PostUpdate() {};
 
 		virtual void Render() {};
 		virtual void PostRender() {};
 
 		void WrapOnDestroy(){}
 		void WrapStart();
+		void WrapPreUpdate();
 		void WrapUpdate();
+		void WrapPostUpdate();
 		void WrapRender();
 		void WrapPostRender();
 

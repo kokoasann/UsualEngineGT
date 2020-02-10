@@ -30,6 +30,18 @@ namespace UsualEngine
 			float v[2];
 		};
 
+		CVector2& operator =(const CVector2& v)
+		{
+			vec = v.vec;
+			return *this;
+		}
+		CVector2& operator =(const CVector3& v)
+		{
+			x = v.x;
+			y = v.y;
+			return *this;
+		}
+
 		void Add(const CVector2& v1, const CVector2& v2)
 		{
 			x = v1.x + v2.x;
@@ -52,6 +64,13 @@ namespace UsualEngine
 		{
 			DirectX::XMVECTOR xmv = DirectX::XMLoadFloat2(&vec);
 			return DirectX::XMVector2Length(xmv).m128_f32[0];
+		}
+
+		void Normalize()
+		{
+			DirectX::XMVECTOR xmv = DirectX::XMLoadFloat2(&vec);
+			DirectX::XMVector2Normalize(xmv);
+			DirectX::XMStoreFloat2(&vec, xmv);
 		}
 		/*!
 		* @brief	ê¸å`ï‚ä‘ÅB
@@ -93,6 +112,13 @@ namespace UsualEngine
 		CVector3& operator=(const CVector3& _v)
 		{
 			vec = _v.vec;
+			return *this;
+		}
+		CVector3& operator=(const CVector2& v)
+		{
+			x = v.x;
+			y = v.y;
+			z = 0.0f;
 			return *this;
 		}
 		CVector3() {}

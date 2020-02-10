@@ -49,6 +49,7 @@ namespace UsualEngine
 				}
 				sw = s;
 				s->isPushed = true;
+				break;
 			}
 			else
 			{
@@ -86,6 +87,7 @@ namespace UsualEngine
 					}
 					sw = s;
 					s->isPushed = true;
+					break;
 				}
 				else
 				{

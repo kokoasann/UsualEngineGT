@@ -181,40 +181,62 @@ namespace UsualEngine
 		{
 			return m_animMove;
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		const CVector3& GetMove() const
+		{
+			return m_move;
+		}
+
+		bool IsHit() const
+		{
+			return m_isHit;
+		}
+
+		btCollisionObject* GetHitCollision() const
+		{
+			return m_hitCollision;
+		}
+
 	private:
-		bool m_isFirst = true;					//初めてか？
-		Bone* m_effectorBone=0;					//エフェクタボーン
-		Bone* m_endBone=0;						//エンドボーン
-		float m_radius = 0.f;					//コライダーの半径。
-		UseIK m_usingIK = enUSE_CCD;				//使用するIKの種類。
-		IKMode m_ikMode = enMode_Normal;		//IKのモード
+		bool m_isFirst = true;							//初めてか？
+		Bone* m_effectorBone=0;							//エフェクタボーン
+		Bone* m_endBone=0;								//エンドボーン
+		float m_radius = 0.f;							//コライダーの半径。
+		UseIK m_usingIK = enUSE_CCD;					//使用するIKの種類。
+		IKMode m_ikMode = enMode_Normal;				//IKのモード
 
-		SphereCollider m_collider;				//コライダー
-		RigidBody m_rigidBody;					//リジッドボディ
+		SphereCollider m_collider;						//コライダー
+		RigidBody m_rigidBody;							//リジッドボディ
 
-		CVector3 m_offset = CVector3::Zero();
+		CVector3 m_offset = CVector3::Zero();			
 		CVector3 m_target = CVector3::Zero();			//IKのターゲット
 		CVector3 m_oldTarget = CVector3::Zero();		//old IKのターゲット
 		CVector3 m_rubTarget = CVector3::Zero();		//擦った先のポジション。
-		CVector3 m_move = CVector3::Zero();			//移動ベクトル
+		CVector3 m_move = CVector3::Zero();				//移動ベクトル
 		CVector3 m_animMove = CVector3::Zero();
 		bool m_isUseLocalTarget = 1;
-		float m_speed = 1.f;					//次のターゲットに移動するときの速度(%)。1なら1フレームで移動する。0なら動かない。
+		float m_speed = 1.f;							//次のターゲットに移動するときの速度(%)。1なら1フレームで移動する。0なら動かない。
 
-		bool m_isHit = false;					//当たった？
-		float m_rubbing = 1.0f;					//摩擦率、初期値は100%　滑ることはない。
+		bool m_isHit = false;							//当たった？
+		float m_rubbing = 1.0f;							//摩擦率、初期値は100%　滑ることはない。
 
-		bool m_isActive = true;					//動く？
-		CVector3 m_nextTarget = CVector3::Zero();	//外部から設定された次のターゲット
-		bool m_isSetNextTarget = false;				//次のターゲットがセットされた？
+		bool m_isActive = true;							//動く？
+		CVector3 m_nextTarget = CVector3::Zero();		//外部から設定された次のターゲット
+		bool m_isSetNextTarget = false;					//次のターゲットがセットされた？
 		
-		bool m_isUseRigidBody = true;				//リジッドボディーを使う？
+		bool m_isUseRigidBody = true;					//リジッドボディーを使う？
 
-		float m_gravity = 0.0f;					// 重力。
-		float m_timer = 0.0f;					//重力用のタイマー
-		bool m_isNextGravity = false;
-		float m_gravitPow = 0.0f;				
-		CVector3 m_oldNewTarget = CVector3::Zero();	
+		float m_gravity = 0.0f;							// 重力。
+		float m_timer = 0.0f;							//重力用のタイマー
+		bool m_isNextGravity = false;					
+		float m_gravitPow = 0.0f;							
+		CVector3 m_oldNewTarget = CVector3::Zero();		
+
+		btCollisionObject* m_hitCollision = nullptr
 	};
 
 }

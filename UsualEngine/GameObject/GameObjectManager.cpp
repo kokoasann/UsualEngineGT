@@ -78,20 +78,35 @@ namespace UsualEngine
 		{
 			for (auto go : goList)
 			{
-				if (go->IsStart())
+				go->WrapPreUpdate();
+			}
+		}
+		for (auto& goList : m_gameObjectList)
+		{
+			for (auto go : goList)
+			{
+				go->WrapUpdate();
+			}
+		}
+		for (auto& goList : m_gameObjectList)
+		{
+			for (auto go : goList)
+			{
+				go->WrapPostUpdate();
+			}
+		}
+		
+		//Ž€‚ñ‚¾“z‚Ìˆ—B
+		for (auto& goList : m_gameObjectList)
+		{
+			for (auto go : goList)
+			{
+				if (go->IsDead())
 				{
-					if (!go->IsDead())
-					{
-						go->Update();
-						
-					}
-					else
-					{
-						DeadData dd;
-						dd.ind = Count;
-						dd.prio = go->GetPrio();
-						m_ddList.push_back(dd);
-					}
+					DeadData dd;
+					dd.ind = Count;
+					dd.prio = go->GetPrio();
+					m_ddList.push_back(dd);
 				}
 				Count++;
 			}

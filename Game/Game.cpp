@@ -21,6 +21,7 @@ bool Game::Start()
 	ue::NewGO<Ene_Gib>(0);
 	//ue::NewGO<Ene_GibTes>(0);
 
+	//インスタンシングのテスト
 	{
 		ue::CVector3 sca = ue::CVector3(0.05, 0.05, 0.05);
 		ue::CMatrix mat;
@@ -83,7 +84,7 @@ bool Game::Start()
 			else if(wcscmp(obj.name,L"weed")==0)
 			{
 				ue::CMatrix mat;
-				mat.MakeScaling(obj.scale);
+				mat.MakeScaling(obj.scale*0.4f);
 				mat.v[3] = ue::CVector4(obj.position)*120;
 				mat.v[3].w = 1;
 				weedSMs.SetInstanceData(weedinst, mat);
@@ -91,20 +92,6 @@ bool Game::Start()
 			}
 			return true;
 	});
-	/*ue::BoxCollider* bcp = new ue::BoxCollider(); 
-	auto& bc = *bcp;
-	bcp->Create({ 100,50,100 });
-	ue::RigidBodyInfo info;
-	info.mass = 0.f;
-	info.collider = bcp;
-	info.pos = { 500,10,0 };
-	ue::CQuaternion r;
-	r.SetRotationDeg(ue::CVector3::AxisX(), 10);
-	info.rot = r;
-	ue::RigidBody* rbp = new ue::RigidBody();
-	auto& rb = *rbp;
-	rbp->Create(info);
-	ue::Physics().AddRigidBody(*rbp);*/
 
 	/*auto BG = ue::NewGO < ue::SkinModelRender>(0);
 	BG->Init(L"Assets/model/BackGroundTest.cmo");
@@ -112,164 +99,25 @@ bool Game::Start()
 
 	cam = &ue::usualEngine()->GetMainCamera();
 
-	//ground = ue::NewGO<ue::SMR4Ground>(0);
-	//ground->InitG(L"Assets/model/dun.cmo", 0, 0, ue::enFbxUpAxisZ);
-	//ground->SetIsShadowCaster(true);
-	//ground->SetIsShadowReciever(true);
-	////ground->SetSca(ue::CVector3{30, 0.1f, 10});
-	//ground->SetSca(ue::CVector3{30, 30.f, 10}/10);
-	////ground->SetPos({ 0,-100,0 });
-	//ground->SetPos(ue::CVector3{ 0,-100*300,0 }/10);
-	//rot.SetRotationDeg(ue::CVector3::AxisZ(), 90);
-	//ground->SetBlendMap(L"Assets/sprite/map.dds");
-	//ground->SetTexture(0, L"Assets/sprite/kusa.dds");
-	//ground->SetTexture(1, L"Assets/sprite/tuti.dds");
-	//ground->SetSpecularMap(ue::SMR4Ground::tkGrass, L"Assets/sprite/kusa_spe.dds", L"grass");
-	//ground->SetSpecularMap(ue::SMR4Ground::tkTuti, L"Assets/sprite/tuti_spe.dds", L"gaia");
-
-	//pso.CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(),ground->GetSca());
-	//ground->SetRot(rot);
-	if(false)
-	{
-		float sca = 0.04;
-		ue::CVector3 pos = { 0,-7600*sca,0 };
-		ue::CVector3 scal = ue::CVector3::One() * sca;
-		ground = ue::NewGO<ue::SMR4Ground>(0);
-		ground->InitG(L"Assets/model/map1A.cmo", 0, 0, ue::enFbxUpAxisZ, ue::SMR4Ground::gtBlendThree);
-		ground->SetIsShadowCaster(true);
-		ground->SetIsShadowReciever(true);
-		ground->SetBlendMap(L"Assets/sprite/worldBlend.dds");
-		ground->SetTexture(0, L"Assets/sprite/kusa.dds");
-		ground->SetTexture(1, L"Assets/sprite/tuti.dds");
-		ground->SetTexture(2, L"Assets/sprite/iwa.dds");
-		ground->SetSpecularMap(ue::SMR4Ground::tkGrass, L"Assets/sprite/kusa_spe.dds", L"grass");
-		ground->SetSpecularMap(ue::SMR4Ground::tkTuti, L"Assets/sprite/tuti_spe.dds", L"gaia");
-		ground->SetSpecularMap(ue::SMR4Ground::tkOther, L"Assets/sprite/iwa_spe.dds", L"");
-		ground->SetPos(pos);
-		ground->SetSca(scal);
-		wpso[0].CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(), ground->GetSca());
-
-		ground = ue::NewGO<ue::SMR4Ground>(0);
-		ground->InitG(L"Assets/model/map1B.cmo", 0, 0, ue::enFbxUpAxisZ, ue::SMR4Ground::gtBlendThree);
-		ground->SetIsShadowCaster(true);
-		ground->SetIsShadowReciever(true);
-		ground->SetBlendMap(L"Assets/sprite/worldBlend.dds");
-		ground->SetTexture(0, L"Assets/sprite/kusa.dds");
-		ground->SetTexture(1, L"Assets/sprite/tuti.dds");
-		ground->SetTexture(2, L"Assets/sprite/iwa.dds");
-		ground->SetSpecularMap(ue::SMR4Ground::tkGrass, L"Assets/sprite/kusa_spe.dds", L"grass");
-		ground->SetSpecularMap(ue::SMR4Ground::tkTuti, L"Assets/sprite/tuti_spe.dds", L"gaia");
-		ground->SetSpecularMap(ue::SMR4Ground::tkOther, L"Assets/sprite/iwa_spe.dds", L"");
-		ground->SetPos(pos);
-		ground->SetSca(scal);
-		wpso[1].CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(), ground->GetSca());
-
-		ground = ue::NewGO<ue::SMR4Ground>(0);
-		ground->InitG(L"Assets/model/map1C.cmo", 0, 0, ue::enFbxUpAxisZ, ue::SMR4Ground::gtBlendThree);
-		ground->SetIsShadowCaster(true);
-		ground->SetIsShadowReciever(true);
-		ground->SetBlendMap(L"Assets/sprite/worldBlend.dds");
-		ground->SetTexture(0, L"Assets/sprite/kusa.dds");
-		ground->SetTexture(1, L"Assets/sprite/tuti.dds");
-		ground->SetTexture(2, L"Assets/sprite/iwa.dds");
-		ground->SetSpecularMap(ue::SMR4Ground::tkGrass, L"Assets/sprite/kusa_spe.dds", L"grass");
-		ground->SetSpecularMap(ue::SMR4Ground::tkTuti, L"Assets/sprite/tuti_spe.dds", L"gaia");
-		ground->SetSpecularMap(ue::SMR4Ground::tkOther, L"Assets/sprite/iwa_spe.dds", L"");
-		ground->SetPos(pos);
-		ground->SetSca(scal);
-		wpso[2].CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(), ground->GetSca());
-
-		ground = ue::NewGO<ue::SMR4Ground>(0);
-		ground->InitG(L"Assets/model/map2A.cmo", 0, 0, ue::enFbxUpAxisZ, ue::SMR4Ground::gtBlendThree);
-		ground->SetIsShadowCaster(true);
-		ground->SetIsShadowReciever(true);
-		ground->SetBlendMap(L"Assets/sprite/worldBlend.dds");
-		ground->SetTexture(0, L"Assets/sprite/kusa.dds");
-		ground->SetTexture(1, L"Assets/sprite/tuti.dds");
-		ground->SetTexture(2, L"Assets/sprite/iwa.dds");
-		ground->SetSpecularMap(ue::SMR4Ground::tkGrass, L"Assets/sprite/kusa_spe.dds", L"grass");
-		ground->SetSpecularMap(ue::SMR4Ground::tkTuti, L"Assets/sprite/tuti_spe.dds", L"gaia");
-		ground->SetSpecularMap(ue::SMR4Ground::tkOther, L"Assets/sprite/iwa_spe.dds", L"");
-		ground->SetPos(pos);
-		ground->SetSca(scal);
-		wpso[3].CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(), ground->GetSca());
-
-		ground = ue::NewGO<ue::SMR4Ground>(0);
-		ground->InitG(L"Assets/model/map2B.cmo", 0, 0, ue::enFbxUpAxisZ, ue::SMR4Ground::gtBlendThree);
-		ground->SetIsShadowCaster(true);
-		ground->SetIsShadowReciever(true);
-		ground->SetBlendMap(L"Assets/sprite/worldBlend.dds");
-		ground->SetTexture(0, L"Assets/sprite/kusa.dds");
-		ground->SetTexture(1, L"Assets/sprite/tuti.dds");
-		ground->SetTexture(2, L"Assets/sprite/iwa.dds");
-		ground->SetSpecularMap(ue::SMR4Ground::tkGrass, L"Assets/sprite/kusa_spe.dds", L"grass");
-		ground->SetSpecularMap(ue::SMR4Ground::tkTuti, L"Assets/sprite/tuti_spe.dds", L"gaia");
-		ground->SetSpecularMap(ue::SMR4Ground::tkOther, L"Assets/sprite/iwa_spe.dds", L"");
-		ground->SetPos(pos);
-		ground->SetSca(scal);
-		wpso[4].CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(), ground->GetSca());
-
-		ground = ue::NewGO<ue::SMR4Ground>(0);
-		ground->InitG(L"Assets/model/map2C.cmo", 0, 0, ue::enFbxUpAxisZ, ue::SMR4Ground::gtBlendThree);
-		ground->SetIsShadowCaster(true);
-		ground->SetIsShadowReciever(true);
-		ground->SetBlendMap(L"Assets/sprite/worldBlend.dds");
-		ground->SetTexture(0, L"Assets/sprite/kusa.dds");
-		ground->SetTexture(1, L"Assets/sprite/tuti.dds");
-		ground->SetTexture(2, L"Assets/sprite/iwa.dds");
-		ground->SetSpecularMap(ue::SMR4Ground::tkGrass, L"Assets/sprite/kusa_spe.dds", L"grass");
-		ground->SetSpecularMap(ue::SMR4Ground::tkTuti, L"Assets/sprite/tuti_spe.dds", L"gaia");
-		ground->SetSpecularMap(ue::SMR4Ground::tkOther, L"Assets/sprite/iwa_spe.dds", L"");
-		ground->SetPos(pos);
-		ground->SetSca(scal);
-		wpso[5].CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(), ground->GetSca());
-
-		ground = ue::NewGO<ue::SMR4Ground>(0);
-		ground->InitG(L"Assets/model/map3A.cmo", 0, 0, ue::enFbxUpAxisZ, ue::SMR4Ground::gtBlendThree);
-		ground->SetIsShadowCaster(true);
-		ground->SetIsShadowReciever(true);
-		ground->SetBlendMap(L"Assets/sprite/worldBlend.dds");
-		ground->SetTexture(0, L"Assets/sprite/kusa.dds");
-		ground->SetTexture(1, L"Assets/sprite/tuti.dds");
-		ground->SetTexture(2, L"Assets/sprite/iwa.dds");
-		ground->SetSpecularMap(ue::SMR4Ground::tkGrass, L"Assets/sprite/kusa_spe.dds", L"grass");
-		ground->SetSpecularMap(ue::SMR4Ground::tkTuti, L"Assets/sprite/tuti_spe.dds", L"gaia");
-		ground->SetSpecularMap(ue::SMR4Ground::tkOther, L"Assets/sprite/iwa_spe.dds", L"");
-		ground->SetPos(pos);
-		ground->SetSca(scal);
-		wpso[6].CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(), ground->GetSca());
-
-		ground = ue::NewGO<ue::SMR4Ground>(0);
-		ground->InitG(L"Assets/model/map3B.cmo", 0, 0, ue::enFbxUpAxisZ, ue::SMR4Ground::gtBlendThree);
-		ground->SetIsShadowCaster(true);
-		ground->SetIsShadowReciever(true);
-		ground->SetBlendMap(L"Assets/sprite/worldBlend.dds");
-		ground->SetTexture(0, L"Assets/sprite/kusa.dds");
-		ground->SetTexture(1, L"Assets/sprite/tuti.dds");
-		ground->SetTexture(2, L"Assets/sprite/iwa.dds");
-		ground->SetSpecularMap(ue::SMR4Ground::tkGrass, L"Assets/sprite/kusa_spe.dds", L"grass");
-		ground->SetSpecularMap(ue::SMR4Ground::tkTuti, L"Assets/sprite/tuti_spe.dds", L"gaia");
-		ground->SetSpecularMap(ue::SMR4Ground::tkOther, L"Assets/sprite/iwa_spe.dds", L"");
-		ground->SetPos(pos);
-		ground->SetSca(scal);
-		wpso[7].CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(), ground->GetSca());
-
-		ground = ue::NewGO<ue::SMR4Ground>(0);
-		ground->InitG(L"Assets/model/map3C.cmo", 0, 0, ue::enFbxUpAxisZ, ue::SMR4Ground::gtBlendThree);
-		ground->SetIsShadowCaster(true);
-		ground->SetIsShadowReciever(true);
-		ground->SetBlendMap(L"Assets/sprite/worldBlend.dds");
-		ground->SetTexture(0, L"Assets/sprite/kusa.dds");
-		ground->SetTexture(1, L"Assets/sprite/tuti.dds");
-		ground->SetTexture(2, L"Assets/sprite/iwa.dds");
-		ground->SetSpecularMap(ue::SMR4Ground::tkGrass, L"Assets/sprite/kusa_spe.dds", L"grass");
-		ground->SetSpecularMap(ue::SMR4Ground::tkTuti, L"Assets/sprite/tuti_spe.dds", L"gaia");
-		ground->SetSpecularMap(ue::SMR4Ground::tkOther, L"Assets/sprite/iwa_spe.dds", L"");
-		ground->SetPos(pos);
-		ground->SetSca(scal);
-		wpso[8].CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(), ground->GetSca());
-	}
+	//IKのデバッグ用の平らな足場とスロープ
 #if 0
+	ground = ue::NewGO<ue::SMR4Ground>(0);
+	ground->InitG(L"Assets/model/dun.cmo", 0, 0, ue::enFbxUpAxisZ);
+	ground->SetIsShadowCaster(true);
+	ground->SetIsShadowReciever(true);
+	//ground->SetSca(ue::CVector3{30, 0.1f, 10});
+	ground->SetSca(ue::CVector3{30, 30.f, 10}/10);
+	//ground->SetPos({ 0,-100,0 });
+	ground->SetPos(ue::CVector3{ 0,-100*300,0 }/10);
+	rot.SetRotationDeg(ue::CVector3::AxisZ(), 90);
+	ground->SetBlendMap(L"Assets/sprite/map.dds");
+	ground->SetTexture(0, L"Assets/sprite/kusa.dds");
+	ground->SetTexture(1, L"Assets/sprite/tuti.dds");
+	ground->SetSpecularMap(ue::SMR4Ground::tkGrass, L"Assets/sprite/kusa_spe.dds", L"grass");
+	ground->SetSpecularMap(ue::SMR4Ground::tkTuti, L"Assets/sprite/tuti_spe.dds", L"gaia");
+
+	pso.CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(),ground->GetSca());
+	ground->SetRot(rot);
 	//デバッグ用のスロープ
 	ground = ue::NewGO<ue::SMR4Ground>(0);
 	ground->InitG(L"Assets/model/dun.cmo", 0, 0, ue::enFbxUpAxisZ);

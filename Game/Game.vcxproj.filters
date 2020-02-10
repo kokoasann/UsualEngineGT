@@ -43,6 +43,9 @@
     <ClCompile Include="Character\CharacterMotionController.cpp">
       <Filter>Chara</Filter>
     </ClCompile>
+    <ClCompile Include="Player\PlayerClimb.cpp">
+      <Filter>Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -92,6 +95,9 @@
     <ClInclude Include="CollisionTag.h" />
     <ClInclude Include="Character\CharacterMotionController.h">
       <Filter>Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="Player\PlayerClimb.h">
+      <Filter>Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

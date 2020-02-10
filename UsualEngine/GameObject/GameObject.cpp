@@ -17,11 +17,27 @@ void UsualEngine::GameObject::WrapStart()
 	}
 }
 
+void UsualEngine::GameObject::WrapPreUpdate()
+{
+	if (m_isStartGO && m_isActiveGO && !m_isDeadGO)
+	{
+		PreUpdate();
+	}
+}
+
 void UsualEngine::GameObject::WrapUpdate()
 {
 	if (m_isStartGO && m_isActiveGO && !m_isDeadGO)
 	{
 		Update();
+	}
+}
+
+void UsualEngine::GameObject::WrapPostUpdate()
+{
+	if (m_isStartGO && m_isActiveGO && !m_isDeadGO)
+	{
+		PostUpdate();
 	}
 }
 

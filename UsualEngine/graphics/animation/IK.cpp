@@ -14,6 +14,7 @@ namespace UsualEngine
 		float dist = FLT_MAX;
 		btCollisionObject* me = nullptr;
 		int chit = 0;
+		btCollisionObject* hitCollision = nullptr;
 
 		btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
 		{
@@ -34,6 +35,7 @@ namespace UsualEngine
 				hitNormal.Normalize();
 				hitPos = *(CVector3*)&convexResult.m_hitPointLocal;
 				dist = dis;
+				hitCollision = (btCollisionObject*)convexResult.m_hitCollisionObject;
 			}
 			return 0.0f;
 		}
@@ -49,6 +51,7 @@ namespace UsualEngine
 		float dist = FLT_MAX;
 		btCollisionObject* me = nullptr;
 		int chit = 0;
+		btCollisionObject* hitCollision = nullptr;
 
 		btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
 		{
@@ -75,6 +78,8 @@ namespace UsualEngine
 					hitNormal.Normalize();
 					hitPos = *(CVector3*)& convexResult.m_hitPointLocal;
 					dist = dis;
+
+					hitCollision = (btCollisionObject*)convexResult.m_hitCollisionObject;
 				}
 			}
 			return 0.0f;
@@ -90,6 +95,7 @@ namespace UsualEngine
 		float dist = FLT_MAX;
 		btCollisionObject* me = nullptr;
 		int chit = 0;
+		btCollisionObject* hitCollision = nullptr;
 
 		btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
 		{
@@ -115,6 +121,7 @@ namespace UsualEngine
 					hitNormal = *(CVector3*)& convexResult.m_hitNormalLocal;
 					hitPos = *(CVector3*)& convexResult.m_hitPointLocal;
 					dist = dis;
+					hitCollision = (btCollisionObject*)convexResult.m_hitCollisionObject;
 				}
 			}
 			return 0.0f;
@@ -440,12 +447,14 @@ namespace UsualEngine
 			}
 			m_effectorBone->SetIsONGround(sr.isHit);
 			isHitGround = sr.isHit;
+			m_hitCollision = sr.hitCollision;
 		}
 		else
 		{
 			m_effectorBone->SetIsONGround(m_isHit);
 			isHitGround = m_isHit;
 		}
+		
 
 
 		if ((CVector3( oldpos.x, 0.f, oldpos.z) -CVector3( newpos.x, 0.f, newpos.z )).Length() > FLT_EPSILON)
@@ -481,6 +490,7 @@ namespace UsualEngine
 				else
 					target = newpos2;
 			}
+			m_hitCollision = sr_w.hitCollision;
 		}
 
 #if 1
@@ -513,6 +523,7 @@ namespace UsualEngine
 			}
 			m_effectorBone->SetIsONGround(sr.isHit);
 			isHitGround = sr.isHit;
+			m_hitCollision = sr.hitCollision;
 		}
 #endif
 
