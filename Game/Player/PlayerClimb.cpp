@@ -86,6 +86,37 @@ void PlayerClimb::LimbState_Stop::Update(ue::IK* ik)
 {
 }
 
+void* PlayerClimb::LimbState_Move::operator new(size_t size)
+{
+	void* ptr = nullptr;
+	if (TrashBox.size() == 0)
+	{
+		ptr = malloc(size);
+		AllInstance.push_back((LimbState_Move*)ptr);
+	}
+	else
+	{
+		ptr = (void*)TrashBox[TrashBox.size() - 1];
+		TrashBox.pop_back();
+	}
+	return ptr;
+}
+
+void PlayerClimb::LimbState_Move::Release()
+{
+	for (auto item : AllInstance)
+	{
+		free(item);
+	}
+	AllInstance.clear();
+	TrashBox.clear();
+}
+
+PlayerClimb::LimbState_Move::~LimbState_Move()
+{
+
+}
+
 void PlayerClimb::LimbState_Move::Update(ue::IK* ik)
 {
 }

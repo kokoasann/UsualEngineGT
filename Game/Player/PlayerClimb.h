@@ -4,6 +4,7 @@
 class PlayerClimb:public ue::GameObject
 {
 private:
+	
 	/// <summary>
 	/// ステート
 	/// </summary>
@@ -13,7 +14,6 @@ private:
 		{
 		}
 		virtual ~LimbState(){}
-		void Relese(){}
 		virtual void Update(ue::IK* ik) = 0;
 		
 		bool isComplete = false;
@@ -25,37 +25,14 @@ private:
 	{
 		static std::vector<LimbState_Move*>TrashBox;
 		static std::vector<LimbState_Move*>AllInstance;
-		static void* operator new(size_t size)
-		{
-			void* ptr = nullptr;
-			if (TrashBox.size() == 0)
-			{
-				ptr = malloc(size);
-				AllInstance.push_back((LimbState_Move*)ptr);
-				
-			}
-			else
-			{
-				ptr = (void*)TrashBox[TrashBox.size() - 1];
-				TrashBox.pop_back();
-			}
-			return ptr;
-		}
+		static void* operator new(size_t size);
+		
 		static void operator delete(void* ptr)
 		{
 			TrashBox.push_back((LimbState_Move*)ptr);
 		}
-		static void Release()
-		{
-			for (auto item : AllInstance)
-			{
-				free(item);
-			}
-			AllInstance.clear();
-			TrashBox.clear();
-		}
-
-
+		static void Release();
+		
 		~LimbState_Move();
 		void Update(ue::IK* ik) override;
 		float timer = 0.0f;
@@ -75,7 +52,14 @@ private:
 		bool isInTrush = false;
 	};
 
-
+	struct LimbStateManager
+	{
+		~LimbStateManager()
+		{
+			LimbState_Move::Release();
+		}
+	};
+	static LimbStateManager s_limbStateManager;
 public:
 	/// <summary>
 	/// 登るときのスペック
