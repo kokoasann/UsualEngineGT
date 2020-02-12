@@ -129,6 +129,12 @@ namespace UsualEngine
 		{
 			Set(x, y, z);
 		}
+		CVector3(const CVector2& v)
+		{
+			x = v.x;
+			y = v.y;
+			z = 0.0f;
+		}
 		/*!
 		* @brief	線形補間。
 		*@details
@@ -185,6 +191,27 @@ namespace UsualEngine
 			DirectX::XMVECTOR xmv1 = DirectX::XMLoadFloat3(&v1.vec);
 			DirectX::XMVECTOR xmvr = DirectX::XMVectorAdd(xmv0, xmv1);
 			DirectX::XMStoreFloat3(&vec, xmvr);
+		}
+
+		void Add(const CVector2& v)
+		{
+			DirectX::XMVECTOR xmv0 = DirectX::XMLoadFloat3(&vec);
+			DirectX::XMVECTOR xmv1 = DirectX::XMLoadFloat2(&v.vec);
+			DirectX::XMVECTOR xmvr = DirectX::XMVectorAdd(xmv0, xmv1);
+			DirectX::XMStoreFloat3(&vec, xmvr);
+		}
+		void Add(const CVector3& v1, const CVector2& v2)
+		{
+			DirectX::XMVECTOR xmv0 = DirectX::XMLoadFloat3(&v1.vec);
+			DirectX::XMVECTOR xmv1 = DirectX::XMLoadFloat2(&v2.vec);
+			DirectX::XMVECTOR xmvr = DirectX::XMVectorAdd(xmv0, xmv1);
+			DirectX::XMStoreFloat3(&vec, xmvr);
+		}
+		CVector3 operator+( const CVector2& v2) const
+		{
+			CVector3 v;
+			v.Add(*this,v2);
+			return v;
 		}
 		/*!
 		 * @brief	ベクトルを減算。

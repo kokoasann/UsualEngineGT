@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "PlayerClimb.h"
+#include "../Character/Character.h"
 
 PlayerClimb::PlayerClimb()
 {
@@ -18,8 +19,9 @@ void PlayerClimb::OnDestroy()
 	Release();
 }
 
-void PlayerClimb::Init(ue::IK* footL, ue::IK* footR, ue::IK* handL, ue::IK* handR)
+void PlayerClimb::Init(Character* chara,ue::IK* footL, ue::IK* footR, ue::IK* handL, ue::IK* handR)
 {
+	m_chara = chara;
 	m_footLIK = footL;
 	m_footRIK = footR;
 	m_handLIK = handL;
@@ -47,6 +49,11 @@ void PlayerClimb::Init(ue::IK* footL, ue::IK* footR, ue::IK* handL, ue::IK* hand
 	};
 }
 
+void PlayerClimb::InitClimbSpec(const ClimbSpec& spec)
+{
+	m_climbSpec = spec;
+}
+
 void PlayerClimb::Update()
 {
 
@@ -64,6 +71,17 @@ void PlayerClimb::UpdateInput(const ue::CVector2& dir)
 
 void PlayerClimb::StartClimb()
 {
+	m_footLIK->SetNextTarget(m_chara->GetPos() + m_climbSpec.startFootPos);
+	ue::CVector2 inv = m_climbSpec.startFootPos;
+	inv.x *= -1.f;
+	m_footRIK->SetNextTarget(m_chara->GetPos() + inv);
+
+
+	m_handLIK->SetNextTarget(m_chara->GetPos() + m_climbSpec.startHandPos);
+	inv = m_climbSpec.startHandPos;
+	inv.x *= -1.f;
+	m_handRIK->SetNextTarget(m_chara->GetPos() + inv);
+
 
 }
 
@@ -76,15 +94,14 @@ void PlayerClimb::StopClimb()
 }
 
 
+
 /// <summary>
 /// 
 ///		こっからは LimbState 関係。
 /// 
 /// </summary>
 
-void PlayerClimb::LimbState_Stop::Update(ue::IK* ik)
-{
-}
+
 
 void* PlayerClimb::LimbState_Move::operator new(size_t size)
 {
@@ -117,6 +134,18 @@ PlayerClimb::LimbState_Move::~LimbState_Move()
 
 }
 
-void PlayerClimb::LimbState_Move::Update(ue::IK* ik)
+
+/// <summary>
+/// 
+///		limbState 更新系。
+/// 
+/// </summary>
+
+void PlayerClimb::LimbState_Move::Update(const PlayerClimb& body, ue::IK* ik)
+{
+	
+}
+
+void PlayerClimb::LimbState_Stop::Update(const PlayerClimb& body, ue::IK* ik)
 {
 }

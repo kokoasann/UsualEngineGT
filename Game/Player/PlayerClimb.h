@@ -1,6 +1,6 @@
 #pragma once
 
-
+class Character;
 class PlayerClimb:public ue::GameObject
 {
 private:
@@ -14,7 +14,7 @@ private:
 		{
 		}
 		virtual ~LimbState(){}
-		virtual void Update(ue::IK* ik) = 0;
+		virtual void Update(const PlayerClimb& body, ue::IK* ik) = 0;
 		
 		bool isComplete = false;
 	};
@@ -25,16 +25,16 @@ private:
 	{
 		static std::vector<LimbState_Move*>TrashBox;
 		static std::vector<LimbState_Move*>AllInstance;
-		static void* operator new(size_t size);
+		void* operator new(size_t size);
 		
-		static void operator delete(void* ptr)
+		void operator delete(void* ptr)
 		{
 			TrashBox.push_back((LimbState_Move*)ptr);
 		}
 		static void Release();
 		
 		~LimbState_Move();
-		void Update(ue::IK* ik) override;
+		void Update(const PlayerClimb& body, ue::IK* ik) override;
 		float timer = 0.0f;
 
 	private:
@@ -45,13 +45,35 @@ private:
 	/// </summary>
 	struct LimbState_Stop :public LimbState
 	{
-
-		void Update(ue::IK* ik) override;
-
+		void Update(const PlayerClimb& body, ue::IK* ik) override;
 	private:
 		bool isInTrush = false;
 	};
 
+	template<class LimbState_Temp>
+	LimbState_Temp* NewLS()
+	{
+		LimbState_Temp* ls = nullptr;
+		if (TrashBox.size() == 0)
+		{
+			ls = new LimbState_Temp();
+			LimbState_Temp::AllInstance.push_back(ls);
+		}		else
+		{
+			ls = LimbState_Temp::TrashBox[LimbState_Temp::TrashBox.size() - 1];
+			LimbState_Temp::TrashBox.pop_back();
+		}
+		return ls;
+	}
+	template<class LimbState_Temp>
+	void DelLS(LimbState_Temp* ls)
+	{
+		LimbState_Temp::TrashBox.push_back(ls)
+	}
+
+	/// <summary>
+	/// マネージャー
+	/// </summary>
 	struct LimbStateManager
 	{
 		~LimbStateManager()
@@ -59,7 +81,9 @@ private:
 			LimbState_Move::Release();
 		}
 	};
+	
 	static LimbStateManager s_limbStateManager;
+
 public:
 	/// <summary>
 	/// 登るときのスペック
@@ -70,6 +94,8 @@ public:
 		float sideLen = 0.0f;		//モデルの中心から横にどれだけ手足を広げるか
 		float forwardLen = 0.0f;	//手足をどれだけ前に出すか
 		float speed = 0.0f;			//手足を動かすスピード
+		ue::CVector2 startHandPos = ue::CVector2::Zero();	//モデルのポジションからの相対的な手の初期位置。左手側のポジションだけで大丈夫。
+		ue::CVector2 startFootPos = ue::CVector2::Zero();	//モデルのポジションからの相対的な足の初期位置。左足側のポジションだけで大丈夫。
 	};
 
 	PlayerClimb();
@@ -85,7 +111,13 @@ public:
 	/// <param name="footR"></param>
 	/// <param name="handL"></param>
 	/// <param name="handR"></param>
-	void Init(ue::IK* footL, ue::IK* footR, ue::IK* handL, ue::IK* handR);
+	void Init(Character* chara,ue::IK* footL, ue::IK* footR, ue::IK* handL, ue::IK* handR);
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="spec"></param>
+	void InitClimbSpec(const ClimbSpec& spec);
 
 	void Update();
 	void PostUpdate();
@@ -113,6 +145,7 @@ public:
 	/// </summary>
 	void StopClimb();
 private:
+	Character* m_chara = nullptr;		//キャラクター
 	ue::IK* m_footLIK = nullptr;		//左足のIK
 	ue::IK* m_footRIK = nullptr;		//右足のIK
 	ue::IK* m_handLIK = nullptr;		//左手のIK
@@ -125,7 +158,7 @@ private:
 
 	ue::CVector2 m_moveDir = ue::CVector2::Zero();	//動く方向。
 
-	bool m_isClimb = false;
+	bool m_isClimb = false;							//
 
 	ClimbSpec m_climbSpec;							//登るスペック
 
