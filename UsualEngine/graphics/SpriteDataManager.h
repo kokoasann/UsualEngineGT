@@ -17,7 +17,8 @@ namespace UsualEngine
 		}
 		void Release();
 
-		ID3D11ShaderResourceView* Load(std::wstring& st);
+		//ID3D11ShaderResourceView* Load(std::wstring& st);
+		ID3D11ShaderResourceView* Load(const wchar_t* st);
 
 	private:
 		std::map<std::wstring, ID3D11ShaderResourceView*> mDatas;

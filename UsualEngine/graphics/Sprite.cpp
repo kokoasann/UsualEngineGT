@@ -17,8 +17,8 @@ namespace UsualEngine
 	}
 	void Sprite::Init(const wchar_t* path, CVector2 size)
 	{
-		std::wstring st = path;
-		m_textuer = SpriteDataManager::Get()->Load(st);
+		//std::wstring st = path;
+		m_textuer = SpriteDataManager::Get()->Load(path);
 
 		mSize = size;
 		CVector2 hsize = size/2;

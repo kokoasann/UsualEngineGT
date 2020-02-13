@@ -21,6 +21,7 @@ namespace UsualEngine
 		bool isSkining = false;
 		ID3D11ShaderResourceView* m_albedoTex = nullptr;
 		ID3D11ShaderResourceView* m_specularMap = nullptr;
+		ID3D11ShaderResourceView* m_alphaMap = nullptr;
 		bool m_isInstancing = false;
 	public:
 		ModelEffect()
@@ -50,6 +51,10 @@ namespace UsualEngine
 		void SetSpecularMap(ID3D11ShaderResourceView* tex)
 		{
 			m_specularMap = tex;
+		}
+		void SetAlphaMap(ID3D11ShaderResourceView* tex)
+		{
+			m_alphaMap = tex;
 		}
 		void SetMatrialName(const wchar_t* matName)
 		{

@@ -63,10 +63,16 @@ namespace UsualEngine
 
 		m_skinModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 
-		auto& pr = usualEngine()->GetGraphicsEngine()->GetPreRender();
-		auto& gb = pr.GetGBuffer();
-		gb.AddSkinModel(this);
-		
+		if (!m_isAlphaModel)
+		{
+			auto& pr = usualEngine()->GetGraphicsEngine()->GetPreRender();
+			auto& gb = pr.GetGBuffer();
+			gb.AddSkinModel(this);
+		}
+		else
+		{
+
+		}
 		m_isRenderingOK = true;
 	}
 
@@ -77,6 +83,19 @@ namespace UsualEngine
 			m_animation.Init(m_skinModel, anims, animCount);
 
 		
+	}
+
+	void SkinModelRender::SetAlphaMap(const wchar_t* path, const wchar_t* materialName)
+	{
+		auto tex = SpriteDataManager::Get()->Load(path);
+		m_skinModel.FindMaterial([&](ModelEffect* material)->void
+		{
+			if (material->EqualMaterialName(materialName))
+			{
+				material->SetAlphaMap(tex);
+			}
+		});
+		m_isAlphaModel = true;
 	}
 
 

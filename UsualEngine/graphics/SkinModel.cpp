@@ -103,10 +103,12 @@ namespace UsualEngine
 		//ì¬B
 		usualEngine()->GetGraphicsEngine()->GetD3DDevice()->CreateBuffer(&bufferDesc, NULL, &m_cb);
 	}
+
+
 	void SkinModel::SetSpecularMap(const wchar_t* path)
 	{
-		std::wstring p = path;
-		m_specularMap = SpriteDataManager::Get()->Load(p);
+		//std::wstring p = path;
+		m_specularMap = SpriteDataManager::Get()->Load(path);
 	}
 	void SkinModel::InitSamplerState()
 	{

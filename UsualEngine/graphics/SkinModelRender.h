@@ -135,6 +135,8 @@ namespace UsualEngine
 			return m_skinModel.IsShadowReciever();
 		}
 
+		void SetAlphaMap(const wchar_t* path, const wchar_t* materialName);
+
 		/// <summary>
 		/// スキンモデルを返す
 		/// </summary>
@@ -198,6 +200,8 @@ namespace UsualEngine
 		CVector3 m_position = CVector3::Zero();					//ポジション
 		CQuaternion m_rotation = CQuaternion::Identity();		//回転.
 		CVector3 m_scale = CVector3::One();						//スケール
+
+		bool m_isAlphaModel = false;
 
 		bool m_isRenderingOK = false; //レンダリングしてもよかと？
 

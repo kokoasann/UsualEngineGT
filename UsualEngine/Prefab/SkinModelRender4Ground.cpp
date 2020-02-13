@@ -59,13 +59,13 @@ namespace UsualEngine
 
 	void SkinModelRender4Ground::SetBlendMap(const wchar_t* path)
 	{
-		std::wstring st = path;
-		m_blendMap = SpriteDataManager::Get()->Load(st);
+		//std::wstring st = path;
+		m_blendMap = SpriteDataManager::Get()->Load(path);
 	}
 	void SkinModelRender4Ground::SetTexture(int num,const wchar_t* path, const wchar_t* materialName)
 	{
-		std::wstring st = path;
-		m_textures[num] = SpriteDataManager::Get()->Load(st);
+		//std::wstring st = path;
+		m_textures[num] = SpriteDataManager::Get()->Load(path);
 		const wchar_t* matename = materialName;
 		if (materialName == nullptr)
 		{
@@ -93,8 +93,8 @@ namespace UsualEngine
 
 	void SkinModelRender4Ground::SetSpecularMap(int num, const wchar_t* path,const wchar_t* materialName)
 	{
-		std::wstring st = path;
-		m_specularMap[num] = SpriteDataManager::Get()->Load(st);
+		//std::wstring st = path;
+		m_specularMap[num] = SpriteDataManager::Get()->Load(path);
 		const wchar_t* matename = materialName;
 		if (materialName == nullptr)
 		{
@@ -122,8 +122,8 @@ namespace UsualEngine
 
 	void SkinModelRender4Ground::SetHightMap(const wchar_t* path)
 	{
-		std::wstring p = path;
-		m_hightMap = SpriteDataManager::Get()->Load(p);
+		//std::wstring p = path;
+		m_hightMap = SpriteDataManager::Get()->Load(path);
 	}
 
 	void SkinModelRender4Ground::Render()

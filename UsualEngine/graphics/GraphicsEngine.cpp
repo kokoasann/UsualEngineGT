@@ -329,8 +329,8 @@ namespace UsualEngine
 		m_psDefferd_Specular.Load("Assets/shader/DefferdShading.fx", "PSMain_Specular", Shader::EnType::PS);
 #endif
 
-		std::wstring st = L"Assets/sprite/Deferred_Grad.dds";
-		m_speculaGradation =  SpriteDataManager::Get()->Load(st);
+		//std::wstring st = L"Assets/sprite/Deferred_Grad.dds";
+		m_speculaGradation =  SpriteDataManager::Get()->Load(L"Assets/sprite/Deferred_Grad.dds");
 
 		//font用のクラスの初期化。
 		m_spriteBatch = new DirectX::SpriteBatch(m_pd3dDeviceContext);

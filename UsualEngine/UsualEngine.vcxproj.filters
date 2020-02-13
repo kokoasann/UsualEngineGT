@@ -272,6 +272,9 @@
     <ClCompile Include="graphics\LightPoint.cpp">
       <Filter>Graphics\Light</Filter>
     </ClCompile>
+    <ClCompile Include="Prefab\SkinModelRender4Clear.cpp">
+      <Filter>Prefab</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="character\CharacterController.h">
@@ -482,6 +485,9 @@
     </ClInclude>
     <ClInclude Include="graphics\LightPoint.h">
       <Filter>Graphics\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Prefab\SkinModelRender4Clear.h">
+      <Filter>Prefab</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
