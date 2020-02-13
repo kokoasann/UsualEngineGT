@@ -35,12 +35,12 @@ namespace UsualEngine
 			vec = v.vec;
 			return *this;
 		}
-		CVector2& operator =(const CVector3& v)
+		/*CVector2& operator =(const CVector3& v)
 		{
 			x = v.x;
 			y = v.y;
 			return *this;
-		}
+		}*/
 
 		void Add(const CVector2& v1, const CVector2& v2)
 		{
@@ -114,13 +114,13 @@ namespace UsualEngine
 			vec = _v.vec;
 			return *this;
 		}
-		CVector3& operator=(const CVector2& v)
+		/*CVector3& operator=(const CVector2& v)
 		{
 			x = v.x;
 			y = v.y;
 			z = 0.0f;
 			return *this;
-		}
+		}*/
 		CVector3() {}
 		/*!
 		* @brief	コンストラクタ。

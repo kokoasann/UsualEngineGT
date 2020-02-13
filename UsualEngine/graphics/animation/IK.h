@@ -236,7 +236,7 @@ namespace UsualEngine
 		float m_gravitPow = 0.0f;							
 		CVector3 m_oldNewTarget = CVector3::Zero();		
 
-		btCollisionObject* m_hitCollision = nullptr
+		btCollisionObject* m_hitCollision = nullptr;
 	};
 
 }
