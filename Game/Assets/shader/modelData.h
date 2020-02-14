@@ -87,33 +87,6 @@ struct PSOutput
 *///////////////////////////////////////////////////////////////////////////////////////
 StructuredBuffer<float4x4> boneMatrix : register(t1);
 
-/*//////////////////////////////////////////////////////////////////////////////////////
-	ライト系.
-*//////////////////////////////////////////////////////////////////////////////////////
-
-struct SDirectionLight
-{
-	float3 dir;			//ディレクション
-	float4 color;		//色
-};
-
-StructuredBuffer<SDirectionLight> DirLights : register(t50);
-
-struct SPointLight
-{
-	float3 pos;
-	float4 color;
-};
-
-StructuredBuffer<SPointLight> PntLights : register(t51);
-
-cbuffer LightCB : register(b1)
-{
-	float4 screenSize : packoffset(c0);		//スクリーンのサイズ
-	float3 eyepos : packoffset(c1);			//視点
-	int DLcount : packoffset(c1.w);			//ディレクションライトの数
-	int PLcount : packoffset(c2.x);			//ポイントライトの数
-}
 
 
 
@@ -127,7 +100,7 @@ Texture2D<float4> specularMap_3:register(t42);
 
 
 /*////////////////////////////////////////////////////////////////////////////////////////
-	スペキュラー
+	heightマップ
 *//////////////////////////////////////////////////////////////////////////////////////////
 Texture2D<float4> hightMap_1:register(t43);
 

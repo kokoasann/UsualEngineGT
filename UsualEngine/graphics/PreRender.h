@@ -26,6 +26,11 @@ namespace UsualEngine
 		{
 			m_prePostRenderObject.push_back(go);
 		}
+
+		RenderTarget* GetPrePostRenderTarget()
+		{
+			return &m_prePostRenderTarget;
+		}
 	private:
 		struct ConstantBufferData
 		{

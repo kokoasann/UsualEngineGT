@@ -1,18 +1,10 @@
-#include "modelData.h"
+
+#include "DrawProcess.fx"
 
 
-cbuffer DefferdCB:register(b0)
-{
-    float4x4 mViewProjInv;
-    float3 camDir;
-}
 
-float3 GetWorldPosition(float2 uv,float depth,float4x4 mVPI)
-{
-    float4 projPos = float4(uv*float2(2.0f,-2.0f)+float2(-1.0f,1.0f),depth,1.0f);
-    float4 pos = mul(mVPI,projPos);
-    return pos.xyz / pos.w;
-}
+
+
 
 struct DefferdVSInput
 {

@@ -37,6 +37,14 @@ bool Game::Start()
 		ssss.SetInstanceData(1, mat);
 	}
 
+	//
+	{
+		ue::SkinModelRender* alpha = ue::NewGO<ue::SkinModelRender>(0);
+		alpha->Init(L"Assets/model/AlphaModelTest.cmo");
+		alpha->SetAlphaMap(L"Assets/sprite/map.dds", L"Alpha");
+		alpha->SetSca({ 10,10,10 });
+	}
+
 	
 	ue::SkinModelRender* weedSM = ue::NewGO<ue::SkinModelRender>(0);
 	weedSM->Init(L"Assets/model/weed.cmo", 0, 0, ue::enFbxUpAxisY);

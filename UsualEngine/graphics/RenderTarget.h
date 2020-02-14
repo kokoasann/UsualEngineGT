@@ -43,7 +43,7 @@ namespace UsualEngine
 		/// depthStencilViewを返す
 		/// </summary>
 		/// <returns></returns>
-		ID3D11DepthStencilView* GetDSV()
+		ID3D11DepthStencilView* GetDSV() const
 		{
 			return m_depthStencilView;
 		}
@@ -61,7 +61,7 @@ namespace UsualEngine
 		/// レンダーターゲットを返す。
 		/// </summary>
 		/// <returns></returns>
-		ID3D11Texture2D* GetRenderTarget()
+		ID3D11Texture2D* GetRenderTarget() const
 		{
 			return m_renderTarget;
 		}
@@ -70,7 +70,7 @@ namespace UsualEngine
 		/// テクスチャのフォーマットを返す
 		/// </summary>
 		/// <returns></returns>
-		DXGI_FORMAT* GetTexFormat()
+		const DXGI_FORMAT* GetTexFormat() const
 		{
 			return &m_colFormat;
 		}
@@ -79,7 +79,7 @@ namespace UsualEngine
 		/// 横を返す
 		/// </summary>
 		/// <returns></returns>
-		int GetWidth()
+		int GetWidth() const
 		{
 			return m_width;
 		}
@@ -88,7 +88,7 @@ namespace UsualEngine
 		/// 縦を返す
 		/// </summary>
 		/// <returns></returns>
-		int GetHeight()
+		int GetHeight() const
 		{
 			return m_height;
 		}
@@ -97,7 +97,7 @@ namespace UsualEngine
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		ViewPort GetViewPort()
+		ViewPort GetViewPort() const
 		{
 			return m_viewport;
 		}

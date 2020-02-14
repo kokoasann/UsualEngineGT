@@ -155,6 +155,9 @@
     <Filter Include="Assets\Model\weed">
       <UniqueIdentifier>{9d623486-8e66-4320-b139-68a9d58fbdcc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Model\AlphaModelTest">
+      <UniqueIdentifier>{efc75b6d-7172-4bcb-a062-a5e5ece20f49}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\model.fx">
@@ -277,6 +280,9 @@
     </MeshContentTask>
     <MeshContentTask Include="Assets\model\weed\weed.fbx">
       <Filter>Assets\Model\weed</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\AlphaModelTest\AlphaModelTest.fbx">
+      <Filter>Assets\Model\AlphaModelTest</Filter>
     </MeshContentTask>
   </ItemGroup>
 </Project>

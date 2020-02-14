@@ -9,6 +9,12 @@ namespace UsualEngine
 		m_gBuffer.Init(h, w);
 		m_softShadow.Init();
 		m_constBuffer.Create(&m_cbData, sizeof(m_cbData));
+
+		DXGI_SAMPLE_DESC msaaD;
+		ZeroMemory(&msaaD, sizeof(msaaD));
+		msaaD.Count = 1;
+		msaaD.Quality = 0;
+		m_prePostRenderTarget.Create(w, h, 1, 1, DXGI_FORMAT_R16G16B16A16_FLOAT, DXGI_FORMAT_D32_FLOAT, msaaD, NULL, NULL, true);
 	}
 	void PreRender::Render()
 	{
@@ -23,14 +29,18 @@ namespace UsualEngine
 		auto dc = ge->GetD3DDeviceContext();
 		dc->PSSetShaderResources(enSkinModelSRVReg_SceneTexture, 1,&oldtarget[0]->GetSRV());
 		RenderTarget* rendertarget[] = { &m_prePostRenderTarget };
-		float color[4] = { 0,0,0,0 };
-		dc->ClearRenderTargetView(m_prePostRenderTarget.GetRTV(), color);
 		ge->OMSetRenderTarget(1, rendertarget);
+		float color[4] = { 0.f,0.f,0.f,0.f };
+		dc->ClearRenderTargetView(m_prePostRenderTarget.GetRTV(), color);
+		
 		for (auto go : m_prePostRenderObject)
 		{
 			go->Render();
 		}
+		m_prePostRenderObject.clear();
 
+		//Œ³‚É–ß‚·
+		ge->OMSetRenderTarget(rtcount, oldtarget);
 	}
 	void PreRender::SendDeferrdConstBuffer()
 	{

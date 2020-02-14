@@ -202,6 +202,7 @@ namespace UsualEngine
 		CVector3 m_scale = CVector3::One();						//スケール
 
 		bool m_isAlphaModel = false;
+		Shader m_psAlpha;
 
 		bool m_isRenderingOK = false; //レンダリングしてもよかと？
 

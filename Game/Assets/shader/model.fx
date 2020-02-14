@@ -9,7 +9,7 @@
 // Shader Resource View
 /////////////////////////////////////////////////////////////
 //アルベドテクスチャ。
-Texture2D<float4> albedoTexture : register(t0);	
+Texture2D<float4> albedoTexture : register(t0);
 
 
 
@@ -228,66 +228,6 @@ PSInputDepth VSMainDepth_Skin(VSInputNmTxWeights In)
 	psInput.Position = pos;
 	psInput.PosInProj = pos;
 	return psInput;
-}
-
-float4 PSProcess(float4 albe, PSInput In)
-{
-	float2 uv = In.PosInProj.xy / In.PosInProj.w;
-	uv *= float2(0.5f, -0.5f);
-	uv += 0.5f;
-	float4 shadow = float4(1, 1, 1, 1);
-	float sum = 0.f;
-	/*float gaus[3][3] = {
-	{1.f / 16.f,2.f / 16.f,1.f / 16.f},
-	{2.f / 16.f,4.f / 16.f,2.f / 16.f},
-	{1.f / 16.f,2.f / 16.f,1.f / 16.f}
-	};
-	int ksize = 3;
-	[unroll(ksize)]
-	for (int y = 0; y < ksize; y++)
-	{
-		[unroll(ksize)]
-		for (int x = 0; x < ksize; x++)
-		{
-			sum += GetShadow(In.Pos, shadowMap_1, float2(x - (ksize - 1) / 2, y - (ksize - 1) / 2)) * gaus[y][x];
-		}
-	}*/
-	sum += GetShadow(In.Pos, shadowMap_1,0);
-	float scol = sum;
-	//float scol = GetShadow(In.Pos, shadowMap_1, float2(0, 0));
-	//float scol = sum / pow(ksize,2);
-
-	shadow.x = lerp(1.0f, 0.45f, scol);
-	shadow.y = lerp(1.0f, 0.4f, scol);
-	shadow.z = lerp(1.0f, 0.6f, scol);
-	shadow *= isShadowReciever;
-
-	float3 li = 0.f;
-	for (int i = 0; i < DLcount; i++)
-	{
-		float rad = dot(DirLights[i].dir * -1.f, In.Normal);
-		int k = step(0.174533f,rad);
-
-		li = float3(0.45f, 0.4f, 0.6f) * !k;//影が付く!
-
-		li += (DirLights[i].color * shadow)*k;//ノット影!!
-		float3 R = -camDir + 2 * dot(camDir, In.Normal) * In.Normal;
-		rad = dot(DirLights[i].dir, R);
-		float sp = max(0.f, rad);
-		li += pow(sp, 5)*k;
-	}
-	albe.xyz *= li;
-
-	//遠くをうすく
-	float3 usu = float3(0.61f, 0.88f, 1.f) * 0.7f;
-	float usulen = min(length(In.PosInView) * 0.00002f, 0.7f);
-	//usulen = min(In.PosInView.y * 0.0005f, usulen);
-	albe.xyz *= 1.f - usulen;
-	albe.xyz += usu * usulen;
-
-	float4 fcol = float4(0.f, 0.f, 0.f, 1.f);
-	fcol.xyz = albe.xyz;
-	return fcol;
 }
 
 PSOutput PSProcess_GBuffer(float4 albe,PSInput In)

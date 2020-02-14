@@ -192,7 +192,7 @@ private:
 			{
 				if (typeid(&trash) == typeid(LimbState_Temp))
 				{
-					ls = dynamic_cast<LimbState_Temp>(trash);
+					ls = dynamic_cast<LimbState_Temp*>(trash);
 				}
 			}
 			if (ls == nullptr)
