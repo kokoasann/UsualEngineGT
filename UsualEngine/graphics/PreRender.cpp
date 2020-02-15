@@ -20,30 +20,6 @@ namespace UsualEngine
 	{
 		m_gBuffer.Draw();
 	}
-	void PreRender::PrePostRender()
-	{
-		//auto ge = usualEngine()->GetGraphicsEngine();
-		//int rtcount = 0;
-		//RenderTarget* oldtarget[8] = { nullptr };
-		//ge->OMGetRenderTargets(rtcount, oldtarget);
-		//auto dc = ge->GetD3DDeviceContext();
-		//ID3D11ShaderResourceView* srvlist[] = { ge->GetMainRenderTarget()->GetSRV() };
-		//dc->PSSetShaderResources(enSkinModelSRVReg_SceneTexture, 1,srvlist);
-		//RenderTarget* rendertarget[] = { &m_prePostRenderTarget };
-		//ge->OMSetRenderTarget(1, rendertarget);
-		//float color[4] = { 0.f,0.f,0.f,0.f };
-		//dc->ClearDepthStencilView(m_prePostRenderTarget.GetDSV(), D3D11_CLEAR_DEPTH, 1.f, 0);
-		//dc->ClearRenderTargetView(m_prePostRenderTarget.GetRTV(), color);
-		//
-		//for (auto go : m_prePostRenderObject)
-		//{
-		//	go->Render();
-		//}
-		//m_prePostRenderObject.clear();
-
-		////Œ³‚É–ß‚·
-		//ge->OMSetRenderTarget(rtcount, oldtarget);
-	}
 	void PreRender::SendDeferrdConstBuffer()
 	{
 		auto& cam = usualEngine()->GetMainCamera();

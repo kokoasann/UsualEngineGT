@@ -21,7 +21,7 @@ float4 DrawProcess(float4 diffuse,float3 normal,float specular,float gshadow,flo
     float4 depthShadow = gshadow;
     float shadow = 0.f;
     float3 foundation = 0.f;
-    //最初のライトはデプスシャドウで使っているライトなので別でか処理する
+    //最初のライトはデプスシャドウで使っているライトなので別で処理する
     {
         float rad = dot(DirLights[0].dir * -1.f, normal);
         float threshold = 0.174533f;                        //いずれ未来の自分が改善してくれているはず!
@@ -59,6 +59,7 @@ float4 DrawProcess(float4 diffuse,float3 normal,float specular,float gshadow,flo
         shadow += -1.0f * (shadow * (1.0f-sha));
     }
     //ポイントライト
+#if 1
     for(int i=0;i<PLcount;i++)
     {
         float3 lendir = worldPos - PntLights[i].pos;
@@ -74,26 +75,27 @@ float4 DrawProcess(float4 diffuse,float3 normal,float specular,float gshadow,flo
         ligPow = max(0,min(1.f,ligPow));
         ligPow *= specular;
 
-        float sha = (1.0f-k);
 
         float colorPow = length(PntLights[i].color.xyz);
         float4 spGradation = texture_1.Sample(Sampler,float2(lerp(1.f,0.f,ligPow),1.f));  //グラデーションマップ(明かり用)
-        float3 lig = (PntLights[i].color.xyz*(spGradation.x));
+        float3 ligcolor = PntLights[i].color.xyz/len;
+        float3 lig = (ligcolor*(spGradation.x));
         
         //反射
-        float3 w2p = PntLights[i].pos - worldPos;
+        float3 w2p = worldPos - PntLights[i].pos;
         float3 e2w = worldPos - eyepos;
         w2p = normalize(w2p);
         e2w = normalize(e2w);
-        float3 w2pRef =  w2p + 2.0f * dot(w2p,normal) + normal;
+        float3 w2pRef =  -w2p + 2.0f * dot(w2p,normal) * normal;
         float refDote2w = dot(w2pRef,e2w);
         float sp = max(0,refDote2w);
 
-        sp *= specular;
         spGradation = texture_1.Sample(Sampler,float2(lerp(1.f,0.f,sp),1.f));  //グラデーションマップ(明かり用)
+        sp *= specular;
 
-        foundation += lig+lig*spGradation.x;
+        foundation += (ligcolor*spGradation.x)*k;
     }
+#endif
     col.xyz *= float3(0.45f, 0.4f, 0.6f) + foundation;
 
 
