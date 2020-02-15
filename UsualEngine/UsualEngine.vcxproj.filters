@@ -275,6 +275,9 @@
     <ClCompile Include="Prefab\SkinModelRender4Clear.cpp">
       <Filter>Prefab</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\PostEffect\AlphaModel.cpp">
+      <Filter>Graphics\PostEffect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="character\CharacterController.h">
@@ -488,6 +491,9 @@
     </ClInclude>
     <ClInclude Include="Prefab\SkinModelRender4Clear.h">
       <Filter>Prefab</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\PostEffect\AlphaModel.h">
+      <Filter>Graphics\PostEffect</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

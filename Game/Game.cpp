@@ -41,8 +41,8 @@ bool Game::Start()
 	{
 		ue::SkinModelRender* alpha = ue::NewGO<ue::SkinModelRender>(0);
 		alpha->Init(L"Assets/model/AlphaModelTest.cmo");
-		alpha->SetAlphaMap(L"Assets/sprite/map.dds", L"Alpha");
-		alpha->SetSca({ 10,10,10 });
+		alpha->SetAlphaMap(L"Assets/sprite/iwa.dds", L"Alpha");
+		//alpha->SetSca({ 10,10,10 });
 	}
 
 	
