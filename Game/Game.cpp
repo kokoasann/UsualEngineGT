@@ -37,10 +37,10 @@ bool Game::Start()
 		ssss.SetInstanceData(1, mat);
 	}
 
-	//
+	//アルファモデルのテスト
 	{
 		ue::SkinModelRender* alpha = ue::NewGO<ue::SkinModelRender>(0);
-		alpha->Init(L"Assets/model/AlphaModelTest.cmo");
+		alpha->Init(L"Assets/model/AlphaModelTestBlock.cmo");
 		alpha->SetAlphaMap(L"Assets/sprite/kusa_spe.dds", L"Alpha");
 		//alpha->SetSca({ 10,10,10 });
 		alpha->SetPos({ 160,0,-100 });
@@ -102,9 +102,9 @@ bool Game::Start()
 			return true;
 	});
 
-	/*auto BG = ue::NewGO < ue::SkinModelRender>(0);
+	auto BG = ue::NewGO < ue::SkinModelRender>(0);
 	BG->Init(L"Assets/model/BackGroundTest.cmo");
-	BG->SetSca(ue::CVector3::One() * 50);*/
+	BG->SetSca(ue::CVector3::One() * 50);
 
 	cam = &ue::usualEngine()->GetMainCamera();
 
