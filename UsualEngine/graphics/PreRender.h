@@ -11,7 +11,6 @@ namespace UsualEngine
 		~PreRender(){}
 		void Init(float h,float w);
 		void Render();
-		void PrePostRender();
 		GBuffer& GetGBuffer()
 		{
 			return m_gBuffer;
@@ -21,16 +20,6 @@ namespace UsualEngine
 			return &m_softShadow;
 		}
 		void SendDeferrdConstBuffer();
-
-		void AddPrePostRenderObject(GameObject* go)
-		{
-			m_prePostRenderObject.push_back(go);
-		}
-
-		RenderTarget* GetPrePostRenderTarget()
-		{
-			return &m_prePostRenderTarget;
-		}
 	private:
 		struct ConstantBufferData
 		{
@@ -42,7 +31,6 @@ namespace UsualEngine
 		ConstantBufferData m_cbData;
 		ConstantBuffer m_constBuffer;
 
-		RenderTarget m_prePostRenderTarget;
-		std::vector<GameObject*> m_prePostRenderObject;
+		
 	};
 }

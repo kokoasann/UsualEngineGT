@@ -72,7 +72,8 @@ namespace UsualEngine
 		}
 		else
 		{
-			pr.AddPrePostRenderObject(this);
+			usualEngine()->GetGraphicsEngine()->GetPostEffect().GetAlphaBlendRender().AddRenderObject(this);
+			//pr.AddPrePostRenderObject(this);
 		}
 		m_isRenderingOK = true;
 	}

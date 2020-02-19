@@ -41,8 +41,9 @@ bool Game::Start()
 	{
 		ue::SkinModelRender* alpha = ue::NewGO<ue::SkinModelRender>(0);
 		alpha->Init(L"Assets/model/AlphaModelTest.cmo");
-		alpha->SetAlphaMap(L"Assets/sprite/map.dds", L"Alpha");
-		alpha->SetSca({ 10,10,10 });
+		alpha->SetAlphaMap(L"Assets/sprite/kusa_spe.dds", L"Alpha");
+		//alpha->SetSca({ 10,10,10 });
+		alpha->SetPos({ 160,0,-100 });
 	}
 
 	
@@ -181,7 +182,7 @@ bool Game::Start()
 
 	static auto plig = ue::NewGO < ue::LightPoint>(0);
 	plig->SetPos({ 0,1,-100 });
-	plig->SetCol(ue::CVector3{ 0.6,0.25,0.08}*50);
+	plig->SetCol(ue::CVector3{ 0.6,0.25,0.08}*500);
 
 	campos = { -940,312,0 };
 	//campos = { 0,3000,2000 };

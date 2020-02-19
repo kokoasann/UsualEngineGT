@@ -140,19 +140,6 @@ namespace UsualEngine
 		m_pd3dDeviceContext->IASetInputLayout(m_vsDefferd.GetInputLayout());
 		m_postEffect.DrawPrimitive();
 
-		m_preRender.PrePostRender();
-		ID3D11ShaderResourceView* prepostsrv = m_preRender.GetPrePostRenderTarget()->GetSRV();
-		m_pd3dDeviceContext->PSGetShaderResources(enSkinModelSRVReg_SceneTexture, 1, &prepostsrv);
-
-		ID3D11BlendState* blendS = nullptr;
-		float factor[4];
-		unsigned int mask=0;
-		m_pd3dDeviceContext->OMGetBlendState(&blendS, factor, &mask);
-		m_pd3dDeviceContext->OMSetBlendState(BlendState_Trans(), 0, 0xFFFFFFFF);
-
-		m_postEffect.DrawPrimitive();
-		m_pd3dDeviceContext->OMSetBlendState(blendS, factor, mask);
-
 		gb.UnSetGBuffer();
 	}
 	void GraphicsEngine::Release()
