@@ -117,6 +117,16 @@ namespace UsualEngine
 		{
 			return m_oldTarget;
 		}
+
+		/// <summary>
+		/// 使用されているコリジョンの半径。
+		/// </summary>
+		/// <returns></returns>
+		float GetCollisionRadius() const
+		{
+			return m_radius;
+		}
+
 		/// <summary>
 		/// 摩擦率をゲット
 		/// </summary>

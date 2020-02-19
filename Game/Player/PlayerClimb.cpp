@@ -59,7 +59,7 @@ void PlayerClimb::Init(Character* chara,ue::IK* footL, ue::IK* footR, ue::IK* ha
 		RLimb.limbState = NewLS<LimbState_Stop>();
 	}
 	
-	m_collider.Create(5);
+	m_collider.Create(footL->GetCollisionRadius());
 	
 	m_moveFunc = [&](ue::CVector3& pos)
 	{
@@ -271,11 +271,33 @@ void PlayerClimb::LimbState_Stop::Init()
 PlayerClimb::LimbStep PlayerClimb::LimbState_Up::Update(const PlayerClimb& body, ue::IK* ik)
 {
 	auto charaDir = body.m_chara->GetDir();
-	
-	auto move = charaDir * -1.f * body.m_climbSpec.speed;
+	ue::CVector3 move;
+	//目の前の壁の法線を調べて動かすベクトルを決める
+	{
+		auto pos = ik->GetTarget();
+		auto tar = pos + charaDir * (body.m_climbSpec.forwardLen * 10.f);
+		btTransform start, end;
+		start.setIdentity();
+		end.setIdentity();
+		start.setOrigin(btVector3(pos.x, pos.y, pos.z));
+		end.setOrigin(btVector3(tar.x, tar.y, tar.z));
+
+		SweepResultClimb sr;
+		ue::Physics().ConvexSweepTest((const btConvexShape*)body.m_collider.GetBody(), start, end, sr);
+		if (sr.isHit)
+		{
+			move = sr.hitNormal * body.m_climbSpec.speed;
+		}
+		else
+		{
+			move = charaDir * -1.f * body.m_climbSpec.speed;
+		}
+	}
+
 	m_upLen += move.Length();
 	auto target = ik->GetTarget();
 	target += move;
+	ik->SetNextTarget(target);
 
 	if (body.m_climbSpec.forwardLen <= m_upLen && !ik->IsHit())
 		return Step_Move;
@@ -287,10 +309,33 @@ PlayerClimb::LimbStep PlayerClimb::LimbState_Down::Update(const PlayerClimb& bod
 {
 	auto charaDir = body.m_chara->GetDir();
 
-	auto move = charaDir * body.m_climbSpec.speed;
+	ue::CVector3 move;
+	//目の前の壁の法線を調べて動かすベクトルを決める
+	{
+		auto pos = ik->GetTarget();
+		auto tar = pos + charaDir * (body.m_climbSpec.forwardLen * 10.f);
+		btTransform start, end;
+		start.setIdentity();
+		end.setIdentity();
+		start.setOrigin(btVector3(pos.x, pos.y, pos.z));
+		end.setOrigin(btVector3(tar.x, tar.y, tar.z));
+
+		SweepResultClimb sr;
+		ue::Physics().ConvexSweepTest((const btConvexShape*)body.m_collider.GetBody(), start, end, sr);
+		if (sr.isHit)
+		{
+			move = sr.hitNormal * -1.0f * body.m_climbSpec.speed;
+		}
+		else
+		{
+			move = charaDir * body.m_climbSpec.speed;
+		}
+	}
+
 	m_downLen += move.Length();
 	auto target = ik->GetTarget();
 	target += move;
+	ik->SetNextTarget(target);
 
 	if (body.m_climbSpec.forwardLen <= m_downLen && ik->IsHit())
 		return Step_Stop;
@@ -299,8 +344,46 @@ PlayerClimb::LimbStep PlayerClimb::LimbState_Down::Update(const PlayerClimb& bod
 
 PlayerClimb::LimbStep PlayerClimb::LimbState_Move::Update(const PlayerClimb& body, ue::IK* ik)
 {
+	auto charaDir = body.m_chara->GetDir();
+
+	ue::CVector3 move;
+	//目の前の壁の法線を調べて動かすベクトルを決める
+	{
+		auto pos = ik->GetTarget();
+		auto tar = pos + charaDir * (body.m_climbSpec.forwardLen * 10.f);
+		btTransform start, end;
+		start.setIdentity();
+		end.setIdentity();
+		start.setOrigin(btVector3(pos.x, pos.y, pos.z));
+		end.setOrigin(btVector3(tar.x, tar.y, tar.z));
+
+		SweepResultClimb sr;
+		ue::Physics().ConvexSweepTest((const btConvexShape*)body.m_collider.GetBody(), start, end, sr);
+		if (sr.isHit)
+		{
+			move = sr.hitNormal;
+		}
+		else
+		{
+			move = charaDir * -1.0f;
+		}
+	}
+	ue::CVector3 X,Z=move;
+	X.Cross(Z,ue::CVector3::AxisY());
+	auto inp = body.m_moveDir;
+	inp.Normalize();
+	float dot = inp.Dot(ue::CVector2(0.0f,1.0f));
+	float rad = acos(dot);
+
+	move.Cross(Z, X);
 
 
+	move *= body.m_climbSpec.speed;
+	
+	auto target = ik->GetTarget();
+	target += move;
+
+	if(body.m_climbSpec.upLen)
 	return Step_None;
 }
 

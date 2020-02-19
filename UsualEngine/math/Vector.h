@@ -59,6 +59,13 @@ namespace UsualEngine
 			Scale(sv);
 		}
 
+		float Dot(const CVector2& v) const
+		{
+			DirectX::XMVECTOR xmv1 = DirectX::XMLoadFloat2(&vec);
+			DirectX::XMVECTOR xmv2 = DirectX::XMLoadFloat2(&v.vec);
+			return DirectX::XMVector2Dot(xmv1, xmv2).m128_f32[0];
+		}
+
 
 		float Length() const
 		{
