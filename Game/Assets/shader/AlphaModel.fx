@@ -14,7 +14,7 @@ float4 PSMain_Alpha(PSInput In):SV_Target0
     clip(sceneDep-depth);
 
     float4 res;
-    float3 ref = refract(camDir,In.Normal,1.f);
+    float3 ref = refract(camDir,In.Normal,0.3f);
     float refind = 0.0f;
     float3 eyeline = camDir;
     float dotlignor = dot(eyeline,In.Normal);

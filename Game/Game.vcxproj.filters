@@ -284,5 +284,8 @@
     <MeshContentTask Include="Assets\model\AlphaModelTest\AlphaModelTest.fbx">
       <Filter>Assets\Model\AlphaModelTest</Filter>
     </MeshContentTask>
+    <MeshContentTask Include="Assets\model\AlphaModelTest\AlphaModelTestBlock.fbx">
+      <Filter>Assets\Model\AlphaModelTest</Filter>
+    </MeshContentTask>
   </ItemGroup>
 </Project>

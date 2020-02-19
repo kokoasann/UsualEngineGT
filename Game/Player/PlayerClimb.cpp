@@ -2,6 +2,18 @@
 #include "PlayerClimb.h"
 #include "../Character/Character.h"
 
+struct SweepResultClimb :public btCollisionWorld::ConvexResultCallback
+{
+	bool isHit = false;
+	ue::CVector3 hitPos = ue::CVector3::Zero();
+	ue::CVector3 hitNormal = ue::CVector3::Zero();
+	btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
+	{
+		hitPos.Set(convexResult.m_hitPointLocal);
+		hitNormal.Set(convexResult.m_hitNormalLocal);
+	}
+};
+
 PlayerClimb::PlayerClimb()
 {
 }
@@ -47,6 +59,7 @@ void PlayerClimb::Init(Character* chara,ue::IK* footL, ue::IK* footR, ue::IK* ha
 		RLimb.limbState = NewLS<LimbState_Stop>();
 	}
 	
+	m_collider.Create(5);
 	
 	m_moveFunc = [&](ue::CVector3& pos)
 	{
@@ -72,16 +85,14 @@ void PlayerClimb::Init(Character* chara,ue::IK* footL, ue::IK* footR, ue::IK* ha
 
 void PlayerClimb::InitClimbSpec(const ClimbSpec& spec)
 {
-	m_climbSpec = spec;
+	memcpy(&m_climbSpec, &spec, sizeof(m_climbSpec));
+	//m_climbSpec = spec;
 }
 
 void PlayerClimb::Update()
 {
-	UpdateLimbState(m_footLIK, m_footLState);
-	UpdateLimbState(m_footRIK, m_footRState);
-	UpdateLimbState(m_handLIK, m_handLState);
-	UpdateLimbState(m_handRIK, m_handRState);
-	
+	UpdatePairLimbs(m_footLimbs);
+	UpdatePairLimbs(m_handLimbs);
 }
 
 void PlayerClimb::PostUpdate()
@@ -133,18 +144,22 @@ void PlayerClimb::UpdateLimb(Limb& limb)
 	case Step_UP:
 		DelLS(limb.limbState);
 		limb.limbState = NewLS<LimbState_Up>();
+		limb.nowStep = Step_UP;
 		break;
 	case Step_Down:
 		DelLS(limb.limbState);
 		limb.limbState = NewLS<LimbState_Down>();
+		limb.nowStep = Step_Down;
 		break;
 	case Step_Move:
 		DelLS(limb.limbState);
 		limb.limbState = NewLS<LimbState_Move>();
+		limb.nowStep = Step_Move;
 		break;
 	case Step_Stop:
 		DelLS(limb.limbState);
 		limb.limbState = NewLS<LimbState_Stop>();
+		limb.nowStep = Step_Stop;
 		break;
 	}
 	if (step != Step_None)
@@ -155,17 +170,39 @@ void PlayerClimb::UpdateLimb(Limb& limb)
 
 void PlayerClimb::UpdatePairLimbs(PairLimbs& pair)
 {
-
-	if (m_climbSpec.changeLug <= pair.timer)
+	UpdateLimb(pair.leftLimb);
+	UpdateLimb(pair.rightLimb);
+	if (!pair.isCoolTime)
 	{
-		switch (pair.moveLimb)
+		if (pair.leftLimb.nowStep == Step_Stop && pair.rightLimb.nowStep == Step_Stop) //左右ともストップステップになったのでクールタイム開始。
 		{
-		case PairLimbs::Pair_Right:
-			break;
-		case PairLimbs::Pair_Left:
-			break;
+			pair.isCoolTime = true;
+			pair.timer = 0.0f;
 		}
 	}
+
+	if (pair.isCoolTime)
+	{
+		if (m_climbSpec.changeLug <= pair.timer)
+		{
+			switch (pair.moveLimb)
+			{
+			case PairLimbs::Pair_Right:
+				pair.moveLimb = PairLimbs::Pair_Left;
+				DelLS(pair.leftLimb.limbState);
+				pair.leftLimb.limbState = NewLS<LimbState_Up>();
+				break;
+			case PairLimbs::Pair_Left:
+				pair.moveLimb = PairLimbs::Pair_Right;
+				DelLS(pair.rightLimb.limbState);
+				pair.rightLimb.limbState = NewLS<LimbState_Up>();
+				break;
+			}
+
+		}
+		pair.timer += ue::gameTime()->GetDeltaTime();
+	}
+	
 }
 
 void PlayerClimb::StartClimb()
@@ -229,6 +266,8 @@ void PlayerClimb::LimbState_Stop::Init()
 ///		limbState 更新系。
 /// 
 /// </summary>
+
+//手(足)を壁から離して移動ステップにチェンジ
 PlayerClimb::LimbStep PlayerClimb::LimbState_Up::Update(const PlayerClimb& body, ue::IK* ik)
 {
 	auto charaDir = body.m_chara->GetDir();
@@ -243,6 +282,7 @@ PlayerClimb::LimbStep PlayerClimb::LimbState_Up::Update(const PlayerClimb& body,
 	return Step_None;
 }
 
+//手(足)を壁に設置してストップステップにチェンジ
 PlayerClimb::LimbStep PlayerClimb::LimbState_Down::Update(const PlayerClimb& body, ue::IK* ik)
 {
 	auto charaDir = body.m_chara->GetDir();
@@ -253,7 +293,7 @@ PlayerClimb::LimbStep PlayerClimb::LimbState_Down::Update(const PlayerClimb& bod
 	target += move;
 
 	if (body.m_climbSpec.forwardLen <= m_downLen && ik->IsHit())
-		return Step_Move;
+		return Step_Stop;
 	return Step_None;
 }
 

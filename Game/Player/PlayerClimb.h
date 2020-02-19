@@ -1,5 +1,7 @@
 #pragma once
 
+//#include "physics/SphereCollider.h"
+
 class Character;
 class PlayerClimb:public ue::GameObject
 {
@@ -256,6 +258,7 @@ public:
 		Limb leftLimb;
 		Limb rightLimb;
 		LR moveLimb = Pair_None;
+		bool isCoolTime = false;
 		float timer = 0.0f;
 	};
 
@@ -353,6 +356,8 @@ private:
 	bool m_isClimb = false;							//
 
 	ClimbSpec m_climbSpec;							//登るスペック
+
+	ue::SphereCollider m_collider;					//
 
 	ue::SkinModelRender::MoveFunc m_moveFunc;		//
 	ue::SkinModelRender::RotateFunc m_rotateFunc;	//
