@@ -214,6 +214,7 @@
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Assets\model\AlphaModelTest\AlphaModelTest.fbx" />
+    <MeshContentTask Include="Assets\model\AlphaModelTest\AlphaModelTestBlock.fbx" />
     <MeshContentTask Include="Assets\model\BackGroundTest\BackGroundTest.fbx" />
     <MeshContentTask Include="Assets\model\block\dun.fbx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>

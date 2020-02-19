@@ -3,9 +3,6 @@
 
 
 
-
-
-
 struct DefferdVSInput
 {
     float4 pos : SV_POSITION;
