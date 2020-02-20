@@ -2,7 +2,7 @@
 #include "lightData.h"
 #include "Math.h"
 
-cbuffer DefferdCB:register(b0)
+cbuffer DefferdCB:register(b7)
 {
     float4x4 mViewProjInv;
     float3 camDir;

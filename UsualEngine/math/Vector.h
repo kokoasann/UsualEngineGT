@@ -65,6 +65,13 @@ namespace UsualEngine
 			DirectX::XMVECTOR xmv2 = DirectX::XMLoadFloat2(&v.vec);
 			return DirectX::XMVector2Dot(xmv1, xmv2).m128_f32[0];
 		}
+		void Cross(const CVector2& v1, const CVector2& v2)
+		{
+			DirectX::XMVECTOR xmv1 = DirectX::XMLoadFloat2(&v1.vec);
+			DirectX::XMVECTOR xmv2 = DirectX::XMLoadFloat2(&v2.vec);
+			auto res = DirectX::XMVector2Cross(xmv1, xmv2);
+			DirectX::XMStoreFloat2(&vec, res);
+		}
 
 
 		float Length() const

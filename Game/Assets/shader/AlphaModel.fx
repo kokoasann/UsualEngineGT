@@ -4,6 +4,15 @@ Texture2D<float4> albedoTexture : register(t0);
 Texture2D<float4> sceneTexture:register(t13);
 Texture2D<float4> alphaMap:register(t12);
 
+cbuffer VSPSCb : register(b0){
+	float4x4 mWorld;
+	float4x4 mView;
+	float4x4 mProj;
+	float3 camDirps;
+	int isShadowReciever;
+	int isUseSpecularMap;
+};
+
 float4 PSMain_Alpha(PSInput In):SV_Target0
 {
     float depth = In.PosInProj.z / In.PosInProj.w;
@@ -13,14 +22,23 @@ float4 PSMain_Alpha(PSInput In):SV_Target0
     float sceneDep = gDepthMap.Sample(Sampler,sceneUV);
     clip(sceneDep-depth);
 
+    float3 norm = mul(mWorld,In.Normal);
+    norm = mul(mView,norm);
+    norm = mul(mProj,norm);
+    norm = normalize(norm);
     float4 res;
-    float3 ref = refract(camDir,In.Normal,0.3f);
+    float3 ref = refract(float3(0,0,1),norm,0.3f);
+
     float refind = 0.0f;
     float3 eyeline = camDir;
     float dotlignor = dot(eyeline,In.Normal);
     //ref = -refind * (eyeline - dotlignor * In.Normal) - In.Normal * sqrt(1 - pow(refind, 2)*(1 - pow(dotlignor, 2)));
     
     float2 uv = sceneUV+ref.xy;
+    uv.x -= (uv.x-1.f)*(1.f-step(uv.y,1.f));
+    uv.x += (uv.x*-1.f)*(step(uv.x,0.f));
+    uv.y -= (uv.y-1.f)*(1.f-step(uv.y,1.f));
+    uv.y += (uv.y*-1.f)*(step(uv.y,0.f));
     float4 scene = sceneTexture.Sample(Sampler,uv);
     float4 color = albedoTexture.Sample(Sampler, In.TexCoord);
     float alpha = alphaMap.Sample(Sampler,In.TexCoord);

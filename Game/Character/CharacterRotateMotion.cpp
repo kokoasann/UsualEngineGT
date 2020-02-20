@@ -128,7 +128,7 @@ void CharacterRotateMotion::NextRotate(const ue::CVector3& dir, PlayAnim pa, boo
 	m_dir.y = 0;
 	m_dir.Normalize();
 	float t = m_oldDir.Dot(m_dir);
-
+	
 	m_maxRad = acosf(fabsf(t)<1.f?t:t/fabsf(t));
 	
 	ue::CVector3 vv;

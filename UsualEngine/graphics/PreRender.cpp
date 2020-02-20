@@ -30,6 +30,6 @@ namespace UsualEngine
 		m_cbData.mViewProj.Inverse(m_cbData.mViewProj);
 		auto dc = usualEngine()->GetGraphicsEngine()->GetD3DDeviceContext();
 		dc->UpdateSubresource(m_constBuffer.GetBody(), 0, 0, &m_cbData, 0, 0);
-		dc->PSSetConstantBuffers(0, 1, &m_constBuffer.GetBody());
+		dc->PSSetConstantBuffers(enSkinModelCBReg_Deferred, 1, &m_constBuffer.GetBody());
 	}
 }

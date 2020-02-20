@@ -11,6 +11,7 @@ struct SweepResultClimb :public btCollisionWorld::ConvexResultCallback
 	{
 		hitPos.Set(convexResult.m_hitPointLocal);
 		hitNormal.Set(convexResult.m_hitNormalLocal);
+		return 0.0f;
 	}
 };
 
@@ -370,20 +371,33 @@ PlayerClimb::LimbStep PlayerClimb::LimbState_Move::Update(const PlayerClimb& bod
 	}
 	ue::CVector3 X,Z=move;
 	X.Cross(Z,ue::CVector3::AxisY());
-	auto inp = body.m_moveDir;
-	inp.Normalize();
-	float dot = inp.Dot(ue::CVector2(0.0f,1.0f));
-	float rad = acos(dot);
-
 	move.Cross(Z, X);
 
+	//ƒpƒbƒh‚Ì“ü—Í‚É‡‚í‚¹‚Ämove‚ğ‰ñ“]‚³‚¹‚é
+	auto inp = body.m_moveDir;
+	inp.Normalize();
+	float dot = inp.Dot(ue::CVector2(0.0f, 1.0f));
+	float rad = acos(fabsf(dot)<=1.0f?dot:dot/fabsf(dot));	//dot‚ÌŒ‹‰Ê‚ª1‚æ‚è‘å‚«‚­‚È‚¢‚©’²‚×‚ÄA‘å‚«‚¢ê‡‚Í•„†‚ğc‚µ‚Ä1‚É‚·‚é
+
+	ue::CVector2 crossRes;
+	crossRes.Cross(ue::CVector2(0.f, 1.f), inp);
+	if (crossRes.x <= 0)	//(0,1)‚ğŠî€‚ÉƒQ[ƒ€ƒpƒbƒh‚ª¶‰E‚Ç‚¿‚ç‚ÉŒX‚¢‚Ä‚¢‚é‚©’²‚×‚é
+	{
+		//¶‚ÉŒX‚¢‚Ä‚¢‚éê‡‚Í-1‚ğŠ|‚¯‚Ä‹t‰ñ“]‚³‚¹‚é
+		rad *= -1.f;
+	}
+
+	ue::CQuaternion rot;
+	rot.SetRotation(Z, rad);
+	rot.Multiply(move);
 
 	move *= body.m_climbSpec.speed;
 	
 	auto target = ik->GetTarget();
 	target += move;
 
-	if(body.m_climbSpec.upLen)
+	if (body.m_climbSpec.upLen < (body.m_chara->GetPos() - ik->GetTarget()).Length())	// L‚Î‚µI‚í‚Á‚½‚çè(‘«)‚ğ‰º‚·
+		return Step_Down;
 	return Step_None;
 }
 
