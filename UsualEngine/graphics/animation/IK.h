@@ -118,6 +118,12 @@ namespace UsualEngine
 			return m_oldTarget;
 		}
 
+		
+		const CVector3& GetOldNewTarget() const
+		{
+			return m_oldNewTarget;
+		}
+
 		/// <summary>
 		/// 使用されているコリジョンの半径。
 		/// </summary>

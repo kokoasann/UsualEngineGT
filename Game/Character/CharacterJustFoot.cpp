@@ -82,7 +82,14 @@ void CharacterJustFoot::Update_JustFoot(float delTime)
 			up *= delTime * m_justFoot_UpIKSpeed;
 			m_nowUP -= up;
 			m_chara->SetIKOffset(m_nowUP, startBone);*/
-			m_chara->SetIKSpeed(0.2f, startBone);
+			auto ik = m_chara->GetIK(startBone);
+			const auto& tar = ik->GetOldNewTarget();
+			auto pos = startBone->GetWorldMatrix().GetTranslation();
+			auto dir = pos - tar;
+			dir.Normalize();
+			dir *= m_justFoot_DownIKSpeed * delTime;
+			//m_chara->SetIKOffset(dir,endBone);
+			ik->SetNextTarget(ik->GetTarget() + dir);
 			if (startBone->IsONGround())
 			{
 				m_isUped = false;
@@ -130,7 +137,15 @@ void CharacterJustFoot::Update_JustFoot(float delTime)
 			up *= delTime * m_justFoot_UpIKSpeed;
 			m_nowUP -= up;
 			m_chara->SetIKOffset(m_nowUP, endBone);*/
-			m_chara->SetIKSpeed(0.2f, endBone);
+			auto ik = m_chara->GetIK(endBone);
+			const auto& tar = ik->GetOldNewTarget();
+			auto pos = endBone->GetWorldMatrix().GetTranslation();
+			auto dir = pos-tar;
+			dir.Normalize();
+			dir *= m_justFoot_DownIKSpeed*delTime;
+			//m_chara->SetIKOffset(dir,endBone);
+			ik->SetNextTarget(ik->GetTarget() + dir);
+			//m_chara->SetIKSpeed(0.2f, endBone);
 			if (endBone->IsONGround())
 			{
 				m_isUped = false;

@@ -1,17 +1,6 @@
 #include "modelData.h"
 #include "ModelProcess.h"
 
-/*!
- * @brief	’¸“_ƒVƒF[ƒ_[‚ÆƒsƒNƒZƒ‹ƒVƒF[ƒ_[—p‚Ì’è”ƒoƒbƒtƒ@B
- */
-cbuffer VSPSCb : register(b0){
-	float4x4 mWorld;
-	float4x4 mView;
-	float4x4 mProj;
-	float3 camDir;
-	int isShadowReciever;
-	int isUseSpecularMap;
-};
 
 
 PSInputGround VSMain_Ground(VSInputNmTxVcTangent In)
@@ -37,7 +26,7 @@ PSInputGround VSMain_Ground(VSInputNmTxVcTangent In)
 	psInput.NormalFlag.y = step(ax,ay)*step(az,ay);
 	psInput.NormalFlag.z = step(ay,az)*step(ax,az)*step(0,In.Normal.z);
 
-	//ƒnƒCƒgƒ}ƒbƒv‚Ì“Ç‚İ‚İ(u~nŒ©‚½–Ú‚ª•Ï‚í‚é‚¾‚¯‚¾‚©‚çˆÈ—ˆ‚È‚¢‚©‚à`EEE)
+	//ï¿½nï¿½Cï¿½gï¿½}ï¿½bï¿½vï¿½Ì“Ç‚İï¿½ï¿½ï¿½(u~nï¿½ï¿½ï¿½ï¿½ï¿½Ú‚ï¿½ï¿½Ï‚ï¿½é‚¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È—ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½Eï¿½Eï¿½E)
 	//psInput.Position += (ps.Normal * hightMap_1.Sample(Sampler,In.TexCoord).x) * hightScale;
 
 	return psInput;
@@ -67,17 +56,17 @@ float2 UVChanger(float2 UV,float3 groundScale,int4 NormalFlag,float offset)
 }
 
 /*//////////////////////////////////////////////////////////////////////////
-		’n–Ê—pƒfƒtƒHƒ‹ƒg
-		ƒ‚ƒfƒ‹‚ğ‚Ù‚Ú‚»‚Ì‚Ü‚Ü•`‰æ‚·‚éB
+		ï¿½nï¿½Ê—pï¿½fï¿½tï¿½Hï¿½ï¿½ï¿½g
+		ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½ï¿½ï¿½Ù‚Ú‚ï¿½ï¿½Ì‚Ü‚Ü•`ï¿½æ‚·ï¿½ï¿½B
 */////////////////////////////////////////////////////////////////////////
 PSOutput PSMain_GroundDefault(PSInputGround In)
 {
 	float2 UV = In.TexCoord;
-	float3 gsca = groundScale.xyz;	//’n–Ê‚ÌƒXƒP[ƒ‹
+	float3 gsca = groundScale.xyz;	//ï¿½nï¿½Ê‚ÌƒXï¿½Pï¿½[ï¿½ï¿½
 
 	float2 uvs = UVChanger(UV,gsca,In.NormalFlag,5.0f*0.333333f);
 
-	//ƒAƒ‹ƒxƒh‚Ìæ“¾
+	//ï¿½Aï¿½ï¿½ï¿½xï¿½hï¿½Ìæ“¾
 	float4 alb = float4(0, 0, 0, 1);
 
 	float4 blend = groundBlendMap.Sample(Sampler, UV);
@@ -85,11 +74,11 @@ PSOutput PSMain_GroundDefault(PSInputGround In)
 	float4 alb2 = texture_2.Sample(Sampler, uvs);
 	float len = 0.f;
 
-	//ƒuƒŒƒ“ƒh‚È‚µ
+	//ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½hï¿½È‚ï¿½
 	float3 albtex = albedoTexture.Sample(Sampler, uvs);
 	alb.xyz += albtex;// * !groundUseTexs.x;
 
-	//ƒXƒyƒLƒ…ƒ‰[ƒ}ƒbƒv‚ÌƒTƒ“ƒvƒŠƒ“ƒO
+	//ï¿½Xï¿½yï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½}ï¿½bï¿½vï¿½ÌƒTï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½O
 	float specul = specularMap.Sample(Sampler,uvs).x * groundUseSpes.y;
 	specul += 1-groundUseSpes.y;
 
@@ -101,17 +90,17 @@ PSOutput PSMain_GroundDefault(PSInputGround In)
 
 
 /*//////////////////////////////////////////////////////////////////////////
-		’n–Ê—pƒuƒŒƒ“ƒh3
-		ƒXƒvƒ‰ƒbƒgƒ}ƒbƒv‚ğ‚à‚Æ‚É3–‡‚ÌƒeƒNƒXƒ`ƒƒ‚ğ‡¬‚·‚é
+		ï¿½nï¿½Ê—pï¿½uï¿½ï¿½ï¿½ï¿½ï¿½h3
+		ï¿½Xï¿½vï¿½ï¿½ï¿½bï¿½gï¿½}ï¿½bï¿½vï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½3ï¿½ï¿½ï¿½Ìƒeï¿½Nï¿½Xï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 */////////////////////////////////////////////////////////////////////////
 PSOutput PSMain_GroundBlendThree(PSInputGround In)
 {
 	float2 UV = In.TexCoord;
-	float3 gsca = groundScale.xyz;	//’n–Ê‚ÌƒXƒP[ƒ‹
+	float3 gsca = groundScale.xyz;	//ï¿½nï¿½Ê‚ÌƒXï¿½Pï¿½[ï¿½ï¿½
 
 	float2 uvs = UVChanger(UV,gsca,In.NormalFlag,5.0f*10);
 
-	//ƒAƒ‹ƒxƒh‚Ìæ“¾
+	//ï¿½Aï¿½ï¿½ï¿½xï¿½hï¿½Ìæ“¾
 	float4 alb = float4(0, 0, 0, 1);
 
 	
@@ -121,7 +110,7 @@ PSOutput PSMain_GroundBlendThree(PSInputGround In)
 	float4 alb3 = texture_3.Sample(Sampler, uvs);
 	float len = 0.f;
 
-	//ƒuƒŒƒ“ƒh(ƒeƒNƒXƒ`ƒƒ3–‡)
+	//ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½h(ï¿½eï¿½Nï¿½Xï¿½`ï¿½ï¿½3ï¿½ï¿½)
 	len = blend.x + blend.y + blend.z;
 	float3 blendThreeColor = blend.xyz;
 	blendThreeColor /= len;
@@ -130,7 +119,7 @@ PSOutput PSMain_GroundBlendThree(PSInputGround In)
 	alb3 *= blendThreeColor.z;
 	alb.xyz += (alb1.xyz + alb2.xyz + alb3.xyz);
 
-	//ƒXƒyƒLƒ…ƒ‰[ƒ}ƒbƒv‚ÌƒTƒ“ƒvƒŠƒ“ƒO
+	//ï¿½Xï¿½yï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½}ï¿½bï¿½vï¿½ÌƒTï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½O
 	float specul1 = specularMap_1.Sample(Sampler,uvs).x*groundUseSpes.y;
 	specul1 += 1 - groundUseSpes.y;
 	float specul2 = specularMap_2.Sample(Sampler,uvs).x*groundUseSpes.z;
@@ -147,17 +136,17 @@ PSOutput PSMain_GroundBlendThree(PSInputGround In)
 
 
 /*//////////////////////////////////////////////////////////////////////////
-		’n–Ê—pƒuƒŒƒ“ƒh2
-		ƒXƒvƒ‰ƒbƒgƒ}ƒbƒv‚ğ‚à‚Æ‚É2–‡‚ÌƒeƒNƒXƒ`ƒƒ‚ğ‡¬‚·‚é
+		ï¿½nï¿½Ê—pï¿½uï¿½ï¿½ï¿½ï¿½ï¿½h2
+		ï¿½Xï¿½vï¿½ï¿½ï¿½bï¿½gï¿½}ï¿½bï¿½vï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½2ï¿½ï¿½ï¿½Ìƒeï¿½Nï¿½Xï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 */////////////////////////////////////////////////////////////////////////
 PSOutput PSMain_GroundBlendTwo(PSInputGround In)
 {
 	float2 UV = In.TexCoord;
-	float3 gsca = groundScale.xyz;	//’n–Ê‚ÌƒXƒP[ƒ‹
+	float3 gsca = groundScale.xyz;	//ï¿½nï¿½Ê‚ÌƒXï¿½Pï¿½[ï¿½ï¿½
 
 	float2 uvs = UVChanger(UV,gsca,In.NormalFlag,5.0f);
 
-	//ƒAƒ‹ƒxƒh‚Ìæ“¾
+	//ï¿½Aï¿½ï¿½ï¿½xï¿½hï¿½Ìæ“¾
 	float4 alb = float4(0, 0, 0, 1);
 
 	
@@ -166,7 +155,7 @@ PSOutput PSMain_GroundBlendTwo(PSInputGround In)
 	float4 alb2 = texture_2.Sample(Sampler, uvs);
 	float len = 0.f;
 
-	//ƒuƒŒƒ“ƒh(ƒeƒNƒXƒ`ƒƒ2–‡)
+	//ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½h(ï¿½eï¿½Nï¿½Xï¿½`ï¿½ï¿½2ï¿½ï¿½)
 	len = blend.x + blend.y;
 	float2 blendTwoColor = blend.xy;
 	blendTwoColor /= len;
@@ -174,7 +163,7 @@ PSOutput PSMain_GroundBlendTwo(PSInputGround In)
 	alb2 *= blendTwoColor.y;
 	alb.xyz += (alb1.xyz + alb2.xyz);
 
-	//ƒXƒyƒLƒ…ƒ‰[ƒ}ƒbƒv‚ÌƒTƒ“ƒvƒŠƒ“ƒO
+	//ï¿½Xï¿½yï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½}ï¿½bï¿½vï¿½ÌƒTï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½O
 	float specul1 = specularMap_1.Sample(Sampler,uvs).x*groundUseSpes.y;
 	specul1 += 1 - groundUseSpes.y;
 	float specul2 = specularMap_2.Sample(Sampler,uvs).x*groundUseSpes.z;

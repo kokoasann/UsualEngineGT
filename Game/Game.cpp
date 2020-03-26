@@ -43,7 +43,21 @@ bool Game::Start()
 		alpha->Init(L"Assets/model/AlphaModelTestBlock.cmo");
 		alpha->SetAlphaMap(L"Assets/sprite/kusa_spe.dds", L"Alpha");
 		//alpha->SetSca({ 10,10,10 });
-		alpha->SetPos({ 160,0,-100 });
+		alpha->SetPos({ 190,0,-100 });
+		
+		alpha = ue::NewGO<ue::SkinModelRender>(0);
+		alpha->Init(L"Assets/model/AlphaModelTestBlock.cmo");
+		alpha->SetAlphaMap(L"Assets/sprite/kusa_spe.dds", L"Alpha");
+		//alpha->SetSca({ 10,10,10 });
+		alpha->SetPos({ 500,0,-100 });
+		alpha->SetRefractiveIndex(1.3f);
+
+		alpha = ue::NewGO<ue::SkinModelRender>(0);
+		alpha->Init(L"Assets/model/AlphaModelTest.cmo");
+		alpha->SetAlphaMap(L"Assets/sprite/kusa_spe.dds", L"Alpha");
+		//alpha->SetSca({ 10,10,10 });
+		alpha->SetPos({ 1000,0,-100 });
+		alpha->SetRefractiveIndex(1.3f);
 	}
 
 	

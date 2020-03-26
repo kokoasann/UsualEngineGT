@@ -254,6 +254,16 @@ public:
 	{
 		return m_model->GetAnimation();
 	}
+
+	ue::IK* GetIK(ue::Bone* bone);
+	ue::IK* GetFootLIK()
+	{
+		return m_footLIK;
+	}
+	ue::IK* GetFootRIK()
+	{
+		return m_footRIK;
+	}
 private:
 	ue::SkinModelRender* m_model = nullptr;		//モデルのポインタ
 	ue::Bone* m_footL = nullptr;				//左足のボーン

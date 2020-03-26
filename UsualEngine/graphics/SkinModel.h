@@ -158,6 +158,11 @@ namespace UsualEngine
 		{
 			m_instancingData[num] = mat;
 		}
+
+		void SetRefractiveIndex(float f)
+		{
+			m_refractiveIndex = f;
+		}
 	private:
 		/*!
 		*@brief	サンプラステートの初期化。
@@ -182,6 +187,7 @@ namespace UsualEngine
 			CVector3 camDir;
 			int isShadowReciever;
 			int isUseSpecularMap = 0;
+			float refractiveIndex = 1.0f;
 		};
 		EnFbxUpAxis			m_enFbxUpAxis = enFbxUpAxisZ;	//!<FBXの上方向。
 		ID3D11Buffer* m_cb = nullptr;					//!<定数バッファ。
@@ -200,6 +206,8 @@ namespace UsualEngine
 		unsigned int m_numInstance = 0;
 		CMatrix* m_instancingData = nullptr;
 		StructuredBuffer m_instancingDataSB;
+
+		float m_refractiveIndex = 1.0f;
 	};
 
 }

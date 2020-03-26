@@ -323,3 +323,11 @@ void Character::PlayAnim(int anim, float lerp, float start, ActionMode am)
 	m_actionMode = am;
 }
 
+ue::IK* Character::GetIK(ue::Bone* bone)
+{
+	if (bone == m_footL)
+		return m_footLIK;
+	if (bone == m_footR)
+		return m_footRIK;
+}
+

@@ -1,21 +1,9 @@
 #include "modelData.h"
 
-/*!
- * @brief	頂点シェーダーとピクセルシェーダー用の定数バッファ。
- */
-cbuffer VSPSCb : register(b0){
-	float4x4 mWorld;
-	float4x4 mView;
-	float4x4 mProj;
-	float3 camDir;
-	int isShadowReciever;
-	int isUseSpecularMap;
-};
-
-//インスタンスごとのデータの入った配列。
+//?C???X?^???X?????f?[?^????????z??B
 StructuredBuffer<float4x4> instancingDataList : register(t11);
 
-//	スキンなし用。
+//	?X?L??????p?B
 PSInput VSMain_NonSkin_Instancing(VSInputNmTxVcTangent In,uint instanceID:SV_InstanceID)
 {
     PSInput psInput = (PSInput)0;
@@ -35,7 +23,7 @@ PSInput VSMain_NonSkin_Instancing(VSInputNmTxVcTangent In,uint instanceID:SV_Ins
 }
 
 
-//	スキンあり用。
+//	?X?L??????p?B
 PSInput VSMain_Skin_Instancing(VSInputNmTxWeights In,uint instanceID:SV_InstanceID)
 {
 	PSInput psInput = (PSInput)0;
@@ -48,16 +36,16 @@ PSInput VSMain_Skin_Instancing(VSInputNmTxWeights In,uint instanceID:SV_Instance
 		[unroll(3)]
 	    for (int i = 0; i < 3; i++)
 	    {
-			//boneMatrixにボーン行列が設定されていて、
-			//In.indicesは頂点に埋め込まれた、関連しているボーンの番号。
-			//In.weightsは頂点に埋め込まれた、関連しているボーンのウェイト。
+			//boneMatrix??{?[???s??????????A
+			//In.indices????_??????????A??A???????{?[???????B
+			//In.weights????_??????????A??A???????{?[????E?F?C?g?B
 	        skinning += boneMatrix[In.Indices[i]] * In.Weights[i];
 	        w += In.Weights[i];
 	    }
-	    //最後のボーンを計算する。
+	    //????{?[?????v?Z????B
 	    skinning += boneMatrix[In.Indices[3]] * (1.0f - w);
-	  	//頂点座標にスキン行列を乗算して、頂点をワールド空間に変換。
-		//mulは乗算命令。
+	  	//???_???W??X?L???s?????Z????A???_?????[???h???????B
+		//mul???Z????B
 	    pos = mul(skinning, In.Position);
 	}
 	psInput.Normal = normalize( mul(skinning, In.Normal) );
@@ -76,7 +64,7 @@ PSInput VSMain_Skin_Instancing(VSInputNmTxWeights In,uint instanceID:SV_Instance
 }
 
 
-//	スキンなし用デプス
+//	?X?L??????p?f?v?X
 PSInputDepth VSMain_DepthNonSkin_Instancing(VSInputNmTxVcTangent In,uint instanceID:SV_InstanceID)
 {
 	PSInputDepth psInput = (PSInputDepth)0;
@@ -90,7 +78,7 @@ PSInputDepth VSMain_DepthNonSkin_Instancing(VSInputNmTxVcTangent In,uint instanc
 }
 
 
-//	スキンあり用デプス
+//	?X?L??????p?f?v?X
 PSInputDepth VSMain_DepthSkin_Instancing(VSInputNmTxWeights In,uint instanceID:SV_InstanceID)
 {
 	PSInputDepth psInput = (PSInputDepth)0;
