@@ -70,10 +70,10 @@ Ene_Gib::Ene_Gib()
 		auto& cam = ue::usualEngine()->GetMainCamera();
 		//cam.CameraModeOrth();
 		auto v = m_chara.GetPos();
-		v.y += 600;
+		v.y += 600/10;
 		cam.SetTarget(v);
-		v.x += 1600;
-		cam.SetPosition(v);
+		v.x += 1600/10;
+		cam.SetPosition(v/10);
 		cam.Update();
 	};
 	ue::DebugSwitchAddRadio(ue::DebugSwitchNewSwitch('Z', 0, f));
@@ -82,10 +82,10 @@ Ene_Gib::Ene_Gib()
 		auto& cam = ue::usualEngine()->GetMainCamera();
 		
 		auto v = m_chara.GetPos();
-		v.y += 30;
+		v.y += 30/10;
 		cam.SetTarget(v);
-		v.y += 80;
-		v.x += 600;
+		v.y += 80/10;
+		v.x += 600/10;
 		cam.SetPosition(v);
 		cam.Update();
 	};

@@ -14,18 +14,18 @@ float4 PSMain_Alpha(PSInput In):SV_Target0
     float sceneDep = gDepthMap.Sample(Sampler,sceneUV);
     clip(sceneDep-depth);
 
-    float3 norm = mul(mWorld,In.Normal);
+    float3 norm = In.Normal;
     norm = mul(mView,norm);
-    norm = mul(mProj,norm);
     norm = normalize(norm);
     float4 res;
     float3 ref = refract(float3(0,0,1),norm,refractiveIndex);
 
     float refind = 0.0f;
-    float3 eyeline = camDir;
-    float dotlignor = dot(eyeline,In.Normal);
-    //ref = -refind * (eyeline - dotlignor * In.Normal) - In.Normal * sqrt(1 - pow(refind, 2)*(1 - pow(dotlignor, 2)));
-    
+    float3 eyeline = float3(0,0,1);
+    float dotlignor = dot(eyeline,norm);
+    //ref = -refractiveIndex * (eyeline - dotlignor * norm) - norm * sqrt(1 - pow(refractiveIndex, 2)*(1 - pow(dotlignor, 2)));
+    //dotlignor = dot(camDir,In.Normal);
+    //ref = -refractiveIndex * (camDir - dotlignor * In.Normal) - In.Normal * sqrt(1 - pow(refractiveIndex, 2)*(1 - pow(dotlignor, 2)));
     float2 uv = sceneUV+ref.xy;
     /*uv.x -= (uv.x-1.f)*(1.f-step(uv.y,1.f));
     uv.x += (uv.x*-1.f)*(step(uv.x,0.f));

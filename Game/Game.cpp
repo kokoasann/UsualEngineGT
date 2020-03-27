@@ -43,21 +43,29 @@ bool Game::Start()
 		alpha->Init(L"Assets/model/AlphaModelTestBlock.cmo");
 		alpha->SetAlphaMap(L"Assets/sprite/kusa_spe.dds", L"Alpha");
 		//alpha->SetSca({ 10,10,10 });
-		alpha->SetPos({ 190,0,-100 });
+		alpha->SetPos({ 200,0,-100 });
+		alpha->SetRefractiveIndex(1.0f);
 		
 		alpha = ue::NewGO<ue::SkinModelRender>(0);
 		alpha->Init(L"Assets/model/AlphaModelTestBlock.cmo");
 		alpha->SetAlphaMap(L"Assets/sprite/kusa_spe.dds", L"Alpha");
 		//alpha->SetSca({ 10,10,10 });
 		alpha->SetPos({ 500,0,-100 });
-		alpha->SetRefractiveIndex(1.3f);
+		alpha->SetRefractiveIndex(1.5f);
+
+		alpha = ue::NewGO<ue::SkinModelRender>(0);
+		alpha->Init(L"Assets/model/AlphaModelTestCapsule.cmo");
+		alpha->SetAlphaMap(L"Assets/sprite/kusa_spe.dds", L"Alpha");
+		//alpha->SetSca({ 10,10,10 });
+		alpha->SetPos({ 800,0,-100 });
+		alpha->SetRefractiveIndex(1.5f);
 
 		alpha = ue::NewGO<ue::SkinModelRender>(0);
 		alpha->Init(L"Assets/model/AlphaModelTest.cmo");
 		alpha->SetAlphaMap(L"Assets/sprite/kusa_spe.dds", L"Alpha");
 		//alpha->SetSca({ 10,10,10 });
-		alpha->SetPos({ 1000,0,-100 });
-		alpha->SetRefractiveIndex(1.3f);
+		alpha->SetPos({ 1100,0,-100 });
+		alpha->SetRefractiveIndex(1.5f);
 	}
 
 	
@@ -102,7 +110,13 @@ bool Game::Start()
 				ground->SetSpecularMap(ue::SMR4Ground::tkOther, L"Assets/sprite/iwa_spe.dds", L"");
 				ground->SetPos(pos);
 				ground->SetSca(scal);
-				wpso[grCount++].CreateMeshObject(ground->GetSkinModel(), ground->GetPos(), ground->GetRot(), ground->GetSca());
+				auto* colli = ue::NewGO<ue::SkinModelRender>(0);
+				colli->SetActive(false);
+				path = L"Assets/model/";
+				path += obj.name;
+				path += L"_col.cmo";
+				colli->Init(path.c_str());
+				wpso[grCount++].CreateMeshObject(colli->GetSkinModel(), ground->GetPos(), colli->GetRot(), ground->GetSca());
 			}
 			else if(wcscmp(obj.name,L"weed")==0)
 			{

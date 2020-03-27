@@ -215,6 +215,7 @@
   <ItemGroup>
     <MeshContentTask Include="Assets\model\AlphaModelTest\AlphaModelTest.fbx" />
     <MeshContentTask Include="Assets\model\AlphaModelTest\AlphaModelTestBlock.fbx" />
+    <MeshContentTask Include="Assets\model\AlphaModelTest\AlphaModelTestCapsule.fbx" />
     <MeshContentTask Include="Assets\model\BackGroundTest\BackGroundTest.fbx" />
     <MeshContentTask Include="Assets\model\block\dun.fbx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -254,6 +255,15 @@
     <MeshContentTask Include="Assets\model\weed\weed.fbx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </MeshContentTask>
+    <MeshContentTask Include="Assets\model\world\pre\Collision\map1A_col.fbx" />
+    <MeshContentTask Include="Assets\model\world\pre\Collision\map1B_col.fbx" />
+    <MeshContentTask Include="Assets\model\world\pre\Collision\map1C_col.fbx" />
+    <MeshContentTask Include="Assets\model\world\pre\Collision\map2A_col.fbx" />
+    <MeshContentTask Include="Assets\model\world\pre\Collision\map2B_col.fbx" />
+    <MeshContentTask Include="Assets\model\world\pre\Collision\map2C_col.fbx" />
+    <MeshContentTask Include="Assets\model\world\pre\Collision\map3A_col.fbx" />
+    <MeshContentTask Include="Assets\model\world\pre\Collision\map3B_col.fbx" />
+    <MeshContentTask Include="Assets\model\world\pre\Collision\map3C_col.fbx" />
     <MeshContentTask Include="Assets\model\world\pre\map1A.fbx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </MeshContentTask>
