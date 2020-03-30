@@ -217,6 +217,8 @@ namespace UsualEngine
 			return m_hitCollision;
 		}
 
+		void SetPos(const CVector3& p);
+
 	private:
 		bool m_isFirst = true;							//初めてか？
 		Bone* m_effectorBone=0;							//エフェクタボーン

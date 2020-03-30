@@ -179,7 +179,7 @@ void CharacterMoveMotion::Walk2Idle(float delTime)
 		m_moved = m_chara->GetDir() * m_oldSpeed;
 
 		//m_chara->PlayAnim(m_idolNum, m_animLug_2idle);
-		m_chara->PlayAnim(m_idolNum, 1.f,AM_None);
+		
 		m_isWalk = false;
 		//m_chara->SetAllIKRub(0.0f);
 		//m_chara->SetIKOffset(ue::CVector3::Zero());
@@ -191,80 +191,18 @@ void CharacterMoveMotion::Walk2Idle(float delTime)
 		//m_isJustedStart = false;
 	//m_justTime = 0.f;
 	//m_isStartJustFoot = false;
+		m_chara->PlayAnim(m_idolNum, 1.f, AM_None);
 		m_isJustFoot = true;
 	}
 	auto move = m_moved * ((m_time) / m_animLug_2idle);
 	//m_chara->SetIKOffset(move * delTime);
 	m_chara->SetMove(move);
 	m_time -= delTime;
-}
-#if 0
-void CharacterMoveMotion::JustFoot(float delTime)
-{
-	if (!m_isStartJustFoot)//遠い足の方から先に整える
+	if (m_time <= 0.f)
 	{
-		auto moveL = m_footL->GetMove().Length();
-		auto moveR = m_footR->GetMove().Length();
-
-		if (moveL > moveR)
-			m_startJustFoot = JF_footL;
-		else
-			m_startJustFoot = JF_footR;
-		m_isStartJustFoot = true;
-		m_chara->SetIKRub(0.0f);
-	}
-	ue::Bone* startBone = nullptr;
-	ue::Bone* endBone = nullptr;
-
-	switch (m_startJustFoot)
-	{
-	case JF_footL://左足からスタート
-		startBone = m_footL;
-		endBone = m_footR;
-		break;
-	case JF_footR://右足からスタート
-		startBone = m_footR;
-		endBone = m_footL;
-		break;
-	}
-
-	if (!m_isJustedStart)//最初に出す足の処理。
-	{
-		auto move = startBone->GetMove().Length();
-		if (m_time > 0.2f || move < 10.f)
-		{
-			m_isJustedStart = true;
-			m_chara->SetIKSpeed(m_justFoot_DownIKSpeed, startBone);
-			m_time = 0.f;
-		}
-		else if (m_time < 0.1f)
-		{
-			auto up = m_chara->GetDir() * -1.f;
-
-			up.y += m_justFoot_OffsetY;
-			up.Normalize();
-			m_chara->SetIKOffset(up * m_justFoot_Scale, startBone);
-			m_chara->SetIKSpeed(m_justFoot_UpIKSpeed, startBone);
-		}
-		m_time += delTime;
-	}
-	else if (!m_isJustedEnd)//最後に出す足の処理。
-	{
-		auto move = endBone->GetMove().Length();
-		if (m_time > 0.1f || move < 10.f)
-		{
-			m_isJustedEnd = true;
-			m_chara->SetIKSpeed(m_justFoot_DownIKSpeed, endBone);
-		}
-		auto up = m_chara->GetDir() * -1.f;
-		up.y += m_justFoot_OffsetY;
-		up.Normalize();
-		m_chara->SetIKOffset(up * m_justFoot_Scale, endBone);
-		m_chara->SetIKSpeed(m_justFoot_UpIKSpeed, endBone);
-		m_time += delTime;
+		
 	}
 }
-#endif
 void CharacterMoveMotion::ChangePlayingAnim(PlayAnim pa)
 {
 	m_oldSpeed = m_oldSpeedBuff;

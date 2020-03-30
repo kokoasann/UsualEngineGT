@@ -44,23 +44,6 @@ void CharacterJustFoot::Update_JustFoot(float delTime)
 
 	if (!m_isJustedStart)//Å‰‚Éo‚·‘«‚Ìˆ—B
 	{
-		/*auto move = startBone->GetMove().Length();
-		if (m_time > 0.2f || move < 10.f)
-		{
-			m_isJustedStart = true;
-			m_chara->SetIKSpeed(m_justFoot_DownIKSpeed, startBone);
-			m_time = 0.f;
-		}
-		else if (m_time < 0.1f)
-		{
-			auto up = m_chara->GetDir() * -1.f;
-
-			up.y += m_justFoot_OffsetY;
-			up.Normalize();
-			m_chara->SetIKOffset(up * m_justFoot_Scale, startBone);
-			m_chara->SetIKSpeed(m_justFoot_UpIKSpeed, startBone);
-		}*/
-
 		if (!m_isUped)
 		{
 			auto up = m_chara->GetDir() * -1.f;
@@ -76,12 +59,6 @@ void CharacterJustFoot::Update_JustFoot(float delTime)
 		}
 		else
 		{
-			/*auto up = m_chara->GetDir() * -1.f;
-			up.y += m_justFoot_OffsetY;
-			up.Normalize();
-			up *= delTime * m_justFoot_UpIKSpeed;
-			m_nowUP -= up;
-			m_chara->SetIKOffset(m_nowUP, startBone);*/
 			auto ik = m_chara->GetIK(startBone);
 			const auto& tar = ik->GetOldNewTarget();
 			auto pos = startBone->GetWorldMatrix().GetTranslation();
@@ -175,14 +152,26 @@ void CharacterJustFoot::Start_JustFoot()
 
 	//if (!m_isStartJustFoot)//‰“‚¢‘«‚Ì•û‚©‚çæ‚É®‚¦‚é
 	{
-		m_chara->SetIKOffset(ue::CVector3::Zero());
-		auto moveL = m_footL->GetMove().Length();
-		auto moveR = m_footR->GetMove().Length();
-
-		if (moveL > moveR)
+		bool onGroundL = m_footL->IsONGround(), onGroundR = m_footR->IsONGround();
+		if (!onGroundL)
+		{
 			m_startJustFoot = JF_footL;
-		else
+		}
+		else if (!onGroundR)
+		{
 			m_startJustFoot = JF_footR;
+		}
+		else
+		{
+			m_chara->SetIKOffset(ue::CVector3::Zero());
+			auto moveL = m_footL->GetMove().Length();
+			auto moveR = m_footR->GetMove().Length();
+
+			if (moveL > moveR)
+				m_startJustFoot = JF_footL;
+			else
+				m_startJustFoot = JF_footR;
+		}
 		//m_isStartJustFoot = true;
 		//m_chara->SetIKRub(0.0f);
 		m_time = 0.f;

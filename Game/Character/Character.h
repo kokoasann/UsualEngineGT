@@ -173,8 +173,16 @@ public:
 	}
 	void SetPos(ue::CVector3& pos)
 	{
+		const auto& oldpos = m_model->GetPos();
+		auto& anim = m_model->GetAnimation();
+		anim.QueryIK([&](ue::IK* ik)
+			{
+				auto p2t = ik->GetOldTarget()-oldpos;
+				ik->SetPos(pos + p2t);
+			});
 		m_characon.SetPosition(pos);
 		m_model->SetPos(pos);
+		
 	}
 	/// <summary>
 	/// ˆø”rot‚Ì•ª‚¾‚¯‰ñ“]‚·‚é

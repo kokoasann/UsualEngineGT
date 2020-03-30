@@ -135,6 +135,8 @@ namespace UsualEngine
 		void SetIKNextTarget(const CVector3& tar, Bone* bone);
 
 		void SetIKGravity(float g, Bone* bone = nullptr);
+
+		void QueryIK(std::function<void(IK*)> ikfunc);
 		/// <summary>
 		/// 
 		/// </summary>

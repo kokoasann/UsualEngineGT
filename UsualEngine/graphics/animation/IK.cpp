@@ -805,4 +805,15 @@ namespace UsualEngine
 		auto& bpo = body->getWorldTransform();
 		bpo.setOrigin({ pos.x,pos.y, pos.z });
 	}
+
+	void IK::SetPos(const CVector3& p)
+	{
+		m_target = p;
+		m_oldNewTarget = p;
+		m_oldTarget = p;
+		//m_nextTarget = p;
+		m_isSetNextTarget = false;
+		m_rubTarget = p;
+		UpdateRigidBody(p);
+	}
 }

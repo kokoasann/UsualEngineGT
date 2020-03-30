@@ -354,4 +354,11 @@ namespace UsualEngine
 			}
 		}
 	}
+	void Animation::QueryIK(std::function<void(IK*)> ikfunc)
+	{
+		for (auto ik : m_ik)
+		{
+			ikfunc(ik);
+		}
+	}
 }
