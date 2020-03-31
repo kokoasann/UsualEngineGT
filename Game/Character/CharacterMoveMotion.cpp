@@ -191,7 +191,7 @@ void CharacterMoveMotion::Walk2Idle(float delTime)
 		//m_isJustedStart = false;
 	//m_justTime = 0.f;
 	//m_isStartJustFoot = false;
-		m_chara->PlayAnim(m_idolNum, 1.f, AM_None);
+		m_chara->PlayAnim(m_idolNum, 1.f,0.f, AM_Move);
 		m_isJustFoot = true;
 	}
 	auto move = m_moved * ((m_time) / m_animLug_2idle);
