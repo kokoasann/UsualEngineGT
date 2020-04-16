@@ -118,6 +118,12 @@ namespace UsualEngine
 			return m_oldTarget;
 		}
 
+		
+		const CVector3& GetOldNewTarget() const
+		{
+			return m_oldNewTarget;
+		}
+
 		/// <summary>
 		/// 使用されているコリジョンの半径。
 		/// </summary>
@@ -210,6 +216,8 @@ namespace UsualEngine
 		{
 			return m_hitCollision;
 		}
+
+		void SetPos(const CVector3& p);
 
 	private:
 		bool m_isFirst = true;							//初めてか？

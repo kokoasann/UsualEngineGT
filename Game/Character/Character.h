@@ -173,8 +173,16 @@ public:
 	}
 	void SetPos(ue::CVector3& pos)
 	{
+		const auto& oldpos = m_model->GetPos();
+		auto& anim = m_model->GetAnimation();
+		anim.QueryIK([&](ue::IK* ik)
+			{
+				auto p2t = ik->GetOldTarget()-oldpos;
+				ik->SetPos(pos + p2t);
+			});
 		m_characon.SetPosition(pos);
 		m_model->SetPos(pos);
+		
 	}
 	/// <summary>
 	/// 引数rotの分だけ回転する
@@ -253,6 +261,16 @@ public:
 	ue::Animation& GetAnimation() const
 	{
 		return m_model->GetAnimation();
+	}
+
+	ue::IK* GetIK(ue::Bone* bone);
+	ue::IK* GetFootLIK()
+	{
+		return m_footLIK;
+	}
+	ue::IK* GetFootRIK()
+	{
+		return m_footRIK;
 	}
 private:
 	ue::SkinModelRender* m_model = nullptr;		//モデルのポインタ

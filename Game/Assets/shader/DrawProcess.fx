@@ -5,7 +5,7 @@
 cbuffer DefferdCB:register(b7)
 {
     float4x4 mViewProjInv;
-    float3 camDir;
+    float3 camDirm;
 }
 
 float4 DrawProcess(float4 diffuse,float3 normal,float specular,float gshadow,float depth,float2 uv)

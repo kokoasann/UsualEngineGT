@@ -178,6 +178,7 @@ namespace UsualEngine
 		vsCb.camDir =camdir;
 		vsCb.isShadowReciever = m_isShadowReciever;
 		vsCb.isUseSpecularMap = m_specularMap != nullptr;
+		vsCb.refractiveIndex = m_refractiveIndex;
 
 		d3dDeviceContext->UpdateSubresource(m_cb, 0, nullptr, &vsCb, 0, 0);
 		//定数バッファをGPUに転送。

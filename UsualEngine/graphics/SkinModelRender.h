@@ -193,6 +193,11 @@ namespace UsualEngine
 		{
 			m_animation.SetIKRub(f,bone);
 		}
+
+		void SetRefractiveIndex(float f)
+		{
+			m_skinModel.SetRefractiveIndex(f);
+		}
 	private:
 		SkinModel m_skinModel;	//siknModel
 		Animation m_animation;	//Animation

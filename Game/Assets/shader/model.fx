@@ -13,20 +13,6 @@ Texture2D<float4> albedoTexture : register(t0);
 
 
 
-/////////////////////////////////////////////////////////////
-// 定数バッファ。
-/////////////////////////////////////////////////////////////
-/*!
- * @brief	頂点シェーダーとピクセルシェーダー用の定数バッファ。
- */
-cbuffer VSPSCb : register(b0){
-	float4x4 mWorld;
-	float4x4 mView;
-	float4x4 mProj;
-	float3 camDir;
-	int isShadowReciever;
-	int isUseSpecularMap;
-};
 
 
 float GetShadow(float3 wpos,Texture2D<float4> tex, float2 offset)

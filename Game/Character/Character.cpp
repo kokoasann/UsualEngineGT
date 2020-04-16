@@ -68,32 +68,31 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 			}
 			//else
 			{
-				if (!isR && m_footR->IsDown())
-				{
-					move.y += m_footR->GetMove().y;
-					//pos.y = m_footRIK->GetTarget().y;
-				}
-				else if (!isL && m_footL->IsDown())
-				{
-					move.y += m_footL->GetMove().y;
-					//pos.y = m_footLIK->GetTarget().y;
-				}
+				//if (!isR && m_footR->IsDown())
+				//{
+				//	move.y += m_footR->GetMove().y;
+				//	//pos.y = m_footRIK->GetTarget().y;
+				//}
+				//else if (!isL && m_footL->IsDown())
+				//{
+				//	move.y += m_footL->GetMove().y;
+				//	//pos.y = m_footLIK->GetTarget().y;
+				//}
 				
 				//move.y = 0;
 
 				move *= -1;
-				if (isR && isL)
+				float moveY = 0.0f;
+				if (m_footLIK->GetTarget().y < m_footRIK->GetTarget().y)
 				{
-					if (m_footLIK->GetTarget().y < m_footRIK->GetTarget().y)
-					{
-						move.y = m_footLIK->GetTarget().y - m_footLIK->GetOldTarget().y;
-					}
-					else
-					{
-						move.y = m_footRIK->GetTarget().y - m_footRIK->GetOldTarget().y;
-					}
+					move.y = m_footLIK->GetTarget().y - m_footLIK->GetOldTarget().y;
+					//move.y = m_footLIK->GetTarget().y - pos.y;
 				}
-				
+				else
+				{
+					move.y = m_footRIK->GetTarget().y - m_footRIK->GetOldTarget().y;
+					//move.y = m_footRIK->GetTarget().y - pos.y;
+				}
 				auto rpos = m_characon.Execute(1, move);
 				rpos += m_ccOffset;
 				pos = rpos;
@@ -321,5 +320,13 @@ void Character::PlayAnim(int anim, float lerp, float start, ActionMode am)
 {
 	m_model->GetAnimation().Play(anim, lerp, start);
 	m_actionMode = am;
+}
+
+ue::IK* Character::GetIK(ue::Bone* bone)
+{
+	if (bone == m_footL)
+		return m_footLIK;
+	if (bone == m_footR)
+		return m_footRIK;
 }
 

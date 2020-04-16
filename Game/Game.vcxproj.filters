@@ -158,6 +158,9 @@
     <Filter Include="Assets\Model\AlphaModelTest">
       <UniqueIdentifier>{efc75b6d-7172-4bcb-a062-a5e5ece20f49}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\world\pre\Collision">
+      <UniqueIdentifier>{603fcdda-a893-484e-9dac-16dfb3a69d1d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\model.fx">
@@ -286,6 +289,36 @@
     </MeshContentTask>
     <MeshContentTask Include="Assets\model\AlphaModelTest\AlphaModelTestBlock.fbx">
       <Filter>Assets\Model\AlphaModelTest</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\AlphaModelTest\AlphaModelTestCapsule.fbx">
+      <Filter>Assets\Model\AlphaModelTest</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\world\pre\Collision\map3A_col.fbx">
+      <Filter>Assets\world\pre\Collision</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\world\pre\Collision\map3B_col.fbx">
+      <Filter>Assets\world\pre\Collision</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\world\pre\Collision\map3C_col.fbx">
+      <Filter>Assets\world\pre\Collision</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\world\pre\Collision\map1A_col.fbx">
+      <Filter>Assets\world\pre\Collision</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\world\pre\Collision\map1B_col.fbx">
+      <Filter>Assets\world\pre\Collision</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\world\pre\Collision\map1C_col.fbx">
+      <Filter>Assets\world\pre\Collision</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\world\pre\Collision\map2A_col.fbx">
+      <Filter>Assets\world\pre\Collision</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\world\pre\Collision\map2B_col.fbx">
+      <Filter>Assets\world\pre\Collision</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\world\pre\Collision\map2C_col.fbx">
+      <Filter>Assets\world\pre\Collision</Filter>
     </MeshContentTask>
   </ItemGroup>
 </Project>

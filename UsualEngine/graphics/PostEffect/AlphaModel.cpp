@@ -31,6 +31,11 @@ namespace UsualEngine
 		dc->ClearDepthStencilView(m_alphaRenderTarget.GetDSV(), D3D11_CLEAR_DEPTH, 1.f, 0);
 		dc->ClearRenderTargetView(m_alphaRenderTarget.GetRTV(), color);
 
+		ID3D11DepthStencilState* oldDS=0;
+		unsigned int oldIND = 0;
+		dc->OMGetDepthStencilState(&oldDS, &oldIND);
+		dc->OMSetDepthStencilState(DepthStencilState::sceneRender, 0);
+
 		for (auto go : m_renderObject)
 		{
 			go->Render();
@@ -59,5 +64,6 @@ namespace UsualEngine
 		posteffect->DrawPrimitive();
 		dc->OMSetBlendState(blendS, factor, mask);
 		ge->OMSetRenderTarget(rtcount, oldtarget);
+		dc->OMSetDepthStencilState(oldDS, oldIND);
 	}
 }

@@ -35,10 +35,6 @@ namespace UsualEngine
 		auto& pe = usualEngine()->GetGraphicsEngine()->GetPostEffect();
 		pe.Render();
 
-		if (Debug::Instance().debugState.isPhysicsDebugDraw)
-		{
-			Physics().DebugDraw();
-		}
 		Debug::Instance().DrawLog();
 
 		for (auto& ngd : m_newGOBuffer)

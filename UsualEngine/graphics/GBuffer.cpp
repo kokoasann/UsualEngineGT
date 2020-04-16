@@ -88,6 +88,13 @@ namespace UsualEngine
 			go->Render();
 		}
 		m_modelList.clear();
+
+		//ƒRƒŠƒWƒ‡ƒ“‚Ì•`‰æB
+		if (Debug::Instance().debugState.isPhysicsDebugDraw)
+		{
+			Physics().DebugDraw();
+		}
+
 		ge->OMSetRenderTarget(oldRTcount, oldRT);
 	}
 }
