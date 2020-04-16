@@ -68,7 +68,9 @@ namespace UsualEngine
 			0, 
 			*GetCurrentRenderTarget().GetTexFormat()
 		);
-		m_alphaModelRender.Render(this);
+		static bool isAlphaRender = true;
+		if(isAlphaRender)
+			m_alphaModelRender.Render(this);
 		m_bloom.Render(this);
 
 		gEngine->EndPostEffect();
