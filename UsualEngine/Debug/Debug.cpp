@@ -20,7 +20,7 @@ namespace UsualEngine
 		DebugSwitchAddCheck(DebugSwitchNewSwitch(VK_F1, 0, on, off));
 
 
-#if _DEBUG
+#if 1
 		DebugSwitchNewRadioBox("GBufferDraw");
 		on = [&]()
 		{

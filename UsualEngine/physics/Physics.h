@@ -1,6 +1,6 @@
 #pragma once
 
-#if _DEBUG
+#if DEBUG_FUNC
 #include "physics/PhysicsDebugDraw.h"
 #endif
 

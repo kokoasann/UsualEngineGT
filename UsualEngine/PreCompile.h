@@ -12,6 +12,7 @@ const float SPRITE_SPACE_SCREEN_H = 720.0f;
 static const int MAX_BONE = 512;	//!<ƒ{[ƒ“‚ÌÅ‘å”B
 
 static const int RTV_MAX = 8;
+#define DEBUG_FUNC 1
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -97,7 +98,7 @@ static const int RTV_MAX = 8;
 #include "graphics/SkinModelRender.h"
 #include "Prefab/SkinModelRender4Ground.h"
 #include "level/Level.h"
-#if _DEBUG
+#if DEBUG_FUNC
 //#include "Debug/DebugLog.h"
 
 #include "Debug/Debug.h"

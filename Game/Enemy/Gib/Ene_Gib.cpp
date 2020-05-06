@@ -65,6 +65,8 @@ Ene_Gib::Ene_Gib()
 		return ind;
 	});
 
+#if DEBUG_FUNC
+	//debug用のスイッチ作成
 	std::function<void()> f = [&]() 
 	{
 		auto& cam = ue::usualEngine()->GetMainCamera();
@@ -120,7 +122,7 @@ Ene_Gib::Ene_Gib()
 		m_charaMotion.PlayIdol();
 	};
 	ue::DebugSwitchAddRadioBoxButton("gibMove", ue::DebugSwitchNewSwitch('B', 0, f));
-
+#endif
 }
 
 Ene_Gib::~Ene_Gib()

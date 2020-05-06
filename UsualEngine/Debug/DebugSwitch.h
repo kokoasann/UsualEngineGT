@@ -3,7 +3,7 @@
 
 namespace UsualEngine
 {
-#if _DEBUG
+#if DEBUG_FUNC
 	class DebugSwitch
 	{
 	private:
@@ -94,14 +94,14 @@ namespace UsualEngine
 
 	static void DebugSwitchUpdate()
 	{
-#if _DEBUG
+#if DEBUG_FUNC
 		DebugSwitch::Instance()->Update();
 #endif
 	}
 
 	static void* DebugSwitchNewSwitch(char k1, char k2, std::function<void()>& update)
 	{
-#if _DEBUG
+#if DEBUG_FUNC
 		return new DebugSwitch::SSwitch(k1, k2, update);
 #else
 		return nullptr;
@@ -110,7 +110,7 @@ namespace UsualEngine
 
 	static void* DebugSwitchNewSwitch(char k1, char k2, std::function<void()>& on, std::function<void()>& off)
 	{
-#if _DEBUG
+#if DEBUG_FUNC
 		return new DebugSwitch::SSwitch(k1, k2, on,off);
 #else
 		return nullptr;
@@ -119,7 +119,7 @@ namespace UsualEngine
 
 	static void* DebugSwitchNewSwitch(char k1, char k2, std::function<void()>& update, std::function<void()>& on, std::function<void()>& off)
 	{
-#if _DEBUG
+#if DEBUG_FUNC
 		return new DebugSwitch::SSwitch(k1, k2, update, on, off);
 #else
 		return nullptr;
@@ -128,28 +128,28 @@ namespace UsualEngine
 
 	static void DebugSwitchAddCheck(void* s)
 	{
-#if _DEBUG
+#if DEBUG_FUNC
 		DebugSwitch::Instance()->AddCheckButton(reinterpret_cast<DebugSwitch::SSwitch*>(s));
 #endif
 	}
 
 	static void DebugSwitchAddRadio(void* s)
 	{
-#if _DEBUG
+#if DEBUG_FUNC
 		DebugSwitch::Instance()->AddRadioButton(reinterpret_cast<DebugSwitch::SSwitch*>(s));
 #endif
 	}
 
 	static void DebugSwitchNewRadioBox(const char* name)
 	{
-#if _DEBUG
+#if DEBUG_FUNC
 		DebugSwitch::Instance()->NewRadioBox(name);
 #endif
 	}
 
 	static void DebugSwitchAddRadioBoxButton(const char* name, void* s)
 	{
-#if _DEBUG
+#if DEBUG_FUNC
 		DebugSwitch::Instance()->AddRadioBoxButton(name, reinterpret_cast<DebugSwitch::SSwitch*>(s));
 #endif
 	}

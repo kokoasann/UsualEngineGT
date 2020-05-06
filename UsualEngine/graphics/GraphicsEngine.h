@@ -160,7 +160,7 @@ namespace UsualEngine
 		Shader m_psCopy;									//コピー用ピクセルシェーダ
 		Shader m_vsDefferd;								//デファード用頂点シェーダ
 		Shader m_psDefferd;								//デファード用ピクセルシェーダ
-#if _DEBUG
+#if DEBUG_FUNC
 		Shader m_psDefferd_Diffuse;						//デファード用ピクセルシェーダ(デバック用)
 		Shader m_psDefferd_Normal;						//デファード用ピクセルシェーダ(デバック用)
 		Shader m_psDefferd_Depth;						//デファード用ピクセルシェーダ(デバック用)

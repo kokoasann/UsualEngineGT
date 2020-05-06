@@ -27,7 +27,7 @@ void PlayerCamera::Init(Player* p)
 {
 	m_player = p;
 
-#if _DEBUG
+#if DEBUG_FUNC
 	std::function<void()> on = [&]()
 	{
 		m_isCameraOff = true;
@@ -119,7 +119,7 @@ void PlayerCamera::Update()
 		m_cannon->SetTarget(m_cannonDir);
 	}
 	
-#if _DEBUG
+#if DEBUG_FUNC
 	if (m_isCameraOff)
 	{
 		m_camera->SetPosition(campos);

@@ -2,7 +2,7 @@
 #include "GraphicsEngine.h"
 #include "RenderState.h"
 
-#if _DEBUG
+#if DEBUG_FUNC
 #include "Debug/Debug.h"
 #endif
 
@@ -110,7 +110,7 @@ namespace UsualEngine
 		m_pd3dDeviceContext->PSSetShaderResources(enSkinModelSRVReg_Textur_1, 1, &m_speculaGradation);
 		//m_pd3dDeviceContext->PSSetShaderResources(enSkinModelSRVReg_GShadowMap, 1, &sdw);
 
-#if _DEBUG
+#if DEBUG_FUNC
 		switch (Debug::Instance().gbufferDraw)
 		{
 		case Debug::gdDefault:
@@ -322,7 +322,7 @@ namespace UsualEngine
 		m_vsDefferd.Load("Assets/shader/DefferdShading.fx", "VSMain_Defferd", Shader::EnType::VS);
 		m_psDefferd.Load("Assets/shader/DefferdShading.fx", "PSMain_Defferd", Shader::EnType::PS);
 
-#if _DEBUG
+#if DEBUG_FUNC
 		m_psDefferd_Diffuse.Load("Assets/shader/DefferdShading.fx", "PSMain_Diffuse", Shader::EnType::PS);
 		m_psDefferd_Normal.Load("Assets/shader/DefferdShading.fx", "PSMain_Normal", Shader::EnType::PS);
 		m_psDefferd_Depth.Load("Assets/shader/DefferdShading.fx", "PSMain_Depth", Shader::EnType::PS);
