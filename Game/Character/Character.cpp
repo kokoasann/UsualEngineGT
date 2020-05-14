@@ -83,6 +83,7 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 
 				move *= -1;
 				float moveY = 0.0f;
+				
 				if (m_footLIK->GetTarget().y < m_footRIK->GetTarget().y)
 				{
 					move.y = m_footLIK->GetTarget().y - m_footLIK->GetOldTarget().y;
@@ -92,6 +93,14 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 				{
 					move.y = m_footRIK->GetTarget().y - m_footRIK->GetOldTarget().y;
 					//move.y = m_footRIK->GetTarget().y - pos.y;
+				}
+				if (pos.y > m_footLIK->GetTarget().y)
+				{
+					move.y =  m_footLIK->GetTarget().y - pos.y;
+				}
+				else if (pos.y > m_footRIK->GetTarget().y)
+				{
+					move.y = m_footRIK->GetTarget().y - pos.y;
 				}
 				auto rpos = m_characon.Execute(1, move);
 				rpos += m_ccOffset;
