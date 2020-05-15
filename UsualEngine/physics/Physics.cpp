@@ -66,7 +66,7 @@ namespace UsualEngine
 	}
 	void PhysicsWorld::DebugDraw()
 	{
-#if _DEBUG
+#if DEBUG_FUNC
 		m_debugDraw.BeginRender();
 		dynamicWorld->debugDrawWorld();
 		m_debugDraw.EndRender();

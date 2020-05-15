@@ -4,7 +4,7 @@
 #include "GameObject/GameObjectManager.h"
 
 #include "system/system.h"
-#if _DEBUG
+#if DEBUG_FUNC
 #include "Debug/DebugSwitch.h"
 #endif
 #include "Debug/Debug.h"

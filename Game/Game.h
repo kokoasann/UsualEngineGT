@@ -2,6 +2,9 @@
 
 #include "physics/PhysicsStaticObject.h"
 
+/// <summary>
+/// テスト用
+/// </summary>
 class Game :public ue::GameObject
 {
 public:

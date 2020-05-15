@@ -59,22 +59,24 @@ void CharacterJustFoot::Update_JustFoot(float delTime)
 		}
 		else
 		{
-			auto ik = m_chara->GetIK(startBone);
-			const auto& tar = ik->GetOldNewTarget();
-			auto pos = startBone->GetWorldMatrix().GetTranslation();
-			auto dir = pos - tar;
-			dir.Normalize();
-			dir *= m_justFoot_DownIKSpeed * delTime;
-			//m_chara->SetIKOffset(dir,endBone);
-			ik->SetNextTarget(ik->GetTarget() + dir);
-			if (startBone->IsONGround())
+			ue::IK* ik = m_chara->GetIK(startBone);
+			if (ik != nullptr)
 			{
-				m_isUped = false;
-				m_nowUP = ue::CVector3::Zero();
-				m_isJustedStart = true;
-				m_chara->SetIKSpeed(1.f, startBone);
+				const auto& tar = ik->GetOldNewTarget();
+				auto pos = startBone->GetWorldMatrix().GetTranslation();
+				auto dir = pos - tar;
+				dir.Normalize();
+				dir *= m_justFoot_DownIKSpeed * delTime;
+				//m_chara->SetIKOffset(dir,endBone);
+				ik->SetNextTarget(ik->GetTarget() + dir);
+				if (startBone->IsONGround())
+				{
+					m_isUped = false;
+					m_nowUP = ue::CVector3::Zero();
+					m_isJustedStart = true;
+					m_chara->SetIKSpeed(1.f, startBone);
+				}
 			}
-
 		}
 	}
 	else if (!m_isJustedEnd)//ÅŒã‚Éo‚·‘«‚Ìˆ—B
@@ -115,20 +117,23 @@ void CharacterJustFoot::Update_JustFoot(float delTime)
 			m_nowUP -= up;
 			m_chara->SetIKOffset(m_nowUP, endBone);*/
 			auto ik = m_chara->GetIK(endBone);
-			const auto& tar = ik->GetOldNewTarget();
-			auto pos = endBone->GetWorldMatrix().GetTranslation();
-			auto dir = pos-tar;
-			dir.Normalize();
-			dir *= m_justFoot_DownIKSpeed*delTime;
-			//m_chara->SetIKOffset(dir,endBone);
-			ik->SetNextTarget(ik->GetTarget() + dir);
-			//m_chara->SetIKSpeed(0.2f, endBone);
-			if (endBone->IsONGround())
+			if (ik != nullptr)
 			{
-				m_isUped = false;
-				m_nowUP = ue::CVector3::Zero();
-				m_isJustedEnd = true;
-				m_chara->SetIKSpeed(1.f, endBone);
+				const auto& tar = ik->GetOldNewTarget();
+				auto pos = endBone->GetWorldMatrix().GetTranslation();
+				auto dir = pos - tar;
+				dir.Normalize();
+				dir *= m_justFoot_DownIKSpeed * delTime;
+				//m_chara->SetIKOffset(dir,endBone);
+				ik->SetNextTarget(ik->GetTarget() + dir);
+				//m_chara->SetIKSpeed(0.2f, endBone);
+				if (endBone->IsONGround())
+				{
+					m_isUped = false;
+					m_nowUP = ue::CVector3::Zero();
+					m_isJustedEnd = true;
+					m_chara->SetIKSpeed(1.f, endBone);
+				}
 			}
 		}
 	}
