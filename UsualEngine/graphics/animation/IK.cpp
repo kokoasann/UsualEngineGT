@@ -357,7 +357,7 @@ namespace UsualEngine
 		if (m_isSetNextTarget)
 		{
 			newpos = m_nextTarget + m_offset;
-			orgpos = newpos;
+			orgpos = newpos-worldMat.GetTranslation();
 			m_isSetNextTarget = false;
 		}
 		else
@@ -526,7 +526,6 @@ namespace UsualEngine
 			m_hitCollision = sr.hitCollision;
 		}
 #endif
-
 
 		//m_rubTarget += (target-oldpos)*m_speed;
 		m_target += (target - nowpos) * m_speed;

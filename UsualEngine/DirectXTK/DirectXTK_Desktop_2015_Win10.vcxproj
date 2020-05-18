@@ -690,7 +690,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)UsualEngine\exlib</OutDir>
     <IntDir>Bin\Desktop_2015_Win10\$(Platform)\$(Configuration)\</IntDir>
-    <TargetName>DirectXTK</TargetName>
+    <TargetName>DirectXTK_Debug</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Middle|x64'">
     <OutDir>Bin\Desktop_2015_Win10\$(Platform)\$(Configuration)\</OutDir>

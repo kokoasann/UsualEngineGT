@@ -420,9 +420,14 @@ namespace UsualEngine
 			static const CVector3 one = { 1.0f, 1.0f, 1.0f };
 			return one;
 		}
-		char* ToString(char* str,int size)
+		char* ToString(char* str,int size) const
 		{
 			sprintf_s(str,size, "x: %.4f y: %.4f z: %.4f\n", x, y, z);
+			return str;
+		}
+		wchar_t* ToWString(wchar_t* str, int size) const
+		{
+			swprintf_s(str, size,L"x: %.4f y: %.4f z: %.4f\n", x, y, z);
 			return str;
 		}
 	};

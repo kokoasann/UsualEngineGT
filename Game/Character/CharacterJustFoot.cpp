@@ -44,29 +44,42 @@ void CharacterJustFoot::Update_JustFoot(float delTime)
 
 	if (!m_isJustedStart)//最初に出す足の処理。
 	{
+		ue::IK* ik = m_chara->GetIK(startBone);
 		if (!m_isUped)
 		{
+			if (ik->GetTarget().y >= m_justFoot_Scale)
+			{
+				m_isUped = true;
+			}
 			auto up = m_chara->GetDir() * -1.f;
 			up.y += m_justFoot_OffsetY;
 			up.Normalize();
 			up *= delTime * m_justFoot_UpIKSpeed;
 			m_nowUP += up;
-			m_chara->SetIKOffset(m_nowUP, startBone);
-			if (m_nowUP.y >= m_justFoot_Scale)
-			{
-				m_isUped = true;
-			}
+			ik->SetNextTarget(ik->GetTarget() + up);
+			//m_chara->SetIKOffset(m_nowUP, startBone);+
+			
 		}
 		else
 		{
-			ue::IK* ik = m_chara->GetIK(startBone);
+			
 			if (ik != nullptr)
 			{
 				const auto& tar = ik->GetOldNewTarget();
 				auto pos = startBone->GetWorldMatrix().GetTranslation();
 				auto dir = pos - tar;
 				dir.Normalize();
-				dir *= m_justFoot_DownIKSpeed * delTime;
+				auto move = dir * m_justFoot_DownIKSpeed * delTime;
+				auto mpos = m_chara->GetPos();
+				if (mpos.y > (ik->GetTarget() + move).y)
+				{
+					float y = move.y / (tar+mpos).y;
+					dir = move * y;
+				}
+				else
+				{
+					dir = move;
+				}
 				//m_chara->SetIKOffset(dir,endBone);
 				ik->SetNextTarget(ik->GetTarget() + dir);
 				if (startBone->IsONGround())
@@ -81,49 +94,40 @@ void CharacterJustFoot::Update_JustFoot(float delTime)
 	}
 	else if (!m_isJustedEnd)//最後に出す足の処理。
 	{
-		//auto move = endBone->GetMove().Length();
-		//if (m_time > 0.1f || move < 10.f)
-		//{
-		//	m_isJustedEnd = true;
-		//	m_chara->SetIKSpeed(m_justFoot_DownIKSpeed, endBone);
-		//	m_time = 0.f;
-		//	//m_isStart = false;
-		//}
-		//auto up = m_chara->GetDir() * -1.f;
-		//up.y += m_justFoot_OffsetY;
-		//up.Normalize();
-		//m_chara->SetIKOffset(up * m_justFoot_Scale, endBone);
-		//m_chara->SetIKSpeed(m_justFoot_UpIKSpeed, endBone);
+		ue::IK* ik = m_chara->GetIK(endBone);
 
 		if (!m_isUped)
 		{
+			if (ik->GetTarget().y >= m_justFoot_Scale)
+			{
+				m_isUped = true;
+			}
 			auto up = m_chara->GetDir() * -1.f;
 			up.y += m_justFoot_OffsetY;
 			up.Normalize();
 			up *= delTime * m_justFoot_UpIKSpeed;
 			m_nowUP += up;
-			m_chara->SetIKOffset(m_nowUP, endBone);
-			if (m_nowUP.y >= m_justFoot_Scale)
-			{
-				m_isUped = true;
-			}
+			ik->SetNextTarget(ik->GetTarget() + up);
 		}
 		else
 		{
-			/*auto up = m_chara->GetDir() * -1.f;
-			up.y += m_justFoot_OffsetY;
-			up.Normalize();
-			up *= delTime * m_justFoot_UpIKSpeed;
-			m_nowUP -= up;
-			m_chara->SetIKOffset(m_nowUP, endBone);*/
-			auto ik = m_chara->GetIK(endBone);
 			if (ik != nullptr)
 			{
 				const auto& tar = ik->GetOldNewTarget();
 				auto pos = endBone->GetWorldMatrix().GetTranslation();
 				auto dir = pos - tar;
 				dir.Normalize();
-				dir *= m_justFoot_DownIKSpeed * delTime;
+				auto move = dir * m_justFoot_DownIKSpeed * delTime;
+				auto mpos = m_chara->GetPos();
+				if (mpos.y > (ik->GetTarget() + move).y)
+				{
+					float y = move.y / (tar + mpos).y;
+					dir = move * y;
+				}
+				else
+				{
+					dir = move;
+				}
 				//m_chara->SetIKOffset(dir,endBone);
 				ik->SetNextTarget(ik->GetTarget() + dir);
 				//m_chara->SetIKSpeed(0.2f, endBone);

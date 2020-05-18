@@ -8,7 +8,8 @@ namespace UsualEngine
 	public:
 		struct Log
 		{
-			const wchar_t* log = nullptr;
+			std::wstring log;
+			//const wchar_t* log = nullptr;
 			float lifeTime = 0.0f;
 		};
 		DebugLog();
