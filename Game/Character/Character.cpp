@@ -113,9 +113,9 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 				{
 					move.y = m_footRIK->GetTarget().y - pos.y;
 				}*/
-				wchar_t st[255] = { 0 };
+				//wchar_t st[255] = { 0 };
 				//swprintf_s(st, 255, L"%f",move.y);
-				ue::DebugPrint(move.ToWString(st,255));
+				//ue::DebugPrint(move.ToWString(st,255));
 				auto rpos = m_characon.Execute(1, move);
 				rpos += m_ccOffset;
 				pos = rpos;

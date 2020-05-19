@@ -345,19 +345,14 @@ namespace UsualEngine
 		auto effmat = GetBoneWorldMatrix(m_effectorBone, worldMat);
 		auto effpos = effmat.GetTranslation();
 		auto currentBone = m_effectorBone->GetParent();						//作業中のボーン
+		auto modelpos = worldMat.GetTranslation();		//モデルのポジション
 
-		auto imat = worldMat;
-		imat.v[3].x = 0.0f;
-		imat.v[3].y = 0.0f;
-		imat.v[3].z = 0.0f;
-		effmat = GetBoneWorldMatrix(m_effectorBone, imat);
-		auto orgpos = effmat.GetTranslation()+m_offset;
-		
+		auto orgpos = effpos - modelpos;//モデルのポジションからの距離
 		CVector3 newpos;	//移動先のポジション
 		if (m_isSetNextTarget)
 		{
 			newpos = m_nextTarget + m_offset;
-			orgpos = newpos-worldMat.GetTranslation();
+			orgpos = newpos- modelpos;
 			m_isSetNextTarget = false;
 		}
 		else
@@ -381,7 +376,7 @@ namespace UsualEngine
 		if (m_isFirst)
 		{
 			oldpos = m_effectorBone->GetBindPoseMatrix().GetTranslation();
-			oldpos += worldMat.GetTranslation();
+			oldpos += modelpos;
 			m_isFirst = false;
 		}
 		else
@@ -534,8 +529,8 @@ namespace UsualEngine
 		
 		m_isHit = isHitGround;
 		//newpos.y += m_gravitPow;
-		auto wpos = worldMat.GetTranslation();
-		m_move = (orgpos+m_offset) - (m_target-wpos);
+		
+		m_move = (orgpos+m_offset) - (m_target- modelpos);
 		//m_move = (effpos + m_offset) - m_target;
 		m_effectorBone->SetMove(m_move);
 		m_oldNewTarget = orgpos;
