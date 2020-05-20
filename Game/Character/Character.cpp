@@ -41,13 +41,17 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 		ue::CVector3 move = ue::CVector3::Zero();
 		bool isR = m_footR->IsONGround();
 		bool isL = m_footL->IsONGround();
+		float yR = 0.0;
+		float yL = 0.0;
 		if (isR)
 		{
 			move += m_footR->GetMove();
+			yR = move.y;
 		}
 		if (isL)
 		{
 			move += m_footL->GetMove();
+			yL = m_footL->GetMove().y;
 		}
 
 		if (move.Length() > FLT_EPSILON)
@@ -56,7 +60,14 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 			{
 				move.x = 0.0f;
 				move.z = 0.0f;
-				move.y = 0.0f;
+				if (yR > yL)
+				{
+					move.y = yL*1.f;
+				}
+				else
+				{
+					move.y = yR*1.f;
+				}
 				/*if (m_footL->GetWorldMatrix().GetTranslation().y < m_footR->GetWorldMatrix().GetTranslation().y)
 				{
 					pos.y = m_footL->GetWorldMatrix().GetTranslation().y;
@@ -84,24 +95,27 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 				move *= -1;
 				float moveY = 0.0f;
 				
-				if (m_footLIK->GetTarget().y < m_footRIK->GetTarget().y)
-				{
-					move.y = m_footLIK->GetTarget().y - m_footLIK->GetOldTarget().y;
-					//move.y = m_footLIK->GetTarget().y - pos.y;
-				}
-				else
-				{
-					move.y = m_footRIK->GetTarget().y - m_footRIK->GetOldTarget().y;
-					//move.y = m_footRIK->GetTarget().y - pos.y;
-				}
-				if (pos.y > m_footLIK->GetTarget().y)
+				//if (m_footLIK->GetTarget().y < m_footRIK->GetTarget().y)
+				//{
+				//	move.y = m_footLIK->GetTarget().y - m_footLIK->GetOldTarget().y;
+				//	//move.y = m_footLIK->GetTarget().y - pos.y;
+				//}
+				//else
+				//{
+				//	move.y = m_footRIK->GetTarget().y - m_footRIK->GetOldTarget().y;
+				//	//move.y = m_footRIK->GetTarget().y - pos.y;
+				//}
+				/*if (pos.y > m_footLIK->GetTarget().y)
 				{
 					move.y =  m_footLIK->GetTarget().y - pos.y;
 				}
 				else if (pos.y > m_footRIK->GetTarget().y)
 				{
 					move.y = m_footRIK->GetTarget().y - pos.y;
-				}
+				}*/
+				//wchar_t st[255] = { 0 };
+				//swprintf_s(st, 255, L"%f",move.y);
+				//ue::DebugPrint(move.ToWString(st,255));
 				auto rpos = m_characon.Execute(1, move);
 				rpos += m_ccOffset;
 				pos = rpos;

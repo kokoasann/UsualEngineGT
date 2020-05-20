@@ -13,7 +13,7 @@ namespace UsualEngine
 	}
 	void DebugLog::Print(const wchar_t* str)
 	{
-		m_printList.push_back({ str,m_lifeTime });
+		m_printList.push_back({ std::wstring(str),m_lifeTime });
 		if (m_printList.size() >= m_logMaxNum)
 		{
 			m_printList.pop_front();
@@ -32,14 +32,14 @@ namespace UsualEngine
 		}
 
 		auto pos = m_originPos;
-		m_font.Draw(logs[m_printList.size()-1]->log,pos, m_fontColor, 0.f, m_firstFontSize, { 0.f,1.f });
+		m_font.Draw(logs[m_printList.size()-1]->log.c_str(),pos, m_fontColor, 0.f, m_firstFontSize, { 0.f,1.f });
 		pos.y -= m_firstFontSpace;
 		count = 2;
 		
 		for (int i = m_printList.size()-count; i >= 0; i--)
 		{
 			auto it = logs[i];
-			m_font.Draw(it->log, pos, m_fontColor, 0.f, m_fontSize, {0.f,1.f});
+			m_font.Draw(it->log.c_str(), pos, m_fontColor, 0.f, m_fontSize, {0.f,1.f});
 			pos.y -= m_fontSpace;
 		}
 		m_font.End();
@@ -55,6 +55,7 @@ namespace UsualEngine
 
 		for (int i = 0; i < count; i++)
 		{
+			//delete m_printList.begin()->log;
 			m_printList.pop_front();
 		}
 	}
