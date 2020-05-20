@@ -757,7 +757,7 @@ namespace UsualEngine
 				rad = acos(rad);
 				//float deg = CMath::RadToDeg(rad);
 
-				if (1 || rad > 0.000001f)
+				
 				{
 					auto axis = CVector3::Zero();					//‰ñ“]Ž².
 					axis.Cross(toEffector, toTarget);
