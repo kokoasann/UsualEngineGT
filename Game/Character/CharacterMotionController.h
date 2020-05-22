@@ -30,7 +30,7 @@ public:
 	/// </summary>
 	/// <param name="footL"></param>
 	/// <param name="footR"></param>
-	void InitMove(ue::Bone* footL, ue::Bone* footR);
+	void InitMove(ue::Bone* footL, ue::Bone* footR,float startUPMax = 0.0f, float upSpeed=0.0f);
 	/// <summary>
 	/// 回転用の初期化。
 	/// </summary>
@@ -77,4 +77,6 @@ private:
 
 	int m_initCount = 0;					//初期化した?
 	bool m_isPlatAnimRotate = false;		//回転時にアニメーションを再生している?
+
+	
 };

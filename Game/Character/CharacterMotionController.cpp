@@ -19,9 +19,10 @@ void CharacterMotionController::Init(Character* chara, ue::AnimationClip* animCl
 	m_initCount++;
 }
 
-void CharacterMotionController::InitMove(ue::Bone* footL, ue::Bone* footR)
+void CharacterMotionController::InitMove(ue::Bone* footL, ue::Bone* footR, float startUPMax ,float upSpeed)
 {
 	m_moveMotion.InitBone(footL, footR);
+	m_moveMotion.InitStartUpFoot(startUPMax,upSpeed);
 	m_initCount++;
 }
 

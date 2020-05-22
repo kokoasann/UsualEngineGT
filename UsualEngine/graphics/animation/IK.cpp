@@ -348,6 +348,7 @@ namespace UsualEngine
 		auto modelpos = worldMat.GetTranslation();		//モデルのポジション
 
 		auto orgpos = effpos - modelpos;//モデルのポジションからの距離
+		orgpos += m_offset;
 		CVector3 newpos;	//移動先のポジション
 		if (m_isSetNextTarget)
 		{

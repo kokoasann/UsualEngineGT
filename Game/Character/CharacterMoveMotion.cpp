@@ -51,6 +51,14 @@ void CharacterMoveMotion::InitBone(ue::Bone* footL, ue::Bone* footR)
 	ue::Animation& anim = m_chara->GetAnimation();
 	anim.SetIKMode(ue::IK::enMode_Foot, footL);
 	anim.SetIKMode(ue::IK::enMode_Foot, footR);
+	m_footLIK = m_chara->GetFootRIK();
+}
+
+void CharacterMoveMotion::InitStartUpFoot(float upMax,float upspeed)
+{
+	m_isStartUpFoot = true;
+	m_startUpMax = upMax;
+	m_startUpSpeed = upspeed;
 }
 
 void CharacterMoveMotion::Update()
@@ -86,7 +94,7 @@ void CharacterMoveMotion::Move(float delTime, PlayAnim pa, float movespeed, Acti
 		if (m_playingAnim != m_idolNum)
 		{
 			//これから再生するアニメーションの再生開始時間を計算。
-			auto& anm = m_chara->GetAnimation();
+			const auto& anm = m_chara->GetAnimation();
 			float fc = anm.GetFrameNum();			//現在再生中のアニメーションのフレーム数。
 			float fn = anm.GetCurrentFrameNo();		//現在再生中のアニメーションのフレーム番号。
 			float fnRate = fn / fc;					//現在再生中のフレーム番号がフレーム数に対して何％なのか調べる。
@@ -110,6 +118,31 @@ void CharacterMoveMotion::Move(float delTime, PlayAnim pa, float movespeed, Acti
 		}
 		m_chara->PlayAnim(pa, animLug, ntime, am);
 		m_isWalk = true;
+		m_isUpfoot = true;
+	}
+	if (m_isUpfoot)
+	{
+		const auto& anm = m_chara->GetAnimation();
+		float fc = anm.GetFrameNum();			//現在再生中のアニメーションのフレーム数。
+		float fn = anm.GetCurrentFrameNo();		//現在再生中のアニメーションのフレーム番号。
+		float fnRate = fn / fc;					//現在再生中のフレーム番号がフレーム数に対して何％なのか調べる。
+		if (fnRate <= 0.5)
+		{
+			m_startUpNow += m_startUpSpeed*delTime;
+			if (m_startUpNow > m_startUpMax)
+				m_startUpNow = m_startUpMax;
+			m_footLIK->SetOffset({ 0.f,m_startUpNow ,0.f});
+		}
+		else
+		{
+			m_startUpNow -= m_startUpSpeed*delTime;
+			m_footLIK->SetOffset({ 0.f,m_startUpNow ,0.f });
+			if (m_startUpNow < 0.f)
+			{
+				m_startUpNow = 0.f;
+				m_isUpfoot = false;
+			}
+		}
 	}
 
 	//スピードの計算。
@@ -149,7 +182,7 @@ void CharacterMoveMotion::Walk2Idle(float delTime)
 {
 	if (m_isWalk)
 	{
-		auto& anm = m_chara->GetAnimation();
+		const auto& anm = m_chara->GetAnimation();
 		float fc = anm.GetFrameNum();			//現在再生中のアニメーションのフレーム数。
 		float fn = anm.GetCurrentFrameNo();		//現在再生中のアニメーションのフレーム番号。
 		float fnRate = fn / fc;					//現在再生中のフレーム番号がフレーム数に対して何％なのか調べる。

@@ -43,10 +43,10 @@ Ene_Gib::Ene_Gib()
 
 	m_chara.SetIKRub(0, footR->GetChildren()[0]);
 	m_chara.SetIKRub(0, footL->GetChildren()[0]);
-	m_chara.Init_JustFoot(32.f, 30.f, 70.f, 70.f);
+	m_chara.Init_JustFoot(40.f, 30.f, 70.f, 70.f);
 
 	m_charaMotion.Init(&m_chara, m_animClip);
-	m_charaMotion.InitMove(footL, footR);
+	m_charaMotion.InitMove(footL, footR,15.f,60.f);
 	m_charaMotion.InitRotate(CharacterRotateMotion::RM_UseIK, 0);
 
 	//m_charaMove.Init(&m_chara, m_animClip);

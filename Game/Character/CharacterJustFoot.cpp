@@ -62,7 +62,7 @@ void CharacterJustFoot::Update_JustFoot(float delTime)
 	ue::IK* ik = m_chara->GetIK(currentBone);
 	if (!m_isUped)
 	{
-		if (ik->GetTarget().y >= m_justFoot_Scale)
+		if (m_nowUP.Length() >= m_justFoot_Scale)
 		{
 			m_isUped = true;
 		}

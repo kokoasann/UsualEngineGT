@@ -33,6 +33,8 @@ public:
 	/// <param name="footL">左</param>
 	/// <param name="footR">右</param>
 	void InitBone(ue::Bone* footL, ue::Bone* footR);
+
+	void InitStartUpFoot(float upMax,float upspeed);
 	
 	/// <summary>
 	/// JustFootの初期化。
@@ -45,6 +47,7 @@ public:
 	/// <param name="downSpeed">足をおろすスピード playerの場合0.5f</param>
 	void InitJustFoot(float offsetY, float scale, float upSpeed, float downSpeed)
 	{
+
 		/*m_justFoot_OffsetY = offsetY;
 		m_justFoot_Scale = scale;
 		m_justFoot_UpIKSpeed = upSpeed;
@@ -129,5 +132,12 @@ private:
 
 	ue::Bone* m_footL = nullptr;			//左足のボーン
 	ue::Bone* m_footR = nullptr;			//右足のボーン
+	ue::IK* m_footLIK = nullptr;
 	bool m_isJustFoot = false;							//justFootを行えるか？
+
+	bool m_isUpfoot = false;
+	bool m_isStartUpFoot = false;
+	float m_startUpMax = 0.0f;
+	float m_startUpSpeed = 0.f;
+	float m_startUpNow = 0.0f;
 };
