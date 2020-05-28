@@ -14,6 +14,8 @@ void PlayerMotion::Init(Player* player, Character* chara, ue::Camera* cam, ue::A
 
 	m_footL = m_chara->FindBone(L"Bone_L.003", BK_FootL, true, 3, 1.f);
 	m_footR = m_chara->FindBone(L"Bone_R.003", BK_FootR, true, 3, 1.f);
+	auto handL = m_chara->FindBone(L"Bone.003_L.004", BK_HandL, true, 3, 1.f);
+	auto handR = m_chara->FindBone(L"Bone.003_R.004", BK_HandR, true, 3, 1.f);
 	m_noneMF = [&](auto& pos) {return;	};
 	m_noneRF = [&](auto& rote) {return; };
 
@@ -29,6 +31,10 @@ void PlayerMotion::Init(Player* player, Character* chara, ue::Camera* cam, ue::A
 
 	m_charaRotate.Init(m_chara,CharacterRotateMotion::RM_Lerp,15.f);
 	m_chara->Init_JustFoot(2.f, 4.f, 0.04f, 0.05f);
+
+	m_playerClimb.Init(m_chara, m_chara->GetFootLIK(), m_chara->GetFootRIK(), m_chara->GetIK(handL), m_chara->GetIK(handR));
+	m_playerClimb.InitClimbSpec({ 0.5f,0.25f,0.1f,3.f,0.5f,{-7.55f,1.25f,-3},{-5.55f,3.25f,5} });
+	m_playerClimb.StartClimb();
 }
 
 
@@ -39,35 +45,44 @@ void PlayerMotion::Update()
 	stick.y = m_pad->GetLStickYF();
 	float deltime = ue::gameTime()->GetDeltaTime();
 
-	if (stick.Length() > 0.0001f)
+	if (!m_playerClimb.IsClimb())
 	{
-		auto f = m_camera->GetForward() * stick.y;
-		auto r = m_camera->GetRight() * stick.x;
-		auto move = f + r;
-		m_charaRotate.NextRotate(move, 0);
-	}
+		if (stick.Length() > 0.0001f)
+		{
+			auto f = m_camera->GetForward() * stick.y;
+			auto r = m_camera->GetRight() * stick.x;
+			auto move = f + r;
+			m_charaRotate.NextRotate(move, 0);
+		}
 
-	if (fabsf(stick.x) > 0.01f || fabsf(stick.y) > 0.01f)	//stick入力がある。つまり移動。
-	{
-		if (m_pad->IsPress(ue::enButtonB))		//ダッシュ
+		if (fabsf(stick.x) > 0.01f || fabsf(stick.y) > 0.01f)	//stick入力がある。つまり移動。
 		{
-			m_charaMove.NextPlayAnim(PA_dush, m_dushSpeed, AM_None);
+			if (m_pad->IsPress(ue::enButtonB))		//ダッシュ
+			{
+				m_charaMove.NextPlayAnim(PA_dush, m_dushSpeed, AM_None);
+			}
+			else if (stick.Length() >= 0.5f)				//早歩き
+			{
+				m_charaMove.NextPlayAnim(PA_walkFast, m_walkFastSpeed, AM_None);
+			}
+			else														//歩き
+			{
+				m_charaMove.NextPlayAnim(PA_walk, m_walkSpeed, AM_Move);
+			}
+
 		}
-		else if (stick.Length() >= 0.5f)				//早歩き
+		else
 		{
-			m_charaMove.NextPlayAnim(PA_walkFast, m_walkFastSpeed, AM_None);
+			m_charaMove.NextPlayAnim(PA_idol, 0, AM_None);
 		}
-		else														//歩き
-		{
-			m_charaMove.NextPlayAnim(PA_walk, m_walkSpeed, AM_Move);
-		}
-		
+
+		m_charaRotate.Update();
+		m_charaMove.Update();
 	}
 	else
 	{
-		m_charaMove.NextPlayAnim(PA_idol, 0, AM_None);
+		m_playerClimb.UpdateInput(stick);
+		m_playerClimb.Update();
 	}
-	m_charaRotate.Update();
-	m_charaMove.Update();
 	return;
 }

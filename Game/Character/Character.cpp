@@ -351,6 +351,6 @@ ue::IK* Character::GetIK(ue::Bone* bone)
 		return m_footLIK;
 	if (bone == m_footR)
 		return m_footRIK;
-	return nullptr;
+	return m_model->GetAnimation().FindIK(bone);
 }
 

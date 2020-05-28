@@ -215,6 +215,18 @@ namespace UsualEngine
 		//UpdateIK();
 	}
 
+	IK* Animation::FindIK(Bone* bone)
+	{
+		for (auto ik : m_ik)
+		{
+			if (bone == ik->GetEffectorBone())
+			{
+				return ik;
+			}
+		}
+		return nullptr;
+	}
+
 	void Animation::SetIKMode(int mode, Bone* bone)
 	{
 		if (bone == nullptr)

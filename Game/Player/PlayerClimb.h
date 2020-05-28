@@ -279,8 +279,8 @@ public:
 		float forwardLen = 0.0f;	//手足をどれだけ前に出すか
 		float speed = 0.0f;			//手足を動かすスピード
 		float changeLug = 0.0f;		//登る方の手(足)を入れ替えるときにかかる時間(秒)
-		ue::CVector2 startHandPos = ue::CVector2::Zero();	//モデルのポジションからの相対的な手の初期位置。左手側のポジションだけで大丈夫。
-		ue::CVector2 startFootPos = ue::CVector2::Zero();	//モデルのポジションからの相対的な足の初期位置。左足側のポジションだけで大丈夫。
+		ue::CVector3 startHandPos = ue::CVector3::Zero();	//モデルのポジションからの相対的な手の初期位置。左手側のポジションだけで大丈夫。
+		ue::CVector3 startFootPos = ue::CVector3::Zero();	//モデルのポジションからの相対的な足の初期位置。左足側のポジションだけで大丈夫。
 	};
 
 	PlayerClimb();
@@ -335,6 +335,15 @@ public:
 	/// 一旦休憩。
 	/// </summary>
 	void StopClimb();
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <returns></returns>
+	bool IsClimb()
+	{
+		return m_isClimb;
+	}
 private:
 	Character* m_chara = nullptr;		//キャラクター
 	ue::IK* m_footLIK = nullptr;		//左足のIK

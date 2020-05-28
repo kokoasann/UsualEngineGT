@@ -107,6 +107,7 @@ void PlayerClimb::UpdateInput(const ue::CVector2& dir)
 	m_moveDir.Normalize();
 }
 
+//NOT
 void PlayerClimb::UpdateLimbState(ue::IK* ik,LimbState*& limbState)
 {
 	LimbStep step = limbState->Update(*this, ik);
@@ -208,20 +209,36 @@ void PlayerClimb::UpdatePairLimbs(PairLimbs& pair)
 
 void PlayerClimb::StartClimb()
 {
-	m_footLIK->SetNextTarget(m_chara->GetPos() + m_climbSpec.startFootPos);
-	ue::CVector2 inv = m_climbSpec.startFootPos;
+	
+	const auto& dir = m_chara->GetDir();
+
+	float cta = dir.Dot({ 0,0,-1 });
+	float rad = acosf(cta);
+	ue::CQuaternion rot;
+	rot.SetRotation(ue::CVector3::AxisY(),rad);
+	ue::CVector3 offset = m_climbSpec.startFootPos;
+	rot.Multiply(offset);
+
+	m_footLIK->SetNextTarget(m_chara->GetPos() + offset);
+	ue::CVector3 inv = m_climbSpec.startFootPos;
 	inv.x *= -1.f;
+	rot.Multiply(inv);
 	m_footRIK->SetNextTarget(m_chara->GetPos() + inv);
 
-
-	m_handLIK->SetNextTarget(m_chara->GetPos() + m_climbSpec.startHandPos);
+	offset = m_climbSpec.startHandPos;
+	rot.Multiply(offset);
+	m_handLIK->SetNextTarget(m_chara->GetPos() + offset);
 	inv = m_climbSpec.startHandPos;
 	inv.x *= -1.f;
+	rot.Multiply(inv);
 	m_handRIK->SetNextTarget(m_chara->GetPos() + inv);
+
+	m_isClimb = true;
 }
 
 void PlayerClimb::BreakClimb()
 {
+	m_isClimb = false;
 }
 
 void PlayerClimb::StopClimb()
@@ -395,6 +412,7 @@ PlayerClimb::LimbStep PlayerClimb::LimbState_Move::Update(const PlayerClimb& bod
 	
 	auto target = ik->GetTarget();
 	target += move;
+	ik->SetNextTarget(target);
 
 	if (body.m_climbSpec.upLen < (body.m_chara->GetPos() - ik->GetTarget()).Length())	// L‚Î‚µI‚í‚Á‚½‚çŽè(‘«)‚ð‰º‚·
 		return Step_Down;
@@ -403,5 +421,7 @@ PlayerClimb::LimbStep PlayerClimb::LimbState_Move::Update(const PlayerClimb& bod
 
 PlayerClimb::LimbStep PlayerClimb::LimbState_Stop::Update(const PlayerClimb& body, ue::IK* ik)
 {
+	auto pos = ik->GetTarget();
+	ik->SetNextTarget(pos);
 	return Step_None;
 }

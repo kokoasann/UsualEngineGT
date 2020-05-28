@@ -102,6 +102,7 @@ namespace UsualEngine
 		{
 			return m_ik[num];
 		}
+		IK* FindIK(Bone* bone);
 
 		void SetIKMode(int mode, Bone* bone = nullptr);
 		

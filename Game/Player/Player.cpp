@@ -34,7 +34,7 @@ Player::Player()
 
 	ue::SkinModelRender* model = ue::NewGO<ue::SkinModelRender>(0);
 	model->Init(L"Assets/model/Player.cmo",m_anim,PA_num,ue::enFbxUpAxisY);
-	model->SetPos({ 0,100,0 });
+	model->SetPos({ -30,0.1f,0 });
 	model->SetSca(ue::CVector3::One()*2.f);
 	model->SetIsShadowCaster(true);
 	model->SetIsShadowReciever(true);

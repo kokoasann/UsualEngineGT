@@ -58,6 +58,7 @@ private:
 
 	CharacterMoveMotion m_charaMove;
 	CharacterRotateMotion m_charaRotate;
+	PlayerClimb m_playerClimb;
 
 	ue::SkinModelRender::MoveFunc m_noneMF;
 	ue::SkinModelRender::RotateFunc m_noneRF;
