@@ -12,8 +12,11 @@ void PlayerMotion::Init(Player* player, Character* chara, ue::Camera* cam, ue::A
 	m_anim = anim;
 	m_pad = pad;
 
+	auto kneeL = m_chara->FindBone(L"Bone_L.002", BK_None, true, 1, 1.f);
+	auto kneeR = m_chara->FindBone(L"Bone_R.002", BK_None, true, 1, 1.f);
 	m_footL = m_chara->FindBone(L"Bone_L.003", BK_FootL, true, 3, 1.f);
 	m_footR = m_chara->FindBone(L"Bone_R.003", BK_FootR, true, 3, 1.f);
+	
 	auto handL = m_chara->FindBone(L"Bone.003_L.004", BK_HandL, true, 3, 1.f);
 	auto handR = m_chara->FindBone(L"Bone.003_R.004", BK_HandR, true, 3, 1.f);
 	m_noneMF = [&](auto& pos) {return;	};
