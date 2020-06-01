@@ -245,6 +245,7 @@ namespace UsualEngine
 		bool m_isActive = true;							//動く？
 		CVector3 m_nextTarget = CVector3::Zero();		//外部から設定された次のターゲット
 		bool m_isSetNextTarget = false;					//次のターゲットがセットされた？
+		bool m_isSetOldTarget = false;					//IK更新用。
 		
 		bool m_isUseRigidBody = true;					//リジッドボディーを使う？
 

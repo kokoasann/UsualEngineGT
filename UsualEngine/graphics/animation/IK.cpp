@@ -261,6 +261,7 @@ namespace UsualEngine
 		{
 			newpos = m_nextTarget;
 			m_isSetNextTarget = false;
+			m_isSetOldTarget = true;
 		}
 
 		auto oldpos = m_effectorBone->GetWorldMatrix().GetTranslation();	//移動前のポジション
@@ -355,6 +356,7 @@ namespace UsualEngine
 			newpos = m_nextTarget + m_offset;
 			orgpos = newpos- modelpos;
 			m_isSetNextTarget = false;
+			m_isSetOldTarget = true;
 		}
 		else
 			newpos = effpos + m_offset;
@@ -525,6 +527,7 @@ namespace UsualEngine
 
 		//m_rubTarget += (target-oldpos)*m_speed;
 		m_target += (target - nowpos) * m_speed;
+		//m_target = target;
 
 		//m_oldNewTarget = effpos+m_offset;
 		
@@ -713,7 +716,8 @@ namespace UsualEngine
 		}
 		//break;//debug用。
 #else
-		if (!m_isHit and 0)
+		//どこにもヒットしてない、もしくはNextTargetもされてなく、IKモードがFootじゃない場合必ず早期リターン
+		if (!(m_isHit or m_isSetOldTarget) and m_ikMode!=IKMode::enMode_Foot)
 			return;
 		for (int i = 0; i < 3; i++)
 		{
@@ -789,6 +793,7 @@ namespace UsualEngine
 				currentBone = currentBone->GetParent();
 			}
 		}
+		m_isSetOldTarget = false;
 #endif
 		//UpdateRigidBody(m_target);
 	}
