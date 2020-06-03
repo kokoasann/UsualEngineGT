@@ -184,8 +184,11 @@ namespace UsualEngine
 	{
 		for (auto ik : m_ik)
 		{
-			if(ik->IsActive())
+			if (ik->IsActive())
+			{
 				ik->UpdateTarget(m_worldMatrix);
+				
+			}
 		}
 	}
 
@@ -194,6 +197,15 @@ namespace UsualEngine
 		for (auto ik : m_ik)
 		{
 			if(ik->IsActive())
+				ik->Update(m_worldMatrix);
+		}
+	}
+
+	void Animation::UpdateContactIK()
+	{
+		for (auto ik : m_ik)
+		{
+			if(ik->IsActive() and ik->IsHit())
 				ik->Update(m_worldMatrix);
 		}
 	}

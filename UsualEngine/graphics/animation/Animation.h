@@ -146,6 +146,10 @@ namespace UsualEngine
 		/// 
 		/// </summary>
 		void UpdateIK();
+		/// <summary>
+		/// 
+		/// </summary>
+		void UpdateContactIK();
 		
 		int GetFrameNum() const
 		{

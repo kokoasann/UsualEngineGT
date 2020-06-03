@@ -17,7 +17,7 @@ void Game::OnDestroy()
 
 bool Game::Start()
 {
-	ue::NewGO<Player>(0);
+	//ue::NewGO<Player>(0);
 	ue::NewGO<Ene_Gib>(0);
 	//ue::NewGO<Ene_GibTes>(0);
 

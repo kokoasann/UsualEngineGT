@@ -11,7 +11,7 @@ namespace UsualEngine
 	void SkinModelRender::Update()
 	{
 		auto& ske = m_skinModel.GetSkeleton();
-
+		
 		m_animation.Update(gameTime()->GetDeltaTime());		//アニメーションの更新。
 		
 		ske.UpdateBase(CMatrix::Identity());				//回転のためのスケルトン更新。
@@ -59,6 +59,7 @@ namespace UsualEngine
 		{
 			m_animation.SetWorldMatrix(worldMatrix);
 			m_animation.UpdateIK();
+			//m_animation.UpdateContactIK();
 		}
 
 		m_skinModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
@@ -66,7 +67,6 @@ namespace UsualEngine
 		auto& pr = usualEngine()->GetGraphicsEngine()->GetPreRender();
 		if (!m_isAlphaModel)
 		{
-			
 			auto& gb = pr.GetGBuffer();
 			gb.AddSkinModel(this);
 		}

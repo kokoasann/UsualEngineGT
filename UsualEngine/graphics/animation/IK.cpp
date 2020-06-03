@@ -539,6 +539,7 @@ namespace UsualEngine
 		m_effectorBone->SetMove(m_move);
 		m_oldNewTarget = orgpos;
 		m_offset = CVector3::Zero();
+
 		if (m_isUseRigidBody)
 			UpdateRigidBody(m_target);
 	}
