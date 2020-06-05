@@ -187,7 +187,7 @@ namespace UsualEngine
 			if (ik->IsActive())
 			{
 				ik->UpdateTarget(m_worldMatrix);
-				
+				ik->Update(m_worldMatrix);
 			}
 		}
 	}

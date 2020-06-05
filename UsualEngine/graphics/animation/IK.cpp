@@ -274,12 +274,16 @@ namespace UsualEngine
 		{
 			oldpos = m_target;
 		}
-		if ((newpos - oldpos).Length() < FLT_EPSILON)
+		if ((newpos - oldpos).Length() <= FLT_EPSILON)
 			return;
 
 		SweepResultIK sr;
 		sr.startPos = oldpos;
 		sr.me = m_rigidBody.GetBody();
+
+		CVector3 target = newpos;//ターゲット
+
+		//if((oldpos-newpos).Length() > FLT_EPSILON)
 
 		btTransform bstart, bend;
 		bstart.setIdentity();
@@ -288,7 +292,7 @@ namespace UsualEngine
 		bstart.setOrigin(btVector3(oldpos.x, oldpos.y, oldpos.z));
 		bend.setOrigin(btVector3(newpos.x, newpos.y, newpos.z));
 
-		CVector3 target = newpos;//ターゲット
+		
 		Physics().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), bstart, bend, sr);
 		if (sr.isHit)
 		{

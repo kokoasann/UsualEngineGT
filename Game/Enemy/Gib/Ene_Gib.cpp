@@ -22,8 +22,8 @@ Ene_Gib::Ene_Gib()
 
 	auto footR = m_chara.FindBone(L"IK_Bone.007_R.003", BK_FootR, true, 3, 6);	//‘«
 	auto footL = m_chara.FindBone(L"IK_Bone.007_L.003", BK_FootL, true, 3, 6);
-	//m_chara.SetBone(footR->GetChildren()[0], BK_None, true, 1, 2);					//‘«æ
-	//m_chara.SetBone(footL->GetChildren()[0], BK_None, true, 1, 2);
+	m_chara.SetBone(footR->GetChildren()[0], BK_None, true, 1, 2);					//‘«æ
+	m_chara.SetBone(footL->GetChildren()[0], BK_None, true, 1, 2);
 	//m_chara.SetBone(footR, BK_FootR, true, 3, 60);
 	//m_chara.SetBone(footL, BK_FootL, true, 3, 60);
 	m_chara.SetBone(footR->GetParent()->GetParent()->GetParent(), BK_WaistR);
