@@ -116,7 +116,14 @@ bool Game::Start()
 				path += obj.name;
 				path += L"_col.cmo";
 				colli->Init(path.c_str());
-				wpso[grCount++].CreateMeshObject(colli->GetSkinModel(), ground->GetPos(), colli->GetRot(), ground->GetSca());
+				wpso[grCount].CreateMeshObject(colli->GetSkinModel(), ground->GetPos(), colli->GetRot(), ground->GetSca());
+				auto& collider = wpso[grCount].GetMeshCollider();
+				auto b = collider.GetBody();
+				
+				auto& rig = wpso[grCount].GetRigidBody();
+				//auto b = rig.GetBody();
+				
+				grCount++;
 			}
 			else if(wcscmp(obj.name,L"weed")==0)
 			{

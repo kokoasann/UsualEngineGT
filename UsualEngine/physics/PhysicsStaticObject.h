@@ -30,6 +30,14 @@ namespace UsualEngine
 			*/
 		void CreateMeshObject(SkinModel& skinModel, CVector3 pos, CQuaternion rot,CVector3 sca);
 
+		MeshCollider& GetMeshCollider()
+		{
+			return m_meshCollider;
+		}
+		RigidBody& GetRigidBody()
+		{
+			return m_rigidBody;
+		}
 	private:
 		MeshCollider m_meshCollider;		//!<メッシュコライダー。
 		RigidBody m_rigidBody;				//!<剛体。

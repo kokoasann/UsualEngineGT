@@ -175,6 +175,7 @@
     <ClCompile Include="graphics\Camera.cpp" />
     <ClCompile Include="graphics\ConstantBuffer.cpp" />
     <ClCompile Include="graphics\Font\Font.cpp" />
+    <ClCompile Include="graphics\Font\FontBlur.cpp" />
     <ClCompile Include="graphics\GBuffer.cpp" />
     <ClCompile Include="graphics\GPUViewer.cpp" />
     <ClCompile Include="graphics\GraphicsEngine.cpp" />
@@ -249,6 +250,7 @@
     <ClInclude Include="graphics\Camera.h" />
     <ClInclude Include="graphics\ConstantBuffer.h" />
     <ClInclude Include="graphics\Font\Font.h" />
+    <ClInclude Include="graphics\Font\FontBlur.h" />
     <ClInclude Include="graphics\GBuffer.h" />
     <ClInclude Include="graphics\GPUViewer.h" />
     <ClInclude Include="graphics\GraphicsEngine.h" />
