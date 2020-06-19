@@ -7,6 +7,7 @@
 
 Game::Game()
 {
+	m_fblur.Init();
 }
 
 void Game::OnDestroy()
@@ -357,9 +358,11 @@ void Game::Update()
 
 void Game::PostRender()
 {
+	m_fblur.DrawStart();
 	m_font.Begin();
 
-	//m_font.Draw(L"TEST", { 0,0 }, { 0,0,0,1 }, 0, 1);
+	m_font.Draw(L"TEST", { 0,0 }, { 1,1,1,1 }, 0, 1);
 
 	m_font.End();
+	m_fblur.DrawEnd();
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "physics/PhysicsStaticObject.h"
+#include "Graphics/Font/FontBlur.h"
 
 /// <summary>
 /// テスト用
@@ -49,4 +50,5 @@ private:
 	ue::LightDirection* light = 0;
 
 	ue::Font m_font;
+	ue::FontBlur m_fblur;
 };

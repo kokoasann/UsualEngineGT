@@ -17,6 +17,9 @@ namespace UsualEngine
 		desc.Quality = 0;
 		m_renderTarget.Create(FRAME_BUFFER_W, FRAME_BUFFER_H, 1, 1, DXGI_FORMAT_R16G16B16A16_FLOAT, DXGI_FORMAT_UNKNOWN, desc);
 		m_gausBlur.Init(FRAME_BUFFER_W, FRAME_BUFFER_H);
+
+		m_psCopy.Load("Assets/shader/copy.fx", "PSMain", Shader::EnType::PS);
+		m_vsCopy.Load("Assets/shader/copy.fx", "VSMain", Shader::EnType::VS);
 	}
 	void FontBlur::DrawStart()
 	{
@@ -35,10 +38,23 @@ namespace UsualEngine
 	void FontBlur::DrawEnd()
 	{
 		auto gEngine = usualEngine()->GetGraphicsEngine();
+		auto devcon = gEngine->GetD3DDeviceContext();
 
 		m_gausBlur.SetDispersion(m_blurParam);
-		m_gausBlur.Render(m_renderTarget.GetSRV(), gEngine->GetPostEffect().GetPrimitive());
+		auto Blur = m_gausBlur.Render(m_renderTarget.GetSRV(), gEngine->GetPostEffect().GetPrimitive());
 		
+		RenderTarget* RT = gEngine->GetMainRenderTarget();
+		
+		RenderTarget* rts[] = { RT };
+		gEngine->OMSetRenderTarget(1, &RT);
+
+		
+		
+		devcon->PSSetShaderResources(0, 1, &Blur);
+		devcon->VSSetShader((ID3D11VertexShader*)m_vsCopy.GetBody(), 0, 0);
+		devcon->PSSetShader((ID3D11PixelShader*)m_psCopy.GetBody(), 0, 0);
+		gEngine->GetPostEffect().DrawPrimitive();
+
 		gEngine->OMSetRenderTarget(m_oldRenderNum, m_oldRenderTarget);
 	}
 }

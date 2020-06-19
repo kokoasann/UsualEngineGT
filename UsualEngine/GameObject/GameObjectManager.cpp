@@ -29,11 +29,13 @@ namespace UsualEngine
 
 		//UpdateRender();
 		UpdatePreRender();
-		UpdatePostRender();
+		
 
 
 		auto& pe = usualEngine()->GetGraphicsEngine()->GetPostEffect();
 		pe.Render();
+
+		UpdatePostRender();
 
 		Debug::Instance().DrawLog();
 

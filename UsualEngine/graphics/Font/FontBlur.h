@@ -29,6 +29,9 @@ namespace UsualEngine
 		RenderTarget* m_oldRenderTarget[7];
 		int m_oldRenderNum = 0;
 		GaussianBlur m_gausBlur;
-		float m_blurParam = 0;
+		float m_blurParam = 1;
+
+		Shader m_vsCopy;
+		Shader m_psCopy;
 	};
 }
