@@ -18,15 +18,20 @@ namespace UsualEngine
 	{
 		auto ge = usualEngine()->GetGraphicsEngine();
 		auto& gbuffer = ge->GetPreRender().GetGBuffer();
+
 		gbuffer.SetGBuffer();
+
 		int rtcount = 0;
 		RenderTarget* oldtarget[8] = { nullptr };
 		ge->OMGetRenderTargets(rtcount, oldtarget);
+
 		auto dc = ge->GetD3DDeviceContext();
+
 		//ID3D11ShaderResourceView* srvlist[] = { ge->GetMainRenderTarget()->GetSRV() };
 		dc->PSSetShaderResources(enSkinModelSRVReg_SceneTexture, 1, &posteffect->GetCurrentRenderTarget().GetSRV());
 		RenderTarget* rendertarget[] = { &m_alphaRenderTarget };
 		ge->OMSetRenderTarget(1, rendertarget);
+
 		float color[4] = { 0.f,0.f,0.f,0.f };
 		dc->ClearDepthStencilView(m_alphaRenderTarget.GetDSV(), D3D11_CLEAR_DEPTH, 1.f, 0);
 		dc->ClearRenderTargetView(m_alphaRenderTarget.GetRTV(), color);
@@ -57,6 +62,7 @@ namespace UsualEngine
 		dc->OMGetBlendState(&blendS, factor, &mask);
 		dc->OMSetBlendState(BlendState_Trans(), 0, 0xFFFFFFFF);
 		//m_pd3dDeviceContext->OMSetDepthStencilState(DepthStencilState::spriteRender, 0);
+
 		dc->VSSetShader((ID3D11VertexShader*)m_vsCopy.GetBody(), 0, 0);
 		dc->PSSetShader((ID3D11PixelShader*)m_psCopy.GetBody(), 0, 0);
 		dc->IASetInputLayout(m_vsCopy.GetInputLayout());

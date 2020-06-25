@@ -13,6 +13,26 @@ namespace UsualEngine
 	}
 	void GaussianBlur::Init(int w, int h)
 	{
+		{
+			auto dev = usualEngine()->GetGraphicsEngine()->GetD3DDevice();
+			D3D11_BLEND_DESC desc;
+			ZeroMemory(&desc, sizeof(desc));
+
+			desc.RenderTarget[0].BlendEnable = true;
+			desc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+			desc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
+			desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+			desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+			desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
+			desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+			//desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_RED | D3D11_COLOR_WRITE_ENABLE_GREEN | D3D11_COLOR_WRITE_ENABLE_BLUE;
+			desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+			//desc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+			//desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+			dev->CreateBlendState(&desc, &m_blendstate);
+		}
+
 		m_vsXBlur.Load("Assets/shader/GausBlur.fx", "VSMain_X", Shader::EnType::VS);
 		m_vsYBlur.Load("Assets/shader/GausBlur.fx", "VSMain_Y", Shader::EnType::VS);
 		m_psBlur.Load("Assets/shader/GausBlur.fx", "PSMain", Shader::EnType::PS);
@@ -34,6 +54,7 @@ namespace UsualEngine
 		m_vsXBlur.Release();
 		m_vsYBlur.Release();
 		m_psBlur.Release();
+		m_blendstate->Release();
 	}
 
 	void GaussianBlur::UpdateWeight()
@@ -61,6 +82,12 @@ namespace UsualEngine
 		float clearColor[] = {
 			0.0f, 0.0f, 0.0f, 0.0f
 		};
+		ID3D11BlendState* oldblend = 0;
+		float oldBF[4] = { 0 };
+		UINT oldSM = 0;
+		devcon->OMGetBlendState(&oldblend, oldBF, &oldSM);
+
+		devcon->OMSetBlendState(m_blendstate, 0, 0xffffffff);
 		
 		RenderTarget* oldRT[7] = {0};
 		int oldNum = 0;
@@ -106,6 +133,7 @@ namespace UsualEngine
 		primitive->Draw();
 
 		gEngine->OMSetRenderTarget(oldNum, oldRT);
+		devcon->OMSetBlendState(oldblend, oldBF, oldSM);
 		//devcon->RSSetViewports(oldnumvpl, oldvpl);
 
 		return m_renderTargetY.GetSRV();

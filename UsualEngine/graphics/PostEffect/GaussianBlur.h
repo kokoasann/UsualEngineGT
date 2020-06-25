@@ -51,6 +51,7 @@ namespace UsualEngine
 		Shader m_psBlur;				//ピクセルシェーダ
 		BlurParam m_bp;				//constantBufferに入れるデータ
 		ConstantBuffer m_cb;		//定数バッファ
+		ID3D11BlendState* m_blendstate = 0;
 		float m_dispersion = 25.f;	//ボケ具合。
 		bool m_isChangeBOKE = true;	//dispersionの値が変わった場合trueになる
 	};

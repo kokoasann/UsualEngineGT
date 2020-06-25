@@ -94,5 +94,6 @@ float4 PSMain(PS_BlurInput In):SV_Target0
 	Color += weight[1].w * (srcTex.Sample(Sampler, In.tex7)
 						+ srcTex.Sample(Sampler, In.tex0 + offset.xy));
 	//return float4(0,0,1,1);
-	return float4(Color.xyz, 1.0f);
+	return Color;
+	//return float4(Color.xyz,1);
 }

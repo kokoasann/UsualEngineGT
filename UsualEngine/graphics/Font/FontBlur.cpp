@@ -1,6 +1,6 @@
 #include "PreCompile.h"
 #include "FontBlur.h"
-
+#include "../RenderState.h"
 
 namespace UsualEngine
 {
@@ -9,9 +9,12 @@ namespace UsualEngine
 	}
 	FontBlur::~FontBlur()
 	{
+		
 	}
 	void FontBlur::Init()
 	{
+		
+
 		DXGI_SAMPLE_DESC desc = {};
 		desc.Count = 1;
 		desc.Quality = 0;
@@ -42,19 +45,25 @@ namespace UsualEngine
 
 		m_gausBlur.SetDispersion(m_blurParam);
 		auto Blur = m_gausBlur.Render(m_renderTarget.GetSRV(), gEngine->GetPostEffect().GetPrimitive());
+
+		ID3D11DepthStencilState* oldDS = 0;
+		unsigned int oldIND = 0;
+		devcon->OMGetDepthStencilState(&oldDS, &oldIND);
 		
 		RenderTarget* RT = gEngine->GetMainRenderTarget();
 		
 		RenderTarget* rts[] = { RT };
-		gEngine->OMSetRenderTarget(1, &RT);
-
+		//gEngine->OMSetRenderTarget(1, &RT);
+		gEngine->OMSetRenderTarget(m_oldRenderNum, m_oldRenderTarget);
 		
-		
+		devcon->OMSetDepthStencilState(DepthStencilState::spriteRender, 0);
 		devcon->PSSetShaderResources(0, 1, &Blur);
 		devcon->VSSetShader((ID3D11VertexShader*)m_vsCopy.GetBody(), 0, 0);
 		devcon->PSSetShader((ID3D11PixelShader*)m_psCopy.GetBody(), 0, 0);
+		devcon->IASetInputLayout(m_vsCopy.GetInputLayout());
 		gEngine->GetPostEffect().DrawPrimitive();
 
 		gEngine->OMSetRenderTarget(m_oldRenderNum, m_oldRenderTarget);
+		devcon->OMSetDepthStencilState(oldDS, oldIND);
 	}
 }

@@ -31,6 +31,7 @@ namespace UsualEngine
 		GaussianBlur m_gausBlur;
 		float m_blurParam = 1;
 
+		
 		Shader m_vsCopy;
 		Shader m_psCopy;
 	};
