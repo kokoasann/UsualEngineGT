@@ -292,6 +292,7 @@ bool Game::Start()
 		}
 	};
 	ue::DebugSwitchAddCheck(ue::DebugSwitchNewSwitch('P', 0, f));
+
 	return true;
 }
 
@@ -354,6 +355,23 @@ void Game::Update()
 	//sprintf_s(st, "deg:%.3f\n", deg);
 	//sprintf_s(st, "x:%.3f y:%.3f z:%.3f\n", v.x,v.y,v.z);
 	//OutputDebugString(st);
+
+	//
+	static float blurParam = 0.f;
+	static bool  isUP = true;
+	if (isUP)
+	{
+		blurParam += 0.5f;
+		if (blurParam >= 100)
+			isUP = false;
+	}
+	else
+	{
+		blurParam -= 0.5f;
+		if (blurParam <= 0)
+			isUP = true;
+	}
+	m_fblur.SetBlurParam(blurParam);
 }
 
 void Game::PostRender()
@@ -361,7 +379,7 @@ void Game::PostRender()
 	m_fblur.DrawStart();
 	m_font.Begin();
 
-	m_font.Draw(L"TEST", { 0,0 }, { 1,1,1,1 }, 0, 1);
+	m_font.Draw(L"TEST", { 0,0 }, { 1,1,1,1 }, 0, 5);
 
 	m_font.End();
 	m_fblur.DrawEnd();

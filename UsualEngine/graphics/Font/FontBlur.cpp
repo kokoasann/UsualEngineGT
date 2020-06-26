@@ -54,7 +54,9 @@ namespace UsualEngine
 		
 		RenderTarget* rts[] = { RT };
 		//gEngine->OMSetRenderTarget(1, &RT);
-		gEngine->OMSetRenderTarget(m_oldRenderNum, m_oldRenderTarget);
+		//gEngine->OMSetRenderTarget(m_oldRenderNum, m_oldRenderTarget);
+		ID3D11RenderTargetView* rtvs[] = { gEngine->GetBackBuffer() };
+		devcon->OMSetRenderTargets(1, rtvs, nullptr);
 		
 		devcon->OMSetDepthStencilState(DepthStencilState::spriteRender, 0);
 		devcon->PSSetShaderResources(0, 1, &Blur);
@@ -63,7 +65,7 @@ namespace UsualEngine
 		devcon->IASetInputLayout(m_vsCopy.GetInputLayout());
 		gEngine->GetPostEffect().DrawPrimitive();
 
-		gEngine->OMSetRenderTarget(m_oldRenderNum, m_oldRenderTarget);
+		//gEngine->OMSetRenderTarget(m_oldRenderNum, m_oldRenderTarget);
 		devcon->OMSetDepthStencilState(oldDS, oldIND);
 	}
 }
