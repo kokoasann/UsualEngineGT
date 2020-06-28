@@ -10,7 +10,7 @@ namespace UsualEngine
 		FontBlur();
 		~FontBlur();
 		void Init();
-		void DrawStart();
+		void DrawStart(const CVector4& clearColor = {0,0,0,0});
 		void DrawEnd();
 		void Reset()
 		{

@@ -357,26 +357,32 @@ void Game::Update()
 	//OutputDebugString(st);
 
 	//
-	static float blurParam = 0.f;
+	static float blurParam = FLT_EPSILON;
 	static bool  isUP = true;
 	if (isUP)
 	{
 		blurParam += 0.5f;
-		if (blurParam >= 100)
+		if (blurParam >= 50)
+		{
+			blurParam = 50.f;
 			isUP = false;
+		}
 	}
 	else
 	{
 		blurParam -= 0.5f;
-		if (blurParam <= 0)
+		if (blurParam <= FLT_EPSILON)
+		{
+			blurParam = FLT_EPSILON;
 			isUP = true;
+		}
 	}
 	m_fblur.SetBlurParam(blurParam);
 }
 
 void Game::PostRender()
 {
-	m_fblur.DrawStart();
+	m_fblur.DrawStart({1,1,1,0});
 	m_font.Begin();
 
 	m_font.Draw(L"TEST", { 0,0 }, { 1,1,1,1 }, 0, 5);

@@ -24,17 +24,17 @@ namespace UsualEngine
 		m_psCopy.Load("Assets/shader/copy.fx", "PSMain", Shader::EnType::PS);
 		m_vsCopy.Load("Assets/shader/copy.fx", "VSMain", Shader::EnType::VS);
 	}
-	void FontBlur::DrawStart()
+	void FontBlur::DrawStart(const CVector4& clearColor)
 	{
 		auto gEngine = usualEngine()->GetGraphicsEngine();
 		auto devcon = gEngine->GetD3DDeviceContext();
 
 		gEngine->OMGetRenderTargets(m_oldRenderNum, m_oldRenderTarget);
 
-		float clearColor[] = {
+		/*float fclearColor[] = {
 			0.0f, 0.0f, 0.0f, 0.0f
-		};
-		devcon->ClearRenderTargetView(m_renderTarget.GetRTV(), clearColor);
+		};*/
+		devcon->ClearRenderTargetView(m_renderTarget.GetRTV(), clearColor.v);
 		RenderTarget* rt[] = { &m_renderTarget };
 		gEngine->OMSetRenderTarget(1, rt);
 	}
