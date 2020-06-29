@@ -98,7 +98,9 @@ float4 PSMain_Defferd(DefferdPSInput In):SV_TARGET0
 
         float colorPow = length(PntLights[i].color.xyz);
         float4 spGradation = texture_1.Sample(Sampler,float2(lerp(1.f,0.f,ligPow),1.f));  //グラデーションマップ(明かり用)
-        float3 ligcolor = PntLights[i].color.xyz/len;
+        //float4 spGradation = texture_1.Sample(Sampler,float2(lerp(1.f,0.f,max(colorPow-len,0.f)),1.f));  //グラデーションマップ(明かり用)
+        //float3 ligcolor = PntLights[i].color.xyz/len;
+        float3 ligcolor = PntLights[i].color.xyz*min(1.0f,max(colorPow-len,0.f));
         float3 lig = (ligcolor*(spGradation.x));
         
         //反射
@@ -112,7 +114,7 @@ float4 PSMain_Defferd(DefferdPSInput In):SV_TARGET0
 
         //float sp = max(0.f,dot(dir, R));
         sp *= specular;
-        spGradation = texture_1.Sample(Sampler,float2(lerp(1.f,0.f,sp),1.f));  //グラデーションマップ(明かり用)
+        spGradation = texture_1.Sample(Sampler,float2(lerp(1.f,0.f,sp*min(max(colorPow-len,0.f),1)),1));  //グラデーションマップ(明かり用)
 
         //foundation += lig+lig*spGradation.x;
         foundation += ligcolor * spGradation.x * k;

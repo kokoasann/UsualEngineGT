@@ -19,7 +19,7 @@ namespace UsualEngine
 		desc.Count = 1;
 		desc.Quality = 0;
 		m_renderTarget.Create(FRAME_BUFFER_W, FRAME_BUFFER_H, 1, 1, DXGI_FORMAT_R16G16B16A16_FLOAT, DXGI_FORMAT_UNKNOWN, desc);
-		m_gausBlur.Init(FRAME_BUFFER_W, FRAME_BUFFER_H);
+		m_gausBlur.Init(FRAME_BUFFER_W*2, FRAME_BUFFER_H*2);
 
 		m_psCopy.Load("Assets/shader/copy.fx", "PSMain", Shader::EnType::PS);
 		m_vsCopy.Load("Assets/shader/copy.fx", "VSMain", Shader::EnType::VS);

@@ -78,7 +78,8 @@ float4 DrawProcess(float4 diffuse,float3 normal,float specular,float gshadow,flo
 
         float colorPow = length(PntLights[i].color.xyz);
         float4 spGradation = texture_1.Sample(Sampler,float2(lerp(1.f,0.f,ligPow),1.f));  //グラデーションマップ(明かり用)
-        float3 ligcolor = PntLights[i].color.xyz/len;
+        //float3 ligcolor = PntLights[i].color.xyz/len;
+        float3 ligcolor = PntLights[i].color.xyz*max(colorPow-len,0.f);
         float3 lig = (ligcolor*(spGradation.x));
         
         //反射

@@ -218,7 +218,7 @@ bool Game::Start()
 
 	static auto plig = ue::NewGO < ue::LightPoint>(0);
 	plig->SetPos({ 0,1,-100 });
-	plig->SetCol(ue::CVector3{ 0.6,0.25,0.08}*500);
+	plig->SetCol(ue::CVector3{ 0.6,0.25,0.08}*50);
 
 	campos = { -940,312,0 };
 	//campos = { 0,3000,2000 };
@@ -386,6 +386,7 @@ void Game::PostRender()
 	m_font.Begin();
 
 	m_font.Draw(L"TEST", { 0,0 }, { 1,1,1,1 }, 0, 5);
+	//m_font.Draw(L"YESY", {})
 
 	m_font.End();
 	m_fblur.DrawEnd();
