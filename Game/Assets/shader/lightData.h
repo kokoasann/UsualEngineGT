@@ -16,6 +16,8 @@ struct SPointLight
 {
 	float3 pos;
 	float4 color;
+	float decay;
+	float radius;
 };
 
 StructuredBuffer<SPointLight> PntLights : register(t51);

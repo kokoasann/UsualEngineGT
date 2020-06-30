@@ -218,7 +218,11 @@ bool Game::Start()
 
 	static auto plig = ue::NewGO < ue::LightPoint>(0);
 	plig->SetPos({ 0,1,-100 });
-	plig->SetCol(ue::CVector3{ 0.6,0.25,0.08}*50);
+	auto col = ue::CVector3{ 0.6,0.25,0.08 };
+	col.Normalize();
+	plig->SetCol(col);
+	plig->SetDecay(0.5f);
+	plig->SetRadius(50.f);
 
 	campos = { -940,312,0 };
 	//campos = { 0,3000,2000 };
@@ -361,7 +365,7 @@ void Game::Update()
 	static bool  isUP = true;
 	if (isUP)
 	{
-		blurParam += 0.5f;
+		blurParam += 10.f*ue::gameTime()->GetDeltaTime();
 		if (blurParam >= 50)
 		{
 			blurParam = 50.f;
@@ -370,7 +374,7 @@ void Game::Update()
 	}
 	else
 	{
-		blurParam -= 0.5f;
+		blurParam -= 10.f * ue::gameTime()->GetDeltaTime();
 		if (blurParam <= FLT_EPSILON)
 		{
 			blurParam = FLT_EPSILON;

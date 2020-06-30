@@ -41,6 +41,15 @@ namespace UsualEngine
 		{
 			return m_light.color;
 		}
+
+		void SetDecay(float v)
+		{
+			m_light.decay = v;
+		}
+		void SetRadius(float v)
+		{
+			m_light.radius = v;
+		}
 	private:
 		SPointLight m_light;
 	};

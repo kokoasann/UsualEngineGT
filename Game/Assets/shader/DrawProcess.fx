@@ -70,18 +70,32 @@ float4 DrawProcess(float4 diffuse,float3 normal,float specular,float gshadow,flo
 		float k = step(threshold,rad);
         
         float len = length(lendir);
+
+        k = min(k, step(len,PntLights[i].radius));
+
+        /*
         float ligPow = max(0.0f,rad) / (1.0f + len);    // V / 1+len
         ligPow *= 10.f;
         ligPow = max(0,min(1.f,ligPow));
         ligPow *= specular;
+        */
 
+        float ligPow = (len*PntLights[i].decay);//PntLights[i].radius;
+        //ligPow *= specular;
+        float ligDecay = texture_1.Sample(Sampler,
+                float2(max(min(ligPow,1.f),0.f),1.f)).x; 
+        float3 decayColor = PntLights[i].color.xyz * ligDecay;
 
         float colorPow = length(PntLights[i].color.xyz);
-        float4 spGradation = texture_1.Sample(Sampler,float2(lerp(1.f,0.f,ligPow),1.f));  //グラデーションマップ(明かり用)
+        float spGradation = texture_1.Sample(Sampler,
+                float2(max(min(specular,1.f),0.f),1.f)).x;  //グラデーションマップ(明かり用)
         //float3 ligcolor = PntLights[i].color.xyz/len;
-        float3 ligcolor = PntLights[i].color.xyz*max(colorPow-len,0.f);
-        float3 lig = (ligcolor*(spGradation.x));
-        
+        //float3 ligcolor = PntLights[i].color.xyz*max(colorPow-len,0.f);
+        //float3 lig = (ligcolor*(spGradation.x));
+        float3 lig = (PntLights[i].color.xyz*spGradation)-decayColor;
+        lig = float3(max(lig.x,0),max(lig.y,0),max(lig.z,0));
+        foundation += lig*k;
+
         //反射
         float3 w2p = worldPos - PntLights[i].pos;
         float3 e2w = worldPos - eyepos;
@@ -91,10 +105,12 @@ float4 DrawProcess(float4 diffuse,float3 normal,float specular,float gshadow,flo
         float refDote2w = dot(w2pRef,e2w);
         float sp = max(0,refDote2w);
 
-        spGradation = texture_1.Sample(Sampler,float2(lerp(1.f,0.f,sp),1.f));  //グラデーションマップ(明かり用)
-        sp *= specular;
-
-        foundation += (ligcolor*spGradation.x)*k;
+        spGradation = texture_1.Sample(Sampler,
+                float2(1.f-max(min(sp*specular,1.f),0.f),1.f)).x;  //グラデーションマップ(明かり用)
+        //sp *= spGradation.x;
+        lig = (PntLights[i].color.xyz*spGradation)-decayColor;
+        lig = float3(max(lig.x,0),max(lig.y,0),max(lig.z,0));
+        foundation += lig*k;
     }
 #endif
     col.xyz *= float3(0.45f, 0.4f, 0.6f) + foundation;
