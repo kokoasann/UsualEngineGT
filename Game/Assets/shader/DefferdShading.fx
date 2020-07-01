@@ -29,6 +29,18 @@ float4 PSMain_Defferd(DefferdPSInput In):SV_TARGET0
     float4 col = diffuse;
     float depth = gDepthMap.Sample(Sampler,In.uv);
     float specular = gSpecularMap.Sample(Sampler,In.uv);
+    float depthShadow = gShadowMap.Sample(Sampler,In.uv);
+
+    return DrawProcess(diffuse,normal,specular,depthShadow,depth,In.uv);
+}
+
+float4 PSMain_Defferd1(DefferdPSInput In):SV_TARGET0
+{
+    float4 diffuse = gDiffuseMap.Sample(Sampler,In.uv);
+    float3 normal = gNormalMap.Sample(Sampler,In.uv);
+    float4 col = diffuse;
+    float depth = gDepthMap.Sample(Sampler,In.uv);
+    float specular = gSpecularMap.Sample(Sampler,In.uv);
 
     float3 worldPos = GetWorldPosition(In.uv,depth,mViewProjInv);
 

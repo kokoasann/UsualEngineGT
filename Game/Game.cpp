@@ -216,13 +216,13 @@ bool Game::Start()
 	light->SetCol({ 0.3f,0.0f,0.f,1.0f });*/
 	
 
-	static auto plig = ue::NewGO < ue::LightPoint>(0);
+	static auto plig = ue::NewGO<ue::LightPoint>(0);
 	plig->SetPos({ 0,1,-100 });
 	auto col = ue::CVector3{ 0.6,0.25,0.08 };
 	col.Normalize();
-	plig->SetCol(col);
-	plig->SetDecay(0.5f);
-	plig->SetRadius(50.f);
+	plig->SetCol(col*3);
+	plig->SetDecay(0.001f);
+	plig->SetRadius(300.f);
 
 	campos = { -940,312,0 };
 	//campos = { 0,3000,2000 };
