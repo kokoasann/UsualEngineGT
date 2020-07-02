@@ -13,13 +13,13 @@ namespace UsualEngine
 	}
 	void FontBlur::Init()
 	{
-		
-
 		DXGI_SAMPLE_DESC desc = {};
 		desc.Count = 1;
 		desc.Quality = 0;
 		m_renderTarget.Create(FRAME_BUFFER_W, FRAME_BUFFER_H, 1, 1, DXGI_FORMAT_R16G16B16A16_FLOAT, DXGI_FORMAT_UNKNOWN, desc);
 		m_gausBlur.Init(FRAME_BUFFER_W*2, FRAME_BUFFER_H*2);
+		m_gausBlur_mid.Init(FRAME_BUFFER_W/4, FRAME_BUFFER_H/4);
+		//m_gausBlur_mid.Init(FRAME_BUFFER_W*0.5, FRAME_BUFFER_H * 0.5);
 
 		m_psCopy.Load("Assets/shader/copy.fx", "PSMain", Shader::EnType::PS);
 		m_vsCopy.Load("Assets/shader/copy.fx", "VSMain", Shader::EnType::VS);
@@ -43,8 +43,20 @@ namespace UsualEngine
 		auto gEngine = usualEngine()->GetGraphicsEngine();
 		auto devcon = gEngine->GetD3DDeviceContext();
 
-		m_gausBlur.SetDispersion(m_blurParam);
-		auto Blur = m_gausBlur.Render(m_renderTarget.GetSRV(), gEngine->GetPostEffect().GetPrimitive());
+		ID3D11ShaderResourceView* Blur = 0;
+		if (m_blurParam < 6)
+		{
+			m_gausBlur.SetDispersion(FLT_EPSILON);
+			Blur = m_gausBlur.Render(m_renderTarget.GetSRV(), gEngine->GetPostEffect().GetPrimitive());
+		}
+		else
+		{
+			m_gausBlur_mid.SetDispersion(FLT_EPSILON);
+			Blur = m_gausBlur_mid.Render(m_renderTarget.GetSRV(), gEngine->GetPostEffect().GetPrimitive());
+		}
+
+		D3D11_VIEWPORT viewPort[] = { { 0.f ,0.f ,FRAME_BUFFER_W,FRAME_BUFFER_H } };
+		devcon->RSSetViewports(1, viewPort);
 
 		ID3D11DepthStencilState* oldDS = 0;
 		unsigned int oldIND = 0;

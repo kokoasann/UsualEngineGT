@@ -45,6 +45,7 @@ namespace UsualEngine
 		m_renderTargetY.Create(w>>1, h>>1, 1, 1, DXGI_FORMAT_R16G16B16A16_FLOAT, DXGI_FORMAT_UNKNOWN, desc);
 
 		m_cb.Create(&m_bp, sizeof(m_bp));
+
 	}
 	void GaussianBlur::Release()
 	{
@@ -61,6 +62,16 @@ namespace UsualEngine
 	{
 		if (!m_isChangeBOKE)
 			return;
+
+		if (m_dispersion == 0.f)
+		{
+			for (int i = 0; i < BLUR_NUM_WEIGHT; i++)
+			{
+				m_bp.weights[i] = 0.f;
+			}
+			return;
+		}
+
 		float total = 0;
 		for (int i = 0; i < BLUR_NUM_WEIGHT; i++) {
 			m_bp.weights[i] = expf(-0.5f * (float)(i * i) / m_dispersion);
@@ -88,6 +99,7 @@ namespace UsualEngine
 		devcon->OMGetBlendState(&oldblend, oldBF, &oldSM);
 
 		devcon->OMSetBlendState(m_blendstate, 0, 0xffffffff);
+
 		
 		RenderTarget* oldRT[7] = {0};
 		int oldNum = 0;
@@ -100,10 +112,14 @@ namespace UsualEngine
 		ID3D11SamplerState* ssl[] = { SamplerState_Liner() };
 		devcon->PSSetSamplers(0, 1, ssl);
 
+		
+
 		RenderTarget* rtl[] = { &m_renderTargetX };
 		gEngine->OMSetRenderTarget(1, rtl);
-		m_bp.offset.x = 16.f / (m_renderTargetX.GetWidth()<<1);
+		//m_bp.offset.x = 16 / (m_renderTargetX.GetWidth()<<1);
+		m_bp.offset.x = 8 / 1280;
 		m_bp.offset.y = 0.f;
+		
 		devcon->UpdateSubresource(m_cb.GetBody(), 0,0,&m_bp,0,0);
 		devcon->ClearRenderTargetView(m_renderTargetX.GetRTV(), clearColor);
 		devcon->VSSetShaderResources(0, 1, &src);
@@ -116,10 +132,13 @@ namespace UsualEngine
 		devcon->RSSetViewports(1, vpl);
 		primitive->Draw();
 
+
 		rtl[0] = &m_renderTargetY;
 		gEngine->OMSetRenderTarget(1, rtl);
 		m_bp.offset.x = 0.f;
-		m_bp.offset.y = 16.f / m_renderTargetX.GetHeight();
+		//m_bp.offset.y = 16 / m_renderTargetX.GetHeight();
+		//m_bp.offset.y = 1./1280;
+
 		devcon->UpdateSubresource(m_cb.GetBody(), 0, 0, &m_bp, 0, 0);
 		devcon->ClearRenderTargetView(m_renderTargetY.GetRTV(), clearColor);
 		devcon->VSSetShaderResources(0, 1, &m_renderTargetX.GetSRV());
