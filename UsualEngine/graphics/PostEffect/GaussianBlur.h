@@ -23,7 +23,7 @@ namespace UsualEngine
 		/// <param name="src"></param>
 		/// <param name="primitive"></param>
 		/// <returns></returns>
-		ID3D11ShaderResourceView* Render(ID3D11ShaderResourceView* src, Primitive* primitive);
+		ID3D11ShaderResourceView* Render(ID3D11ShaderResourceView* src ,float w, float h, Primitive* primitive);
 
 		void SetDispersion(float v)
 		{

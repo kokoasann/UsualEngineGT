@@ -84,7 +84,7 @@ namespace UsualEngine
 		m_isChangeBOKE = false;
 	}
 
-	ID3D11ShaderResourceView* GaussianBlur::Render(ID3D11ShaderResourceView* src,Primitive* primitive)
+	ID3D11ShaderResourceView* GaussianBlur::Render(ID3D11ShaderResourceView* src, float w, float h,Primitive* primitive)
 	{
 		auto gEngine = usualEngine()->GetGraphicsEngine();
 		auto devcon = usualEngine()->GetGraphicsEngine()->GetD3DDeviceContext();
@@ -112,14 +112,19 @@ namespace UsualEngine
 		ID3D11SamplerState* ssl[] = { SamplerState_Liner() };
 		devcon->PSSetSamplers(0, 1, ssl);
 
-		
 
 		RenderTarget* rtl[] = { &m_renderTargetX };
 		gEngine->OMSetRenderTarget(1, rtl);
-		//m_bp.offset.x = 16 / (m_renderTargetX.GetWidth()<<1);
-		m_bp.offset.x = 8 / 1280;
+
+		//フィルターのサイズが16*16なので8ピクセル分動かす
+		//m_bp.offset.x = 8.f / (m_renderTargetX.GetWidth()<<1);	//本来ここは引数で送られて来たテクスチャのサイズを使う。
+		m_bp.offset.x = 8.f / w;
 		m_bp.offset.y = 0.f;
-		
+
+		/*for (int i = 0; i < BLUR_NUM_WEIGHT; i++) {
+			m_bp.weights[i] = 0.;
+		}
+		m_bp.weights[7]= 0.3;*/
 		devcon->UpdateSubresource(m_cb.GetBody(), 0,0,&m_bp,0,0);
 		devcon->ClearRenderTargetView(m_renderTargetX.GetRTV(), clearColor);
 		devcon->VSSetShaderResources(0, 1, &src);
@@ -136,8 +141,8 @@ namespace UsualEngine
 		rtl[0] = &m_renderTargetY;
 		gEngine->OMSetRenderTarget(1, rtl);
 		m_bp.offset.x = 0.f;
-		//m_bp.offset.y = 16 / m_renderTargetX.GetHeight();
-		//m_bp.offset.y = 1./1280;
+		m_bp.offset.y = 8.f / m_renderTargetX.GetHeight();
+		//m_bp.offset.y = 0;
 
 		devcon->UpdateSubresource(m_cb.GetBody(), 0, 0, &m_bp, 0, 0);
 		devcon->ClearRenderTargetView(m_renderTargetY.GetRTV(), clearColor);

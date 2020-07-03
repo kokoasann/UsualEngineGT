@@ -28,7 +28,7 @@ namespace UsualEngine
 	ID3D11ShaderResourceView* SoftShadow::Draw()
 	{
 		auto& pe = usualEngine()->GetGraphicsEngine()->GetPostEffect();
-		auto shadow = m_gauss.Render(m_gBufShadow->GetSRV(), pe.GetPrimitive());
+		auto shadow = m_gauss.Render(m_gBufShadow->GetSRV(),m_gBufShadow->GetWidth(), m_gBufShadow->GetHeight(), pe.GetPrimitive());
 		return shadow;
 	}
 }

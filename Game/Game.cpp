@@ -366,9 +366,9 @@ void Game::Update()
 	if (isUP)
 	{
 		blurParam += 10.f*ue::gameTime()->GetDeltaTime();
-		if (blurParam >= 50)
+		if (blurParam >= 12)
 		{
-			blurParam = 50.f;
+			blurParam = 12.f;
 			isUP = false;
 		}
 	}
@@ -386,7 +386,7 @@ void Game::Update()
 
 void Game::PostRender()
 {
-	m_fblur.DrawStart({1,1,1,0});
+	m_fblur.DrawStart({0,0,1,0});
 	m_font.Begin();
 
 	m_font.Draw(L"TEST", { 0,0 }, { 1,1,1,1 }, 0, 5);

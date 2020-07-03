@@ -44,15 +44,15 @@ namespace UsualEngine
 		auto devcon = gEngine->GetD3DDeviceContext();
 
 		ID3D11ShaderResourceView* Blur = 0;
-		if (m_blurParam < 6)
+		if (m_blurParam < 6 and 0)
 		{
-			m_gausBlur.SetDispersion(FLT_EPSILON);
-			Blur = m_gausBlur.Render(m_renderTarget.GetSRV(), gEngine->GetPostEffect().GetPrimitive());
+			m_gausBlur.SetDispersion(m_blurParam);
+			Blur = m_gausBlur.Render(m_renderTarget.GetSRV(),m_renderTarget.GetWidth(), m_renderTarget.GetHeight(), gEngine->GetPostEffect().GetPrimitive());
 		}
 		else
 		{
-			m_gausBlur_mid.SetDispersion(FLT_EPSILON);
-			Blur = m_gausBlur_mid.Render(m_renderTarget.GetSRV(), gEngine->GetPostEffect().GetPrimitive());
+			m_gausBlur_mid.SetDispersion(m_blurParam);
+			Blur = m_gausBlur_mid.Render(m_renderTarget.GetSRV(), m_renderTarget.GetWidth(), m_renderTarget.GetHeight(), gEngine->GetPostEffect().GetPrimitive());
 		}
 
 		D3D11_VIEWPORT viewPort[] = { { 0.f ,0.f ,FRAME_BUFFER_W,FRAME_BUFFER_H } };
