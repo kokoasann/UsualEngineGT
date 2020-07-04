@@ -116,15 +116,17 @@ namespace UsualEngine
 		RenderTarget* rtl[] = { &m_renderTargetX };
 		gEngine->OMSetRenderTarget(1, rtl);
 
+		for (int i = 0; i < BLUR_NUM_WEIGHT; i++) {
+			//m_bp.weights[i] = 0.f;
+		}
+		//m_bp.weights[7] = 0.5f;
+		//m_bp.weights[0] = 0.3f;
+
 		//フィルターのサイズが16*16なので8ピクセル分動かす
 		//m_bp.offset.x = 8.f / (m_renderTargetX.GetWidth()<<1);	//本来ここは引数で送られて来たテクスチャのサイズを使う。
-		m_bp.offset.x = 8.f / w;
+		m_bp.offset.x = 32.f / w;	//テクスチャの縮小の関係でYブラーの4倍オフセットをする必要がある。
 		m_bp.offset.y = 0.f;
 
-		/*for (int i = 0; i < BLUR_NUM_WEIGHT; i++) {
-			m_bp.weights[i] = 0.;
-		}
-		m_bp.weights[7]= 0.3;*/
 		devcon->UpdateSubresource(m_cb.GetBody(), 0,0,&m_bp,0,0);
 		devcon->ClearRenderTargetView(m_renderTargetX.GetRTV(), clearColor);
 		devcon->VSSetShaderResources(0, 1, &src);

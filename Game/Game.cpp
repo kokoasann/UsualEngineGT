@@ -389,7 +389,7 @@ void Game::PostRender()
 	m_fblur.DrawStart({0,0,1,0});
 	m_font.Begin();
 
-	m_font.Draw(L"TEST", { 0,0 }, { 1,1,1,1 }, 0, 5);
+	m_font.Draw(L"O", { 0,0 }, { 1,1,1,1 }, 0, 5,{0.5f,-1.f});
 	//m_font.Draw(L"YESY", {})
 
 	m_font.End();
