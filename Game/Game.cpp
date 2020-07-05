@@ -363,18 +363,32 @@ void Game::Update()
 	//
 	static float blurParam = FLT_EPSILON;
 	static bool  isUP = true;
+	static float upSpeed = 50.f;
+	static float sspeed[3] = { upSpeed,upSpeed / 4.f,upSpeed / 8.f };
+	static float pmax = 64;
 	if (isUP)
 	{
-		blurParam += 10.f*ue::gameTime()->GetDeltaTime();
-		if (blurParam >= 12)
+		if(blurParam <16.f)
+			blurParam += sspeed[0] *ue::gameTime()->GetDeltaTime();
+		else if(blurParam < 32.f)
+			blurParam += sspeed[1] * ue::gameTime()->GetDeltaTime();
+		else
+			blurParam += sspeed[2] * ue::gameTime()->GetDeltaTime();
+		if (blurParam > pmax)
 		{
-			blurParam = 12.f;
+			blurParam = pmax;
 			isUP = false;
 		}
 	}
 	else
 	{
-		blurParam -= 10.f * ue::gameTime()->GetDeltaTime();
+		if (blurParam >= 32.f)
+			blurParam -= sspeed[2] * ue::gameTime()->GetDeltaTime();
+		else if (blurParam >= 16.f)
+			blurParam -= sspeed[1] * ue::gameTime()->GetDeltaTime();
+		else
+			blurParam -= sspeed[0] * ue::gameTime()->GetDeltaTime();
+		
 		if (blurParam <= FLT_EPSILON)
 		{
 			blurParam = FLT_EPSILON;
@@ -386,10 +400,18 @@ void Game::Update()
 
 void Game::PostRender()
 {
-	m_fblur.DrawStart({0,0,1,0});
+	auto str = L"O";
 	m_font.Begin();
 
-	m_font.Draw(L"O", { 0,0 }, { 1,1,1,1 }, 0, 5,{0.5f,-1.f});
+	//m_font.Draw(str, { 0,0 }, { 1,1,1,1 }, 0, 5, { 0.5f,-1.f });
+	
+
+	m_font.End();
+
+	m_fblur.DrawStart({1,1,1,0});
+	m_font.Begin();
+
+	m_font.Draw(str, { 0,0 }, { 1,1,1,1 }, 0, 5,{0.5f,-1.f});
 	//m_font.Draw(L"YESY", {})
 
 	m_font.End();

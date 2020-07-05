@@ -30,6 +30,7 @@ namespace UsualEngine
 		int m_oldRenderNum = 0;
 		GaussianBlur m_gausBlur;
 		GaussianBlur m_gausBlur_mid;
+		GaussianBlur m_gausBlur_sml;
 		float m_blurParam = 1;
 		float m_blurParamReal = 1;
 

@@ -1,7 +1,7 @@
 #pragma once
 
 //ガウスブラーに必要な厚みの配列の数
-#define BLUR_NUM_WEIGHT 9
+#define BLUR_NUM_WEIGHT 8
 namespace UsualEngine
 {
 	class Primitive;
@@ -42,6 +42,7 @@ namespace UsualEngine
 		{
 			CVector4 offset = CVector4::Zero();					//
 			float weights[BLUR_NUM_WEIGHT] = {0};		//
+			float rttexRatio = 0;
 		};
 	private:
 		RenderTarget m_renderTargetX;	//レンダーターゲット ｴｪｪｯｸｽｯ!!!

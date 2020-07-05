@@ -62,7 +62,7 @@ namespace UsualEngine
 	{
 		if (!m_isChangeBOKE)
 			return;
-
+		
 		if (m_dispersion == 0.f)
 		{
 			for (int i = 0; i < BLUR_NUM_WEIGHT; i++)
@@ -120,17 +120,20 @@ namespace UsualEngine
 			//m_bp.weights[i] = 0.f;
 		}
 		//m_bp.weights[7] = 0.5f;
-		//m_bp.weights[0] = 0.3f;
+		//m_bp.weights[0] = 0.4f;
 
-		//フィルターのサイズが16*16なので8ピクセル分動かす
-		//m_bp.offset.x = 8.f / (m_renderTargetX.GetWidth()<<1);	//本来ここは引数で送られて来たテクスチャのサイズを使う。
-		m_bp.offset.x = 32.f / w;	//テクスチャの縮小の関係でYブラーの4倍オフセットをする必要がある。
+		
+		//m_bp.offset.x = 8.f / (m_renderTargetX.GetWidth()<<1);
+		m_bp.rttexRatio = 1.f*(w/m_renderTargetX.GetWidth());
+		//m_bp.offset.x = (8.f*m_bp.rttexRatio-2.f) / w;
+		m_bp.offset.x = (8.f * (m_bp.rttexRatio)) / w;
 		m_bp.offset.y = 0.f;
 
 		devcon->UpdateSubresource(m_cb.GetBody(), 0,0,&m_bp,0,0);
 		devcon->ClearRenderTargetView(m_renderTargetX.GetRTV(), clearColor);
 		devcon->VSSetShaderResources(0, 1, &src);
 		devcon->PSSetShaderResources(0, 1, &src);
+		devcon->VSSetConstantBuffers(0, 1, &m_cb.GetBody());
 		devcon->PSSetConstantBuffers(0, 1, &m_cb.GetBody());
 		devcon->VSSetShader((ID3D11VertexShader*)m_vsXBlur.GetBody(),0,0);
 		devcon->PSSetShader((ID3D11PixelShader*)m_psBlur.GetBody(), 0, 0);
@@ -142,8 +145,9 @@ namespace UsualEngine
 
 		rtl[0] = &m_renderTargetY;
 		gEngine->OMSetRenderTarget(1, rtl);
+		m_bp.rttexRatio = 2.f* (m_renderTargetY.GetWidth()/m_renderTargetY.GetHeight());
 		m_bp.offset.x = 0.f;
-		m_bp.offset.y = 8.f / m_renderTargetX.GetHeight();
+		m_bp.offset.y = (8.f*(m_bp.rttexRatio)) / m_renderTargetX.GetHeight();// *m_renderTargetX.GetWidth() / w;
 		//m_bp.offset.y = 0;
 
 		devcon->UpdateSubresource(m_cb.GetBody(), 0, 0, &m_bp, 0, 0);

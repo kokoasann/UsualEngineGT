@@ -18,7 +18,8 @@ namespace UsualEngine
 		desc.Quality = 0;
 		m_renderTarget.Create(FRAME_BUFFER_W, FRAME_BUFFER_H, 1, 1, DXGI_FORMAT_R16G16B16A16_FLOAT, DXGI_FORMAT_UNKNOWN, desc);
 		m_gausBlur.Init(FRAME_BUFFER_W*2, FRAME_BUFFER_H*2);
-		m_gausBlur_mid.Init(FRAME_BUFFER_W/4, FRAME_BUFFER_H/4);
+		m_gausBlur_mid.Init(FRAME_BUFFER_W, FRAME_BUFFER_H);
+		m_gausBlur_sml.Init(FRAME_BUFFER_W/2, FRAME_BUFFER_H/2);
 		//m_gausBlur_mid.Init(FRAME_BUFFER_W*0.5, FRAME_BUFFER_H * 0.5);
 
 		m_psCopy.Load("Assets/shader/copy.fx", "PSMain", Shader::EnType::PS);
@@ -44,15 +45,20 @@ namespace UsualEngine
 		auto devcon = gEngine->GetD3DDeviceContext();
 
 		ID3D11ShaderResourceView* Blur = 0;
-		if (m_blurParam < 6 and 0)
+		if (m_blurParam < 16.f)
 		{
 			m_gausBlur.SetDispersion(m_blurParam);
 			Blur = m_gausBlur.Render(m_renderTarget.GetSRV(),m_renderTarget.GetWidth(), m_renderTarget.GetHeight(), gEngine->GetPostEffect().GetPrimitive());
 		}
+		else if(m_blurParam < 32.f)
+		{
+			m_gausBlur_mid.SetDispersion(m_blurParam-13.f);
+			Blur = m_gausBlur_mid.Render(m_renderTarget.GetSRV(), m_renderTarget.GetWidth(), m_renderTarget.GetHeight(), gEngine->GetPostEffect().GetPrimitive());
+		}
 		else
 		{
-			m_gausBlur_mid.SetDispersion(m_blurParam);
-			Blur = m_gausBlur_mid.Render(m_renderTarget.GetSRV(), m_renderTarget.GetWidth(), m_renderTarget.GetHeight(), gEngine->GetPostEffect().GetPrimitive());
+			m_gausBlur_sml.SetDispersion(m_blurParam-29.f);
+			Blur = m_gausBlur_sml.Render(m_renderTarget.GetSRV(), m_renderTarget.GetWidth(), m_renderTarget.GetHeight(), gEngine->GetPostEffect().GetPrimitive());
 		}
 
 		D3D11_VIEWPORT viewPort[] = { { 0.f ,0.f ,FRAME_BUFFER_W,FRAME_BUFFER_H } };

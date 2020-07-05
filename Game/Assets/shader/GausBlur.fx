@@ -21,6 +21,7 @@ cbuffer BlurParam:register(b0)
 {
 	float4 offset;
 	float4 weight[2];
+	float rttexRatio;
 }
 
 Texture2D<float4> srcTex:register(t0);	//�ڂ����e�N�X�`��
@@ -39,7 +40,7 @@ PS_BlurInput VSMain_X(VSInput In)
 	float2 tex = In.uv;
 	float pixSize = -1.0f / texSize.x;
 
-	tex += float2(pixSize*0.5f,0.f);
+	//tex += float2(pixSize*0.5f,0.f);
 	/*
 	Out.tex0 = tex + float2(-1.0f / texSize.x, 0.0f);
 	Out.tex1 = tex + float2(-3.0f / texSize.x, 0.0f);
@@ -50,15 +51,16 @@ PS_BlurInput VSMain_X(VSInput In)
 	Out.tex6 = tex + float2(-13.0f / texSize.x, 0.0f);
 	Out.tex7 = tex + float2(-15.0f / texSize.x, 0.0f);
 	*/
-	
-	Out.tex0 = tex + float2(pixSize*1.0f, 0.0f);
-	Out.tex1 = tex + float2(pixSize*5.0f, 0.0f);
-	Out.tex2 = tex + float2(pixSize*9.0f, 0.0f);
-	Out.tex3 = tex + float2(pixSize*13.0f, 0.0f);
-	Out.tex4 = tex + float2(pixSize*17.0f, 0.0f);
-	Out.tex5 = tex + float2(pixSize*21.0f, 0.0f);
-	Out.tex6 = tex + float2(pixSize*25.0f, 0.0f);
-	Out.tex7 = tex + float2(pixSize*29.0f, 0.0f);
+
+	float addpix = pixSize*rttexRatio;
+	Out.tex0 = tex + float2(pixSize, 0.0f);
+	Out.tex1 = tex + float2(pixSize+addpix*1.f, 0.0f);
+	Out.tex2 = tex + float2(pixSize+addpix*2.f, 0.0f);
+	Out.tex3 = tex + float2(pixSize+addpix*3.f, 0.0f);
+	Out.tex4 = tex + float2(pixSize+addpix*4.f, 0.0f);
+	Out.tex5 = tex + float2(pixSize+addpix*5.f, 0.0f);
+	Out.tex6 = tex + float2(pixSize+addpix*6.f, 0.0f);
+	Out.tex7 = tex + float2(pixSize+addpix*7.f, 0.0f);
 	return Out;
 }
 
@@ -86,7 +88,7 @@ PS_BlurInput VSMain_Y(VSInput In)
 	Out.tex6 = tex + float2(0.0f, -13.0f / texSize.y);
 	Out.tex7 = tex + float2(0.0f, -15.0f / texSize.y);
 	*/
-	
+	/*
 	Out.tex0 = tex + float2(0.0f, pixSize*1.0f);
 	Out.tex1 = tex + float2(0.0f, pixSize*2.0f);
 	Out.tex2 = tex + float2(0.0f, pixSize*3.0f);
@@ -95,6 +97,16 @@ PS_BlurInput VSMain_Y(VSInput In)
 	Out.tex5 = tex + float2(0.0f, pixSize*6.0f);
 	Out.tex6 = tex + float2(0.0f, pixSize*7.0f);
 	Out.tex7 = tex + float2(0.0f, pixSize*8.0f);
+	*/
+	float addpix = pixSize*rttexRatio;
+	Out.tex0 = tex + float2(0.0f,pixSize);
+	Out.tex1 = tex + float2(0.0f,pixSize+addpix*1.f);
+	Out.tex2 = tex + float2(0.0f,pixSize+addpix*2.f);
+	Out.tex3 = tex + float2(0.0f,pixSize+addpix*3.f);
+	Out.tex4 = tex + float2(0.0f,pixSize+addpix*4.f);
+	Out.tex5 = tex + float2(0.0f,pixSize+addpix*5.f);
+	Out.tex6 = tex + float2(0.0f,pixSize+addpix*6.f);
+	Out.tex7 = tex + float2(0.0f,pixSize+addpix*7.f);
 	return Out;
 }
 
