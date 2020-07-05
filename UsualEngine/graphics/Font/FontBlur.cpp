@@ -45,6 +45,7 @@ namespace UsualEngine
 		auto devcon = gEngine->GetD3DDeviceContext();
 
 		ID3D11ShaderResourceView* Blur = 0;
+		ID3D11ShaderResourceView* Blur2 = 0;
 		if (m_blurParam < 16.f)
 		{
 			m_gausBlur.SetDispersion(m_blurParam);

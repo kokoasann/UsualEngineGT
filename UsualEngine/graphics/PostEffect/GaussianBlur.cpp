@@ -124,7 +124,7 @@ namespace UsualEngine
 
 		
 		//m_bp.offset.x = 8.f / (m_renderTargetX.GetWidth()<<1);
-		m_bp.rttexRatio = 1.f*(w/m_renderTargetX.GetWidth());
+		m_bp.rttexRatio = 1.f*(w/(float)m_renderTargetX.GetWidth());
 		//m_bp.offset.x = (8.f*m_bp.rttexRatio-2.f) / w;
 		m_bp.offset.x = (8.f * (m_bp.rttexRatio)) / w;
 		m_bp.offset.y = 0.f;
@@ -145,9 +145,9 @@ namespace UsualEngine
 
 		rtl[0] = &m_renderTargetY;
 		gEngine->OMSetRenderTarget(1, rtl);
-		m_bp.rttexRatio = 2.f* (m_renderTargetY.GetWidth()/m_renderTargetY.GetHeight());
+		m_bp.rttexRatio = 2.f* ((float)m_renderTargetY.GetWidth()/(float)m_renderTargetY.GetHeight());
 		m_bp.offset.x = 0.f;
-		m_bp.offset.y = (8.f*(m_bp.rttexRatio)) / m_renderTargetX.GetHeight();// *m_renderTargetX.GetWidth() / w;
+		m_bp.offset.y = (8.f*(m_bp.rttexRatio)) / (float)m_renderTargetX.GetHeight();// *m_renderTargetX.GetWidth() / w;
 		//m_bp.offset.y = 0;
 
 		devcon->UpdateSubresource(m_cb.GetBody(), 0, 0, &m_bp, 0, 0);
