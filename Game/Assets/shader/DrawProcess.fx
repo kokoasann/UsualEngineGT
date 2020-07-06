@@ -68,7 +68,7 @@ float3 PointLightProcess(float3 worldPos,float3 normal,float specular)
 
         float colorPow = length(PntLights[i].color.xyz);
         float spGradation = texture_1.Sample(Sampler,
-                float2(1.f-max(min(specular,1.f),0.f),1.f),0.f).x;  //グラデーションマップ(明かり用)
+                float2(max(min(rad*specular,1.f),0.f),1.f),0.f).x;  //グラデーションマップ(明かり用)
         //float3 ligcolor = PntLights[i].color.xyz/len;
         //float3 ligcolor = PntLights[i].color.xyz*max(colorPow-len,0.f);
         //float3 lig = (ligcolor*(spGradation.x));
@@ -84,14 +84,14 @@ float3 PointLightProcess(float3 worldPos,float3 normal,float specular)
         e2w = normalize(e2w);
         float3 w2pRef =  -w2p + 2.0f * dot(w2p,normal) * normal;
         float refDote2w = dot(w2pRef,e2w);
-        float sp = max(0,refDote2w);
+        float sp = pow(max(0,refDote2w),5);
 
         spGradation = texture_1.Sample(Sampler,
                 float2(max(min(sp,1.f),0.f),0.f)).x;  //グラデーションマップ(明かり用)
         //sp *= spGradation.x;
         lig = (PntLights[i].color.xyz*min(max((spGradation-ligDecay)*spe,0.f),1.f));
         //lig = float3(max(lig.x,0.f),max(lig.y,0.f),max(lig.z,0.f));
-        foundation += lig;
+        foundation += lig*k;
     }
     return foundation;
 }

@@ -61,7 +61,13 @@ namespace UsualEngine
 		ID3D11ShaderResourceView* blurList[BLOOM_NUM_DWNSMP] = { 0 };
 		for (int i = 0;i<BLOOM_NUM_DWNSMP;i++)
 		{
-			Tex = m_gausBlur[i].Render(Tex,rtl[0]->GetWidth(), rtl[0]->GetHeight(),pe->GetPrimitive());
+			ID3D11Resource* res;
+			Tex->GetResource(&res);
+			auto textex = (ID3D11Texture2D*)res;
+			D3D11_TEXTURE2D_DESC desc;
+			textex->GetDesc(&desc);
+			Tex = m_gausBlur[i].Render(Tex,desc.Width, desc.Height,pe->GetPrimitive());
+
 			blurList[i] = Tex;
 		}
 

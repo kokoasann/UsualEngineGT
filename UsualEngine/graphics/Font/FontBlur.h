@@ -7,9 +7,20 @@ namespace UsualEngine
 	class FontBlur
 	{
 	public:
+		static float PARAM_MAX;
+
+		enum EState
+		{
+			SSTOP,
+			SUP,
+			SDOWN
+		};
+
 		FontBlur();
 		~FontBlur();
+		void Release();
 		void Init();
+		void Update();
 		void DrawStart(const CVector4& clearColor = {0,0,0,0});
 		void DrawEnd();
 		void Reset()
@@ -24,6 +35,30 @@ namespace UsualEngine
 		{
 			return m_blurParam;
 		}
+
+		/// <summary>
+		/// 徐々に鮮明にしていく
+		/// </summary>
+		void Up()
+		{
+			m_state = SUP;
+		}
+		/// <summary>
+		/// 徐々にぼかしていく
+		/// </summary>
+		void Down()
+		{
+			m_state = SDOWN;
+		}
+		/// <summary>
+		/// 遷移のストップ
+		/// </summary>
+		void Stop()
+		{
+			m_state = SSTOP;
+		}
+
+
 	private:
 		RenderTarget m_renderTarget;
 		RenderTarget* m_oldRenderTarget[7];
@@ -31,11 +66,16 @@ namespace UsualEngine
 		GaussianBlur m_gausBlur;
 		GaussianBlur m_gausBlur_mid;
 		GaussianBlur m_gausBlur_sml;
-		float m_blurParam = 1;
+		float m_blurParam = FLT_EPSILON;
 		float m_blurParamReal = 1;
 
 		
 		Shader m_vsCopy;
 		Shader m_psCopy;
+
+		EState m_state = SSTOP;
+
+		float m_speed = 0.0f; //秒。
+		
 	};
 }

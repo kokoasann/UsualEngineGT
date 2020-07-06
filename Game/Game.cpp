@@ -220,7 +220,7 @@ bool Game::Start()
 	plig->SetPos({ 0,1,-100 });
 	auto col = ue::CVector3{ 0.6,0.25,0.08 };
 	col.Normalize();
-	plig->SetCol(col*3);
+	plig->SetCol(col*5);
 	plig->SetDecay(0.001f);
 	plig->SetRadius(300.f);
 
@@ -364,7 +364,7 @@ void Game::Update()
 	static float blurParam = FLT_EPSILON;
 	static bool  isUP = true;
 	static float upSpeed = 50.f;
-	static float sspeed[3] = { upSpeed,upSpeed / 4.f,upSpeed / 8.f };
+	static float sspeed[3] = { upSpeed,upSpeed / 1.f,upSpeed / 1.f };
 	static float pmax = 64;
 	if (isUP)
 	{

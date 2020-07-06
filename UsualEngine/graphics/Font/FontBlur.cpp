@@ -4,12 +4,17 @@
 
 namespace UsualEngine
 {
+	float FontBlur::PARAM_MAX = 64.f;
+
 	FontBlur::FontBlur()
 	{
 	}
 	FontBlur::~FontBlur()
 	{
 		
+	}
+	void FontBlur::Release()
+	{
 	}
 	void FontBlur::Init()
 	{
@@ -24,6 +29,44 @@ namespace UsualEngine
 
 		m_psCopy.Load("Assets/shader/copy.fx", "PSMain", Shader::EnType::PS);
 		m_vsCopy.Load("Assets/shader/copy.fx", "VSMain", Shader::EnType::VS);
+	}
+	void FontBlur::Update()
+	{
+		float sspeed[3] = { m_speed,m_speed / 8.f,m_speed / 16.f };
+		float dtime = gameTime()->GetDeltaTime();
+
+		switch (m_state)
+		{
+		case SSTOP:
+			break;
+		case SUP:
+			if (m_blurParam < 16.f)
+				m_blurParam += sspeed[0] * dtime;
+			else if (m_blurParam < 32.f)
+				m_blurParam += sspeed[1] * dtime;
+			else
+				m_blurParam += sspeed[2] * dtime;
+			if (m_blurParam > PARAM_MAX)
+			{
+				m_blurParam = PARAM_MAX;
+				m_state = SSTOP;
+			}
+			break;
+		case SDOWN:
+			if (m_blurParam >= 32.f)
+				m_blurParam -= sspeed[2] * dtime;
+			else if (m_blurParam >= 16.f)
+				m_blurParam -= sspeed[1] * dtime;
+			else
+				m_blurParam -= sspeed[0] * dtime;
+
+			if (m_blurParam <= FLT_EPSILON)
+			{
+				m_blurParam = FLT_EPSILON;
+				m_state = SSTOP;
+			}
+			break;
+		}
 	}
 	void FontBlur::DrawStart(const CVector4& clearColor)
 	{
@@ -45,7 +88,6 @@ namespace UsualEngine
 		auto devcon = gEngine->GetD3DDeviceContext();
 
 		ID3D11ShaderResourceView* Blur = 0;
-		ID3D11ShaderResourceView* Blur2 = 0;
 		if (m_blurParam < 16.f)
 		{
 			m_gausBlur.SetDispersion(m_blurParam);

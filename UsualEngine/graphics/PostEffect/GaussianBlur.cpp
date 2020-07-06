@@ -125,8 +125,10 @@ namespace UsualEngine
 		
 		//m_bp.offset.x = 8.f / (m_renderTargetX.GetWidth()<<1);
 		m_bp.rttexRatio = 1.f*(w/(float)m_renderTargetX.GetWidth());
+		//m_bp.rttexRatio = 4.f;
 		//m_bp.offset.x = (8.f*m_bp.rttexRatio-2.f) / w;
 		m_bp.offset.x = (8.f * (m_bp.rttexRatio)) / w;
+		//m_bp.offset.x = (8.f) / w;
 		m_bp.offset.y = 0.f;
 
 		devcon->UpdateSubresource(m_cb.GetBody(), 0,0,&m_bp,0,0);
