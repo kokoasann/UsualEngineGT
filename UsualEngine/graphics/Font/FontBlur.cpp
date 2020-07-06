@@ -4,17 +4,18 @@
 
 namespace UsualEngine
 {
-	float FontBlur::PARAM_MAX = 64.f;
+	float FontBlur::PARAM_MAX = 48.f;
 
 	FontBlur::FontBlur()
 	{
 	}
 	FontBlur::~FontBlur()
 	{
-		
+		Release();
 	}
 	void FontBlur::Release()
 	{
+		
 	}
 	void FontBlur::Init()
 	{
@@ -32,7 +33,7 @@ namespace UsualEngine
 	}
 	void FontBlur::Update()
 	{
-		float sspeed[3] = { m_speed,m_speed / 8.f,m_speed / 16.f };
+		float sspeed[3] = { m_speed,m_speed / 8.f,m_speed / 64.f };
 		float dtime = gameTime()->GetDeltaTime();
 
 		switch (m_state)
@@ -100,7 +101,7 @@ namespace UsualEngine
 		}
 		else
 		{
-			m_gausBlur_sml.SetDispersion(m_blurParam-29.f);
+			m_gausBlur_sml.SetDispersion(m_blurParam-28.5f);
 			Blur = m_gausBlur_sml.Render(m_renderTarget.GetSRV(), m_renderTarget.GetWidth(), m_renderTarget.GetHeight(), gEngine->GetPostEffect().GetPrimitive());
 		}
 

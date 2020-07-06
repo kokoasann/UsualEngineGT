@@ -18,7 +18,7 @@ void Game::OnDestroy()
 
 bool Game::Start()
 {
-	ue::NewGO<Player>(0);
+	//ue::NewGO<Player>(0);
 	ue::NewGO<Ene_Gib>(0);
 	//ue::NewGO<Ene_GibTes>(0);
 
@@ -297,6 +297,9 @@ bool Game::Start()
 	};
 	ue::DebugSwitchAddCheck(ue::DebugSwitchNewSwitch('P', 0, f));
 
+
+	// font blur ÇÃÅ@ê›íËÅB
+	m_fblur.SetSpeed(256.f);
 	return true;
 }
 
@@ -361,7 +364,7 @@ void Game::Update()
 	//OutputDebugString(st);
 
 	//
-	static float blurParam = FLT_EPSILON;
+	/*static float blurParam = FLT_EPSILON;
 	static bool  isUP = true;
 	static float upSpeed = 50.f;
 	static float sspeed[3] = { upSpeed,upSpeed / 1.f,upSpeed / 1.f };
@@ -395,25 +398,42 @@ void Game::Update()
 			isUP = true;
 		}
 	}
-	m_fblur.SetBlurParam(blurParam);
+	m_fblur.SetBlurParam(blurParam);*/
+	
 }
 
 void Game::PostRender()
 {
-	auto str = L"O";
-	m_font.Begin();
+	//m_fblur.Update();
+	//
+	//static bool isUped = false;
+	//if (m_fblur.IsStop())
+	//{
+	//	if (!isUped)
+	//	{
+	//		m_fblur.Up();
+	//		isUped = true;
+	//	}
+	//	else
+	//	{
+	//		m_fblur.Down();
+	//		isUped = false;
+	//	}
+	//}
+	//auto str = L"O";
+	//m_font.Begin();
 
-	//m_font.Draw(str, { 0,0 }, { 1,1,1,1 }, 0, 5, { 0.5f,-1.f });
-	
+	////m_font.Draw(str, { 0,0 }, { 1,1,1,1 }, 0, 5, { 0.5f,-1.f });
+	//
 
-	m_font.End();
+	//m_font.End();
 
-	m_fblur.DrawStart({1,1,1,0});
-	m_font.Begin();
+	//m_fblur.DrawStart({1,1,1,0});
+	//m_font.Begin();
 
-	m_font.Draw(str, { 0,0 }, { 1,1,1,1 }, 0, 5,{0.5f,-1.f});
-	//m_font.Draw(L"YESY", {})
+	//m_font.Draw(str, { 0,0 }, { 1,1,1,1 }, 0, 5,{0.5f,-1.f});
+	////m_font.Draw(L"YESY", {})
 
-	m_font.End();
-	m_fblur.DrawEnd();
+	//m_font.End();
+	//m_fblur.DrawEnd();
 }

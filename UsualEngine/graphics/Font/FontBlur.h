@@ -25,7 +25,7 @@ namespace UsualEngine
 		void DrawEnd();
 		void Reset()
 		{
-			m_blurParam = 0;
+			m_blurParam = FLT_EPSILON;
 		}
 		void SetBlurParam(float p)
 		{
@@ -34,6 +34,11 @@ namespace UsualEngine
 		float GetBlurParam() const
 		{
 			return m_blurParam;
+		}
+
+		void SetSpeed(float sp)
+		{
+			m_speed = sp;
 		}
 
 		/// <summary>
@@ -58,16 +63,20 @@ namespace UsualEngine
 			m_state = SSTOP;
 		}
 
+		bool IsStop() const
+		{
+			return m_state == SSTOP;
+		}
 
 	private:
 		RenderTarget m_renderTarget;
-		RenderTarget* m_oldRenderTarget[7];
+		RenderTarget* m_oldRenderTarget[7] = {0};
 		int m_oldRenderNum = 0;
 		GaussianBlur m_gausBlur;
 		GaussianBlur m_gausBlur_mid;
 		GaussianBlur m_gausBlur_sml;
 		float m_blurParam = FLT_EPSILON;
-		float m_blurParamReal = 1;
+		//float m_blurParamReal = 1;
 
 		
 		Shader m_vsCopy;
