@@ -299,7 +299,7 @@ bool Game::Start()
 
 
 	// font blur ÇÃÅ@ê›íËÅB
-	m_fblur.SetSpeed(256.f);
+	m_fblur.SetSpeed(0.5f);
 	return true;
 }
 
@@ -404,36 +404,37 @@ void Game::Update()
 
 void Game::PostRender()
 {
-	//m_fblur.Update();
-	//
-	//static bool isUped = false;
-	//if (m_fblur.IsStop())
-	//{
-	//	if (!isUped)
-	//	{
-	//		m_fblur.Up();
-	//		isUped = true;
-	//	}
-	//	else
-	//	{
-	//		m_fblur.Down();
-	//		isUped = false;
-	//	}
-	//}
-	//auto str = L"O";
-	//m_font.Begin();
+	m_fblur.Update();
+	
+	static bool isUped = false;
+	if (m_fblur.IsStop())
+	{
+		if (!isUped)
+		{
+			m_fblur.Up();
+			//m_fblur.Reset();
+			isUped = true;
+		}
+		else
+		{
+			m_fblur.Down();
+			isUped = false;
+		}
+	}
+	auto str = L"O";
+	m_font.Begin();
 
-	////m_font.Draw(str, { 0,0 }, { 1,1,1,1 }, 0, 5, { 0.5f,-1.f });
-	//
+	//m_font.Draw(str, { 0,0 }, { 1,1,1,1 }, 0, 5, { 0.5f,-1.f });
+	
 
-	//m_font.End();
+	m_font.End();
 
-	//m_fblur.DrawStart({1,1,1,0});
-	//m_font.Begin();
+	m_fblur.DrawStart({1,1,1,0});
+	m_font.Begin();
 
-	//m_font.Draw(str, { 0,0 }, { 1,1,1,1 }, 0, 5,{0.5f,-1.f});
-	////m_font.Draw(L"YESY", {})
+	m_font.Draw(str, { 0,0 }, { 1,1,1,1 }, 0, 5,{0.5f,-1.f});
+	//m_font.Draw(L"YESY", {})
 
-	//m_font.End();
-	//m_fblur.DrawEnd();
+	m_font.End();
+	m_fblur.DrawEnd();
 }

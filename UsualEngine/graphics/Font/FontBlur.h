@@ -8,6 +8,8 @@ namespace UsualEngine
 	{
 	public:
 		static float PARAM_MAX;
+		static float BASE_SPEED_LIST[3];
+		static float BASE_TIME;
 
 		enum EState
 		{
@@ -38,7 +40,7 @@ namespace UsualEngine
 
 		void SetSpeed(float sp)
 		{
-			m_speed = sp;
+			m_speed = sp*BASE_TIME;
 		}
 
 		/// <summary>

@@ -5,6 +5,8 @@
 namespace UsualEngine
 {
 	float FontBlur::PARAM_MAX = 48.f;
+	float FontBlur::BASE_SPEED_LIST[3] = {1.f,8.f,64.f};
+	float FontBlur::BASE_TIME = (BASE_SPEED_LIST[0] + BASE_SPEED_LIST[1] + BASE_SPEED_LIST[2])*16.f;
 
 	FontBlur::FontBlur()
 	{
@@ -33,7 +35,9 @@ namespace UsualEngine
 	}
 	void FontBlur::Update()
 	{
-		float sspeed[3] = { m_speed,m_speed / 8.f,m_speed / 64.f };
+		float sspeed[3] = { m_speed / BASE_SPEED_LIST[0],
+							m_speed / BASE_SPEED_LIST[1],
+							m_speed / BASE_SPEED_LIST[2] };
 		float dtime = gameTime()->GetDeltaTime();
 
 		switch (m_state)
