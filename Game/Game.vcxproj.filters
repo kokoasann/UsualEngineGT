@@ -187,6 +187,9 @@
     <FxCompile Include="Assets\shader\DefferdShading.fx">
       <Filter>Assets\Shader</Filter>
     </FxCompile>
+    <FxCompile Include="Assets\shader\SSR.fx">
+      <Filter>Assets\Shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ImageContentTask Include="Assets\sprite\daru.PNG">

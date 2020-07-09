@@ -216,6 +216,9 @@
     <ClInclude Include="Player\PlayerCamera.h" />
     <ClInclude Include="Player\PlayerMotion.h" />
     <ClInclude Include="stdafx.h" />
+    <FxCompile Include="Assets\shader\SSR.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\model.fx">
