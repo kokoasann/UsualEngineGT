@@ -17,6 +17,7 @@ cbuffer SSRCBuffer:register(b7)
 }
 #define RAY_ITERATIONS 8
 #define THICKNESS 16
+#define BINARY_ITERATIONS 8
 
 float3 GetViewNormal(float2 uv)
 {
@@ -52,21 +53,37 @@ float4 PSMain_SSR(PSInputSSR In)
     float3 rayAdd = refvec*rayStep;
 
     float3 hitpos = viewPos;
-    float isNotHit = 1.0f;
+    float isHit = 0.0f;
     float2 hitpix = float2(0);
     [unroll(RAY_ITERATIONS)]
     for(int i=0;i<RAY_ITERATIONS;i++)
     {
-        hitpos += rayAdd * isNotHit;
+        hitpos += rayAdd;
         float4 cl = mul(projMat,float4(hitpos,1.0f));
         float2 p = cl.xy/cl.w;
-        hitpix = (p*0.5f+0.5f)* isNotHit + hitpix*(1.f-isNotHit);
+        hitpix = (p*0.5f+0.5f) + hitpix;
 
         float viewZ = GetViewZ(gDepthMap.Sample(Sampler,In.uv).x);
         float dist = hitpos.z - viewZ;
-        isNotHit = dist < 0.f && dist > -THICKNESS;
+        isHit = dist < 0.f && dist > -THICKNESS;
+
+        [branch]
+        if(isHit>0.f)
+            break;
     }
 
+    /*
+    [branch]
+    if(isHit > 0.f)
+    {
+        float3 slide = rayAdd*-0.5f;
+        [unroll(BINARY_ITERATIONS)]
+        for(int i=0;i < BINARY_ITERATIONS;i++)
+        {
+
+        }
+    }
+    */
     
 
     return float4(0);
