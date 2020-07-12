@@ -21,6 +21,7 @@ namespace UsualEngine
 		InitPrimitive();
 		m_bloom.Init();
 		m_alphaModelRender.Init();
+		m_ssr.Init();
 	}
 	void PostEffect::InitRenderTarget()
 	{
@@ -71,7 +72,9 @@ namespace UsualEngine
 		static bool isAlphaRender = true;
 		if(isAlphaRender)
 			m_alphaModelRender.Render(this);
+		m_ssr.Render(this);
 		m_bloom.Render(this);
+		
 
 		gEngine->EndPostEffect();
 	}

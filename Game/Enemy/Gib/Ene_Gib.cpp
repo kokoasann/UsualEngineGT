@@ -15,6 +15,8 @@ Ene_Gib::Ene_Gib()
 	model->Init(L"Assets/model/gib.bone.cmo", m_animClip, GA_num, ue::enFbxUpAxisY);
 	model->SetIsShadowReciever(true);
 	model->SetIsShadowCaster(true);
+	auto& sm = model->GetSkinModel();
+	sm.SetSpecularMap(L"Assets/sprite/gib_tex_spe.dds");
 	//model->Init(L"Assets/model/gib.bone.cmo", 0,0, ue::enFbxUpAxisY);
 	model->SetSca({ 10.f,10.f, 10.f });
 	

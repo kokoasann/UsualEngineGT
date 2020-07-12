@@ -1,7 +1,9 @@
 #pragma once
 #include "Bloom.h"
 #include "AlphaModel.h"
+#include "SSReflection.h"
 #include "../Primitive.h"
+
 namespace UsualEngine
 {
 
@@ -48,5 +50,6 @@ namespace UsualEngine
 		RenderTarget m_renderTarget[2];		//レンダーターゲットの配列。
 		Bloom m_bloom;									//ブルーム
 		AlphaModelRender m_alphaModelRender;
+		SSReflection m_ssr;
 	};
 }

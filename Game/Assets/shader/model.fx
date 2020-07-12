@@ -222,7 +222,8 @@ PSOutput PSProcess_GBuffer(float4 albe,PSInput In)
 	Out.diffuse = albe;
 	Out.normal = float4(In.Normal,1.0f);
 	Out.tangent = float4(In.Tangent,1.0f);
-	Out.specular = float4(In.Pos,1.0f);			//スペキュラマップ
+	//Out.specular = float4(In.Pos,1.0f);			//スペキュラマップ
+	
 	Out.depth = In.PosInProj.z / In.PosInProj.w;
 
 	float2 sdw = GetShadow(In.Pos, shadowMap_1,0);
@@ -238,7 +239,7 @@ PSOutput PSMain(PSInput In)
 	float4 albe = albedoTexture.Sample(Sampler, In.TexCoord);
 	//return PSProcess(albe,In);
 	PSOutput Out = PSProcess_GBuffer(albe,In);
-	Out.specular = specularMap_1.Sample(Sampler,In.TexCoord)*isUseSpecularMap;
+	Out.specular = specularMap.Sample(Sampler,In.TexCoord)*isUseSpecularMap;
 	Out.specular += 1 - isUseSpecularMap;
 	return Out; 
 }

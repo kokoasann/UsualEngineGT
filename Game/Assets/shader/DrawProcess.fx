@@ -6,6 +6,7 @@ cbuffer DefferdCB:register(b7)
 {
     float4x4 mViewProjInv;
     float3 camDirm;
+
 }
 
 #define threshold 0.5f
@@ -69,7 +70,7 @@ float3 PointLightProcess(float3 worldPos,float3 normal,float specular)
 
         float colorPow = length(PntLights[i].color.xyz);
         float spGradation = texture_1.Sample(Sampler,
-                float2(max(min(rad*specular,1.f),0.f),1.f),0.f).x;  //グラデーションマップ(明かり用)
+                float2(max(min(rad,1.f),0.f),1.f),0.f).x;  //グラデーションマップ(明かり用)
         //float3 ligcolor = PntLights[i].color.xyz/len;
         //float3 ligcolor = PntLights[i].color.xyz*max(colorPow-len,0.f);
         //float3 lig = (ligcolor*(spGradation.x));
@@ -85,6 +86,7 @@ float3 PointLightProcess(float3 worldPos,float3 normal,float specular)
         e2w = normalize(e2w);
         float3 w2pRef =  -w2p + 2.0f * dot(w2p,normal) * normal;
         float refDote2w = dot(w2pRef,e2w);
+
         float sp = pow(max(0,refDote2w),5);
 
         spGradation = texture_1.Sample(Sampler,
@@ -92,7 +94,7 @@ float3 PointLightProcess(float3 worldPos,float3 normal,float specular)
         //sp *= spGradation.x;
         lig = (PntLights[i].color.xyz*min(max((spGradation-ligDecay)*spe,0.f),1.f));
         //lig = float3(max(lig.x,0.f),max(lig.y,0.f),max(lig.z,0.f));
-        foundation += lig*k;
+        foundation += lig*specular*k;
     }
     return foundation;
 }
@@ -104,7 +106,7 @@ float4 DrawProcess(float4 diffuse,float3 normal,float specular,float gshadow,flo
     float3 worldPos = GetWorldPosition(uv,depth,mViewProjInv);
 
 
-    float3 R = -camDir.xyz + 2.0f * dot(camDir.xyz, normal) * normal; //反射ベクトル
+    float3 R = camDir.xyz - 2.0f * dot(camDir.xyz, normal) * normal; //反射ベクトル
     
     //float3 li = float3(0.f,0.f,0.f);
     float depthShadow = gshadow;

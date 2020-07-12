@@ -109,6 +109,15 @@ namespace UsualEngine
 	{
 		//std::wstring p = path;
 		m_specularMap = SpriteDataManager::Get()->Load(path);
+
+		for (auto& meshs : m_modelDx->meshes)
+		{
+			for (std::unique_ptr<DirectX::ModelMeshPart>& mesh : meshs->meshParts)
+			{
+				ModelEffect* eff = reinterpret_cast<ModelEffect*>(mesh->effect.get());
+				eff->SetSpecularMap(m_specularMap);
+			}
+		}
 	}
 	void SkinModel::InitSamplerState()
 	{

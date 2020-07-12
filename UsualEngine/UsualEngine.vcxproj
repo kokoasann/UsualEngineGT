@@ -190,6 +190,7 @@
     <ClCompile Include="graphics\PostEffect\GaussianBlur.cpp" />
     <ClCompile Include="graphics\PostEffect\PostEffect.cpp" />
     <ClCompile Include="graphics\PostEffect\SoftShadow.cpp" />
+    <ClCompile Include="graphics\PostEffect\SSReflection.cpp" />
     <ClCompile Include="graphics\PreRender.cpp" />
     <ClCompile Include="graphics\Primitive.cpp" />
     <ClCompile Include="graphics\RenderState.cpp" />
@@ -265,6 +266,7 @@
     <ClInclude Include="graphics\PostEffect\GaussianBlur.h" />
     <ClInclude Include="graphics\PostEffect\PostEffect.h" />
     <ClInclude Include="graphics\PostEffect\SoftShadow.h" />
+    <ClInclude Include="graphics\PostEffect\SSReflection.h" />
     <ClInclude Include="graphics\PreRender.h" />
     <ClInclude Include="graphics\Primitive.h" />
     <ClInclude Include="graphics\RenderState.h" />

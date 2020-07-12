@@ -161,6 +161,9 @@
     <Filter Include="Assets\world\pre\Collision">
       <UniqueIdentifier>{603fcdda-a893-484e-9dac-16dfb3a69d1d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Model\gib">
+      <UniqueIdentifier>{73bf3788-da26-4b62-81f1-03775c9ae634}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\model.fx">
@@ -222,6 +225,9 @@
     <ImageContentTask Include="Assets\model\world\pre\worldBlend.png">
       <Filter>Assets\world\pre</Filter>
     </ImageContentTask>
+    <ImageContentTask Include="Assets\model\gib\gib_tex_spe.png">
+      <Filter>Assets\Model\gib</Filter>
+    </ImageContentTask>
   </ItemGroup>
   <ItemGroup>
     <MeshContentTask Include="Assets\model\block\dun.fbx">
@@ -230,16 +236,10 @@
     <MeshContentTask Include="Assets\model\block\octagon.fbx">
       <Filter>Assets\Model\StagePreset</Filter>
     </MeshContentTask>
-    <MeshContentTask Include="Assets\model\gib\gib.bone.fbx">
-      <Filter>Assets\Model</Filter>
-    </MeshContentTask>
     <MeshContentTask Include="Assets\model\player\Player.fbx">
       <Filter>Assets\Model</Filter>
     </MeshContentTask>
     <MeshContentTask Include="Assets\model\unityChan.fbx">
-      <Filter>Assets\Model</Filter>
-    </MeshContentTask>
-    <MeshContentTask Include="Assets\model\gib_tes\gib.bone.neck.fbx">
       <Filter>Assets\Model</Filter>
     </MeshContentTask>
     <MeshContentTask Include="Assets\model\Cannon\Cannon.fbx">
@@ -322,6 +322,12 @@
     </MeshContentTask>
     <MeshContentTask Include="Assets\model\world\pre\Collision\map2C_col.fbx">
       <Filter>Assets\world\pre\Collision</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\gib_tes\gib.bone.neck.fbx">
+      <Filter>Assets\Model\gib</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\gib\gib.bone.fbx">
+      <Filter>Assets\Model\gib</Filter>
     </MeshContentTask>
   </ItemGroup>
 </Project>

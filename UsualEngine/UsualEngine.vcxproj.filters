@@ -281,6 +281,9 @@
     <ClCompile Include="graphics\Font\FontBlur.cpp">
       <Filter>Graphics\2D\Font</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\PostEffect\SSReflection.cpp">
+      <Filter>Graphics\PostEffect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="character\CharacterController.h">
@@ -500,6 +503,9 @@
     </ClInclude>
     <ClInclude Include="graphics\Font\FontBlur.h">
       <Filter>Graphics\2D\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\PostEffect\SSReflection.h">
+      <Filter>Graphics\PostEffect</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
