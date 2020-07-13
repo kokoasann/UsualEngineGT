@@ -17,8 +17,11 @@ namespace UsualEngine
 		}
 	private:
 		RenderTarget m_alphaRenderTarget;
+		RenderTarget m_depthRenderTarget;
+		RenderTarget m_normalRenderTarget;
 		std::vector<GameObject*> m_renderObject;
 		Shader m_psCopy;
 		Shader m_vsCopy;
+		Shader m_psDoubleCopy;
 	};
 }

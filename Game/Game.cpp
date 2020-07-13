@@ -18,11 +18,12 @@ void Game::OnDestroy()
 
 bool Game::Start()
 {
-	//ue::NewGO<Player>(0);
+	ue::NewGO<Player>(0);
 	ue::NewGO<Ene_Gib>(0);
 	//ue::NewGO<Ene_GibTes>(0);
 
 	//インスタンシングのテスト
+	if(0)
 	{
 		ue::CVector3 sca = ue::CVector3(0.05, 0.05, 0.05);
 		ue::CMatrix mat;

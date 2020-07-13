@@ -49,16 +49,16 @@ namespace UsualEngine
 		dc->PSSetShaderResources(enSkinModelSRVReg_Textur_1, 1, &rt.GetSRV());
 
 		auto& cam = usualEngine()->GetMainCamera();
-		m_buf.projMat = cam.GetProjectionMatrix();
-		m_buf.invProjMat.Inverse(m_buf.projMat);
-		m_buf.viewMat = cam.GetViewMatrix();
-		m_buf.VPMat.Mul(m_buf.viewMat, m_buf.projMat);
+		//m_buf.projMat = cam.GetProjectionMatrix();
+		//m_buf.invProjMat.Inverse(m_buf.projMat);
+		//m_buf.viewMat = cam.GetViewMatrix();
+		m_buf.VPMat.Mul(cam.GetViewMatrix(), cam.GetProjectionMatrix());
 		m_buf.invVPMat.Inverse(m_buf.VPMat);
 		m_buf.campos = cam.GetPosition();
 		m_buf.camFar = cam.GetFar();
 		m_buf.camNear = cam.GetNear();
-		m_buf.rayLen = 8.f*8.f;
-		m_buf.rayStep = 8.f;
+		m_buf.rayLen = 1024.f;
+		m_buf.rayStep = 1.f;
 
 		dc->UpdateSubresource(m_constBuf.GetBody(), 0, 0, &m_buf, 0, 0);
 		dc->PSSetConstantBuffers(7, 1, &m_constBuf.GetBody());

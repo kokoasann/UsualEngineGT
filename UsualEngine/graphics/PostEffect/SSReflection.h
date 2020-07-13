@@ -16,8 +16,8 @@ namespace UsualEngine
 	private:
 		struct CBuffer
 		{
-			CMatrix projMat;
-			CMatrix invProjMat;
+			//CMatrix projMat;
+			//CMatrix invProjMat;
 			CMatrix viewMat;
 			CMatrix VPMat;
 			CMatrix invVPMat;

@@ -4,8 +4,15 @@ Texture2D<float4> albedoTexture : register(t0);
 Texture2D<float4> sceneTexture:register(t13);
 Texture2D<float4> alphaMap:register(t12);
 
+struct PSOutput_Alpha
+{
+    float4 OutColor:SV_Target0;
+    float4 depth:SV_Target1;
+    float4 normal:SV_Target2;
+};
 
-float4 PSMain_Alpha(PSInput In):SV_Target0
+
+PSOutput_Alpha PSMain_Alpha(PSInput In)
 {
     float depth = In.PosInProj.z / In.PosInProj.w;
     float2 sceneUV =In.Position.xy;
@@ -39,8 +46,10 @@ float4 PSMain_Alpha(PSInput In):SV_Target0
     
     float specular = specularMap.Sample(Sampler,In.TexCoord);
 
-    res = DrawProcess(scene+color,In.Normal,1,0,depth,sceneUV);
-    
-    return res;
+    PSOutput_Alpha output;
+    output.OutColor = DrawProcess(scene+color,In.Normal,1,0,depth,sceneUV);
+    output.depth = depth;
+    output.normal = float4(In.Normal,1.f);
+    return output;
     //return scene+color;
 }
