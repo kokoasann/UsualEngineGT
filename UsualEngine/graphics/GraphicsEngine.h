@@ -15,6 +15,7 @@ namespace UsualEngine
 	{
 		enRenderMode_ShadowMap,		//シャドウマップへ描画
 		enRenderMode_3DModel,			//3Dモデルを描画
+		enRenderMode_AlphaModel,		//半透明オブジェクトの描画
 	};
 
 	/*!

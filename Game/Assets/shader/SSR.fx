@@ -118,6 +118,6 @@ float4 PSMain_SSR(PSInputSSR In):SV_Target0
 
     float4 res = texture_1.Sample(Sampler,hitpix);
     res *= gSpecularMap.Sample(Sampler,In.uv).x;
-
+    //res *= 0.5;//test用。
     return res;
 }

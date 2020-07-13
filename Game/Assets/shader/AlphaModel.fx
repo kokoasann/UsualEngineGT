@@ -6,9 +6,9 @@ Texture2D<float4> alphaMap:register(t12);
 
 struct PSOutput_Alpha
 {
-    float4 OutColor:SV_Target0;
-    float4 depth:SV_Target1;
-    float4 normal:SV_Target2;
+    float4 OutColor :SV_Target0;
+    float4 depth    :SV_Target1;
+    float4 normal   :SV_Target2;
 };
 
 
@@ -48,8 +48,13 @@ PSOutput_Alpha PSMain_Alpha(PSInput In)
 
     PSOutput_Alpha output;
     output.OutColor = DrawProcess(scene+color,In.Normal,1,0,depth,sceneUV);
-    output.depth = depth;
+    output.depth = float4(depth,0.f,0.f,1.f);
     output.normal = float4(In.Normal,1.f);
     return output;
     //return scene+color;
+}
+
+PSOutput_Alpha PSMain_Specular(PSInput In)
+{
+    
 }
