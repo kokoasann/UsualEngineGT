@@ -240,7 +240,7 @@ PSOutput PSMain(PSInput In)
 	//return PSProcess(albe,In);
 	PSOutput Out = PSProcess_GBuffer(albe,In);
 	Out.specular = specularMap.Sample(Sampler,In.TexCoord)*isUseSpecularMap;
-	Out.specular += 1 - isUseSpecularMap;
+	//Out.specular += 1 - isUseSpecularMap;
 	return Out; 
 }
 

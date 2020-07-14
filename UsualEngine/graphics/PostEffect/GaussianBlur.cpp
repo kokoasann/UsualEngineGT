@@ -104,10 +104,10 @@ namespace UsualEngine
 		RenderTarget* oldRT[7] = {0};
 		int oldNum = 0;
 		gEngine->OMGetRenderTargets(oldNum, oldRT);
-		D3D11_VIEWPORT oldvpl[4]={0};
+		//D3D11_VIEWPORT oldvpl[4]={0};
 		//D3D11_VIEWPORT* oldvpl=0;
-		unsigned int oldnumvpl = 0;
-		devcon->RSGetViewports(&oldnumvpl, oldvpl);
+		//unsigned int oldnumvpl = 0;
+		//devcon->RSGetViewports(&oldnumvpl, oldvpl);		//‚È‚º‚©’l‚ª“ü‚ç‚È‚¢H
 
 		ID3D11SamplerState* ssl[] = { SamplerState_Liner() };
 		devcon->PSSetSamplers(0, 1, ssl);

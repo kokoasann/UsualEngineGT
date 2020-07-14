@@ -1,6 +1,7 @@
 #include "PreCompile.h"
 #include "SSReflection.h"
 #include "PostEffect.h"
+#include "../RenderState.h"
 
 namespace UsualEngine
 {
@@ -24,6 +25,9 @@ namespace UsualEngine
 		desc.Quality = 0;
 		m_rtBuffer.Create(FRAME_BUFFER_W, FRAME_BUFFER_H, 1, 1, 
 			DXGI_FORMAT_R16G16B16A16_FLOAT, DXGI_FORMAT_UNKNOWN, desc);
+
+		m_blur.Init(FRAME_BUFFER_W, FRAME_BUFFER_H);
+		m_blur.SetDispersion(6.f);
 	}
 	void SSReflection::Release()
 	{
@@ -64,18 +68,26 @@ namespace UsualEngine
 		dc->PSSetConstantBuffers(7, 1, &m_constBuf.GetBody());
 		
 		pe->DrawPrimitive();
+
+		auto blurTex = m_blur.Render(m_rtBuffer.GetSRV(), FRAME_BUFFER_W, FRAME_BUFFER_H, pe->GetPrimitive());
 		
 		//dc->PSSetConstantBuffers(7, 1, nullptr);
 		ge->GetPreRender().GetGBuffer().UnSetGBuffer();
 
-
+		
 		//カレントRTに合成。
 		rts[0] = &rt;
 		ge->OMSetRenderTarget(1, rts);
 
 		dc->PSSetShader((ID3D11PixelShader*)m_copyPS.GetBody(), 0, 0);
-		dc->PSSetShaderResources(0, 1, &m_rtBuffer.GetSRV());
+		dc->PSSetShaderResources(0, 1, &blurTex);
+		//dc->OMSetBlendState(BlendState::add, 0, 0xFFFFFFFF);		//blendState
+
+		D3D11_VIEWPORT vpl[] = { { 0.f, 0.f, m_rtBuffer.GetWidth(), m_rtBuffer.GetHeight() } };
+		dc->RSSetViewports(1, vpl);
 
 		pe->DrawPrimitive();
+		//トランスに戻す。
+		//dc->OMSetBlendState(BlendState::trans, 0, 0xFFFFFFFF);
 	}
 }

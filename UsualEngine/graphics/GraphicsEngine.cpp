@@ -291,6 +291,8 @@ namespace UsualEngine
 		SamplerState::Init();
 		DepthStencilState::Init();
 		RasterizerState::Init();
+		//ShaderSampleの初期化。
+		ShaderSample::Init();
 
 		D3D11_RASTERIZER_DESC desc = {};
 		desc.CullMode = D3D11_CULL_NONE;
@@ -336,6 +338,8 @@ namespace UsualEngine
 		//font用のクラスの初期化。
 		m_spriteBatch = new DirectX::SpriteBatch(m_pd3dDeviceContext);
 		m_spriteFont = new DirectX::SpriteFont(m_pd3dDevice, L"Assets/font/mgothic.spritefont");
+
+		
 
 		InitBackBuffer();
 	}

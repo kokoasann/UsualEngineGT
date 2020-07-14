@@ -37,5 +37,6 @@ namespace UsualEngine
 		Shader m_psCopy;			//最終合成用PSコピー。
 		Shader m_vsCopy;			//コピー用VS
 		Shader m_psTripleCopy;		//GBufferコピー用(一気に3つコピーするぞ！)
+
 	};
 }
