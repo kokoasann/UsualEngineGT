@@ -9,10 +9,11 @@ struct PSOutput_Alpha
     float4 OutColor :SV_Target0;
     float4 depth    :SV_Target1;
     float4 normal   :SV_Target2;
+    float4 specular :SV_Target3;
 };
 
 
-PSOutput_Alpha PSMain_Alpha(PSInput In)
+void Alpha_process(PSInput In,out PSOutput_Alpha output)
 {
     float depth = In.PosInProj.z / In.PosInProj.w;
     float2 sceneUV =In.Position.xy;
@@ -44,17 +45,28 @@ PSOutput_Alpha PSMain_Alpha(PSInput In)
     color *= alpha;
     scene *= 1.0f-alpha;
     
-    float specular = specularMap.Sample(Sampler,In.TexCoord);
+    //float specular = specularMap.Sample(Sampler,In.TexCoord);
 
-    PSOutput_Alpha output;
-    output.OutColor = DrawProcess(scene+color,In.Normal,1,0,depth,sceneUV);
+    //PSOutput_Alpha output;
+    output.OutColor = DrawProcess(scene+color,In.Normal,0,0,depth,sceneUV);
     output.depth = float4(depth,0.f,0.f,1.f);
     output.normal = float4(In.Normal,1.f);
-    return output;
+    output.specular = float4(0.5f,0,0,1);
+    
     //return scene+color;
 }
 
-PSOutput_Alpha PSMain_Specular(PSInput In)
+PSOutput_Alpha PSMain_Alpha(PSInput In)
 {
-    
+    PSOutput_Alpha Out;
+    Alpha_process(In,Out);
+    return Out;
+}
+
+PSOutput_Alpha PSMain_Alpha_Specular(PSInput In)
+{
+    PSOutput_Alpha Out;
+    Alpha_process(In,Out);
+    Out.specular = specularMap.Sample(Sampler,In.TexCoord);
+    return Out;
 }

@@ -197,6 +197,7 @@
     <ClCompile Include="graphics\RenderTarget.cpp" />
     <ClCompile Include="graphics\Shader.cpp" />
     <ClCompile Include="graphics\ShaderResources.cpp" />
+    <ClCompile Include="graphics\ShaderSample.cpp" />
     <ClCompile Include="graphics\ShadowMap.cpp" />
     <ClCompile Include="graphics\Skeleton.cpp" />
     <ClCompile Include="graphics\SkinModel.cpp" />
@@ -273,6 +274,7 @@
     <ClInclude Include="graphics\RenderTarget.h" />
     <ClInclude Include="graphics\Shader.h" />
     <ClInclude Include="graphics\ShaderResources.h" />
+    <ClInclude Include="graphics\ShaderSample.h" />
     <ClInclude Include="graphics\ShadowMap.h" />
     <ClInclude Include="graphics\Skeleton.h" />
     <ClInclude Include="graphics\SkinModel.h" />
