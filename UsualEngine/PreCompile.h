@@ -63,6 +63,7 @@ static const int RTV_MAX = 8;
 
 #include "graphics/Primitive.h"
 #include "graphics/Shader.h"
+
 #include "graphics/SpriteDataManager.h"
 #include "graphics/Sprite.h"
 #include "graphics/Font/Font.h"
@@ -98,6 +99,8 @@ static const int RTV_MAX = 8;
 #include "graphics/SkinModelRender.h"
 #include "Prefab/SkinModelRender4Ground.h"
 #include "level/Level.h"
+#include "graphics/ShaderSample.h"
+
 #if DEBUG_FUNC
 //#include "Debug/DebugLog.h"
 
