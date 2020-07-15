@@ -54,17 +54,22 @@ float4 PSMain_SSR(PSInputSSR In):SV_Target0
 {
     float depth = gDepthMap.Sample(Sampler,In.uv).x;
 
+    float4 color = float4(texture_1.Sample(Sampler,In.uv).xyz,0.f);
+
     float3 worldNor = normalize(gNormalMap.Sample(Sampler,In.uv).xyz);  //法線。
     float3 worldPos = GetWorldPosition(In.uv,depth,invVPMat);           //ピクセルの位置。
 
     float3 c2p = worldPos-campos;   //ピクセルのポジションからカメラのポジションのベクトル
     float c2plen = length(c2p);     //その距離。
-    clip((c2plen<=rayLen)-1.f); //描画範囲外なので切り捨て
+    [branch]
+    if(c2plen>rayLen)   //描画範囲外なのでテクスチャ(alpha0)のものを返す
+        return color;
+    //clip((c2plen<=rayLen)-1.f); 
 
     float3 cam2pos = normalize(c2p); //ピクセルのポジションからカメラのポジションの方向ベクトル
     float3 refvec = normalize(reflect(cam2pos,worldNor));   //反射
 
-    float3 rayAdd = refvec*rayStep + refvec * pow(c2plen/rayLen,20)*4.f;    //1ステップ分のレイのベクトル
+    float3 rayAdd = refvec*rayStep;// + refvec * pow(c2plen/rayLen,20)*.f;    //1ステップ分のレイのベクトル
 
     float3 hitpos = worldPos;       //当たった位置。
     float isHit = 0.0f;             //ヒットした？
@@ -89,7 +94,6 @@ float4 PSMain_SSR(PSInputSSR In):SV_Target0
         if(isHit>0.f)   //当たった
             break;
     }
-    clip(isHit-1.f);//ヒットしなかったので切り捨て
     
     //二分木探索。
     float isHitOld = 1.f;
@@ -115,9 +119,9 @@ float4 PSMain_SSR(PSInputSSR In):SV_Target0
         slide *= BYNARY_DECAY*(-1.f*check+(1.f-check));
     }
     
-
-    float4 res = texture_1.Sample(Sampler,hitpix);
-    res *= gSpecularMap.Sample(Sampler,In.uv).x;
-    //res *= 0.5;//test用。
+    float4 res = float4(texture_1.Sample(Sampler,hitpix).xyz,1.f)*isHit;
+    res += color*(1.f-isHit);
+    //res *= 1.f-(1.f-gSpecularMap.Sample(Sampler,In.uv).x)*isHit;
+    res *= 1.f-0.2f*isHit;//test用。
     return res;
 }

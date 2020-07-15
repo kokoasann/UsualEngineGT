@@ -405,6 +405,7 @@ void Game::Update()
 
 void Game::PostRender()
 {
+#if 1
 	m_fblur.Update();
 	
 	static bool isUped = false;
@@ -438,4 +439,6 @@ void Game::PostRender()
 
 	m_font.End();
 	m_fblur.DrawEnd();
+#endif
+
 }

@@ -42,8 +42,12 @@ namespace UsualEngine
 
 		auto& rt = pe->GetCurrentRenderTarget();
 
+		
+
 		RenderTarget* rts[] = { &m_rtBuffer };
 		ge->OMSetRenderTarget(1, rts);
+
+		dc->OMSetBlendState(BlendState::disable, 0, 0xFFFFFFFF);		//blendState
 
 		dc->VSSetShader((ID3D11VertexShader*)m_vs.GetBody(), 0, 0);
 		dc->PSSetShader((ID3D11PixelShader*)m_ps.GetBody(), 0, 0);
@@ -79,9 +83,9 @@ namespace UsualEngine
 		rts[0] = &rt;
 		ge->OMSetRenderTarget(1, rts);
 
+		dc->OMSetBlendState(BlendState::trans, 0, 0xFFFFFFFF);		//blendState
 		dc->PSSetShader((ID3D11PixelShader*)m_copyPS.GetBody(), 0, 0);
 		dc->PSSetShaderResources(0, 1, &blurTex);
-		//dc->OMSetBlendState(BlendState::add, 0, 0xFFFFFFFF);		//blendState
 
 		D3D11_VIEWPORT vpl[] = { { 0.f, 0.f, m_rtBuffer.GetWidth(), m_rtBuffer.GetHeight() } };
 		dc->RSSetViewports(1, vpl);
