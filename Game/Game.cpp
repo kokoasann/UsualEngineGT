@@ -225,10 +225,11 @@ bool Game::Start()
 	plig->SetDecay(0.001f);
 	plig->SetRadius(300.f);
 
-	campos = { -940,312,0 };
-	//campos = { 0,3000,2000 };
+	campos = { -240,52,-100 };
+	//campos = { 0,150,180 };
 	cam->SetPosition(campos);
-	cam->SetTarget({ 0,2,0 });
+	cam->SetTarget({ 0,2,-100 });
+	//cam->SetTarget({ 0,50,50 });
 	cam->Update();
 	
 	std::function<void()> f = [&]()
@@ -405,7 +406,7 @@ void Game::Update()
 
 void Game::PostRender()
 {
-#if 1
+#if 0
 	m_fblur.Update();
 	
 	static bool isUped = false;

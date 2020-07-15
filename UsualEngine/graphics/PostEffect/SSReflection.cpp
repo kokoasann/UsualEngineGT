@@ -27,7 +27,7 @@ namespace UsualEngine
 			DXGI_FORMAT_R16G16B16A16_FLOAT, DXGI_FORMAT_UNKNOWN, desc);
 
 		m_blur.Init(FRAME_BUFFER_W, FRAME_BUFFER_H);
-		m_blur.SetDispersion(6.f);
+		m_blur.SetDispersion(6);
 	}
 	void SSReflection::Release()
 	{
@@ -85,6 +85,7 @@ namespace UsualEngine
 
 		dc->OMSetBlendState(BlendState::trans, 0, 0xFFFFFFFF);		//blendState
 		dc->PSSetShader((ID3D11PixelShader*)m_copyPS.GetBody(), 0, 0);
+		//dc->PSSetShaderResources(0, 1, &blurTex);
 		dc->PSSetShaderResources(0, 1, &blurTex);
 
 		D3D11_VIEWPORT vpl[] = { { 0.f, 0.f, m_rtBuffer.GetWidth(), m_rtBuffer.GetHeight() } };

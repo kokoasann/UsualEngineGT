@@ -20,8 +20,8 @@ cbuffer SSRCBuffer:register(b7)
     float rayStep;
 }
 #define RAY_ITERATIONS 64.f
-#define THICKNESS 32.f
-#define BINARY_ITERATIONS 16.f
+#define THICKNESS 16.f
+#define BINARY_ITERATIONS 8.f
 #define BYNARY_DECAY 0.5f
 
 /*
@@ -62,14 +62,16 @@ float4 PSMain_SSR(PSInputSSR In):SV_Target0
     float3 c2p = worldPos-campos;   //ピクセルのポジションからカメラのポジションのベクトル
     float c2plen = length(c2p);     //その距離。
     [branch]
-    if(c2plen>rayLen)   //描画範囲外なのでテクスチャ(alpha0)のものを返す
+    if(c2plen>rayLen)   //描画範囲外なのでテクスチャ(alpha0)をそのまま返す
         return color;
     //clip((c2plen<=rayLen)-1.f); 
 
     float3 cam2pos = normalize(c2p); //ピクセルのポジションからカメラのポジションの方向ベクトル
     float3 refvec = normalize(reflect(cam2pos,worldNor));   //反射
 
-    float3 rayAdd = refvec*rayStep;// + refvec * pow(c2plen/rayLen,20)*.f;    //1ステップ分のレイのベクトル
+    float3 rayAdd = refvec*rayStep;// + refvec * pow(c2plen/rayLen,20)*4.f;    //1ステップ分のレイのベクトル
+    //rayAdd = refvec*2.f;   //テスト用。
+    rayAdd = refvec*8.f;   //デバッグ用。
 
     float3 hitpos = worldPos;       //当たった位置。
     float isHit = 0.0f;             //ヒットした？
@@ -77,7 +79,8 @@ float4 PSMain_SSR(PSInputSSR In):SV_Target0
     [unroll(RAY_ITERATIONS)]
     for(int i=0;i<RAY_ITERATIONS;i++)
     {
-        hitpos += rayAdd + rayAdd * (c2plen/rayLen)*(RAY_ITERATIONS-i); //ステップ
+        //hitpos += rayAdd + rayAdd * max(c2plen/rayLen,0)*(i/RAY_ITERATIONS)*32.f; //ステップ
+        hitpos += rayAdd; //デバッグ用。
 
         float4 wp = mul(VPMat,float4(hitpos,1.0f));     //カメラ行列変換。
         wp.xyz /= wp.w;
@@ -95,6 +98,7 @@ float4 PSMain_SSR(PSInputSSR In):SV_Target0
             break;
     }
     
+    #if 1
     //二分木探索。
     float isHitOld = 1.f;
     float3 slide = rayAdd*-BYNARY_DECAY;
@@ -117,7 +121,9 @@ float4 PSMain_SSR(PSInputSSR In):SV_Target0
         //treuからfalseもしくはfalseからtrueになった場合折り返す。
         float check = abs(isHitOld - isHit);
         slide *= BYNARY_DECAY*(-1.f*check+(1.f-check));
+        isHitOld = isHit;
     }
+    #endif
     
     float4 res = float4(texture_1.Sample(Sampler,hitpix).xyz,1.f)*isHit;
     res += color*(1.f-isHit);
