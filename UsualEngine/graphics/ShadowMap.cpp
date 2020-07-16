@@ -49,6 +49,8 @@ namespace UsualEngine
 		//m_lightHeight = MainCamera.GetPosition().y + 500.f;
 		//シーンをレンダリング使用としているカメラを使って、ライトカメラの回転を求める。
 		CVector3 cameraDirXZ = MainCamera.GetForward();
+		//cameraDirXZ.y = 0.f;
+		cameraDirXZ.Normalize();
 		if (fabs(cameraDirXZ.x) < FLT_EPSILON && fabsf(cameraDirXZ.z) < FLT_EPSILON) {
 			//ほぼ真上をむいている。
 			return;
@@ -99,13 +101,14 @@ namespace UsualEngine
 		CVector3 cameraUp;
 		cameraUp.Cross(MainCamera.GetRight(), MainCamera.GetForward());
 
-		float shadowAriaTable[3] = { 0.5f,1.0f,2.5f };
+		float shadowAriaTable[3] = { 1.f,10.0f,20.5f };
+		float shadowPosTable[3] = { 0.4f,6.f,8.f };
 		//float shadowAriaTable[3] = { 0.4f,0.8f,1.6f };
 		//float shadowAriaTable[3] = { 1,0.5f,0.25f };
 
 		//視推台を分割するようにライトビュープロジェクション行列を計算する。
 		for (int i = 0; i < MAX_SHADOW_MAP; i++) {
-			farPlaneZ = nearPlaneZ + m_lightHeight * shadowAriaTable[i];
+			farPlaneZ = nearPlaneZ + m_lightHeight * shadowPosTable[i];
 			CMatrix mLightView = CMatrix::Identity();
 			float halfViewAngle = MainCamera.GetViewAngle() * 0.5f;
 			//視推台の8頂点をライト空間に変換してAABBを求めて、正射影の幅と高さを求める。
@@ -113,6 +116,9 @@ namespace UsualEngine
 			float fFar, fNear;
 			CVector3 v[8];
 			{
+
+				cameraDirXZ.y *= 0.4f;
+
 				float t = tan(halfViewAngle);
 				CVector3 toUpperNear, toUpperFar;
 				toUpperNear = cameraUp * t * nearPlaneZ;
