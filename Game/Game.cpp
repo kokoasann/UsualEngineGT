@@ -406,7 +406,7 @@ void Game::Update()
 
 void Game::PostRender()
 {
-#if 0
+#if 1
 	m_fblur.Update();
 	
 	static bool isUped = false;
@@ -424,7 +424,7 @@ void Game::PostRender()
 			isUped = false;
 		}
 	}
-	auto str = L"O";
+	auto str = L"‚ ‚ ‚ ˆŸˆŸˆŸ";
 	m_font.Begin();
 
 	//m_font.Draw(str, { 0,0 }, { 1,1,1,1 }, 0, 5, { 0.5f,-1.f });
