@@ -27,7 +27,7 @@ float4 DirectionLightProcess(float3 normal,float specular,float shadowOrg,float 
 
         float sp = max(0.f,dot(DirLights[i].dir, R));
         sp *= specular;
-        float4 spGradation = texture_1.Sample(Sampler,float2(lerp(0.f,1.f,sp),0.f));  //グラデーションマップ(明かり用)
+        float4 spGradation = texture_1.Sample(Sampler,float2(min(max(sp,0.f),1.f),0.f));  //グラデーションマップ(明かり用)
 
         foundation += (lig+lig*spGradation.x)*(1.0f-sha);
         shadow += -1.0f * (shadow * (1.0f-sha));
@@ -70,7 +70,7 @@ float3 PointLightProcess(float3 worldPos,float3 normal,float specular)
 
         float colorPow = length(PntLights[i].color.xyz);
         float spGradation = texture_1.Sample(Sampler,
-                float2(max(min(rad,1.f),0.f),1.f),0.f).x;  //グラデーションマップ(明かり用)
+                float2(max(min(rad-0.001f,1.f),0.f),1.f)).x;  //グラデーションマップ(明かり用)
         //float3 ligcolor = PntLights[i].color.xyz/len;
         //float3 ligcolor = PntLights[i].color.xyz*max(colorPow-len,0.f);
         //float3 lig = (ligcolor*(spGradation.x));
