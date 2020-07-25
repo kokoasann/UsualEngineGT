@@ -146,8 +146,8 @@ float4 DrawProcess(float4 diffuse,float3 normal,float specular,float gshadow,flo
 
     //距離フォグ
     float4 usu = lerp(float4(0.8f, 0.88f, 1.f,1.f),float4(0.f,0.f,0.f,0.f),min(lerp(1,0,pow(depth,800)),1));
-    col.xyz *= 1.f-usu.w;
-    col.xyz += usu;
+    //col.xyz *= 1.f-usu.w;
+    //col.xyz += usu;
     
     return col;
 }

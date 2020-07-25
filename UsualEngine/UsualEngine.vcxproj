@@ -173,6 +173,7 @@
     <ClCompile Include="graphics\animation\AnimationPlayController.cpp" />
     <ClCompile Include="graphics\animation\IK.cpp" />
     <ClCompile Include="graphics\Camera.cpp" />
+    <ClCompile Include="graphics\CloudPlane.cpp" />
     <ClCompile Include="graphics\ConstantBuffer.cpp" />
     <ClCompile Include="graphics\Font\Font.cpp" />
     <ClCompile Include="graphics\Font\FontBlur.cpp" />
@@ -250,6 +251,7 @@
     <ClInclude Include="graphics\animation\AnimationPlayController.h" />
     <ClInclude Include="graphics\animation\IK.h" />
     <ClInclude Include="graphics\Camera.h" />
+    <ClInclude Include="graphics\CloudPlane.h" />
     <ClInclude Include="graphics\ConstantBuffer.h" />
     <ClInclude Include="graphics\Font\Font.h" />
     <ClInclude Include="graphics\Font\FontBlur.h" />

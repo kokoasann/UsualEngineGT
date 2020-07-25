@@ -79,9 +79,10 @@ namespace UsualEngine
 		//RenderTarget* rtl[] = { &m_mainRenderTarget };
 		//OMSetRenderTarget(1, rtl);
 
+		m_pd3dDeviceContext->IASetInputLayout(m_vsCopy.GetInputLayout());
 		m_pd3dDeviceContext->PSSetShader((ID3D11PixelShader*)m_psCopy.GetBody(), 0, 0);
 		m_pd3dDeviceContext->VSSetShader((ID3D11VertexShader*)m_vsCopy.GetBody(), 0, 0);
-		//m_pd3dDeviceContext->IASetInputLayout(m_vsCopy.GetInputLayout());
+
 		ID3D11ShaderResourceView* srv[] = { m_postEffect.GetCurrentRenderTarget().GetSRV() };
 		m_pd3dDeviceContext->PSSetShaderResources(0, 1, srv);
 		m_postEffect.DrawPrimitive();

@@ -4,6 +4,8 @@
 #include "SSReflection.h"
 #include "../Primitive.h"
 
+#include "../CloudPlane.h"
+
 namespace UsualEngine
 {
 
@@ -51,5 +53,7 @@ namespace UsualEngine
 		Bloom m_bloom;									//ÉuÉãÅ[ÉÄ
 		AlphaModelRender m_alphaModelRender;
 		SSReflection m_ssr;
+
+		CloudPlane m_cloudPlane;
 	};
 }

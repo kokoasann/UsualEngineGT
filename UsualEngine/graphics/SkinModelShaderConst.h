@@ -17,7 +17,9 @@ namespace UsualEngine
 		enSkinModelCBReg_GBuffer,	//!<G-Buffer。
 		enSkinModelCBReg_Ground_PS,	//地面用の定数バッファ
 		enSkinModelCBReg_Ground_VS,	//地面用の定数バッファ
-		enSkinModelCBReg_Deferred,
+		enSkinModelCBReg_Generic,	//汎用。
+		enSkinModelCBReg_Deferred = enSkinModelCBReg_Generic,	//デファード用。
+		
 	};
 	/*!
 	 *@brief	SRVのレジスタ番号。

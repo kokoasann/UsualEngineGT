@@ -287,6 +287,9 @@
     <ClCompile Include="graphics\ShaderSample.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\CloudPlane.cpp">
+      <Filter>Graphics\3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="character\CharacterController.h">
@@ -512,6 +515,9 @@
     </ClInclude>
     <ClInclude Include="graphics\ShaderSample.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\CloudPlane.h">
+      <Filter>Graphics\3D</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

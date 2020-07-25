@@ -187,17 +187,19 @@ namespace UsualEngine
 		*/
 		void InitSkeleton(const wchar_t* filePath);
 
-	private:
+	public:
 		//定数バッファ。
 		struct SVSConstantBuffer {
 			CMatrix mWorld;
 			CMatrix mView;
 			CMatrix mProj;
 			CVector3 camDir;
-			int isShadowReciever;
+			int isShadowReciever = 0;
 			int isUseSpecularMap = 0;
 			float refractiveIndex = 1.0f;
 		};
+	private:
+		
 		EnFbxUpAxis			m_enFbxUpAxis = enFbxUpAxisZ;	//!<FBXの上方向。
 		ID3D11Buffer* m_cb = nullptr;					//!<定数バッファ。
 		Skeleton			m_skeleton;						//!<スケルトン。
