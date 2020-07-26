@@ -19,6 +19,8 @@ namespace UsualEngine
 		res = m_gBuffer[GB_Normal].Create(w, h, 1, 1, DXGI_FORMAT_R16G16B16A16_FLOAT, DXGI_FORMAT_UNKNOWN, msaaD);
 		res = m_gBuffer[GB_Shadow].Create(w, h, 1, 1, DXGI_FORMAT_R16G16B16A16_FLOAT, DXGI_FORMAT_UNKNOWN, msaaD);
 		res = m_gBuffer[GB_Tangent].Create(w, h, 1, 1, DXGI_FORMAT_R16G16B16A16_FLOAT, DXGI_FORMAT_UNKNOWN, msaaD);
+
+		m_sky.Init();
 	}
 	void GBuffer::SetGBuffer()
 	{
@@ -88,6 +90,11 @@ namespace UsualEngine
 			go->Render();
 		}
 		m_modelList.clear();
+		ge->OMSetRenderTarget(oldRTcount, oldRT);
+
+		ge->OMSetRenderTarget(1, RTlist);
+
+		m_sky.Render();
 
 		//ƒRƒŠƒWƒ‡ƒ“‚Ì•`‰æB
 		if (Debug::Instance().debugState.isPhysicsDebugDraw)

@@ -167,6 +167,7 @@ namespace UsualEngine
 	void SkinModel::UpdateWorldMatrix(const CMatrix& wmat)
 	{
 		m_skeleton.Update(wmat);
+		m_worldMatrix = wmat;
 		if (m_isShadowCaster)//シャドウ、落としますか？nj
 			usualEngine()->GetGraphicsEngine()->GetShadowMap().AddShadowCaster(this);
 	}

@@ -5,6 +5,7 @@
 #include "../Primitive.h"
 
 #include "../CloudPlane.h"
+#include "RayMarchingFog.h"
 
 namespace UsualEngine
 {
@@ -55,5 +56,6 @@ namespace UsualEngine
 		SSReflection m_ssr;
 
 		CloudPlane m_cloudPlane;
+		RayMarchingFog m_rmFog;
 	};
 }

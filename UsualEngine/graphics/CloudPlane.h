@@ -47,7 +47,7 @@ namespace UsualEngine
 		RenderTarget m_rt;
 
 		CVector3 m_pos = {0.f,5000.f,0.f};					//ポジション
-		CVector3 m_scale = CVector3::One()*50000.f;				//スケール
+		CVector3 m_scale = CVector3::One()*1000000.f;		//スケール
 		CQuaternion m_rot = CQuaternion::Identity();	//回転。
 	};
 }

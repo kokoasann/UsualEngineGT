@@ -81,6 +81,10 @@ namespace UsualEngine
 		auto ge = usualEngine()->GetGraphicsEngine();
 		auto dc = ge->GetD3DDeviceContext();
 		auto& cam = usualEngine()->GetMainCamera();
+		auto& gbuffer = ge->GetPreRender().GetGBuffer();
+
+		auto gDepth = gbuffer.GetGBuffer(GBuffer::GB_Depth);
+		dc->PSSetShaderResources(enSkinModelSRVReg_GDepthMap, 1, &gDepth->GetSRV());
 
 		dc->OMSetDepthStencilState(DepthStencilState::spriteRender, 0);
 

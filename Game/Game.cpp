@@ -139,9 +139,10 @@ bool Game::Start()
 			return true;
 	});
 
-	auto BG = ue::NewGO < ue::SkinModelRender>(0);
-	BG->Init(L"Assets/model/BackGroundTest.cmo");
-	BG->SetSca(ue::CVector3::One() * 50);
+	//‹óƒ‚ƒfƒ‹
+	//auto BG = ue::NewGO < ue::SkinModelRender>(0);
+	//BG->Init(L"Assets/model/BackGroundTest.cmo");
+	//BG->SetSca(ue::CVector3::One() * 50);
 
 	cam = &ue::usualEngine()->GetMainCamera();
 

@@ -290,6 +290,12 @@
     <ClCompile Include="graphics\CloudPlane.cpp">
       <Filter>Graphics\3D</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\SkyRender.cpp">
+      <Filter>Graphics\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\PostEffect\RayMarchingFog.cpp">
+      <Filter>Graphics\PostEffect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="character\CharacterController.h">
@@ -518,6 +524,12 @@
     </ClInclude>
     <ClInclude Include="graphics\CloudPlane.h">
       <Filter>Graphics\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\SkyRender.h">
+      <Filter>Graphics\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\PostEffect\RayMarchingFog.h">
+      <Filter>Graphics\PostEffect</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

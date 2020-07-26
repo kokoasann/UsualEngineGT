@@ -1,4 +1,5 @@
 #pragma once
+#include "SkyRender.h"
 
 namespace UsualEngine
 {
@@ -33,5 +34,7 @@ namespace UsualEngine
 	private:
 		RenderTarget m_gBuffer[GB_Num];
 		std::vector<GameObject*> m_modelList;
+
+		SkyRender m_sky;
 	};
 }

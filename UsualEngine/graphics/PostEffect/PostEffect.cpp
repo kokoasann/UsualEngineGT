@@ -24,6 +24,7 @@ namespace UsualEngine
 		m_ssr.Init();
 
 		m_cloudPlane.Init();
+		m_rmFog.Init();
 	}
 	void PostEffect::InitRenderTarget()
 	{
@@ -78,6 +79,7 @@ namespace UsualEngine
 		if(isAlphaRender)
 			m_alphaModelRender.Render(this);
 		m_cloudPlane.Render(this);
+		m_rmFog.Render(this);
 		m_ssr.Render(this);
 		m_bloom.Render(this);
 		

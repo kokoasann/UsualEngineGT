@@ -190,6 +190,7 @@
     <ClCompile Include="graphics\PostEffect\Bloom.cpp" />
     <ClCompile Include="graphics\PostEffect\GaussianBlur.cpp" />
     <ClCompile Include="graphics\PostEffect\PostEffect.cpp" />
+    <ClCompile Include="graphics\PostEffect\RayMarchingFog.cpp" />
     <ClCompile Include="graphics\PostEffect\SoftShadow.cpp" />
     <ClCompile Include="graphics\PostEffect\SSReflection.cpp" />
     <ClCompile Include="graphics\PreRender.cpp" />
@@ -206,6 +207,7 @@
     <ClCompile Include="graphics\SkinModelDummy.cpp" />
     <ClCompile Include="graphics\SkinModelEffect.cpp" />
     <ClCompile Include="graphics\SkinModelRender.cpp" />
+    <ClCompile Include="graphics\SkyRender.cpp" />
     <ClCompile Include="graphics\Sprite.cpp" />
     <ClCompile Include="graphics\SpriteDataManager.cpp" />
     <ClCompile Include="graphics\SpriteRender.cpp" />
@@ -268,6 +270,7 @@
     <ClInclude Include="graphics\PostEffect\Bloom.h" />
     <ClInclude Include="graphics\PostEffect\GaussianBlur.h" />
     <ClInclude Include="graphics\PostEffect\PostEffect.h" />
+    <ClInclude Include="graphics\PostEffect\RayMarchingFog.h" />
     <ClInclude Include="graphics\PostEffect\SoftShadow.h" />
     <ClInclude Include="graphics\PostEffect\SSReflection.h" />
     <ClInclude Include="graphics\PreRender.h" />
@@ -285,6 +288,7 @@
     <ClInclude Include="graphics\SkinModelEffect.h" />
     <ClInclude Include="graphics\SkinModelRender.h" />
     <ClInclude Include="graphics\SkinModelShaderConst.h" />
+    <ClInclude Include="graphics\SkyRender.h" />
     <ClInclude Include="graphics\Sprite.h" />
     <ClInclude Include="graphics\SpriteDataManager.h" />
     <ClInclude Include="graphics\SpriteRender.h" />
