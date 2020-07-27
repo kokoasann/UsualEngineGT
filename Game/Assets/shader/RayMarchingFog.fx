@@ -1,6 +1,21 @@
 #include "modelData.h"
 #include "PerlinNoise.fxh"
 #include "Math.h"
+cbuffer CBuffer:register(b7)
+{
+    float4x4 mVP;
+    float4x4 mVPI;
+    float3 mainLightDir;
+    float3 camPos;
+    float camFar;
+    float camNear;
+    float offset;
+}
+//ビュー空間でのZに変換。
+float GetViewZ(float depth)
+{
+    return (camFar*camNear)/((camFar-camNear)*depth-camFar);
+}
 
 float GetShadow(float3 wpos, float2 offset)
 {
@@ -25,7 +40,7 @@ float GetShadow(float3 wpos, float2 offset)
 		shadowbuf += shadowMap_1.Sample(Sampler, smuv + pix * 0.5f).r * is_inuvbuf_shadow_isuv * (1.0f-abs(sign(0-i)));
 		shadowbuf += shadowMap_2.Sample(Sampler, smuv + pix * 0.5f).r * is_inuvbuf_shadow_isuv * (1.0f-abs(sign(1-i)));
 		shadowbuf += shadowMap_3.Sample(Sampler, smuv + pix * 0.5f).r * is_inuvbuf_shadow_isuv * (1.0f-abs(sign(2-i)));
-		float isShadowbuf = (1.0f-step(depthbuf,shadowbuf + depthoffset[i]*2.f))*isInUVbuf*sign(shadowbuf);
+		float isShadowbuf = (1.0f-step((depthbuf),(shadowbuf)))*isInUVbuf*sign(shadowbuf);
 		//depth += depthbuf * isShadowbuf;
 		shadow += shadowbuf*(1.0f-isShadow)* isShadowbuf;
 		isShadow = sign(isShadow+isShadowbuf);
@@ -35,22 +50,9 @@ float GetShadow(float3 wpos, float2 offset)
 }
 
 
-cbuffer CBuffer:register(b7)
-{
-    float4x4 mVP;
-    float4x4 mVPI;
-    float3 mainLightDir;
-    float3 camPos;
-    float camFar;
-    float camNear;
-    float offset;
-}
 
-//ビュー空間でのZに変換。
-float GetViewZ(float depth)
-{
-    return (camFar*camNear)/((camFar-camNear)*depth-camFar);
-}
+
+
 
 
 struct PSInput_RMFog
@@ -63,15 +65,25 @@ float4 PSMain_RMFog(PSInput_RMFog In):SV_Target0
 {
     float gdepth = gDepthMap.Sample(Sampler,In.uv).x;
 
-    float fogHeight = 200.f;
-
+    float3 fogPos = float3(0,0,0);
+    float fogRadius = 1000.f;
+    float fogHeight = 50.f;
+    
     float concentration = 0.5f;
     float disperse = -0.4f;
-
-    #define rayCount 10.f
-    float rayStep = 400.f;
     
-    float radius = 5.f;
+    #define rayCount 20.f
+    float rayStep = 200.f;
+    
+    #if 0
+    //float fogHeight = 200.f;
+    //float concentration = 0.7f;
+    //float disperse = -0.6f;
+    //#define rayCount 60
+    //float rayStep = 50.f;
+    #endif
+    
+    
 
     float fogScale = 0.008f;
     float blendScale = 0.002;
@@ -86,7 +98,7 @@ float4 PSMain_RMFog(PSInput_RMFog In):SV_Target0
     float foundation = 0.f;
     float fog = 0.f;
     float3 col = float3(1.f,1.f,1.f);
-
+    /*
     {
         float3 rayPos = startPos+rayDir*offset*100.f;
 
@@ -97,7 +109,7 @@ float4 PSMain_RMFog(PSInput_RMFog In):SV_Target0
 
         float hrate = fogHeight/(abs(rayPos.y)+0.1f);
         float f = pernoise * blend;
-        f *= min(hrate,1.f);
+        f *= pow(min(hrate,1.f),100.f);
         float shadow = (GetShadow(rayPos,0.f)-0.5f)*2.f*blend;
 
         {
@@ -109,7 +121,8 @@ float4 PSMain_RMFog(PSInput_RMFog In):SV_Target0
         foundation += shadow;
         fog += f;
     }
-    
+    */
+
     [unroll(rayCount)]
     for(int i=1;i<=rayCount;i++)
     {
@@ -119,10 +132,10 @@ float4 PSMain_RMFog(PSInput_RMFog In):SV_Target0
             float4 vpp =  mul(mVP,float4(rayPos,1.f));
             float dep = vpp.z / vpp.w;
             [branch]
-            if(dep>=gdepth+0.001f)
+            if(dep>gdepth)
                 break;
         }
-        rayPos += rayDir*offset*1000.f;
+        //rayPos += rayDir*offset*1000.f;
 
         float pernoise = 1.f-PerlinNoise3D(rayPos*fogScale);
         float blend = (1.f-PerlinNoise3D(rayPos*blendScale))*concentration+disperse;
@@ -130,21 +143,23 @@ float4 PSMain_RMFog(PSInput_RMFog In):SV_Target0
         float hrate = fogHeight/(abs(rayPos.y)+0.1f);
         float f = pernoise * blend;
         f *= min(hrate,1.f);
-        float shadow = (GetShadow(rayPos,0.f)-0.5f)*2.f*blend;
+        float shadow = (GetShadow(rayPos,0.f));
 
+        rayPos += mainLightDir*10.f;
+        float ligblend = (1.f-PerlinNoise3D(rayPos*blendScale))*concentration+disperse;
         {
-            rayPos += mainLightDir*200.f;
-            float blend = (1.f-PerlinNoise3D(rayPos*blendScale))*concentration+disperse;
-            col -= lerp(float3(0,0,0),(float3(1.f,1.f,1.f)-float3(0.45f, 0.4f, 0.6f))*0.2f,blend);
+            
+            //col -= lerp(float3(0,0,0),(float3(1.f,1.f,1.f)-float3(0.45f, 0.4f, 0.6f))*0.1f,min(shadow,1.f));
         }
 
-        foundation += shadow;
+        foundation += (ligblend)*blend;
         fog += f;
+        //fog += shadow;
     }
     fog = clamp(fog,0.f,0.95f);
-    foundation = clamp(foundation,0.f,1.f);
+    foundation = clamp(foundation,0.f,0.5f);
 
-    //col *= lerp(float3(1,1,1),float3(0.45f, 0.4f, 0.6f),foundation);
+    col -= lerp(float3(0,0,0),(float3(1.f,1.f,1.f)-float3(0.5f, 0.45f, 0.55f))*1.3f,foundation);
 
     return float4(col,fog);
 }

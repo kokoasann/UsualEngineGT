@@ -210,8 +210,11 @@ bool Game::Start()
 	ground->SetSpecularMap(ue::SMR4Ground::tkGrass, L"Assets/sprite/kusa_spe.dds", L"grass");
 	ground->SetSpecularMap(ue::SMR4Ground::tkTuti, L"Assets/sprite/tuti_spe.dds", L"gaia");
 
+	//
+	//メインライト
+	//
 	light = ue::NewGO<ue::LightDirection>(0);
-	light->SetDir(ue::CVector3{ -0.3f,-1,-0.2f });
+	light->SetDir(ue::CVector3{ -0.3f,-1,-0.99f });
 	light->SetCol(ue::CVector3::One()/ 3.5f);
 	/*light = ue::NewGO<ue::LightDirection>(0);
 	light->SetDir(ue::CVector3(1.f, 0.0f, 0.f));
@@ -407,7 +410,8 @@ void Game::Update()
 
 void Game::PostRender()
 {
-#if 1
+	//フォントブラーテスト
+#if 0
 	m_fblur.Update();
 	
 	static bool isUped = false;

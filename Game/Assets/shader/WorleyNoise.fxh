@@ -16,7 +16,7 @@ float WorleyNoise3D(float3 pos)
     float3 i_st = floor(pos);
     float3 f_st = frac(pos);
 
-    float m_dist = 0x7f7fffff;  // minimum distance
+    float m_dist = 10.;  // minimum distance
     float3 m_point;        // minimum point
 	
     [unroll(3)]
