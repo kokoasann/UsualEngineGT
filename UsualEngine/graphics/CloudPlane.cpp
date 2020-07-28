@@ -33,7 +33,7 @@ namespace UsualEngine
 		ZeroMemory(&samp, sizeof(samp));
 		samp.Count = 1;
 		samp.Quality = 0;
-		m_rt.Create(FRAME_BUFFER_W, FRAME_BUFFER_H, 1, 1, DXGI_FORMAT_R16G16B16A16_FLOAT, DXGI_FORMAT_UNKNOWN, samp);
+		m_rt.Create(FRAME_BUFFER_W*0.5f, FRAME_BUFFER_H * 0.5f, 1, 1, DXGI_FORMAT_R16G16B16A16_FLOAT, DXGI_FORMAT_UNKNOWN, samp);
 		
 
 		CVector2 hsize = {0.5f,0.5f};
@@ -94,11 +94,14 @@ namespace UsualEngine
 		dc->OMGetBlendState(oldbs, oldbf, &oldbm);
 		dc->OMSetBlendState(BlendState::trans, 0, 0xFFFFFFFF);
 
-		float clearCol[4] = { 0,0,0,0 };
+		float clearCol[4] = { 1,1,1,0 };
 		dc->ClearRenderTargetView(m_rt.GetRTV(), clearCol);
 
-		RenderTarget* rts[] = { &pe->GetCurrentRenderTarget() };
+		D3D11_VIEWPORT vp[] = { { 0.f,0.f,m_rt.GetWidth(),m_rt.GetHeight() } };
+		dc->RSSetViewports(1, vp);
+		RenderTarget* rts[] = { &m_rt};
 		ge->OMSetRenderTarget(1, rts);
+		
 
 		m_cbData.campos = cam.GetPosition();
 		auto mainLight = ge->GetLightManager().GetMainLightDirection();
@@ -130,16 +133,18 @@ namespace UsualEngine
 		m_prim.Draw();
 
 		//copy
-		/*rts[0] = { &pe->GetCurrentRenderTarget() };
+		rts[0] = { &pe->GetCurrentRenderTarget() };
 		ge->OMSetRenderTarget(1, rts);
+		vp[0] = { 0.f,0.f,(FLOAT)rts[0]->GetWidth(),(FLOAT)rts[0]->GetHeight() };
+		dc->RSSetViewports(1, vp);
 
-		dc->PSGetShaderResources(0, 1, &m_rt.GetSRV());
+		dc->PSSetShaderResources(0, 1, &m_rt.GetSRV());
 
 		dc->VSSetShader((ID3D11VertexShader*)ShaderSample::VS_Copy.GetBody(), NULL, 0);
 		dc->PSSetShader((ID3D11PixelShader*)ShaderSample::PS_Copy.GetBody(), NULL, 0);
 		dc->IASetInputLayout(ShaderSample::VS_Copy.GetInputLayout());
 
-		pe->DrawPrimitive();*/
+		pe->DrawPrimitive();
 
 		//Œãˆ—B
 		dc->OMSetBlendState(oldbs[0], oldbf, oldbm);

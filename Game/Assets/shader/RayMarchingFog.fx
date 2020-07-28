@@ -5,6 +5,7 @@ cbuffer CBuffer:register(b7)
 {
     float4x4 mVP;
     float4x4 mVPI;
+    float4 mainLightColor;
     float3 mainLightDir;
     float3 camPos;
     float camFar;
@@ -17,12 +18,33 @@ float GetViewZ(float depth)
     return (camFar*camNear)/((camFar-camNear)*depth-camFar);
 }
 
+#define GET_SHADOW(MAPIND)\
+{ \
+    float4 posinLVP = mul(mLVP[ind], float4(wpos, 1)); \
+    posinLVP.xyz /= posinLVP.w;\
+    float depthbuf = min(posinLVP.z / posinLVP.w, 1.0f);\
+    float2 smuv = float2(0.5f, -0.5f) * posinLVP.xy + float2(0.5f, 0.5f);\
+\
+    float isInUVbuf = (1.0f-step(1.f,smuv.x)) * (1.0f-step(1.f,smuv.y)) * (1.0f-step(smuv.x,0.f)) * (1.0f-step(smuv.y,0.f));\
+    float2 pix = float2(ligPixSize[ind].x * offset.x, ligPixSize[ind].y * offset.y);\
+\
+    float shadowbuf = shadowMap_##MAPIND.Sample(Sampler, smuv + pix * 0.5f).r;\
+    float isShadowbuf = (step((depthbuf),(shadowbuf)))*isInUVbuf;\
+\
+    depth += depthbuf * (1.0f-isShadow)* isShadowbuf;\
+    shadow += shadowbuf * (1.0f-isShadow)* isShadowbuf;\
+    isShadow = sign(isInUV+isInUVbuf+isShadowbuf+isShadow);\
+    isInUV = sign(isInUV+isInUVbuf);\
+    ind++;\
+}
+
 float GetShadow(float3 wpos, float2 offset)
 {
 	float shadow = 0.f;
 	float depth = 0.f;
 	float isShadow = 0.f;
 	float isInUV = 0.f;
+    /*
 	[unroll(MAX_SHADOWMAP)]
 	for(int i = 0; i < MAX_SHADOWMAP;i++)
 	{
@@ -40,19 +62,29 @@ float GetShadow(float3 wpos, float2 offset)
 		shadowbuf += shadowMap_1.Sample(Sampler, smuv + pix * 0.5f).r * is_inuvbuf_shadow_isuv * (1.0f-abs(sign(0-i)));
 		shadowbuf += shadowMap_2.Sample(Sampler, smuv + pix * 0.5f).r * is_inuvbuf_shadow_isuv * (1.0f-abs(sign(1-i)));
 		shadowbuf += shadowMap_3.Sample(Sampler, smuv + pix * 0.5f).r * is_inuvbuf_shadow_isuv * (1.0f-abs(sign(2-i)));
-		float isShadowbuf = (1.0f-step((depthbuf),(shadowbuf)))*isInUVbuf*sign(shadowbuf);
-		//depth += depthbuf * isShadowbuf;
+		float isShadowbuf = (step((depthbuf),(shadowbuf)))*isInUVbuf*sign(shadowbuf);
+		depth += depthbuf * isShadowbuf;
 		shadow += shadowbuf*(1.0f-isShadow)* isShadowbuf;
 		isShadow = sign(isShadow+isShadowbuf);
 		isInUV = sign(isInUV+isInUVbuf);
 	}
-	return isShadow;
+    */
+
+    int ind = 0;
+    //GET_SHADOW(1)
+    //GET_SHADOW(2)
+    //GET_SHADOW(3)
+
+    float4 posinLVP = mul(mLVP[2], float4(wpos, 1));
+    posinLVP.xyz /= posinLVP.w;
+    float depthbuf = min(posinLVP.z / posinLVP.w, 1.0f);
+    float2 smuv = float2(0.5f, -0.5f) * posinLVP.xy + float2(0.5f, 0.5f);
+    float2 pix = float2(ligPixSize[2].x * offset.x, ligPixSize[2].y * offset.y);
+    float shadowbuf = shadowMap_3.Sample(Sampler, smuv + pix * 0.5f).r;
+
+	return (depthbuf-shadowbuf)*(step((depthbuf),(shadowbuf)));
+    //return isShadow;
 }
-
-
-
-
-
 
 
 struct PSInput_RMFog
@@ -61,7 +93,13 @@ struct PSInput_RMFog
     float2 uv:TEXCOORD0;
 };
 
-float4 PSMain_RMFog(PSInput_RMFog In):SV_Target0
+struct PSOutput_RMFog
+{
+    float4 fog:SV_Target0;
+    float4 volume:SV_Target1;
+};
+
+PSOutput_RMFog PSMain_RMFog(PSInput_RMFog In)
 {
     float gdepth = gDepthMap.Sample(Sampler,In.uv).x;
 
@@ -72,8 +110,8 @@ float4 PSMain_RMFog(PSInput_RMFog In):SV_Target0
     float concentration = 0.5f;
     float disperse = -0.4f;
     
-    #define rayCount 20.f
-    float rayStep = 200.f;
+    #define rayCount 50.f
+    float rayStep = 80.f;
     
     #if 0
     //float fogHeight = 200.f;
@@ -97,6 +135,7 @@ float4 PSMain_RMFog(PSInput_RMFog In):SV_Target0
 
     float foundation = 0.f;
     float fog = 0.f;
+    float volume = 0.f;
     float3 col = float3(1.f,1.f,1.f);
     /*
     {
@@ -143,7 +182,8 @@ float4 PSMain_RMFog(PSInput_RMFog In):SV_Target0
         float hrate = fogHeight/(abs(rayPos.y)+0.1f);
         float f = pernoise * blend;
         f *= min(hrate,1.f);
-        float shadow = (GetShadow(rayPos,0.f));
+        float shadowDepth = (GetShadow(rayPos,0.f));
+        volume += shadowDepth;
 
         rayPos += mainLightDir*10.f;
         float ligblend = (1.f-PerlinNoise3D(rayPos*blendScale))*concentration+disperse;
@@ -161,5 +201,8 @@ float4 PSMain_RMFog(PSInput_RMFog In):SV_Target0
 
     col -= lerp(float3(0,0,0),(float3(1.f,1.f,1.f)-float3(0.5f, 0.45f, 0.55f))*1.3f,foundation);
 
-    return float4(col,fog);
+    PSOutput_RMFog Out;
+    Out.fog = float4(col,fog);
+    Out.volume = mainLightColor*0.02f*volume;
+    return Out;
 }

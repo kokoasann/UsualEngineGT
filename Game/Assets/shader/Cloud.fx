@@ -15,8 +15,8 @@ float4 PSMain_PlaneCloud(PSInput In):SV_Target0
     //隠れチェック
     float depth = In.PosInProj.z / In.PosInProj.w;
     float2 sceneUV =In.Position.xy;
-    sceneUV.x *= 0.00078125f;// /=1280.f
-    sceneUV.y *= 0.00138888f;// /=720.f
+    sceneUV.x *= 0.00078125f*2.f;// /=1280.f
+    sceneUV.y *= 0.00138888f*2.f;// /=720.f
     float sceneDep = gDepthMap.Sample(Sampler,sceneUV);
     clip(sceneDep-depth);
 
