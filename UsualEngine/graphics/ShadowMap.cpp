@@ -45,6 +45,8 @@ namespace UsualEngine
 			m_lightDirection = dirlight->GetDir();
 		else
 			m_lightDirection = CVector3::Up();
+		m_lightDirection.Normalize();
+
 		Camera& MainCamera = usualEngine()->GetMainCamera();
 		//m_lightHeight = MainCamera.GetPosition().y + 500.f;
 		//シーンをレンダリング使用としているカメラを使って、ライトカメラの回転を求める。
@@ -93,22 +95,27 @@ namespace UsualEngine
 		CVector3 lightTarget;
 		lightTarget = MainCamera.GetPosition();
 		lightTarget.y = MainCamera.GetTarget().y;
-		lightTarget += cameraDirXZ;
+		//lightTarget += cameraDirXZ;				//?
 		CVector3 lightPos = lightTarget + m_lightDirection * -m_lightHeight;
+
+		float lightHeight = MainCamera.GetPosition().y + m_lightHeight;
 
 		float nearPlaneZ = 0.0f;
 		float farPlaneZ;
 		CVector3 cameraUp;
 		cameraUp.Cross(MainCamera.GetRight(), MainCamera.GetForward());
 
-		float shadowAriaTable[3] = { 1.f,10.0f,20.5f };
+		//float shadowAriaTable[3] = { 1.f,10.0f,20.5f };
 		float shadowPosTable[3] = { 0.4f,6.f,8.f };
-		//float shadowAriaTable[3] = { 0.4f,0.8f,1.6f };
-		//float shadowAriaTable[3] = { 1,0.5f,0.25f };
+		float shadowAriaTable[3] = { 0.4f,0.8f,1.6f };
+		//float shadowPosTable[3] = { 1,0.5f,0.25f };
+		//float offsetLen[3] = { 0.5,1,1.5 };
 
 		//視推台を分割するようにライトビュープロジェクション行列を計算する。
 		for (int i = 0; i < MAX_SHADOW_MAP; i++) {
-			farPlaneZ = nearPlaneZ + m_lightHeight * shadowPosTable[i];
+			//CVector3 lightPos = lightTarget + m_lightDirection * -m_lightHeight;
+			//farPlaneZ = nearPlaneZ + m_lightHeight * shadowPosTable[i];
+			farPlaneZ = nearPlaneZ + lightHeight * shadowAriaTable[i];
 			CMatrix mLightView = CMatrix::Identity();
 			float halfViewAngle = MainCamera.GetViewAngle() * 0.5f;
 			//視推台の8頂点をライト空間に変換してAABBを求めて、正射影の幅と高さを求める。
@@ -117,7 +124,7 @@ namespace UsualEngine
 			CVector3 v[8];
 			{
 
-				cameraDirXZ.y *= 0.4f;
+				//cameraDirXZ.y *= 0.f;
 
 				float t = tan(halfViewAngle);
 				CVector3 toUpperNear, toUpperFar;
@@ -125,25 +132,34 @@ namespace UsualEngine
 				toUpperFar = cameraUp * t * farPlaneZ;
 				t *= MainCamera.GetAspect();
 				//近平面の中央座標を計算。
-				CVector3 vWk = MainCamera.GetPosition() + cameraDirXZ * nearPlaneZ;
-				lightPos = vWk;
-				v[0] = vWk + MainCamera.GetRight() * t * nearPlaneZ + toUpperNear;
+				CVector3 nearWK = MainCamera.GetPosition() + cameraDirXZ * nearPlaneZ;
+				v[0] = nearWK + MainCamera.GetRight() * t * nearPlaneZ + toUpperNear;
 				v[1] = v[0] - toUpperNear * 2.0f;
 
-				v[2] = vWk + MainCamera.GetRight() * -t * nearPlaneZ + toUpperNear;
+				v[2] = nearWK + MainCamera.GetRight() * -t * nearPlaneZ + toUpperNear;
 				v[3] = v[2] - toUpperNear * 2.0f;
 
 				//遠平面の中央座標を計算。
-				vWk = MainCamera.GetPosition() + cameraDirXZ * farPlaneZ;
-				lightPos += vWk;
-				v[4] = vWk + MainCamera.GetRight() * t * farPlaneZ + toUpperFar;
+				CVector3 farWK = MainCamera.GetPosition() + cameraDirXZ * farPlaneZ;
+				v[4] = farWK + MainCamera.GetRight() * t * farPlaneZ + toUpperFar;
 				v[5] = v[4] - toUpperFar * 2.0f;
-				v[6] = vWk + MainCamera.GetRight() * -t * farPlaneZ + toUpperFar;
+				v[6] = farWK + MainCamera.GetRight() * -t * farPlaneZ + toUpperFar;
 				v[7] = v[6] - toUpperFar * 2.0f;
 
 				//ライト行列を作成。
-				lightPos *= 0.5f;
-				lightPos += m_lightDirection * -m_lightHeight;
+				
+				//lightPos *= 0.5f;
+				/*
+				auto ligXZ = m_lightDirection;
+				ligXZ.y = 0;
+				ligXZ.Normalize();
+				float cta = ligXZ.Dot({ 0,-1,0 });
+				float camY = MainCamera.GetPosition().y;*/
+				//lightPos += m_lightDirection * -m_lightHeight + ligXZ * -camY * cta;
+
+				CVector3 half = (nearWK + farWK) * 0.5f;
+				float alpha = (lightHeight - half.y) / m_lightDirection.y;
+				CVector3 lightPos = half + m_lightDirection*alpha;
 
 				mLightView = lightViewRot;
 				mLightView.m[3][0] = lightPos.x;

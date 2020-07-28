@@ -82,7 +82,8 @@ float GetShadow(float3 wpos, float2 offset)
     float2 pix = float2(ligPixSize[2].x * offset.x, ligPixSize[2].y * offset.y);
     float shadowbuf = shadowMap_3.Sample(Sampler, smuv + pix * 0.5f).r;
 
-	return (depthbuf-shadowbuf)*(step((depthbuf),(shadowbuf)));
+	// /return (shadowbuf-depthbuf)*(step((depthbuf),(shadowbuf)));
+    return 1.f-step((shadowbuf),(depthbuf));
     //return isShadow;
 }
 
@@ -202,7 +203,9 @@ PSOutput_RMFog PSMain_RMFog(PSInput_RMFog In)
     col -= lerp(float3(0,0,0),(float3(1.f,1.f,1.f)-float3(0.5f, 0.45f, 0.55f))*1.3f,foundation);
 
     PSOutput_RMFog Out;
-    Out.fog = float4(col,fog);
-    Out.volume = mainLightColor*0.02f*volume;
+    //Out.fog = float4(col,fog);
+    Out.fog = float4(float3(0.5f, 0.45f, 0.55f),fog);
+    Out.volume = mainLightColor*0.03*volume*fog;
+    Out.volume.w *= fog;
     return Out;
 }

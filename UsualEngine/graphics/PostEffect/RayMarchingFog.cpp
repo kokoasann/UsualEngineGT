@@ -80,23 +80,33 @@ namespace UsualEngine
 		dc->PSSetShader((ID3D11PixelShader*)m_ps.GetBody(), 0, 0);
 		dc->IASetInputLayout(ShaderSample::VS_Copy.GetInputLayout());
 
-		pe->DrawPrimitive();
+		//pe->DrawPrimitive();
 
 
 		//copy
-		dc->OMSetBlendState(BlendState::add, 0, 0xFFFFFFFF);
+
 		rts[0] = { &pe->GetCurrentRenderTarget() };
 		ge->OMSetRenderTarget(1, rts);
 		vp[0] = { 0.f,0.f,(FLOAT)rts[0]->GetWidth(),(FLOAT)rts[0]->GetHeight() };
 		dc->RSSetViewports(1, vp);
 
+		dc->PSSetShaderResources(0, 1, &m_rtFog.GetSRV());
+
+		dc->VSSetShader((ID3D11VertexShader*)ShaderSample::VS_Copy.GetBody(), NULL, 0);
+		dc->PSSetShader((ID3D11PixelShader*)ShaderSample::PS_Copy.GetBody(), NULL, 0);
+		dc->IASetInputLayout(ShaderSample::VS_Copy.GetInputLayout());
+
+		//pe->DrawPrimitive();
+
+
+		dc->OMSetBlendState(BlendState::add, 0, 0xFFFFFFFF);
 		dc->PSSetShaderResources(0, 1, &m_rtVolume.GetSRV());
 
 		dc->VSSetShader((ID3D11VertexShader*)ShaderSample::VS_Copy.GetBody(), NULL, 0);
 		dc->PSSetShader((ID3D11PixelShader*)ShaderSample::PS_Copy.GetBody(), NULL, 0);
 		dc->IASetInputLayout(ShaderSample::VS_Copy.GetInputLayout());
 
-		pe->DrawPrimitive();
+		//pe->DrawPrimitive();
 
 
 		dc->OMSetBlendState(oldbs[0], oldbf, oldbm);

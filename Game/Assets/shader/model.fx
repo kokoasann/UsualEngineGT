@@ -11,16 +11,77 @@
 //アルベドテクスチャ。
 Texture2D<float4> albedoTexture : register(t0);
 
+#define DEBUG_SHADOWMAP 1
 
 
 
+#define GET_SHADOW(MAPIND)\
+ \
+    float4 posinLVP = mul(mLVP[ind], float4(wpos, 1)); \
+    posinLVP.xyz /= posinLVP.w;\
+    float depthbuf = min(posinLVP.z / posinLVP.w, 1.0f);\
+    float2 smuv = float2(0.5f, -0.5f) * posinLVP.xy + float2(0.5f, 0.5f);\
+\
+    float isInUVbuf = (step(smuv.x,1.f)) * (step(smuv.y,1.f)) * (step(0.f,smuv.x)) * (step(0.f,smuv.y));\
+    float2 pix = float2(ligPixSize[ind].x * offset.x, ligPixSize[ind].y * offset.y);\
+\
+    float shadowbuf = shadowMap_##MAPIND.Sample(Sampler, smuv + pix).r;\
+    float isShadowbuf = 1.0f-step(depthbuf,shadowbuf);\
+\
+    depth += depthbuf * (1.0f-isShadow)* isShadowbuf;\
+    shadow += shadowbuf * (1.0f-isShadow)* isShadowbuf;\
+    isShadow += isShadowbuf * (1.-isInUV)*(isInUVbuf);\
+    isInUV = sign(isInUV+isInUVbuf);\
+    ind++;\
 
-float GetShadow(float3 wpos,Texture2D<float4> tex, float2 offset)
+
+float4 GetShadow(float3 wpos,Texture2D<float4> tex, float2 offset)
 {
 	float shadow = 0.f;
 	float depth = 0.f;
 	float isShadow = 0.f;
 	float isInUV = 0.f;
+    int ind = 0;
+	#if DEBUG_SHADOWMAP
+	float3 col = float3(0,0,0);
+	{
+    GET_SHADOW(1)
+	if(isInUVbuf)
+	{
+		col.r = 0.5;
+	}
+	}
+	{
+    GET_SHADOW(2)
+	if(isInUVbuf)
+	{
+		col.g = 0.5;
+	}
+	}
+	{
+    GET_SHADOW(3)
+	if(isInUVbuf)
+	{
+		col.b = 0.5;
+	}
+	}
+	#endif
+
+	#if DEBUG_SHADOWMAP
+	return float4(isShadow,col);
+	#else
+	return float(isShadow);
+	#endif
+}
+
+
+float4 _GetShadow(float3 wpos,Texture2D<float4> tex, float2 offset)
+{
+	float shadow = 0.f;
+	float depth = 0.f;
+	float isShadow = 0.f;
+	float isInUV = 0.f;
+	float3 col = float3(0,0,0);
 	[unroll(MAX_SHADOWMAP)]
 	for(int i = 0; i < MAX_SHADOWMAP;i++)
 	{
@@ -41,8 +102,26 @@ float GetShadow(float3 wpos,Texture2D<float4> tex, float2 offset)
 		float isShadowbuf = (1.0f-step(depthbuf,shadowbuf + depthoffset[i]))*isInUVbuf*sign(shadowbuf);
 		//depth += depthbuf * isShadowbuf;
 		shadow += shadowbuf*(1.0f-isShadow)* isShadowbuf;
-		isShadow = sign(isShadow+isShadowbuf);
+		isShadow += isShadowbuf * (1.-isInUV)*(isInUVbuf);
 		isInUV = sign(isInUV+isInUVbuf);
+
+		#if DEBUG_SHADOWMAP
+		if(isInUVbuf)
+		{
+		if (i == 0)
+		{
+			col.x = 0.5;
+		}
+		else if (i == 1)
+		{
+			col.y = 0.5;
+		}
+		else if (i == 2)
+		{
+			col.z = 0.5;
+		}
+		}
+		#endif
 		/*
 		if (smuv.x < 1.f && smuv.y < 1.f && smuv.x > 0.f && smuv.y > 0.f)
 		{
@@ -59,12 +138,17 @@ float GetShadow(float3 wpos,Texture2D<float4> tex, float2 offset)
 			{
 				shadow = shadowMap_3.Sample(Sampler, smuv + pix / 2).r;
 			}
-			int isShadow = !step(depth,shadow.r + depthoffset[i]);
+			int isShadow = 1.f-step(depth,shadow.r + depthoffset[i]);
 			return float2(1.f*isShadow,(depth-shadow)*isShadow);
 		}*/
 	}
 	//int isShadow = !step(depth,shadow.r + depthoffset[i]);
-	return float2(1.f*isShadow,(depth-shadow)*isShadow);
+	//return float2(1.f*isShadow,(depth-shadow)*isShadow);
+	#if DEBUG_SHADOWMAP
+	return float4(1.f*isShadow,col);
+	#else
+	return float(isShadow);
+	#endif
 	//return float2(0.f,0.f);
 }
 
@@ -225,9 +309,15 @@ PSOutput PSProcess_GBuffer(float4 albe,PSInput In)
 	//Out.specular = float4(In.Pos,1.0f);			//スペキュラマップ
 	
 	Out.depth = In.PosInProj.z / In.PosInProj.w;
-
-	float2 sdw = GetShadow(In.Pos, shadowMap_1,0);
-	Out.shadow = float4(sdw,Out.depth.x*sdw.x,1);//x:影の有無 y:未使用 z:深度値(多分使わない) w:未使用.
+	
+	#if DEBUG_SHADOWMAP
+	float4 sdw = GetShadow(In.Pos, shadowMap_1,0);
+	Out.diffuse.xyz += sdw.yzw;
+	Out.shadow = float4(sdw.xy,Out.depth.x*sdw.x,1);//x:影の有無 y:未使用 z:深度値(多分使わない) w:未使用.
+	#else
+	float sdw = GetShadow(In.Pos, shadowMap_1,0);
+	Out.shadow = float4(sdw.x,0,Out.depth.x*sdw.x,1);//x:影の有無 y:未使用 z:深度値(多分使わない) w:未使用.
+	#endif
 	return Out;
 }
 
