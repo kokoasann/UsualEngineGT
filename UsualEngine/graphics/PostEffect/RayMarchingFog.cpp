@@ -24,6 +24,8 @@ namespace UsualEngine
 		samp.Quality = 0;
 		m_rtFog.Create(FRAME_BUFFER_W * 0.5f, FRAME_BUFFER_H * 0.5f, 1, 1, DXGI_FORMAT_R16G16B16A16_FLOAT, DXGI_FORMAT_UNKNOWN, samp);
 		m_rtVolume.Create(FRAME_BUFFER_W * 0.5f, FRAME_BUFFER_H * 0.5f, 1, 1, DXGI_FORMAT_R16G16B16A16_FLOAT, DXGI_FORMAT_UNKNOWN, samp);
+		m_blur.Init(FRAME_BUFFER_W, FRAME_BUFFER_H);
+		m_blur.SetDispersion(0.5f);
 	}
 	void RayMarchingFog::Release()
 	{
@@ -35,16 +37,16 @@ namespace UsualEngine
 		auto ge = usualEngine()->GetGraphicsEngine();
 		auto dc = ge->GetD3DDeviceContext();
 		auto& cam = usualEngine()->GetMainCamera();
+		auto& shadowmap = ge->GetShadowMap();
 		auto lig = ge->GetLightManager().GetMainLightDirection();
 
+		shadowmap.Send2GPU();
 		if (lig != nullptr)
 		{
 			m_cbData.mainLightDir = lig->GetDir();
 			m_cbData.mainLightColor = lig->GetCol();
 		}
 
-		m_cbData.camFar = cam.GetFar();
-		m_cbData.camNear = cam.GetNear();
 		m_cbData.camPos = cam.GetPosition();
 		m_cbData.mVP.Mul(cam.GetViewMatrix(), cam.GetProjectionMatrix());
 		m_cbData.mVPI.Inverse(m_cbData.mVP);
@@ -80,7 +82,10 @@ namespace UsualEngine
 		dc->PSSetShader((ID3D11PixelShader*)m_ps.GetBody(), 0, 0);
 		dc->IASetInputLayout(ShaderSample::VS_Copy.GetInputLayout());
 
-		//pe->DrawPrimitive();
+		pe->DrawPrimitive();
+
+		//blur
+		auto blured = m_blur.Render(m_rtFog.GetSRV(), FRAME_BUFFER_W * 0.5f, FRAME_BUFFER_H * 0.5f, pe->GetPrimitive());
 
 
 		//copy
@@ -90,13 +95,13 @@ namespace UsualEngine
 		vp[0] = { 0.f,0.f,(FLOAT)rts[0]->GetWidth(),(FLOAT)rts[0]->GetHeight() };
 		dc->RSSetViewports(1, vp);
 
-		dc->PSSetShaderResources(0, 1, &m_rtFog.GetSRV());
+		dc->PSSetShaderResources(0, 1, &blured);
 
 		dc->VSSetShader((ID3D11VertexShader*)ShaderSample::VS_Copy.GetBody(), NULL, 0);
 		dc->PSSetShader((ID3D11PixelShader*)ShaderSample::PS_Copy.GetBody(), NULL, 0);
 		dc->IASetInputLayout(ShaderSample::VS_Copy.GetInputLayout());
 
-		//pe->DrawPrimitive();
+		pe->DrawPrimitive();
 
 
 		dc->OMSetBlendState(BlendState::add, 0, 0xFFFFFFFF);

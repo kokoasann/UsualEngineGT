@@ -11,7 +11,8 @@
 //�A���x�h�e�N�X�`���B
 Texture2D<float4> albedoTexture : register(t0);
 
-#define DEBUG_SHADOWMAP 1
+#define DEBUG_SHADOWMAP 0
+#define SHADOW_RETURN_TYPE float
 
 //depthbuf = GetViewZ(depthbuf,ligFar[ind],ligNear[ind]);
 //shadowbuf = GetViewZ(shadowbuf,ligFar[ind],ligNear[ind]);
@@ -36,8 +37,8 @@ Texture2D<float4> albedoTexture : register(t0);
     isInUV = sign(isInUV+isInUVbuf);\
     ind++;\
 
-
-float4 GetShadow(float3 wpos,Texture2D<float4> tex, float2 offset)
+//影分配器。
+SHADOW_RETURN_TYPE GetShadow(float3 wpos, float2 offset)
 {
 	float shadow = 0.f;
 	float depth = 0.f;
@@ -67,7 +68,18 @@ float4 GetShadow(float3 wpos,Texture2D<float4> tex, float2 offset)
 		col.b = 0.5;
 	}
 	}
+	#else
+	{
+    	GET_SHADOW(1)
+	}
+	{
+    	GET_SHADOW(2)
+	}
+	{
+    	GET_SHADOW(3)
+	}
 	#endif
+
 
 	#if DEBUG_SHADOWMAP
 	return float4(isShadow,col);
@@ -77,7 +89,9 @@ float4 GetShadow(float3 wpos,Texture2D<float4> tex, float2 offset)
 }
 
 
-float4 _GetShadow(float3 wpos,Texture2D<float4> tex, float2 offset)
+//影分配機　多分もういらない
+#if 0
+SHADOW_RETURN_TYPE _GetShadow(float3 wpos,Texture2D<float4> tex, float2 offset)
 {
 	float shadow = 0.f;
 	float depth = 0.f;
@@ -153,6 +167,7 @@ float4 _GetShadow(float3 wpos,Texture2D<float4> tex, float2 offset)
 	#endif
 	//return float2(0.f,0.f);
 }
+#endif
 
 /*!
  *@brief	�X�L���s����v�Z�B
@@ -313,11 +328,11 @@ PSOutput PSProcess_GBuffer(float4 albe,PSInput In)
 	Out.depth = In.PosInProj.z / In.PosInProj.w;
 	
 	#if DEBUG_SHADOWMAP
-	float4 sdw = GetShadow(In.Pos, shadowMap_1,0);
+	float4 sdw = GetShadow(In.Pos,0);
 	Out.diffuse.xyz += sdw.yzw;
 	Out.shadow = float4(sdw.xy,Out.depth.x*sdw.x,1);//x:�e�̗L�� y:���g�p z:�[�x�l(�����g��Ȃ�) w:���g�p.
 	#else
-	float sdw = GetShadow(In.Pos, shadowMap_1,0);
+	float sdw = GetShadow(In.Pos,0);
 	Out.shadow = float4(sdw.x,0,Out.depth.x*sdw.x,1);//x:�e�̗L�� y:���g�p z:�[�x�l(�����g��Ȃ�) w:���g�p.
 	#endif
 	return Out;
