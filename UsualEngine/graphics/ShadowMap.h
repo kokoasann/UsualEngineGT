@@ -33,10 +33,12 @@ namespace UsualEngine
 			CVector4 texoffset[MAX_SHADOW_MAP];
 			CVector4 pixSize[MAX_SHADOW_MAP];
 			CVector4 depthoffset;
+			float ligNear[MAX_SHADOW_MAP];
+			float ligFar[MAX_SHADOW_MAP];
 		};
 		CVector3 m_lightDirection = CVector3::Down();				//ƒ‰ƒCƒg‚Ì•ûŒü
 		float m_near = 0.1f;
-		float m_far = 1000.f;
+		float m_far = 100000.f;
 		float m_lightHeight = 1000.f;
 		RenderTarget m_shadowMapRT[MAX_SHADOW_MAP];
 		ConstantBuffer m_shadowCB;

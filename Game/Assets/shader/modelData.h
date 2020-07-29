@@ -4,48 +4,48 @@
 sampler Sampler : register(s0);
 
 /*////////////////////////////////////////////////////////////////
-		VSInputŒn.
+		VSInputï¿½n.
 *////////////////////////////////////////////////////////////////
 /*!
- * @brief	ƒXƒLƒ“‚È‚µƒ‚ƒfƒ‹‚Ì’¸“_\‘¢‘ÌB
+ * @brief	ï¿½Xï¿½Lï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½Ì’ï¿½ï¿½_ï¿½\ï¿½ï¿½ï¿½ÌB
  */
 struct VSInputNmTxVcTangent
 {
-	float4 Position : SV_Position;			//’¸“_À•WB
-	float3 Normal : NORMAL;				//–@üB
-	float3 Tangent : TANGENT;				//ÚƒxƒNƒgƒ‹B
-	float2 TexCoord : TEXCOORD0;			//UVÀ•WB
+	float4 Position : SV_Position;			//ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½Wï¿½B
+	float3 Normal : NORMAL;				//ï¿½@ï¿½ï¿½ï¿½B
+	float3 Tangent : TANGENT;				//ï¿½Úƒxï¿½Nï¿½gï¿½ï¿½ï¿½B
+	float2 TexCoord : TEXCOORD0;			//UVï¿½ï¿½ï¿½Wï¿½B
 };
 
 /*!
- * @brief	ƒXƒLƒ“‚ ‚èƒ‚ƒfƒ‹‚Ì’¸“_\‘¢‘ÌB
+ * @brief	ï¿½Xï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½èƒ‚ï¿½fï¿½ï¿½ï¿½Ì’ï¿½ï¿½_ï¿½\ï¿½ï¿½ï¿½ÌB
  */
 struct VSInputNmTxWeights
 {
-	float4 Position : SV_Position;			//’¸“_À•WB
-	float3 Normal : NORMAL;				//–@üB
-	float2 TexCoord : TEXCOORD0;			//UVÀ•WB
-	float3 Tangent : TANGENT;				//ÚƒxƒNƒgƒ‹B
-	uint4  Indices : BLENDINDICES0;		//‚±‚Ì’¸“_‚ÉŠÖ˜A•t‚¯‚³‚ê‚Ä‚¢‚éƒ{[ƒ“”Ô†Bx,y,z,w‚Ì—v‘f‚É“ü‚Á‚Ä‚¢‚éB4ƒ{[ƒ“ƒXƒLƒjƒ“ƒOB
-	float4 Weights : BLENDWEIGHT0;			//‚±‚Ì’¸“_‚ÉŠÖ˜A•t‚¯‚³‚ê‚Ä‚¢‚éƒ{[ƒ“‚Ö‚ÌƒXƒLƒ“ƒEƒFƒCƒgBx,y,z,w‚Ì—v‘f‚É“ü‚Á‚Ä‚¢‚éB4ƒ{[ƒ“ƒXƒLƒjƒ“ƒOB
+	float4 Position : SV_Position;			//ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½Wï¿½B
+	float3 Normal : NORMAL;				//ï¿½@ï¿½ï¿½ï¿½B
+	float2 TexCoord : TEXCOORD0;			//UVï¿½ï¿½ï¿½Wï¿½B
+	float3 Tangent : TANGENT;				//ï¿½Úƒxï¿½Nï¿½gï¿½ï¿½ï¿½B
+	uint4  Indices : BLENDINDICES0;		//ï¿½ï¿½ï¿½Ì’ï¿½ï¿½_ï¿½ÉŠÖ˜Aï¿½tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½{ï¿½[ï¿½ï¿½ï¿½Ôï¿½ï¿½Bx,y,z,wï¿½Ì—vï¿½fï¿½É“ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½B4ï¿½{ï¿½[ï¿½ï¿½ï¿½Xï¿½Lï¿½jï¿½ï¿½ï¿½Oï¿½B
+	float4 Weights : BLENDWEIGHT0;			//ï¿½ï¿½ï¿½Ì’ï¿½ï¿½_ï¿½ÉŠÖ˜Aï¿½tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½{ï¿½[ï¿½ï¿½ï¿½Ö‚ÌƒXï¿½Lï¿½ï¿½ï¿½Eï¿½Fï¿½Cï¿½gï¿½Bx,y,z,wï¿½Ì—vï¿½fï¿½É“ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½B4ï¿½{ï¿½[ï¿½ï¿½ï¿½Xï¿½Lï¿½jï¿½ï¿½ï¿½Oï¿½B
 };
 
 
 /*/////////////////////////////////////////////////////////////////////
-		PSInputŒn.
+		PSInputï¿½n.
 */////////////////////////////////////////////////////////////////////
 
 /*!
- * @brief	ƒsƒNƒZƒ‹ƒVƒF[ƒ_[‚Ì“ü—ÍB
+ * @brief	ï¿½sï¿½Nï¿½Zï¿½ï¿½ï¿½Vï¿½Fï¿½[ï¿½_ï¿½[ï¿½Ì“ï¿½ï¿½ÍB
  */
 struct PSInput {
 	float4 Position : SV_POSITION;
 	float3 Normal : NORMAL;
 	float3 Tangent : TANGENT;
 	float2 TexCoord : TEXCOORD0;
-	float3 Pos : TEXCOORD1;		//ƒ[ƒ‹ƒhÀ•W
-	float3 PosInView : TEXCOORD2;		//ƒJƒƒ‰‹óŠÔ‚Å‚ÌÀ•W
-	float4 PosInProj : TEXCOORD3;		//³‹K‰»À•WŒn‚Å‚ÌÀ•W
+	float3 Pos : TEXCOORD1;		//ï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½W
+	float3 PosInView : TEXCOORD2;		//ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô‚Å‚Ìï¿½ï¿½W
+	float4 PosInProj : TEXCOORD3;		//ï¿½ï¿½ï¿½Kï¿½ï¿½ï¿½ï¿½ï¿½Wï¿½nï¿½Å‚Ìï¿½ï¿½W
 };
 
 struct PSInputGround {
@@ -53,19 +53,19 @@ struct PSInputGround {
 	float3 Normal : NORMAL;
 	float3 Tangent : TANGENT;
 	float2 TexCoord : TEXCOORD0;
-	float3 Pos : TEXCOORD1;		//ƒ[ƒ‹ƒhÀ•W
-	float3 PosInView : TEXCOORD2;		//ƒJƒƒ‰‹óŠÔ‚Å‚ÌÀ•W
-	float4 PosInProj : TEXCOORD3;		//³‹K‰»À•WŒn‚Å‚ÌÀ•W
+	float3 Pos : TEXCOORD1;		//ï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½W
+	float3 PosInView : TEXCOORD2;		//ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô‚Å‚Ìï¿½ï¿½W
+	float4 PosInProj : TEXCOORD3;		//ï¿½ï¿½ï¿½Kï¿½ï¿½ï¿½ï¿½ï¿½Wï¿½nï¿½Å‚Ìï¿½ï¿½W
 	int4 NormalFlag : TEXCOORD4;
 };
 
 /*
-	[“x‚ğ“ü‚ê‚é‚½‚ß‚¾‚¯‚ÌƒsƒNƒZƒ‹ƒVƒF[ƒ_‚É“ü—Í‚·‚é\‘¢‘Ì
+	ï¿½[ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½é‚½ï¿½ß‚ï¿½ï¿½ï¿½ï¿½Ìƒsï¿½Nï¿½Zï¿½ï¿½ï¿½Vï¿½Fï¿½[ï¿½_ï¿½É“ï¿½ï¿½Í‚ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½
 */
 struct PSInputDepth
 {
 	float4 Position : SV_POSITION;
-	float4 PosInProj : TEXCOORD0;			//³‹K‰»À•WŒn‚Å‚ÌÀ•W
+	float4 PosInProj : TEXCOORD0;			//ï¿½ï¿½ï¿½Kï¿½ï¿½ï¿½ï¿½ï¿½Wï¿½nï¿½Å‚Ìï¿½ï¿½W
 };
 
 /*////////////////////////////////////////////////////////////////////////////////////////
@@ -83,10 +83,10 @@ struct PSOutput
 };
 
 /////////////////////////////////////////////////////////////
-// ’è”ƒoƒbƒtƒ@B
+// ï¿½è”ï¿½oï¿½bï¿½tï¿½@ï¿½B
 /////////////////////////////////////////////////////////////
 /*!
- * @brief	’¸“_ƒVƒF[ƒ_[‚ÆƒsƒNƒZƒ‹ƒVƒF[ƒ_[—p‚Ì’è”ƒoƒbƒtƒ@B
+ * @brief	ï¿½ï¿½ï¿½_ï¿½Vï¿½Fï¿½[ï¿½_ï¿½[ï¿½Æƒsï¿½Nï¿½Zï¿½ï¿½ï¿½Vï¿½Fï¿½[ï¿½_ï¿½[ï¿½pï¿½Ì’è”ï¿½oï¿½bï¿½tï¿½@ï¿½B
  */
 cbuffer VSPSCb : register(b0){
 	float4x4 mWorld;
@@ -100,7 +100,7 @@ cbuffer VSPSCb : register(b0){
 
 
 /*///////////////////////////////////////////////////////////////////////////////////////
-//		ƒ{[ƒ“s—ñ
+//		ï¿½{ï¿½[ï¿½ï¿½ï¿½sï¿½ï¿½
 *///////////////////////////////////////////////////////////////////////////////////////
 StructuredBuffer<float4x4> boneMatrix : register(t1);
 
@@ -108,7 +108,7 @@ StructuredBuffer<float4x4> boneMatrix : register(t1);
 
 
 /*////////////////////////////////////////////////////////////////////////////////////////
-	ƒXƒyƒLƒ…ƒ‰[
+	ï¿½Xï¿½yï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½[
 *//////////////////////////////////////////////////////////////////////////////////////////
 Texture2D<float4> specularMap:register(t39);
 Texture2D<float4> specularMap_1:register(t40);
@@ -117,57 +117,59 @@ Texture2D<float4> specularMap_3:register(t42);
 
 
 /*////////////////////////////////////////////////////////////////////////////////////////
-	heightƒ}ƒbƒv
+	heightï¿½}ï¿½bï¿½v
 *//////////////////////////////////////////////////////////////////////////////////////////
 Texture2D<float4> hightMap_1:register(t43);
 
 
 /*////////////////////////////////////////////////////////////////////////////////////////
-	Œiœc@Œn.
+	ï¿½iï¿½cï¿½@ï¿½n.
 *//////////////////////////////////////////////////////////////////////////////////////////
 #define MAX_SHADOWMAP 3
 
 cbuffer ShadowCB : register(b3)
 {
-	float4x4 mLVP[MAX_SHADOWMAP];			//ƒ‰ƒCƒgƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“ƒ}ƒgƒŠƒNƒX
-	float4 texoffset[MAX_SHADOWMAP];			//ƒIƒtƒZƒbƒg
-	float4 ligPixSize[MAX_SHADOWMAP];			//uv‚Å‚Ì1ƒsƒNƒZƒ‹‚ÌƒTƒCƒY
-	float4 depthoffset;		//[“xƒIƒtƒZƒbƒg
+	float4x4 mLVP[MAX_SHADOWMAP];			//ï¿½ï¿½ï¿½Cï¿½gï¿½rï¿½ï¿½ï¿½[ï¿½vï¿½ï¿½ï¿½Wï¿½Fï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½}ï¿½gï¿½ï¿½ï¿½Nï¿½X
+	float4 texoffset[MAX_SHADOWMAP];			//ï¿½Iï¿½tï¿½Zï¿½bï¿½g
+	float4 ligPixSize[MAX_SHADOWMAP];			//uvï¿½Å‚ï¿½1ï¿½sï¿½Nï¿½Zï¿½ï¿½ï¿½ÌƒTï¿½Cï¿½Y
+	float4 depthoffset;		//ï¿½[ï¿½xï¿½Iï¿½tï¿½Zï¿½bï¿½g
+	float ligNear[MAX_SHADOWMAP];
+	float ligFar[MAX_SHADOWMAP];
 }
 
-Texture2D<float4> shadowMap_1 : register(t2);		//ƒVƒƒƒhƒEƒ}ƒbƒv
-Texture2D<float4> shadowMap_2 : register(t3);		//ƒVƒƒƒhƒEƒ}ƒbƒv
-Texture2D<float4> shadowMap_3 : register(t4);		//ƒVƒƒƒhƒEƒ}ƒbƒv
+Texture2D<float4> shadowMap_1 : register(t2);		//ï¿½Vï¿½ï¿½ï¿½hï¿½Eï¿½}ï¿½bï¿½v
+Texture2D<float4> shadowMap_2 : register(t3);		//ï¿½Vï¿½ï¿½ï¿½hï¿½Eï¿½}ï¿½bï¿½v
+Texture2D<float4> shadowMap_3 : register(t4);		//ï¿½Vï¿½ï¿½ï¿½hï¿½Eï¿½}ï¿½bï¿½v
 
 
 // G-Buffer
-Texture2D<float4> gDiffuseMap : register(t5);	// ƒfƒtƒ…[ƒY
-Texture2D<float4> gSpecularMap : register(t6);	// ƒXƒyƒLƒ…ƒ‰
-Texture2D<float4> gDepthMap : register(t7);		// ƒfƒvƒX
-Texture2D<float4> gNormalMap : register(t8);	// ƒm[ƒ}ƒ‹
-Texture2D<float4> gShadowMap : register(t9);	// ƒVƒƒƒhƒE
-Texture2D<float4> gTangentMap : register(t10);	// ƒ^ƒ“ƒWƒFƒ“ƒg
+Texture2D<float4> gDiffuseMap : register(t5);	// ï¿½fï¿½tï¿½ï¿½ï¿½[ï¿½Y
+Texture2D<float4> gSpecularMap : register(t6);	// ï¿½Xï¿½yï¿½Lï¿½ï¿½ï¿½ï¿½
+Texture2D<float4> gDepthMap : register(t7);		// ï¿½fï¿½vï¿½X
+Texture2D<float4> gNormalMap : register(t8);	// ï¿½mï¿½[ï¿½}ï¿½ï¿½
+Texture2D<float4> gShadowMap : register(t9);	// ï¿½Vï¿½ï¿½ï¿½hï¿½E
+Texture2D<float4> gTangentMap : register(t10);	// ï¿½^ï¿½ï¿½ï¿½Wï¿½Fï¿½ï¿½ï¿½g
 
 
 /*/////////////////////////////////////////////////////////////////////////////////////////////
-		’n–Ê—p
+		ï¿½nï¿½Ê—p
 */////////////////////////////////////////////////////////////////////////////////////////////
 
 cbuffer GroundCB : register(b5)
 {
-	float4 groundScale;				//ƒXƒP[ƒ‹
-	float4x4 groundDir;					//‰ñ“]ƒ}ƒgƒŠƒNƒX
+	float4 groundScale;				//ï¿½Xï¿½Pï¿½[ï¿½ï¿½
+	float4x4 groundDir;					//ï¿½ï¿½]ï¿½}ï¿½gï¿½ï¿½ï¿½Nï¿½X
 	int4 groundUseTexs;
 	int4 groundUseSpes;
 }
 cbuffer GroundCB_VS:register(b6)
 {
-	int isUseHightMap:packoffset(c0.x);	//ƒnƒCƒgƒ}ƒbƒv‚ğg‚¤H
-	float hightScale:packoffset(c0.y);	//ƒnƒCƒgƒ}ƒbƒv‚Ì’l‚ÌƒXƒP[ƒ‹
+	int isUseHightMap:packoffset(c0.x);	//ï¿½nï¿½Cï¿½gï¿½}ï¿½bï¿½vï¿½ï¿½ï¿½gï¿½ï¿½ï¿½H
+	float hightScale:packoffset(c0.y);	//ï¿½nï¿½Cï¿½gï¿½}ï¿½bï¿½vï¿½Ì’lï¿½ÌƒXï¿½Pï¿½[ï¿½ï¿½
 }
 Texture2D<float4> groundBlendMap:register(t101);
 
 
-Texture2D<float4> texture_1:register(t102);		//‘½–Ú“I—p
-Texture2D<float4> texture_2:register(t103);		//‘½–Ú“I—p
-Texture2D<float4> texture_3:register(t104);		//‘½–Ú“I—p
+Texture2D<float4> texture_1:register(t102);		//ï¿½ï¿½ï¿½Ú“Iï¿½p
+Texture2D<float4> texture_2:register(t103);		//ï¿½ï¿½ï¿½Ú“Iï¿½p
+Texture2D<float4> texture_3:register(t104);		//ï¿½ï¿½ï¿½Ú“Iï¿½p

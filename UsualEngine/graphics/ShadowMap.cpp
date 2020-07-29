@@ -29,9 +29,9 @@ namespace UsualEngine
 		}
 		m_shadowCB.Create(&m_shadowCBEntity, sizeof(m_shadowCBEntity));
 		
-		m_shadowCBEntity.depthoffset.x = 0.003f;
-		m_shadowCBEntity.depthoffset.y = 0.05f;
-		m_shadowCBEntity.depthoffset.z = 0.1f;
+		m_shadowCBEntity.depthoffset.x = 0.0001f;
+		m_shadowCBEntity.depthoffset.y = 0.0001f;
+		m_shadowCBEntity.depthoffset.z = 0.0001f;
 
 		m_lightHeight = 500.f;
 
@@ -106,8 +106,8 @@ namespace UsualEngine
 		cameraUp.Cross(MainCamera.GetRight(), MainCamera.GetForward());
 
 		//float shadowAriaTable[3] = { 1.f,10.0f,20.5f };
-		float shadowPosTable[3] = { 0.4f,6.f,8.f };
-		float shadowAriaTable[3] = { 0.4f,0.8f,1.6f };
+		float shadowAriaTable[3] = { 0.4f,0.8f,1.5f };
+		//float shadowAriaTable[3] = { 0.4f,0.8f,1.6f };
 		//float shadowPosTable[3] = { 1,0.5f,0.25f };
 		//float offsetLen[3] = { 0.5,1,1.5 };
 
@@ -188,6 +188,9 @@ namespace UsualEngine
 			);
 			m_mLVP[i].Mul(mLightView, proj);
 			m_shadowCBEntity.mLVP[i] = m_mLVP[i];
+
+			m_shadowCBEntity.ligFar[i] = m_far;
+			m_shadowCBEntity.ligNear[i] = m_near;
 
 			nearPlaneZ = farPlaneZ;
 		}

@@ -1,5 +1,5 @@
 /*!
- * @brief	ƒ‚ƒfƒ‹ƒVƒF[ƒ_[B
+ * @brief	ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½Vï¿½Fï¿½[ï¿½_ï¿½[ï¿½B
  */
 
 #include "modelData.h"
@@ -8,25 +8,27 @@
 /////////////////////////////////////////////////////////////
 // Shader Resource View
 /////////////////////////////////////////////////////////////
-//ƒAƒ‹ƒxƒhƒeƒNƒXƒ`ƒƒB
+//ï¿½Aï¿½ï¿½ï¿½xï¿½hï¿½eï¿½Nï¿½Xï¿½`ï¿½ï¿½ï¿½B
 Texture2D<float4> albedoTexture : register(t0);
 
 #define DEBUG_SHADOWMAP 1
 
-
-
+//depthbuf = GetViewZ(depthbuf,ligFar[ind],ligNear[ind]);
+//shadowbuf = GetViewZ(shadowbuf,ligFar[ind],ligNear[ind]);
 #define GET_SHADOW(MAPIND)\
  \
     float4 posinLVP = mul(mLVP[ind], float4(wpos, 1)); \
     posinLVP.xyz /= posinLVP.w;\
     float depthbuf = min(posinLVP.z / posinLVP.w, 1.0f);\
+	\
     float2 smuv = float2(0.5f, -0.5f) * posinLVP.xy + float2(0.5f, 0.5f);\
 \
     float isInUVbuf = (step(smuv.x,1.f)) * (step(smuv.y,1.f)) * (step(0.f,smuv.x)) * (step(0.f,smuv.y));\
     float2 pix = float2(ligPixSize[ind].x * offset.x, ligPixSize[ind].y * offset.y);\
 \
     float shadowbuf = shadowMap_##MAPIND.Sample(Sampler, smuv + pix).r;\
-    float isShadowbuf = 1.0f-step(depthbuf,shadowbuf);\
+	\
+    float isShadowbuf = 1.0f-step(depthbuf,shadowbuf+depthoffset[ind]);\
 \
     depth += depthbuf * (1.0f-isShadow)* isShadowbuf;\
     shadow += shadowbuf * (1.0f-isShadow)* isShadowbuf;\
@@ -153,7 +155,7 @@ float4 _GetShadow(float3 wpos,Texture2D<float4> tex, float2 offset)
 }
 
 /*!
- *@brief	ƒXƒLƒ“s—ñ‚ğŒvZB
+ *@brief	ï¿½Xï¿½Lï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½vï¿½Zï¿½B
  */
 float4x4 CalcSkinMatrix(VSInputNmTxWeights In)
 {
@@ -170,7 +172,7 @@ float4x4 CalcSkinMatrix(VSInputNmTxWeights In)
     return skinning;
 }
 /*!--------------------------------------------------------------------------------------
- * @brief	ƒXƒLƒ“‚È‚µƒ‚ƒfƒ‹—p‚Ì’¸“_ƒVƒF[ƒ_[B
+ * @brief	ï¿½Xï¿½Lï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½pï¿½Ì’ï¿½ï¿½_ï¿½Vï¿½Fï¿½[ï¿½_ï¿½[ï¿½B
 -------------------------------------------------------------------------------------- */
 PSInput VSMain( VSInputNmTxVcTangent In ) 
 {
@@ -191,16 +193,16 @@ PSInput VSMain( VSInputNmTxVcTangent In )
 }
 
 /*!--------------------------------------------------------------------------------------
- * @brief	ƒXƒLƒ“‚ ‚èƒ‚ƒfƒ‹—p‚Ì’¸“_ƒVƒF[ƒ_[B
- * ‘S‚Ä‚Ì’¸“_‚É‘Î‚µ‚Ä‚±‚ÌƒVƒF[ƒ_[‚ªŒÄ‚Î‚ê‚éB
- * In‚Í1‚Â‚Ì’¸“_ƒf[ƒ^BVSInputNmTxWeights‚ğŒ©‚Ä‚İ‚æ‚¤B
+ * @brief	ï¿½Xï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½èƒ‚ï¿½fï¿½ï¿½ï¿½pï¿½Ì’ï¿½ï¿½_ï¿½Vï¿½Fï¿½[ï¿½_ï¿½[ï¿½B
+ * ï¿½Sï¿½Ä‚Ì’ï¿½ï¿½_ï¿½É‘Î‚ï¿½ï¿½Ä‚ï¿½ï¿½ÌƒVï¿½Fï¿½[ï¿½_ï¿½[ï¿½ï¿½ï¿½Ä‚Î‚ï¿½ï¿½B
+ * Inï¿½ï¿½1ï¿½Â‚Ì’ï¿½ï¿½_ï¿½fï¿½[ï¿½^ï¿½BVSInputNmTxWeightsï¿½ï¿½ï¿½ï¿½ï¿½Ä‚İ‚æ‚¤ï¿½B
 -------------------------------------------------------------------------------------- */
 PSInput VSMainSkin( VSInputNmTxWeights In ) 
 {
 	PSInput psInput = (PSInput)0;
 	///////////////////////////////////////////////////
-	//‚±‚±‚©‚çƒXƒLƒjƒ“ƒO‚ğs‚Á‚Ä‚¢‚é‰ÓŠB
-	//ƒXƒLƒ“s—ñ‚ğŒvZB
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½Lï¿½jï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Óï¿½ï¿½B
+	//ï¿½Xï¿½Lï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½vï¿½Zï¿½B
 	///////////////////////////////////////////////////
 	float4x4 skinning = 0;	
 	float4 pos = 0;
@@ -210,16 +212,16 @@ PSInput VSMainSkin( VSInputNmTxWeights In )
 		[unroll(3)]
 	    for (int i = 0; i < 3; i++)
 	    {
-			//boneMatrix‚Éƒ{[ƒ“s—ñ‚ªİ’è‚³‚ê‚Ä‚¢‚ÄA
-			//In.indices‚Í’¸“_‚É–„‚ß‚Ü‚ê‚½AŠÖ˜A‚µ‚Ä‚¢‚éƒ{[ƒ“‚Ì”Ô†B
-			//In.weights‚Í’¸“_‚É–„‚ß‚Ü‚ê‚½AŠÖ˜A‚µ‚Ä‚¢‚éƒ{[ƒ“‚ÌƒEƒFƒCƒgB
+			//boneMatrixï¿½Éƒ{ï¿½[ï¿½ï¿½ï¿½sï¿½ñ‚ªİ’è‚³ï¿½ï¿½Ä‚ï¿½ï¿½ÄA
+			//In.indicesï¿½Í’ï¿½ï¿½_ï¿½É–ï¿½ï¿½ßï¿½ï¿½Ü‚ê‚½ï¿½Aï¿½Ö˜Aï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½{ï¿½[ï¿½ï¿½ï¿½Ì”Ôï¿½ï¿½B
+			//In.weightsï¿½Í’ï¿½ï¿½_ï¿½É–ï¿½ï¿½ßï¿½ï¿½Ü‚ê‚½ï¿½Aï¿½Ö˜Aï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½{ï¿½[ï¿½ï¿½ï¿½ÌƒEï¿½Fï¿½Cï¿½gï¿½B
 	        skinning += boneMatrix[In.Indices[i]] * In.Weights[i];
 	        w += In.Weights[i];
 	    }
-	    //ÅŒã‚Ìƒ{[ƒ“‚ğŒvZ‚·‚éB
+	    //ï¿½ÅŒï¿½Ìƒ{ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Zï¿½ï¿½ï¿½ï¿½B
 	    skinning += boneMatrix[In.Indices[3]] * (1.0f - w);
-	  	//’¸“_À•W‚ÉƒXƒLƒ“s—ñ‚ğæZ‚µ‚ÄA’¸“_‚ğƒ[ƒ‹ƒh‹óŠÔ‚É•ÏŠ·B
-		//mul‚ÍæZ–½—ßB
+	  	//ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½Wï¿½ÉƒXï¿½Lï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½ÄAï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½hï¿½ï¿½Ô‚É•ÏŠï¿½ï¿½B
+		//mulï¿½Íï¿½Zï¿½ï¿½ï¿½ßB
 	    pos = mul(skinning, In.Position);
 	}
 	psInput.Normal = normalize( mul(skinning, In.Normal) );
@@ -260,14 +262,14 @@ PSInputGround VSMain_Ground(VSInputNmTxVcTangent In)
 	psInput.NormalFlag.y = step(ax,ay)*step(az,ay);
 	psInput.NormalFlag.z = step(ay,az)*step(ax,az)*step(0,In.Normal.z);
 
-	//ƒnƒCƒgƒ}ƒbƒv‚Ì“Ç‚İ‚İ(u~nŒ©‚½–Ú‚ª•Ï‚í‚é‚¾‚¯‚¾‚©‚çˆÈ—ˆ‚È‚¢‚©‚à`EEE)
+	//ï¿½nï¿½Cï¿½gï¿½}ï¿½bï¿½vï¿½Ì“Ç‚İï¿½ï¿½ï¿½(u~nï¿½ï¿½ï¿½ï¿½ï¿½Ú‚ï¿½ï¿½Ï‚ï¿½é‚¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È—ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½`ï¿½Eï¿½Eï¿½E)
 	//psInput.Position += (ps.Normal * hightMap_1.Sample(Sampler,In.TexCoord).x) * hightScale;
 
 	return psInput;
 }
 
 /*///////////////////////////////////////////////////////////////////////////////////////////
-		ƒXƒLƒ“‚È‚µ—p‚Ì[“x’l“ü‚ê‚éê—p‚Ì’¸“_ƒVƒF[ƒ_
+		ï¿½Xï¿½Lï¿½ï¿½ï¿½È‚ï¿½ï¿½pï¿½Ì[ï¿½xï¿½lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½Ì’ï¿½ï¿½_ï¿½Vï¿½Fï¿½[ï¿½_
 *///////////////////////////////////////////////////////////////////////////////////////////
 PSInputDepth VSMainDepth(VSInputNmTxVcTangent In)
 {
@@ -282,13 +284,13 @@ PSInputDepth VSMainDepth(VSInputNmTxVcTangent In)
 }
 
 /*///////////////////////////////////////////////////////////////////////////////////////////
-		ƒXƒLƒ“‚ ‚è—p‚Ì[“x’l“ü‚ê‚éê—p‚Ì’¸“_ƒVƒF[ƒ_
+		ï¿½Xï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½Ì[ï¿½xï¿½lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½Ì’ï¿½ï¿½_ï¿½Vï¿½Fï¿½[ï¿½_
 *///////////////////////////////////////////////////////////////////////////////////////////
 PSInputDepth VSMainDepth_Skin(VSInputNmTxWeights In)
 {
 	PSInputDepth psInput = (PSInputDepth)0;
 
-	//ƒXƒLƒ“s—ñ‚ğŒvZB
+	//ï¿½Xï¿½Lï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½vï¿½Zï¿½B
 	float4x4 skinning = CalcSkinMatrix(In);
 
 	float4 pos;
@@ -306,23 +308,23 @@ PSOutput PSProcess_GBuffer(float4 albe,PSInput In)
 	Out.diffuse = albe;
 	Out.normal = float4(In.Normal,1.0f);
 	Out.tangent = float4(In.Tangent,1.0f);
-	//Out.specular = float4(In.Pos,1.0f);			//ƒXƒyƒLƒ…ƒ‰ƒ}ƒbƒv
+	//Out.specular = float4(In.Pos,1.0f);			//ï¿½Xï¿½yï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½}ï¿½bï¿½v
 	
 	Out.depth = In.PosInProj.z / In.PosInProj.w;
 	
 	#if DEBUG_SHADOWMAP
 	float4 sdw = GetShadow(In.Pos, shadowMap_1,0);
 	Out.diffuse.xyz += sdw.yzw;
-	Out.shadow = float4(sdw.xy,Out.depth.x*sdw.x,1);//x:‰e‚Ì—L–³ y:–¢g—p z:[“x’l(‘½•ªg‚í‚È‚¢) w:–¢g—p.
+	Out.shadow = float4(sdw.xy,Out.depth.x*sdw.x,1);//x:ï¿½eï¿½Ì—Lï¿½ï¿½ y:ï¿½ï¿½ï¿½gï¿½p z:ï¿½[ï¿½xï¿½l(ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½È‚ï¿½) w:ï¿½ï¿½ï¿½gï¿½p.
 	#else
 	float sdw = GetShadow(In.Pos, shadowMap_1,0);
-	Out.shadow = float4(sdw.x,0,Out.depth.x*sdw.x,1);//x:‰e‚Ì—L–³ y:–¢g—p z:[“x’l(‘½•ªg‚í‚È‚¢) w:–¢g—p.
+	Out.shadow = float4(sdw.x,0,Out.depth.x*sdw.x,1);//x:ï¿½eï¿½Ì—Lï¿½ï¿½ y:ï¿½ï¿½ï¿½gï¿½p z:ï¿½[ï¿½xï¿½l(ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½È‚ï¿½) w:ï¿½ï¿½ï¿½gï¿½p.
 	#endif
 	return Out;
 }
 
 //--------------------------------------------------------------------------------------
-// ƒsƒNƒZƒ‹ƒVƒF[ƒ_[‚ÌƒGƒ“ƒgƒŠŠÖ”B
+// ï¿½sï¿½Nï¿½Zï¿½ï¿½ï¿½Vï¿½Fï¿½[ï¿½_ï¿½[ï¿½ÌƒGï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Öï¿½ï¿½B
 //--------------------------------------------------------------------------------------
 PSOutput PSMain(PSInput In)
 {
@@ -339,16 +341,16 @@ PSOutput PSMain(PSInput In)
 
 
 /*/////////////////////////////////////////////////////////////////////////////////
-		’n–Ê—pB
-			ƒ‚ƒfƒ‹‚ÌŠg‘åk¬‚É‚æ‚Á‚ÄUV‚ª•ÏŒ`‚·‚é‚±‚Æ‚ª‚È‚¢‚æ‚¤‚É‚È‚Á‚Ä‚¢‚é
+		ï¿½nï¿½Ê—pï¿½B
+			ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½ÌŠgï¿½ï¿½kï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½ï¿½UVï¿½ï¿½ï¿½ÏŒ`ï¿½ï¿½ï¿½é‚±ï¿½Æ‚ï¿½ï¿½È‚ï¿½ï¿½æ‚¤ï¿½É‚È‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½
 */////////////////////////////////////////////////////////////////////////////////
 PSOutput PSMain_Ground(PSInputGround In)
 {
 	float2 UV = In.TexCoord;
-	float3 gsca = groundScale.xyz;	//’n–Ê‚ÌƒXƒP[ƒ‹
+	float3 gsca = groundScale.xyz;	//ï¿½nï¿½Ê‚ÌƒXï¿½Pï¿½[ï¿½ï¿½
 
 	/*
-	float3 orig = normalize(mul(groundDir,In.Normal));//‰ñ“]‚ğ‚È‚­‚·
+	float3 orig = normalize(mul(groundDir,In.Normal));//ï¿½ï¿½]ï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½
 
 	
 	In.TexCoord *= 2.f;
@@ -357,11 +359,11 @@ PSOutput PSMain_Ground(PSInputGround In)
 	float y = abs(orig.y);
 	float z = abs(orig.z);
 	float o = 0;
-	if (x > y && x > z)			//x²‚Ì•û‚ğŒü‚¢‚Ä‚¢‚é–Ê
+	if (x > y && x > z)			//xï¿½ï¿½ï¿½Ì•ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½
 	{
 		gsca.x = gsca.y;
 	}
-	else if (y > x && y > z)	//y²‚Ì•û‚ğŒü‚¢‚Ä‚¢‚é–Ê
+	else if (y > x && y > z)	//yï¿½ï¿½ï¿½Ì•ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½
 	{
 		if (orig.y < 0)
 		{
@@ -370,7 +372,7 @@ PSOutput PSMain_Ground(PSInputGround In)
 			gsca.x = o;
 		}
 	}
-	else if (z > x && z > y)	//z²‚Ì•û‚ğŒü‚¢‚Ä‚¢‚é–Ê
+	else if (z > x && z > y)	//zï¿½ï¿½ï¿½Ì•ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½
 	{
 		gsca.z = gsca.x;
 		gsca.x = gsca.y;
@@ -397,9 +399,9 @@ PSOutput PSMain_Ground(PSInputGround In)
 	uvs *= 5.0f;
 	//uvs *= 2.0f;
 
-	//ƒAƒ‹ƒxƒh‚Ìæ“¾
+	//ï¿½Aï¿½ï¿½ï¿½xï¿½hï¿½Ìæ“¾
 	float4 alb = float4(0, 0, 0, 1);
-	//if (groundUseTexs.x!=0)//ƒuƒŒƒ“ƒhES
+	//if (groundUseTexs.x!=0)//ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½hï¿½ES
 	//{
 	//	float4 blend = groundBlendMap.Sample(Sampler, UV);
 	//	float4 alb1 = texture_1.Sample(Sampler, In.TexCoord);
@@ -435,18 +437,18 @@ PSOutput PSMain_Ground(PSInputGround In)
 	float4 alb2 = texture_2.Sample(Sampler, uvs);
 	float len = 0.f;
 
-	//ƒuƒŒƒ“ƒh(ƒeƒNƒXƒ`ƒƒ2–‡)
+	//ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½h(ï¿½eï¿½Nï¿½Xï¿½`ï¿½ï¿½2ï¿½ï¿½)
 	len = blend.x + blend.y;
 	float2 blendTwoColor = blend.xy;
 	blendTwoColor /= len;
 	alb1 *= blendTwoColor.x;
 	alb2 *= blendTwoColor.y;
 	alb.xyz += (alb1.xyz + alb2.xyz) * groundUseTexs.x* !groundUseTexs.w;
-	//ƒXƒyƒLƒ…ƒ‰[ƒ}ƒbƒv‚ÌƒTƒ“ƒvƒŠƒ“ƒO
+	//ï¿½Xï¿½yï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½}ï¿½bï¿½vï¿½ÌƒTï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½O
 	specul += (specularMap_1.Sample(Sampler,uvs).x*blendTwoColor.x + specularMap_2.Sample(Sampler,uvs).x*blendTwoColor.y) * groundUseSpes.y* !groundUseSpes.w;
 
 
-	//ƒuƒŒƒ“ƒh(ƒeƒNƒXƒ`ƒƒ3–‡)
+	//ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½h(ï¿½eï¿½Nï¿½Xï¿½`ï¿½ï¿½3ï¿½ï¿½)
 	float4 alb3 = texture_2.Sample(Sampler, uvs);
 	len = blend.x + blend.y + blend.z;
 	float3 blendThreeColor = blend.xyz;
@@ -456,15 +458,15 @@ PSOutput PSMain_Ground(PSInputGround In)
 	alb3 *= blendThreeColor.z;
 	alb.xyz += (alb1.xyz + alb2.xyz + alb3.xyz)* groundUseTexs.w;
 
-	//ƒXƒyƒLƒ…ƒ‰[ƒ}ƒbƒv‚ÌƒTƒ“ƒvƒŠƒ“ƒO
+	//ï¿½Xï¿½yï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½}ï¿½bï¿½vï¿½ÌƒTï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½O
 	specul += (specularMap_1.Sample(Sampler,uvs).x*blendThreeColor.x + specularMap_2.Sample(Sampler,uvs).x*blendThreeColor.y + specularMap_3.Sample(Sampler,uvs).x*blendThreeColor.z) * groundUseSpes.w;
 
 
-	//ƒuƒŒƒ“ƒh‚È‚µ
+	//ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½hï¿½È‚ï¿½
 	float3 albtex = albedoTexture.Sample(Sampler, uvs);
 	alb.xyz += albtex * !groundUseTexs.x;
 
-	//ƒXƒyƒLƒ…ƒ‰[ƒ}ƒbƒv‚ÌƒTƒ“ƒvƒŠƒ“ƒO
+	//ï¿½Xï¿½yï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½}ï¿½bï¿½vï¿½ÌƒTï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½O
 	specul += specularMap_1.Sample(Sampler,uvs).x * groundUseSpes.y;
 	
 	specul += 1-groundUseSpes.y;
@@ -514,17 +516,17 @@ float2 UVChanger(float2 UV,float3 groundScale,int4 NormalFlag,float offset)
 }
 
 /*//////////////////////////////////////////////////////////////////////////
-		’n–Ê—pƒfƒtƒHƒ‹ƒg
-		ƒ‚ƒfƒ‹‚ğ‚Ù‚Ú‚»‚Ì‚Ü‚Ü•`‰æ‚·‚éB
+		ï¿½nï¿½Ê—pï¿½fï¿½tï¿½Hï¿½ï¿½ï¿½g
+		ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½ï¿½ï¿½Ù‚Ú‚ï¿½ï¿½Ì‚Ü‚Ü•`ï¿½æ‚·ï¿½ï¿½B
 */////////////////////////////////////////////////////////////////////////
 PSOutput PSMain_GroundDefault(PSInputGround In)
 {
 	float2 UV = In.TexCoord;
-	float3 gsca = groundScale.xyz;	//’n–Ê‚ÌƒXƒP[ƒ‹
+	float3 gsca = groundScale.xyz;	//ï¿½nï¿½Ê‚ÌƒXï¿½Pï¿½[ï¿½ï¿½
 
 	float2 uvs = UVChanger(UV,gsca,In.NormalFlag,5.0f*0.333333f);
 
-	//ƒAƒ‹ƒxƒh‚Ìæ“¾
+	//ï¿½Aï¿½ï¿½ï¿½xï¿½hï¿½Ìæ“¾
 	float4 alb = float4(0, 0, 0, 1);
 
 	float4 blend = groundBlendMap.Sample(Sampler, UV);
@@ -532,11 +534,11 @@ PSOutput PSMain_GroundDefault(PSInputGround In)
 	float4 alb2 = texture_2.Sample(Sampler, uvs);
 	float len = 0.f;
 
-	//ƒuƒŒƒ“ƒh‚È‚µ
+	//ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½hï¿½È‚ï¿½
 	float3 albtex = albedoTexture.Sample(Sampler, uvs);
 	alb.xyz += albtex;// * !groundUseTexs.x;
 
-	//ƒXƒyƒLƒ…ƒ‰[ƒ}ƒbƒv‚ÌƒTƒ“ƒvƒŠƒ“ƒO
+	//ï¿½Xï¿½yï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½}ï¿½bï¿½vï¿½ÌƒTï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½O
 	float specul = specularMap.Sample(Sampler,uvs).x * groundUseSpes.y;
 	specul += 1-groundUseSpes.y;
 
@@ -548,17 +550,17 @@ PSOutput PSMain_GroundDefault(PSInputGround In)
 
 
 /*//////////////////////////////////////////////////////////////////////////
-		’n–Ê—pƒuƒŒƒ“ƒh3
-		ƒXƒvƒ‰ƒbƒgƒ}ƒbƒv‚ğ‚à‚Æ‚É3–‡‚ÌƒeƒNƒXƒ`ƒƒ‚ğ‡¬‚·‚é
+		ï¿½nï¿½Ê—pï¿½uï¿½ï¿½ï¿½ï¿½ï¿½h3
+		ï¿½Xï¿½vï¿½ï¿½ï¿½bï¿½gï¿½}ï¿½bï¿½vï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½3ï¿½ï¿½ï¿½Ìƒeï¿½Nï¿½Xï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 */////////////////////////////////////////////////////////////////////////
 PSOutput PSMain_GroundBlendThree(PSInputGround In)
 {
 	float2 UV = In.TexCoord;
-	float3 gsca = groundScale.xyz;	//’n–Ê‚ÌƒXƒP[ƒ‹
+	float3 gsca = groundScale.xyz;	//ï¿½nï¿½Ê‚ÌƒXï¿½Pï¿½[ï¿½ï¿½
 
 	float2 uvs = UVChanger(UV,gsca,In.NormalFlag,5.0f*10);
 
-	//ƒAƒ‹ƒxƒh‚Ìæ“¾
+	//ï¿½Aï¿½ï¿½ï¿½xï¿½hï¿½Ìæ“¾
 	float4 alb = float4(0, 0, 0, 1);
 
 	
@@ -568,7 +570,7 @@ PSOutput PSMain_GroundBlendThree(PSInputGround In)
 	float4 alb3 = texture_3.Sample(Sampler, uvs);
 	float len = 0.f;
 
-	//ƒuƒŒƒ“ƒh(ƒeƒNƒXƒ`ƒƒ3–‡)
+	//ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½h(ï¿½eï¿½Nï¿½Xï¿½`ï¿½ï¿½3ï¿½ï¿½)
 	len = blend.x + blend.y + blend.z;
 	float3 blendThreeColor = blend.xyz;
 	blendThreeColor /= len;
@@ -577,7 +579,7 @@ PSOutput PSMain_GroundBlendThree(PSInputGround In)
 	alb3 *= blendThreeColor.z;
 	alb.xyz += (alb1.xyz + alb2.xyz + alb3.xyz);
 
-	//ƒXƒyƒLƒ…ƒ‰[ƒ}ƒbƒv‚ÌƒTƒ“ƒvƒŠƒ“ƒO
+	//ï¿½Xï¿½yï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½}ï¿½bï¿½vï¿½ÌƒTï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½O
 	float specul1 = specularMap_1.Sample(Sampler,uvs).x*groundUseSpes.y;
 	specul1 += 1 - groundUseSpes.y;
 	float specul2 = specularMap_2.Sample(Sampler,uvs).x*groundUseSpes.z;
@@ -594,17 +596,17 @@ PSOutput PSMain_GroundBlendThree(PSInputGround In)
 
 
 /*//////////////////////////////////////////////////////////////////////////
-		’n–Ê—pƒuƒŒƒ“ƒh2
-		ƒXƒvƒ‰ƒbƒgƒ}ƒbƒv‚ğ‚à‚Æ‚É2–‡‚ÌƒeƒNƒXƒ`ƒƒ‚ğ‡¬‚·‚é
+		ï¿½nï¿½Ê—pï¿½uï¿½ï¿½ï¿½ï¿½ï¿½h2
+		ï¿½Xï¿½vï¿½ï¿½ï¿½bï¿½gï¿½}ï¿½bï¿½vï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½2ï¿½ï¿½ï¿½Ìƒeï¿½Nï¿½Xï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 */////////////////////////////////////////////////////////////////////////
 PSOutput PSMain_GroundBlendTwo(PSInputGround In)
 {
 	float2 UV = In.TexCoord;
-	float3 gsca = groundScale.xyz;	//’n–Ê‚ÌƒXƒP[ƒ‹
+	float3 gsca = groundScale.xyz;	//ï¿½nï¿½Ê‚ÌƒXï¿½Pï¿½[ï¿½ï¿½
 
 	float2 uvs = UVChanger(UV,gsca,In.NormalFlag,5.0f);
 
-	//ƒAƒ‹ƒxƒh‚Ìæ“¾
+	//ï¿½Aï¿½ï¿½ï¿½xï¿½hï¿½Ìæ“¾
 	float4 alb = float4(0, 0, 0, 1);
 
 	
@@ -613,7 +615,7 @@ PSOutput PSMain_GroundBlendTwo(PSInputGround In)
 	float4 alb2 = texture_2.Sample(Sampler, uvs);
 	float len = 0.f;
 
-	//ƒuƒŒƒ“ƒh(ƒeƒNƒXƒ`ƒƒ2–‡)
+	//ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½h(ï¿½eï¿½Nï¿½Xï¿½`ï¿½ï¿½2ï¿½ï¿½)
 	len = blend.x + blend.y;
 	float2 blendTwoColor = blend.xy;
 	blendTwoColor /= len;
@@ -621,7 +623,7 @@ PSOutput PSMain_GroundBlendTwo(PSInputGround In)
 	alb2 *= blendTwoColor.y;
 	alb.xyz += (alb1.xyz + alb2.xyz);
 
-	//ƒXƒyƒLƒ…ƒ‰[ƒ}ƒbƒv‚ÌƒTƒ“ƒvƒŠƒ“ƒO
+	//ï¿½Xï¿½yï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½}ï¿½bï¿½vï¿½ÌƒTï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½O
 	float specul1 = specularMap_1.Sample(Sampler,uvs).x*groundUseSpes.y;
 	specul1 += 1 - groundUseSpes.y;
 	float specul2 = specularMap_2.Sample(Sampler,uvs).x*groundUseSpes.z;
@@ -635,7 +637,7 @@ PSOutput PSMain_GroundBlendTwo(PSInputGround In)
 
 
 /*///////////////////////////////////////////////////////////////////////////////
-		[“x’l“ü‚ê‚é‚½‚ß‚¾‚¯‚ÌƒsƒNƒZƒ‹ƒVƒF[ƒ_
+		ï¿½[ï¿½xï¿½lï¿½ï¿½ï¿½ï¿½é‚½ï¿½ß‚ï¿½ï¿½ï¿½ï¿½Ìƒsï¿½Nï¿½Zï¿½ï¿½ï¿½Vï¿½Fï¿½[ï¿½_
 *///////////////////////////////////////////////////////////////////////////////
 float PSMain_Depth(PSInputDepth In) : SV_Target0
 {

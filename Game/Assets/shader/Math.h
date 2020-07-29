@@ -17,3 +17,9 @@ float3 GetWorldPosition(float2 uv,float depth,float4x4 mVPI)
     float4 pos = mul(mVPI,projPos);
     return pos.xyz / pos.w;
 }
+
+//ビュー空間でのZに変換。
+float GetViewZ(float depth,float camFar,float camNear)
+{
+    return (camFar*camNear)/((camFar-camNear)*depth-camFar);
+}
