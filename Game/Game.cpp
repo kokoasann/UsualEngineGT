@@ -70,6 +70,12 @@ bool Game::Start()
 		alpha->SetRefractiveIndex(1.5f);
 	}
 
+	ue::SkinModelRender* TESTANA = ue::NewGO<ue::SkinModelRender>(0);
+	TESTANA->Init(L"Assets/model/ANA.cmo", 0, 0);
+	TESTANA->SetIsShadowCaster(true);
+	TESTANA->SetIsShadowReciever(true);
+	TESTANA->SetPos({ 2000,500,600 });
+	TESTANA->SetSca({ 100,10,100 });
 	
 	ue::SkinModelRender* weedSM = ue::NewGO<ue::SkinModelRender>(0);
 	weedSM->Init(L"Assets/model/weed.cmo", 0, 0, ue::enFbxUpAxisY);

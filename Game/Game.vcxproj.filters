@@ -164,6 +164,9 @@
     <Filter Include="Assets\Model\gib">
       <UniqueIdentifier>{73bf3788-da26-4b62-81f1-03775c9ae634}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Model\Test">
+      <UniqueIdentifier>{84c98d2d-99cc-49e0-8a43-37cb8fcbf9a2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\model.fx">
@@ -328,6 +331,9 @@
     </MeshContentTask>
     <MeshContentTask Include="Assets\model\gib\gib.bone.fbx">
       <Filter>Assets\Model\gib</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\AlphaModelTest\ANA.fbx">
+      <Filter>Assets\Model\Test</Filter>
     </MeshContentTask>
   </ItemGroup>
 </Project>

@@ -167,7 +167,6 @@ PSOutput_RMFog PSMain_RMFog(PSInput_RMFog In)
     for(int i=1;i<=rayCount;i++)
     {
         float3 rayPos = startPos+rayDir*rayStep*(float)i;
-
         {
             float4 vpp =  mul(mVP,float4(rayPos,1.f));
             float dep = vpp.z / vpp.w;
@@ -175,6 +174,7 @@ PSOutput_RMFog PSMain_RMFog(PSInput_RMFog In)
             if(dep>gdepth)
                 break;
         }
+        
         //rayPos += rayDir*offset*1000.f;
 
         float pernoise = 1.f-PerlinNoise3D(rayPos*fogScale);
@@ -182,7 +182,7 @@ PSOutput_RMFog PSMain_RMFog(PSInput_RMFog In)
 
         float hrate = fogHeight/(abs(rayPos.y)+0.1f);
         float f = pernoise * blend;
-        f *= min(hrate,1.f);
+        f *= hrate;
         float shadowDepth = (GetShadow(rayPos,0.f));
         volume += shadowDepth;
 
@@ -192,6 +192,8 @@ PSOutput_RMFog PSMain_RMFog(PSInput_RMFog In)
         foundation += (ligblend)*blend;
         fog += f;
         //fog += shadow;
+
+        
     }
     fog = clamp(fog,0.f,0.95f);
     foundation = clamp(foundation,0.f,0.5f);
@@ -200,7 +202,7 @@ PSOutput_RMFog PSMain_RMFog(PSInput_RMFog In)
 
     PSOutput_RMFog Out;
     //Out.fog = float4(col,fog);
-    Out.fog = float4(float3(0.9,0.9,0.9),min(fog*0.04*volume,1.f));
+    Out.fog = float4(float3(0.9,0.9,0.9),min(fog*0.04*volume,0.9f));
     Out.volume = mainLightColor*0.03*volume*fog*0.5;
     Out.volume.w *= fog*0.5;
     return Out;

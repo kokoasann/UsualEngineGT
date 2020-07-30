@@ -33,7 +33,7 @@ namespace UsualEngine
 		m_shadowCBEntity.depthoffset.y = 0.0001f;
 		m_shadowCBEntity.depthoffset.z = 0.0001f;
 
-		m_lightHeight = 500.f;
+		m_lightHeight = 2000.f;
 
 		m_lightDirection = { -0.3f,-1,-0.2f };
 		m_lightDirection.Normalize();
