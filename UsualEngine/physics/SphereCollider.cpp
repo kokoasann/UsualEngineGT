@@ -11,6 +11,7 @@ namespace UsualEngine
 	{
 		if (m_body != nullptr)
 			delete m_body;
+		m_body = nullptr;
 	}
 	void SphereCollider::Create(float radius)
 	{

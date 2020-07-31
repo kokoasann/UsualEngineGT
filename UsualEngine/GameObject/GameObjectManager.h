@@ -14,6 +14,9 @@ namespace UsualEngine
 		GameObjectManager();
 		~GameObjectManager();
 	public:
+
+		void Release();
+
 		struct NewGOData
 		{
 			GameObject* go = nullptr;
@@ -68,6 +71,7 @@ namespace UsualEngine
 			o->Awake();
 			o->SetPrio(prio);
 			o->SetName(hash);
+			o->CreatInGameObjectManager();
 			//m_gameObjectList[prio].push_back((GameObject*)go);
 			m_newGOBuffer.push_back({ go,(char)prio });
 			if (isCheckIned && m_checkInCountList[prio]>0)
@@ -89,13 +93,15 @@ namespace UsualEngine
 		void ClearCapacity(int prio);
 		void CheckIN(int prio, int count);
 	private:
-		static const size_t m_maxSize = 32;
-		std::array<std::vector<GameObject*>,m_maxSize> m_gameObjectList;
-		std::vector<NewGOData> m_newGOBuffer;
+		static const size_t m_maxSize = 32;					//priorityの最大値。
+		std::array<std::vector<GameObject*>,m_maxSize> m_gameObjectList;	//生きているゲームオブジェクトのリスト
+		std::vector<NewGOData> m_newGOBuffer;				//そのフレームに生成されたオブジェクトのリスト
 		
-		std::array<int, m_maxSize> m_checkInCountList;
-		std::vector<DeadData> m_ddList;
-		std::vector<GameObject*> m_trashBox;
+		std::array<int, m_maxSize> m_checkInCountList;		//
+		std::vector<DeadData> m_ddList;						//DeleteGOされたオブジェクトのリスト
+		std::vector<GameObject*> m_trashBox;				//再利用されるオブジェクトのリスト
+
+		bool m_isReleaseProcess = false;					//全オブジェクトの開放処理中？
 	};
 
 	template<class T>

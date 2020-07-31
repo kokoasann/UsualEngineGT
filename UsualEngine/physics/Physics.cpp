@@ -62,7 +62,9 @@ namespace UsualEngine
 	}
 	void PhysicsWorld::RemoveRigidBody(RigidBody & rb)
 	{
-		dynamicWorld->removeRigidBody(rb.GetBody());
+		auto body = rb.GetBody();
+		if(body != nullptr)
+			dynamicWorld->removeRigidBody(body);
 	}
 	void PhysicsWorld::DebugDraw()
 	{

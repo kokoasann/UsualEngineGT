@@ -62,13 +62,13 @@ namespace UsualEngine
 			m_prioGO = prio;
 		}
 		//優先度を返す
-		int GetPrio()
+		int GetPrio() const
 		{
 			return m_prioGO;
 		}
 
 		//スタート関数でtrueが返ってきたか。
-		bool IsStart()
+		bool IsStart() const
 		{
 			return m_isStartGO;
 		}
@@ -79,7 +79,7 @@ namespace UsualEngine
 		}
 
 		//死んでる？
-		bool IsDead()
+		bool IsDead() const
 		{
 			return m_isDeadGO;
 		}
@@ -90,7 +90,7 @@ namespace UsualEngine
 		}
 
 		//アクティブ？
-		bool IsActive()
+		bool IsActive() const
 		{
 			return m_isActiveGO;
 		}
@@ -106,12 +106,19 @@ namespace UsualEngine
 			m_isTrashTakeGO = true;
 		}
 		//ゴミ拾いする？
-		bool IsTrashTake()
+		bool IsTrashTake() const
 		{
 			return m_isTrashTakeGO;
 		}
 
-		
+		void CreatInGameObjectManager()
+		{
+			m_isCreatedInGOM = true;
+		}
+		bool IsCreatedInGameObjedtManager() const
+		{
+			return m_isCreatedInGOM;
+		}
 
 	private:
 		bool m_isStartGO = false;			//スタート関数呼ばれた？
@@ -122,6 +129,7 @@ namespace UsualEngine
 		int m_prioGO = 0;						//プライオリティ
 
 		bool m_isTrashTakeGO = true;	//ゴミ拾う？
+		bool m_isCreatedInGOM = false; //ゲームオブジェクトマネージャーで作成された。
 	protected:
 	};
 

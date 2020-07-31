@@ -5,9 +5,9 @@
 
 cbuffer PSCloudBuffer:register(b7)
 {
-    float3 campos;
+    float3 campos:packoffset(c0);
     //float3 camDir;
-    float3 mainLightDir;
+    float3 mainLightDir:packoffset(c1);
 }
 
 float4 PSMain_PlaneCloud(PSInput In):SV_Target0

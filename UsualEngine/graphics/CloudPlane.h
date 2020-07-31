@@ -34,6 +34,7 @@ namespace UsualEngine
 		struct CBData
 		{
 			CVector3 campos;	//カメラの位置。
+			float none=0.f;
 			//CVector3 camdir;
 			CVector3 mainLightDir;	//メインライトの向き
 		};

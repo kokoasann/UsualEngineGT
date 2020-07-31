@@ -39,7 +39,8 @@ namespace UsualEngine
 			return m_rigidBody;
 		}
 	private:
-		MeshCollider m_meshCollider;		//!<メッシュコライダー。
-		RigidBody m_rigidBody;				//!<剛体。
+		MeshCollider m_meshCollider;		//メッシュコライダー。
+		RigidBody m_rigidBody;				//剛体。
+		bool m_isCreated = false;			//Createは呼ばれた？
 	};
 }

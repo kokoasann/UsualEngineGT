@@ -13,7 +13,8 @@ namespace UsualEngine
 	}
 	PhysicsStaticObject::~PhysicsStaticObject()
 	{
-		Physics().RemoveRigidBody(m_rigidBody);
+		if(m_isCreated)
+			Physics().RemoveRigidBody(m_rigidBody);
 	}
 
 	void PhysicsStaticObject::CreateMeshObject(SkinModel& skinModel, CVector3 pos, CQuaternion rot, CVector3 sca)
@@ -38,5 +39,7 @@ namespace UsualEngine
 		m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_Ground);
 		//„‘Ì‚ğ•¨—ƒ[ƒ‹ƒh‚É’Ç‰Á‚·‚éB
 		Physics().AddRigidBody(m_rigidBody);
+
+		m_isCreated = true;
 	}
 }

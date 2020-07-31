@@ -42,6 +42,7 @@ namespace UsualEngine
 		for (int n = 0; n < m_bones.size(); n++)
 		{
 			delete m_bones[n];
+			m_bones[n] = nullptr;
 		}
 		//ボーン行列のストラクチャーバッファを解放。
 		if (m_boneMatrixSB != nullptr) {

@@ -14,6 +14,28 @@ namespace UsualEngine
 
 	GameObjectManager::~GameObjectManager()
 	{
+		Release();
+	}
+
+	void GameObjectManager::Release()
+	{
+		m_isReleaseProcess = true;
+
+		for (auto& golist : m_gameObjectList)
+		{
+			for (auto go : golist)
+			{
+				if (go->IsCreatedInGameObjedtManager())
+				{
+					delete go;
+				}
+			}
+		}
+
+		for (auto go : m_trashBox)
+		{
+			delete go;
+		}
 	}
 
 	void GameObjectManager::Update()
@@ -63,7 +85,7 @@ namespace UsualEngine
 
 	void GameObjectManager::DeleteGameObject(GameObject* go)
 	{
-		if (go == nullptr)
+		if (go == nullptr || m_isReleaseProcess)
 			return;
 		go->OnDestroy();
 		go->DoneDead();
@@ -122,10 +144,13 @@ namespace UsualEngine
 			GameObject* go = m_gameObjectList[dd.prio][dd.ind-Count];
 			auto it = std::find(m_gameObjectList[dd.prio].begin(), m_gameObjectList[dd.prio].end(), go);
 			m_gameObjectList[dd.prio].erase(it);
-			if (go->IsTrashTake())
-				m_trashBox.push_back(go);
-			else
-				delete go;
+			if (go->IsCreatedInGameObjedtManager())
+			{
+				if (go->IsTrashTake())
+					m_trashBox.push_back(go);
+				else
+					delete go;
+			}
 			Count++;
 
 		}
