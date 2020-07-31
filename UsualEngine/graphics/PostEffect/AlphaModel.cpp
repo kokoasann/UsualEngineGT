@@ -121,6 +121,7 @@ namespace UsualEngine
 		unsigned int mask = 0;
 		dc->OMGetBlendState(&blendS, factor, &mask);
 		dc->OMSetBlendState(BlendState_Trans(), 0, 0xFFFFFFFF);
+		dc->OMSetDepthStencilState(DepthStencilState::spriteRender, 0);
 		//m_pd3dDeviceContext->OMSetDepthStencilState(DepthStencilState::spriteRender, 0);
 
 		dc->VSSetShader((ID3D11VertexShader*)m_vsCopy.GetBody(), 0, 0);

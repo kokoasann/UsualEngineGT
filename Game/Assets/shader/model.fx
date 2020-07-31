@@ -14,6 +14,7 @@ Texture2D<float4> albedoTexture : register(t0);
 #define DEBUG_SHADOWMAP 0
 #define SHADOW_RETURN_TYPE float
 
+
 //depthbuf = GetViewZ(depthbuf,ligFar[ind],ligNear[ind]);
 //shadowbuf = GetViewZ(shadowbuf,ligFar[ind],ligNear[ind]);
 #define GET_SHADOW(MAPIND)\
@@ -48,25 +49,28 @@ SHADOW_RETURN_TYPE GetShadow(float3 wpos, float2 offset)
 	#if DEBUG_SHADOWMAP
 	float3 col = float3(0,0,0);
 	{
-    GET_SHADOW(1)
-	if(isInUVbuf)
-	{
-		col.r = 0.5;
-	}
-	}
-	{
-    GET_SHADOW(2)
-	if(isInUVbuf)
-	{
-		col.g = 0.5;
-	}
+		float oldisInUV = isInUV;
+		GET_SHADOW(1)
+		if(isInUVbuf*(1.f-oldisInUV))
+		{
+			col.r = 0.5;
+		}
 	}
 	{
-    GET_SHADOW(3)
-	if(isInUVbuf)
-	{
-		col.b = 0.5;
+		float oldisInUV = isInUV;
+		GET_SHADOW(2)
+		if(isInUVbuf*(1.f-oldisInUV))
+		{
+			col.g = 0.5;
+		}
 	}
+	{
+		float oldisInUV = isInUV;
+		GET_SHADOW(3)
+		if(isInUVbuf*(1.f-oldisInUV))
+		{
+			col.b = 0.5;
+		}
 	}
 	#else
 	{

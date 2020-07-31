@@ -3,6 +3,10 @@
 
 namespace UsualEngine
 {
+	/// <summary>
+	/// blenderで設定した場所にbox colliderを設置する
+	/// (スケルトン有りの物に限る)
+	/// </summary>
 	class CharacterBoxCollider:public GameObject
 	{
 	public:

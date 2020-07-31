@@ -106,7 +106,7 @@ namespace UsualEngine
 		cameraUp.Cross(MainCamera.GetRight(), MainCamera.GetForward());
 
 		//float shadowAriaTable[3] = { 1.f,10.0f,20.5f };
-		float shadowAriaTable[3] = { 0.4f,0.8f,1.5f };
+		float shadowAriaTable[3] = { 0.1f,0.5f,1.5f };
 		//float shadowAriaTable[3] = { 0.4f,0.8f,1.6f };
 		//float shadowPosTable[3] = { 1,0.5f,0.25f };
 		//float offsetLen[3] = { 0.5,1,1.5 };

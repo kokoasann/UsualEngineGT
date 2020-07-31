@@ -65,11 +65,11 @@ namespace UsualEngine
 			return mScale;
 		}
 	private:
-		Sprite mSprite;																//スプライト
-		CVector3 mPosition = CVector3::Zero();						//ポジション
+		Sprite mSprite;											//スプライト
+		CVector3 mPosition = CVector3::Zero();					//ポジション
 		CQuaternion mRotation = CQuaternion::Identity();		//ローテーション
-		CVector3 mScale = CVector3::One();							//スケール
-		CVector2 mPivot = {0.5f,0.5f};										//ピボット
+		CVector3 mScale = CVector3::One();						//スケール
+		CVector2 mPivot = {0.5f,0.5f};							//ピボット
 
 	};
 }

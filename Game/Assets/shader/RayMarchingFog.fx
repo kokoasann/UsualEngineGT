@@ -45,30 +45,6 @@ SHADOW_RETURN_TYPE GetShadow(float3 wpos, float2 offset)
 	float isShadow = 0.f;
 	float isInUV = 0.f;
     int ind = 0;
-	#if DEBUG_SHADOWMAP
-	float3 col = float3(0,0,0);
-	{
-    GET_SHADOW(1)
-	if(isInUVbuf)
-	{
-		col.r = 0.5;
-	}
-	}
-	{
-    GET_SHADOW(2)
-	if(isInUVbuf)
-	{
-		col.g = 0.5;
-	}
-	}
-	{
-    GET_SHADOW(3)
-	if(isInUVbuf)
-	{
-		col.b = 0.5;
-	}
-	}
-	#else
 	{
     	GET_SHADOW(1)
 	}
@@ -78,14 +54,8 @@ SHADOW_RETURN_TYPE GetShadow(float3 wpos, float2 offset)
 	{
     	GET_SHADOW(3)
 	}
-	#endif
 
-
-	#if DEBUG_SHADOWMAP
-	return float4(isShadow,col);
-	#else
 	return float(isShadow);
-	#endif
 }
 
 
@@ -100,6 +70,29 @@ struct PSOutput_RMFog
     float4 fog:SV_Target0;
     float4 volume:SV_Target1;
 };
+
+#define BINARY_ITERATIONS 8.f
+#define BYNARY_DECAY 0.2f
+
+void FogProcess(float3 rayPos,float fogScale,float blendScale,float concentration,float disperse,float fogHeight,
+                inout float volume,inout float foundation,inout float fog)
+{
+    float pernoise = 1.f-PerlinNoise3D(rayPos*fogScale);
+    float blend = (1.f-PerlinNoise3D(rayPos*blendScale))*concentration+disperse;
+
+    float hrate = fogHeight/(abs(rayPos.y)+0.1f);
+    //float hrate = 1.f-clamp(abs(rayPos.y)/fogHeight,0.f,1.f);
+    float f = pernoise * blend;
+    f *= hrate;
+    float shadowDepth = (GetShadow(rayPos,0.f));
+    volume += shadowDepth;
+
+    rayPos += mainLightDir*10.f;
+    float ligblend = (1.f-PerlinNoise3D(rayPos*blendScale))*concentration+disperse;
+
+    foundation += (ligblend)*blend;
+    fog += f;
+}
 
 PSOutput_RMFog PSMain_RMFog(PSInput_RMFog In)
 {
@@ -142,59 +135,57 @@ PSOutput_RMFog PSMain_RMFog(PSInput_RMFog In)
     
     {
         float3 rayPos = startPos+rayDir*40.f;
-
-        //rayPos += rayDir*offset*1000.f;
-
-        float pernoise = 1.f-PerlinNoise3D(rayPos*fogScale);
-        float blend = (1.f-PerlinNoise3D(rayPos*blendScale))*concentration+disperse;
-
-        float hrate = fogHeight/(abs(rayPos.y)+0.1f);
-        float f = pernoise * blend;
-        f *= min(hrate,1.f);
-        float shadowDepth = (GetShadow(rayPos,0.f));
-        volume += shadowDepth;
-
-        rayPos += mainLightDir*10.f;
-        float ligblend = (1.f-PerlinNoise3D(rayPos*blendScale))*concentration+disperse;
-
-        foundation += (ligblend)*blend;
-        fog += f;
-        //fog += shadow;
+        FogProcess(rayPos,fogScale,blendScale,concentration,disperse,fogHeight,volume,foundation,fog);
     }
     
-
+    float3 rayPos;
     [unroll(rayCount)]
     for(int i=1;i<=rayCount;i++)
     {
-        float3 rayPos = startPos+rayDir*rayStep*(float)i;
+        rayPos = startPos+rayDir*rayStep*(float)i;
         {
             float4 vpp =  mul(mVP,float4(rayPos,1.f));
             float dep = vpp.z / vpp.w;
+            
             [branch]
             if(dep>gdepth)
+            {
                 break;
+            }
         }
-        
-        //rayPos += rayDir*offset*1000.f;
 
-        float pernoise = 1.f-PerlinNoise3D(rayPos*fogScale);
-        float blend = (1.f-PerlinNoise3D(rayPos*blendScale))*concentration+disperse;
-
-        float hrate = fogHeight/(abs(rayPos.y)+0.1f);
-        float f = pernoise * blend;
-        f *= hrate;
-        float shadowDepth = (GetShadow(rayPos,0.f));
-        volume += shadowDepth;
-
-        rayPos += mainLightDir*10.f;
-        float ligblend = (1.f-PerlinNoise3D(rayPos*blendScale))*concentration+disperse;
-
-        foundation += (ligblend)*blend;
-        fog += f;
-        //fog += shadow;
-
-        
+        FogProcess(rayPos,fogScale,blendScale,concentration,disperse,fogHeight,volume,foundation,fog);
     }
+
+    {
+        #if 1
+        //二分木探索。
+        float3 rayAdd = rayDir*rayStep;
+        float isHitOld = 1.f;
+        float3 slide = rayAdd*-BYNARY_DECAY;
+        [unroll(BINARY_ITERATIONS)]
+        for(int i=0;i < BINARY_ITERATIONS;i++)
+        {
+            float isHit;
+            rayPos += slide;
+
+            float4 wp = mul(mVP,float4(rayPos,1.0f));
+            wp.xyz /= wp.w;
+            //float2 hitpix = wp.xy * float2(0.5f, -0.5f) + 0.5f;
+            float z = gdepth;
+            float dist = z - wp.z;
+
+            isHit = dist > 0.f;
+
+            //treuからfalseもしくはfalseからtrueになった場合折り返す。
+            float check = abs(isHitOld - isHit);
+            slide *= BYNARY_DECAY*(-1.f*check+(1.f-check));
+            isHitOld = isHit;
+        }
+        FogProcess(rayPos,fogScale,blendScale,concentration,disperse,fogHeight,volume,foundation,fog);
+        #endif
+    }
+
     fog = clamp(fog,0.f,0.95f);
     foundation = clamp(foundation,0.f,0.5f);
 
