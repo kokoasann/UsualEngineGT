@@ -45,6 +45,7 @@ namespace UsualEngine
 
 		Physics().Init();
 		Debug::Instance().InitDebugSwitch();
+		m_font.Init();
 	}
 
 	void UsualEngine::InitWindow(InitGameState initGS)
@@ -135,22 +136,32 @@ namespace UsualEngine
 			m_physics.Update();
 			lm.EndRender();
 
-			m_graphicsEngine->EndRender();
+			
+#if DEBUG_FUNC
+			if (DRAW_FPS)
+			{
+				m_count++;
+				if (m_count >= 30)
+				{
+					m_fps = 1.f / (m_sumTime / 30.f);
 
+					//OutputDebugStringW(st);
+					m_sumTime = 0.f;
+					m_count = 0;
+				}
+				wchar_t s[25] = { 0 };
+				swprintf_s(s, L"%3.2f\n", m_fps);
+				m_font.Begin();
+				m_font.Draw(s, { 50,320 }, CVector4::White(), 0, 0.8);
+				m_font.End();
+			}
+#endif
+			m_graphicsEngine->EndRender();
 			float frameTime = st.Stop();
 			gameTime()->PushFrameDeltaTime(frameTime);
 
-			m_count++;
-			if (m_count >= 30)
-			{
-				char s[25] = { 0 };
-				sprintf_s(s, "%f3.2\n", 1.f / (m_sumTime / 30.f));
-				OutputDebugStringA(s);
-				m_sumTime = 0.f;
-				m_count = 0;
-			}
 			m_sumTime += frameTime;
-
+			
 		}
 	}
 	void UsualEngine::Release()

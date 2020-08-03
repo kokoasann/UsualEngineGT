@@ -6,6 +6,7 @@ namespace UsualEngine
 {
 	DebugLog::DebugLog()
 	{
+		m_font.Init();
 		m_font.DrawTypeFrame();
 	}
 	DebugLog::~DebugLog()

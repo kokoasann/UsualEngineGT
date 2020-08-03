@@ -75,6 +75,12 @@ namespace UsualEngine
 
 		int m_count = 0;
 		float m_sumTime = 0.f;
+
+#if DEBUG_FUNC
+		Font m_font;
+		float m_fps = 0.f;
+		static const bool DRAW_FPS = true;
+#endif
 	};
 
 	static UsualEngine* usualEngine()

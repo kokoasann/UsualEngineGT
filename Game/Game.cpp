@@ -310,6 +310,8 @@ bool Game::Start()
 	ue::DebugSwitchAddCheck(ue::DebugSwitchNewSwitch('P', 0, f));
 
 
+	m_font.Init();
+
 	// font blur ‚Ì@İ’èB
 	m_fblur.SetSpeed(0.5f);
 	return true;
