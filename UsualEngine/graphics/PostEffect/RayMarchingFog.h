@@ -36,8 +36,11 @@ namespace UsualEngine
 			CMatrix mVPI;				//逆ビュープロジェクション
 			CVector4 mainLightColor;	//メインライトの色。
 			CVector3 mainLightDir;		//メインライトの方向。
+			float NONE = 0;
 			CVector3 camPos;			//カメラの位置。
 			float offset;				//オフセット
+			float camFar;
+			float camNear;
 		};
 		ConstantBuffer m_cBuffer;		//定数バッファ
 		CBData m_cbData;				//定数バッファのデータ

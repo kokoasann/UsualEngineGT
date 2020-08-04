@@ -79,7 +79,8 @@ namespace UsualEngine
 #if DEBUG_FUNC
 		Font m_font;
 		float m_fps = 0.f;
-		static const bool DRAW_FPS = false;
+		CVector2 m_fpsPos = { 580,340 };
+		static const bool DRAW_FPS = true;
 #endif
 	};
 

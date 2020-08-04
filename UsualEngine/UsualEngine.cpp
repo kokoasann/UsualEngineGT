@@ -152,7 +152,7 @@ namespace UsualEngine
 				wchar_t s[25] = { 0 };
 				swprintf_s(s, L"%3.2f\n", m_fps);
 				m_font.Begin();
-				m_font.Draw(s, { 50,320 }, CVector4::White(), 0, 0.8);
+				m_font.Draw(s, m_fpsPos, CVector4::White(), 0, 0.8);
 				m_font.End();
 			}
 #endif

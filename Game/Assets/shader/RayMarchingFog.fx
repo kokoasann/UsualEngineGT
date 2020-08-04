@@ -3,12 +3,14 @@
 #include "Math.h"
 cbuffer CBuffer:register(b7)
 {
-    float4x4 mVP;
-    float4x4 mVPI;
-    float4 mainLightColor;
-    float3 mainLightDir;
-    float3 camPos;
-    float offset;
+    float4x4 mVP            :packoffset(c0);//0~3
+    float4x4 mVPI           :packoffset(c4);//4~7
+    float4   mainLightColor :packoffset(c8);
+    float3   mainLightDir   :packoffset(c9);
+    float3   camPos         :packoffset(c10);
+    float    offset         :packoffset(c10.w);
+    float    camFar         :packoffset(c11.x);
+    float    camNear        :packoffset(c11.y);
 }
 
 #define DEBUG_SHADOWMAP 0
@@ -94,7 +96,7 @@ void FogProcess(float3 rayPos,float fogScale,float blendScale,float concentratio
     fog += f;
 }
 
-PSOutput_RMFog PSMain_RMFog(PSInput_RMFog In)
+PSOutput_RMFog _PSMain_RMFog(PSInput_RMFog In)
 {
     float gdepth = gDepthMap.Sample(Sampler,In.uv).x;
 
@@ -133,11 +135,13 @@ PSOutput_RMFog PSMain_RMFog(PSInput_RMFog In)
     float volume = 0.f;
     float3 col = float3(1.f,1.f,1.f);
     
+    #if 0
     {
         float3 rayPos = startPos+rayDir*40.f;
         FogProcess(rayPos,fogScale,blendScale,concentration,disperse,fogHeight,volume,foundation,fog);
     }
-    
+    #endif
+
     float3 rayPos;
     [unroll(rayCount)]
     for(int i=1;i<=rayCount;i++)
@@ -193,6 +197,71 @@ PSOutput_RMFog PSMain_RMFog(PSInput_RMFog In)
 
     PSOutput_RMFog Out;
     //Out.fog = float4(col,fog);
+    Out.fog = float4(float3(0.9,0.9,0.9),min(fog*0.04*volume,0.9f));
+    Out.volume = mainLightColor*0.03*volume*fog*0.5;
+    Out.volume.w *= fog*0.5;
+    return Out;
+}
+
+
+
+float GetViewZ(float depth)
+{
+    return (camFar*camNear)/((camFar-camNear)*depth-camFar);
+}
+
+/*////////////////////////////////////////////////////
+
+*////////////////////////////////////////////////////
+PSOutput_RMFog PSMain_RMFog(PSInput_RMFog In)
+{
+    float gdepth = gDepthMap.Sample(Sampler,In.uv).x;
+
+    float3 fogPos = float3(0,0,0);
+    float fogRadius = 1000.f;
+    float fogHeight = 50.f;
+    
+    float concentration = 0.2f;
+    float disperse = -0.1f;
+    
+    #define rayCount 50.f
+    float rayStep;
+    {
+        float gView = GetViewZ(gdepth-0.00001f)*-1.f;
+        rayStep = (gView)/rayCount;
+    }
+
+    float fogScale = 0.008f;
+    float blendScale = 0.002;
+
+    
+    float3 startPos = GetWorldPosition(In.uv,0.f,mVPI);
+    float3 endPos = GetWorldPosition(In.uv,0.5f,mVPI);
+    float3 s2e = endPos-startPos;
+    float3 rayDir = normalize(s2e);
+
+
+    float foundation = 0.f;
+    float fog = 0.f;
+    float volume = 0.f;
+    float3 col = float3(1.f,1.f,1.f);
+    
+
+    float3 rayPos;
+    [unroll(rayCount)]
+    for(int i=1;i<=rayCount;i++)
+    {
+        rayPos = startPos+rayDir*rayStep*(float)i;
+        FogProcess(rayPos,fogScale,blendScale,concentration,disperse,fogHeight,volume,foundation,fog);
+    }
+
+
+    fog = clamp(fog,0.f,0.95f);
+    foundation = clamp(foundation,0.f,0.5f);
+
+    col -= lerp(float3(0,0,0),(float3(1.f,1.f,1.f)-float3(0.5f, 0.45f, 0.55f))*1.3f,foundation);
+
+    PSOutput_RMFog Out;
     Out.fog = float4(float3(0.9,0.9,0.9),min(fog*0.04*volume,0.9f));
     Out.volume = mainLightColor*0.03*volume*fog*0.5;
     Out.volume.w *= fog*0.5;
