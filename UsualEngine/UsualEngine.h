@@ -79,7 +79,7 @@ namespace UsualEngine
 #if DEBUG_FUNC
 		Font m_font;
 		float m_fps = 0.f;
-		static const bool DRAW_FPS = true;
+		static const bool DRAW_FPS = false;
 #endif
 	};
 
