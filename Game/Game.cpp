@@ -235,7 +235,7 @@ bool Game::Start()
 	plig->SetDecay(0.001f);
 	plig->SetRadius(300.f);
 
-	campos = { -240,52,-100 };
+	campos = { -240,52*20,-100 };
 	//campos = { 0,150,180 };
 	cam->SetPosition(campos);
 	cam->SetTarget({ 0,2,-100 });

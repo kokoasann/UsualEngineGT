@@ -57,7 +57,7 @@ SHADOW_RETURN_TYPE GetShadow(float3 wpos, float2 offset)
     	GET_SHADOW(3)
 	}
 
-	return float(isShadow);
+	return float(isShadow+(1.f-isInUV));
 }
 
 
@@ -107,8 +107,8 @@ PSOutput_RMFog _PSMain_RMFog(PSInput_RMFog In)
     float concentration = 0.2f;
     float disperse = -0.1f;
     
-    #define rayCount 50.f
-    float rayStep = 80.f;
+    #define rayCount 25.f
+    float rayStep = 160.f;
     
     #if 0
     //float fogHeight = 200.f;
@@ -197,7 +197,7 @@ PSOutput_RMFog _PSMain_RMFog(PSInput_RMFog In)
 
     PSOutput_RMFog Out;
     //Out.fog = float4(col,fog);
-    Out.fog = float4(float3(0.9,0.9,0.9),min(fog*0.04*volume,0.9f));
+    Out.fog = float4(float3(0.9,0.9,0.9),min(fog*0.04f*volume,0.9f));
     Out.volume = mainLightColor*0.03*volume*fog*0.5;
     Out.volume.w *= fog*0.5;
     return Out;
@@ -224,10 +224,11 @@ PSOutput_RMFog PSMain_RMFog(PSInput_RMFog In)
     float concentration = 0.2f;
     float disperse = -0.1f;
     
-    #define rayCount 50.f
+    #define rayCount 20.f
+    float rayFramePow = 0.4f;
     float rayStep;
     {
-        float gView = GetViewZ(gdepth-0.00001f)*-1.f;
+        float gView = GetViewZ(gdepth)*-1.f;
         rayStep = (gView)/rayCount;
     }
 
@@ -251,8 +252,24 @@ PSOutput_RMFog PSMain_RMFog(PSInput_RMFog In)
     [unroll(rayCount)]
     for(int i=1;i<=rayCount;i++)
     {
-        rayPos = startPos+rayDir*rayStep*(float)i;
-        FogProcess(rayPos,fogScale,blendScale,concentration,disperse,fogHeight,volume,foundation,fog);
+        float rayLen = rayStep*(float)i;
+        rayPos = startPos+rayDir*rayLen;
+        float pernoise = 1.f-PerlinNoise3D(rayPos*fogScale);
+        float blend = (1.f-PerlinNoise3D(rayPos*blendScale))*concentration+disperse;
+
+        float rlRate = 0.000311f;
+        float hrate = ((fogHeight+rayLen*rlRate) / (max(rayPos.y+50.f,0.1f))) * rayLen*rlRate;
+        //float hrate = 1.f-clamp(abs(rayPos.y)/fogHeight,0.f,1.f);
+        float f = pernoise * blend;
+        f *= clamp(hrate,0.f,1.f);
+        float shadowDepth = (GetShadow(rayPos,0.f));
+        volume += shadowDepth;
+
+        rayPos += mainLightDir*10.f;
+        float ligblend = (1.f-PerlinNoise3D(rayPos*blendScale))*concentration+disperse;
+
+        foundation += (ligblend)*blend;
+        fog += f;
     }
 
 
@@ -262,7 +279,7 @@ PSOutput_RMFog PSMain_RMFog(PSInput_RMFog In)
     col -= lerp(float3(0,0,0),(float3(1.f,1.f,1.f)-float3(0.5f, 0.45f, 0.55f))*1.3f,foundation);
 
     PSOutput_RMFog Out;
-    Out.fog = float4(float3(0.9,0.9,0.9),min(fog*0.04*volume,0.9f));
+    Out.fog = float4(float3(0.9,0.9,0.9),min(fog*rayFramePow*volume,0.9f));
     Out.volume = mainLightColor*0.03*volume*fog*0.5;
     Out.volume.w *= fog*0.5;
     return Out;
