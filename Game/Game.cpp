@@ -226,7 +226,9 @@ bool Game::Start()
 	light->SetDir(ue::CVector3(1.f, 0.0f, 0.f));
 	light->SetCol({ 0.3f,0.0f,0.f,1.0f });*/
 	
-
+	//
+	//ポイントライト
+	//
 	static auto plig = ue::NewGO<ue::LightPoint>(0);
 	plig->SetPos({ 0,1,-100 });
 	auto col = ue::CVector3{ 0.6,0.25,0.08 };
@@ -235,7 +237,10 @@ bool Game::Start()
 	plig->SetDecay(0.001f);
 	plig->SetRadius(300.f);
 
-	campos = { -240,52*20,-100 };
+	//
+	//メインカメラの設定。
+	//
+	campos = { -240,52,-100 };
 	//campos = { 0,150,180 };
 	cam->SetPosition(campos);
 	cam->SetTarget({ 0,2,-100 });

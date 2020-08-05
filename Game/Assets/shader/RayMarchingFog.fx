@@ -224,12 +224,12 @@ PSOutput_RMFog PSMain_RMFog(PSInput_RMFog In)
     float concentration = 0.2f;
     float disperse = -0.1f;
     
-    #define rayCount 20.f
+    #define RAY_COUNT 20.f
     float rayFramePow = 0.4f;
     float rayStep;
     {
         float gView = GetViewZ(gdepth)*-1.f;
-        rayStep = (gView)/rayCount;
+        rayStep = (gView)/RAY_COUNT;
     }
 
     float fogScale = 0.008f;
@@ -249,8 +249,8 @@ PSOutput_RMFog PSMain_RMFog(PSInput_RMFog In)
     
 
     float3 rayPos;
-    [unroll(rayCount)]
-    for(int i=1;i<=rayCount;i++)
+    [unroll(RAY_COUNT)]
+    for(int i=1;i<=RAY_COUNT;i++)
     {
         float rayLen = rayStep*(float)i;
         rayPos = startPos+rayDir*rayLen;
@@ -258,28 +258,29 @@ PSOutput_RMFog PSMain_RMFog(PSInput_RMFog In)
         float blend = (1.f-PerlinNoise3D(rayPos*blendScale))*concentration+disperse;
 
         float rlRate = 0.000311f;
-        float hrate = ((fogHeight+rayLen*rlRate) / (max(rayPos.y+50.f,0.1f))) * rayLen*rlRate;
+        float hrate = ((fogHeight) / (max(rayPos.y+50.f,0.1f))) * rayLen*rlRate;//clamp(-pow((rayLen-5000.f),2.f)*0.00000001f+1.f,0.f,1.f);
         //float hrate = 1.f-clamp(abs(rayPos.y)/fogHeight,0.f,1.f);
         float f = pernoise * blend;
         f *= clamp(hrate,0.f,1.f);
         float shadowDepth = (GetShadow(rayPos,0.f));
         volume += shadowDepth;
 
-        rayPos += mainLightDir*10.f;
-        float ligblend = (1.f-PerlinNoise3D(rayPos*blendScale))*concentration+disperse;
+        float3 rayPosLig = rayPos + mainLightDir*-10.f;
+        float ligblend = (1.f-PerlinNoise3D(rayPosLig*blendScale))*concentration+disperse;
 
-        foundation += (ligblend)*blend;
+        foundation += (1.f-fog) * (ligblend)*blend;
         fog += f;
+        fog = clamp(fog,0.f,1.f);
     }
 
-
-    fog = clamp(fog,0.f,0.95f);
+    //fog = clamp(fog,0.f,1.f);
     foundation = clamp(foundation,0.f,0.5f);
 
+    //col -= lerp(float3(0,0,0),(float3(1.f,1.f,1.f)-float3(0.5f, 0.45f, 0.55f))*1.3f,step(0.3f,foundation)*0.5f);
     col -= lerp(float3(0,0,0),(float3(1.f,1.f,1.f)-float3(0.5f, 0.45f, 0.55f))*1.3f,foundation);
 
     PSOutput_RMFog Out;
-    Out.fog = float4(float3(0.9,0.9,0.9),min(fog*rayFramePow*volume,0.9f));
+    Out.fog = float4(col,min(fog*rayFramePow*volume,1.f));
     Out.volume = mainLightColor*0.03*volume*fog*0.5;
     Out.volume.w *= fog*0.5;
     return Out;

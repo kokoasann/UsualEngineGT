@@ -56,7 +56,7 @@ namespace UsualEngine
 		{
 			m_offsetSpeed *= -1.f;
 		}
-		m_cbData.camFar = cam.GetFar();
+		m_cbData.camFar = 5000;
 		m_cbData.camNear = cam.GetNear();
 
 		ID3D11BlendState* oldbs[1];
