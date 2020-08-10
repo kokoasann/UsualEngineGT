@@ -245,7 +245,7 @@ PSOutput_RMFog PSMain_RMFog(PSInput_RMFog In)
     float foundation = 0.f;
     float fog = 0.f;
     float volume = 0.f;
-    float3 col = float3(0.9f,0.9f,0.9f);
+    float3 col = float3(0.95f,0.95f,0.95f);
     
 
 
@@ -286,7 +286,7 @@ PSOutput_RMFog PSMain_RMFog(PSInput_RMFog In)
     foundation *= step(0.01f,foundation)*2.5f;
 
     //col -= lerp(float3(0,0,0),(float3(1.f,1.f,1.f)-float3(0.5f, 0.45f, 0.55f))*1.3f,step(0.3f,foundation)*0.5f);
-    col -= lerp(float3(0,0,0),(float3(1.f,1.f,1.f)-float3(0.5f, 0.45f, 0.55f))*1.3f,foundation);
+    col = lerp(float3(0.95f,0.95f,0.95f),float3(0.5f, 0.45f, 0.55f)*1.f,foundation);
 
     PSOutput_RMFog Out;
     Out.fog = float4(col,min(fog*volume,1.f));
