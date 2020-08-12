@@ -91,7 +91,7 @@ float4 PSMain_PlaneCloud(PSInput In):SV_Target0
     //foundation = clamp(foundation,0.f,1.f);
     //foundation *= step(0.07f,foundation*1.f)*5.f;
     foundation = min(foundation,1.f);
-    color = lerp(float3(0.95f,0.95f,0.95f), float3(0.4f, 0.4f, 0.6f)*1.f, foundation);
+    color = lerp(float3(0.95f,0.95f,0.95f), float3(0.45f, 0.45f, 0.8f)*1.f, foundation);
     //cloud *= 0.8f;
     //clip(cloud-0.0000001f);
     return float4(color,cloud);
