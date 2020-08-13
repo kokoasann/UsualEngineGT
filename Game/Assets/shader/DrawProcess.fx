@@ -139,15 +139,16 @@ float4 DrawProcess(float4 diffuse,float3 normal,float specular,float gshadow,flo
     shadow += lightres.w;
 
     //ポイントライト
-    foundation += PointLightProcess(worldPos,normal,specular);
+    //foundation += PointLightProcess(worldPos,normal,specular);
 
     col.xyz *= float3(0.45f, 0.4f, 0.6f) + foundation;
 
 
     //距離フォグ
-    float4 usu = lerp(float4(0.8f, 0.88f, 1.f,1.f),float4(0.f,0.f,0.f,0.f),min(lerp(1,0,pow(depth,800)),1));
+    float4 usu = lerp(float4(0.8f, 0.88f, 1.f,1.f),float4(0.f,0.f,0.f,0.f),min(1.f-pow(depth,1000),1));
+    //usu *= 1.f-clamp(worldPos.y/3000.f,0.f,1.f);
     //col.xyz *= 1.f-usu.w;
-    //col.xyz += usu;
+    //col.xyz += usu*usu.w;
     
     return col;
 }

@@ -54,6 +54,10 @@ namespace UsualEngine
 			dc->PSSetShader((ID3D11PixelShader*)m_psTripleCopy.GetBody(), 0, 0);
 			dc->IASetInputLayout(m_vsCopy.GetInputLayout());
 
+			float h = m_alphaRenderTarget.GetHeight(), w = m_alphaRenderTarget.GetWidth();
+			D3D11_VIEWPORT vp[] = { { 0.f,0.f,w, h,0,1},{ 0.f,0.f,w, h},{ 0.f,0.f,w, h} };
+			dc->RSSetViewports(1, vp);
+
 			RenderTarget* rts[] = 
 			{ 
 				&m_depthRenderTarget,
@@ -79,12 +83,18 @@ namespace UsualEngine
 			dc->PSSetShaderResources(0, 3, list);
 		}
 
-
+		
 		//#######################
 		//こっからアルファモデルの描画。
 		//#######################
 
-		ID3D11DepthStencilState* oldDS=0;
+		ID3D11BlendState* blendS = nullptr;
+		float factor[4];
+		unsigned int mask = 0;
+		dc->OMGetBlendState(&blendS, factor, &mask);
+		dc->OMSetBlendState(BlendState_Trans(), 0, 0xFFFFFFFF);
+
+		ID3D11DepthStencilState* oldDS = 0;
 		unsigned int oldIND = 0;
 		dc->OMGetDepthStencilState(&oldDS, &oldIND);
 		dc->OMSetDepthStencilState(DepthStencilState::sceneRender, 0);
@@ -92,6 +102,9 @@ namespace UsualEngine
 		//書き込むためのGBufferをセット。
 		RenderTarget* rendertarget[] = { &m_alphaRenderTarget ,gdepth ,gnormal ,gspecular};
 		ge->OMSetRenderTarget(4, rendertarget);
+		float h = m_alphaRenderTarget.GetHeight(), w = m_alphaRenderTarget.GetWidth();
+		D3D11_VIEWPORT vp[] = { { 0.f,0.f,w, h,0.f,1.f } };
+		dc->RSSetViewports(1, vp);
 
 		gbuffer.SetGBuffer();
 		//さっきコピーした読み込み用のものを入れる
@@ -100,6 +113,7 @@ namespace UsualEngine
 		dc->PSSetShaderResources(enSkinModelSRVReg_GSpecularMap, 1, &m_specularRenderTarget.GetSRV());
 
 		dc->PSSetShaderResources(enSkinModelSRVReg_SceneTexture, 1, &posteffect->GetCurrentRenderTarget().GetSRV());
+
 		//レンダー！
 		for (auto go : m_renderObject)
 		{
@@ -113,14 +127,12 @@ namespace UsualEngine
 		//カレントRTに合成。
 		RenderTarget* rtl[] = { &posteffect->GetCurrentRenderTarget() };
 		ge->OMSetRenderTarget(1, rtl);
+
+		//dc->RSSetViewports(1, vp);
 		
 		dc->PSSetShaderResources(0, 1, &m_alphaRenderTarget.GetSRV());
 
-		ID3D11BlendState* blendS = nullptr;
-		float factor[4];
-		unsigned int mask = 0;
-		dc->OMGetBlendState(&blendS, factor, &mask);
-		dc->OMSetBlendState(BlendState_Trans(), 0, 0xFFFFFFFF);
+		
 		dc->OMSetDepthStencilState(DepthStencilState::spriteRender, 0);
 		//m_pd3dDeviceContext->OMSetDepthStencilState(DepthStencilState::spriteRender, 0);
 

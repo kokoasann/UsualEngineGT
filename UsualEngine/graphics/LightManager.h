@@ -2,6 +2,7 @@
 
 #include "graphics/ConstantBuffer.h"
 #include "graphics/StructuredBuffer.h"
+#include "graphics/Shader.h"
 #include "LightStruct.h"
 
 
@@ -54,6 +55,11 @@ namespace UsualEngine
 		//ï`âÊ
 		void Render();
 
+		/// <summary>
+		/// 
+		/// </summary>
+		void RenderPointLight();
+
 		//ï`âÊèIóπ
 		void EndRender();
 
@@ -89,5 +95,18 @@ namespace UsualEngine
 		std::vector<LightPoint*> m_cPointLight;
 		SPointLight m_sPntLights[MAX_PNTLIGHT];
 		StructuredBuffer m_pntLightSB;
+
+		struct CameraParam
+		{
+			CMatrix projMat;
+			CMatrix projInvMat;
+			CMatrix viewRotMat;
+			float camNear;
+			float camFar;
+			float screenWidth;
+			float screenHeight;
+		};
+		ConstantBuffer m_cameraParamCB;
+		Shader m_csPointLightCulling;
 	};
 }

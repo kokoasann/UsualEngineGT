@@ -1,6 +1,6 @@
 #include "PreCompile.h"
 #include "PostEffect.h"
-
+#include "graphics/RenderState.h"
 
 namespace UsualEngine
 {
@@ -75,17 +75,23 @@ namespace UsualEngine
 			0, 
 			*GetCurrentRenderTarget().GetTexFormat()
 		);
+
+		//gEngine->GetLightManager().RenderPointLight();
 		
-		static bool isAlphaRender = true;
-		if(isAlphaRender)
-			m_alphaModelRender.Render(this);
+		
 		m_cloudPlane.Render(this);
+
+		static bool isAlphaRender = true;
+		if (isAlphaRender)
+			m_alphaModelRender.Render(this);
+
 		m_rmFog.Render(this);
+		
 		m_ssr.Render(this);
 		m_bloom.Render(this);
 		
 		
-
+		devcon->OMSetBlendState(BlendState_Trans(), 0, 0xFFFFFFFF);			//”O‚Ì‚½‚ßtrans‚É‚µ‚Æ‚­
 		gEngine->EndPostEffect();
 	}
 

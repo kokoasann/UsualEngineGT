@@ -65,6 +65,11 @@ namespace UsualEngine
 		dc->OMGetBlendState(oldbs, oldbf, &oldbm);
 		dc->OMSetBlendState(BlendState::trans, 0, 0xFFFFFFFF);
 
+		ID3D11DepthStencilState* oldDS = 0;
+		unsigned int oldIND = 0;
+		dc->OMGetDepthStencilState(&oldDS, &oldIND);
+		dc->OMSetDepthStencilState(DepthStencilState::spriteRender, 0);
+
 		float ccolor_fog[] = { 1,1,1,0 };
 		float ccolor_vol[] = { 0,0,0,0 };
 		dc->ClearRenderTargetView(m_rtFog.GetRTV(), ccolor_fog);
@@ -115,7 +120,7 @@ namespace UsualEngine
 
 		//pe->DrawPrimitive();
 
-
+		dc->OMSetDepthStencilState(oldDS, oldIND);
 		dc->OMSetBlendState(oldbs[0], oldbf, oldbm);
 	}
 }

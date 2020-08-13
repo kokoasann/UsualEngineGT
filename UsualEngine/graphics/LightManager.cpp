@@ -3,7 +3,8 @@
 #include "LightBase.h"
 #include "LightDirection.h"
 #include "LightPoint.h"
-
+#include "RenderState.h"
+#include "ShaderSample.h"
 
 namespace UsualEngine
 {
@@ -18,6 +19,9 @@ namespace UsualEngine
 		InitDirectionStructuredBuffer();
 		InitPointStructuredBuffer();
 		m_lightParamCB.Create(&m_lightParam, sizeof(m_lightParam));
+
+		m_cameraParamCB.Create(nullptr, sizeof(CameraParam));
+		m_csPointLightCulling.Load("Assets/shader/PointLightCulling.fx", "CSMain_PointLightCulling", Shader::EnType::CS);
 	}
 
 	void LightManager::InitDirectionStructuredBuffer()
@@ -113,6 +117,12 @@ namespace UsualEngine
 
 	void LightManager::Render()
 	{
+		const auto& viewMat = usualEngine()->GetMainCamera().GetViewMatrix();
+		for (auto& light : m_sPntLights)
+		{
+			viewMat.Mul(light.pos);
+		}
+
 		ID3D11DeviceContext* dc = usualEngine()->GetGraphicsEngine()->GetD3DDeviceContext();
 
 		dc->UpdateSubresource(m_dirLightSB.GetBody(), 0, NULL, m_sDirLights, 0, 0);		//ディレクションライトの更新。
@@ -124,6 +134,62 @@ namespace UsualEngine
 		dc->PSSetShaderResources(enSkinModelSRVReg_DirectionLight, 1,&m_dirLightSB.GetSRV());	//ディレクションライトをセット
 		dc->PSSetShaderResources(enSkinModelSRVReg_PointLight, 1,&m_pntLightSB.GetSRV());	//ポイントライトをセット
 		dc->PSSetConstantBuffers(enSkinModelCBReg_Light, 1, &m_lightParamCB.GetBody());		//ライトの情報を送る
+	}
+	void LightManager::RenderPointLight()
+	{
+		auto ge = usualEngine()->GetGraphicsEngine();
+
+		RenderTarget* rt[8];
+		int rtnum;
+		ge->OMGetRenderTargets(rtnum, rt);
+		ge->OMSetRenderTarget(RTV_MAX, NULL);
+
+		const Camera& cam = usualEngine()->GetMainCamera();
+		CameraParam camParam;
+		camParam.projMat = cam.GetProjectionMatrix();
+		camParam.projInvMat.Inverse(camParam.projMat);
+		camParam.viewRotMat.Inverse(cam.GetViewMatrix());
+		camParam.viewRotMat.m[3][0] = 0.f;
+		camParam.viewRotMat.m[3][1] = 0.f;
+		camParam.viewRotMat.m[3][2] = 0.f;
+		camParam.viewRotMat.Transpose();
+		camParam.camFar = cam.GetFar();
+		camParam.camNear = cam.GetNear();
+		camParam.screenHeight = FRAME_BUFFER_H;
+		camParam.screenWidth = FRAME_BUFFER_W;
+
+		
+		auto& gb = ge->GetPreRender().GetGBuffer();
+		ID3D11DeviceContext* dc = ge->GetD3DDeviceContext();
+
+		dc->CSSetShader((ID3D11ComputeShader*)m_csPointLightCulling.GetBody(), nullptr, 0);
+
+		dc->UpdateSubresource(m_cameraParamCB.GetBody(), 0, NULL, &camParam, 0, 0);
+		dc->CSSetConstantBuffers(0, 1, &m_cameraParamCB.GetBody());
+
+		ID3D11ShaderResourceView* gbuf[4];
+		gbuf[0] = gb.GetGBuffer(GBuffer::GB_Diffuse)->GetSRV();
+		gbuf[1] = gb.GetGBuffer(GBuffer::GB_Normal)->GetSRV();
+		gbuf[2] = gb.GetGBuffer(GBuffer::GB_Depth)->GetSRV();
+		gbuf[3] = gb.GetGBuffer(GBuffer::GB_Specular)->GetSRV();
+
+		dc->CSSetShaderResources(0, 4, gbuf);
+		dc->CSSetShaderResources(enSkinModelSRVReg_PointLight, 1, &m_pntLightSB.GetSRV());	//ポイントライトをセット
+		ID3D11ShaderResourceView* srv[] = { ge->GetGradation() };
+		dc->CSSetShaderResources(enSkinModelSRVReg_Textur_1, 1, srv);
+		dc->CSSetConstantBuffers(enSkinModelCBReg_Light, 1, &m_lightParamCB.GetBody());		//ライトの情報を送る
+
+		auto& pe = ge->GetPostEffect();
+		ID3D11UnorderedAccessView* uav[] = { pe.GetCurrentRenderTarget().GetUAV() };
+		dc->CSSetUnorderedAccessViews(0, 1, uav,NULL);
+
+		dc->CSSetSamplers(0, 1, &SamplerState::pointSampling);
+		
+		dc->Dispatch(FRAME_BUFFER_W / 16, FRAME_BUFFER_H / 16, 1);
+
+		ge->OMSetRenderTarget(rtnum, rt);
+
+		
 	}
 	void LightManager::EndRender()
 	{

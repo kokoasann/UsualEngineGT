@@ -26,56 +26,56 @@ namespace UsualEngine
 		/*!
 		 * @brief	カメラ行列を取得。
 		 */
-		CMatrix GetViewMatrix()
+		const CMatrix& GetViewMatrix() const
 		{
 			return m_viewMatrix;
 		}
 		/*!
 		 * @brief	プロジェクション行列を取得。
 		 */
-		CMatrix GetProjectionMatrix()
+		const CMatrix& GetProjectionMatrix() const
 		{
 			return m_projMatrix;
 		}
 		/*!
 		 * @brief	視点を取得。
 		 */
-		CVector3 GetPosition()
+		const CVector3& GetPosition() const
 		{
 			return m_position;
 		}
 		/*!
 		 * @brief	注視点を取得。
 		 */
-		CVector3 GetTarget()
+		const CVector3& GetTarget() const
 		{
 			return m_target;
 		}
 		/*!
 		 * @brief	カメラの上方向を取得。
 		 */
-		CVector3 GetUp()
+		const CVector3& GetUp() const
 		{
 			return m_up;
 		}
 		/*!
 		 * @brief	視点を設定。
 		 */
-		void SetPosition(CVector3 pos)
+		void SetPosition(const CVector3& pos)
 		{
 			m_position = pos;
 		}
 		/*!
 		 * @brief	注視点を設定。
 		 */
-		void SetTarget(CVector3 target)
+		void SetTarget(const CVector3& target)
 		{
 			m_target = target;
 		}
 		/*!
 		 * @brief	カメラの上方向を設定。
 		 */
-		void SetUp(CVector3 up)
+		void SetUp(const CVector3& up)
 		{
 			m_up = up;
 		}
@@ -104,7 +104,7 @@ namespace UsualEngine
 		/// ビューアングルを返す
 		/// </summary>
 		/// <returns>ビューアングル(float)</returns>
-		float GetViewAngle()
+		float GetViewAngle() const
 		{
 			return m_viewAngle;
 		}
@@ -115,7 +115,7 @@ namespace UsualEngine
 			m_aspect = as;
 		}
 		//アス比を返す
-		float GetAspect()
+		float GetAspect() const
 		{
 			return m_aspect;
 		}
@@ -131,7 +131,7 @@ namespace UsualEngine
 			m_cameraMode = ECameraMode::eOrth;
 		}
 		//現在のカメラモードを返す
-		ECameraMode GetCameraMode()
+		ECameraMode GetCameraMode() const
 		{
 			return m_cameraMode;
 		}
@@ -140,7 +140,7 @@ namespace UsualEngine
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		CVector3 GetForward()
+		const CVector3& GetForward() const
 		{
 			return m_forward;
 		}
@@ -148,16 +148,16 @@ namespace UsualEngine
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		CVector3 GetRight()
+		const CVector3& GetRight() const
 		{
 			return m_right;
 		}
 		
-		float GetFar()
+		float GetFar() const
 		{
 			return m_far;
 		}
-		float GetNear()
+		float GetNear() const
 		{
 			return m_near;
 		}

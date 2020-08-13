@@ -82,10 +82,13 @@ namespace UsualEngine
 		auto dc = ge->GetD3DDeviceContext();
 		auto& cam = usualEngine()->GetMainCamera();
 		auto& gbuffer = ge->GetPreRender().GetGBuffer();
-
+		
 		auto gDepth = gbuffer.GetGBuffer(GBuffer::GB_Depth);
 		dc->PSSetShaderResources(enSkinModelSRVReg_GDepthMap, 1, &gDepth->GetSRV());
-
+		
+		ID3D11DepthStencilState* oldDS = 0;
+		unsigned int oldIND = 0;
+		dc->OMGetDepthStencilState(&oldDS, &oldIND);
 		dc->OMSetDepthStencilState(DepthStencilState::spriteRender, 0);
 
 		ID3D11BlendState* oldbs[1];
@@ -96,7 +99,7 @@ namespace UsualEngine
 
 		float clearCol[4] = { 1,1,1,0 };
 		dc->ClearRenderTargetView(m_rt.GetRTV(), clearCol);
-
+		
 		D3D11_VIEWPORT vp[] = { { 0.f,0.f,m_rt.GetWidth(),m_rt.GetHeight() } };
 		dc->RSSetViewports(1, vp);
 		RenderTarget* rts[] = { &m_rt};
@@ -147,6 +150,8 @@ namespace UsualEngine
 		pe->DrawPrimitive();
 
 		//Œãˆ—B
+		dc->OMSetDepthStencilState(oldDS, oldIND);
 		dc->OMSetBlendState(oldbs[0], oldbf, oldbm);
+		
 	}
 }
