@@ -90,12 +90,12 @@ float3 PointLightProcess(uint lightIndex, float3 posInView, float3 normal, float
 
 	float3 foundation;
 
-	float3 dir = posInView - light.pos;
+	float3 dir = posInView - light.posInView;
 	float len = length(dir);
 	dir = normalize(dir);
 
 	float rad = dot(dir * -1.f, normal);
-	float threshold = 0.174533f;                        //いずれ未来の自分が改善してくれているはず!
+	float threshold = 0.5f;                        //いずれ未来の自分が改善してくれているはず!
 	float k = step(threshold,rad);
 	
 	k = min(k, step(len,light.radius));
@@ -174,7 +174,7 @@ void CSMain_PointLightCulling(uint3 groupId:SV_GroupID, uint3 dispatchThreadId:S
 		[unroll(6)]
 		for (uint i = 0; i < 6; ++i)
 		{
-			float4 lp = float4(light.pos, 1.0f);
+			float4 lp = float4(light.posInView, 1.0f);
 			float d = dot( frustumPlanes[i], lp );
 			inFrustum = inFrustum && (d >= -light.radius);
 		}

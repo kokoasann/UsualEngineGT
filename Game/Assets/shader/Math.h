@@ -23,3 +23,8 @@ float GetViewZ(float depth,float camFar,float camNear)
 {
     return (camFar*camNear)/((camFar-camNear)*depth-camFar);
 }
+
+
+#define MUL_MAT4X4_V4(MAT4X4,V4) mad(V4.x, MAT4X4[0], mad(V4.y, MAT4X4[1], mad(V4.z, MAT4X4[2], V4.w*MAT4X4[3])))
+
+#define MUL_MAT4X4_V4W1(MAT4X4,V3) mad(V3.x, MAT4X4[0], mad(V3.y, MAT4X4[1], mad(V3.z, MAT4X4[2], MAT4X4[3])))

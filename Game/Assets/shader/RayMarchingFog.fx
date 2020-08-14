@@ -21,10 +21,10 @@ cbuffer CBuffer:register(b7)
 #define GET_SHADOW(MAPIND)\
  \
     float4 posinLVP = mul(mLVP[ind], float4(wpos, 1)); \
-    posinLVP.xyz /= posinLVP.w;\
-    float depthbuf = min(posinLVP.z / posinLVP.w, 1.0f);\
+    posinLVP.xyz *= rcp(posinLVP.w);\
+    float depthbuf = saturate(posinLVP.z);\
 	\
-    float2 smuv = float2(0.5f, -0.5f) * posinLVP.xy + float2(0.5f, 0.5f);\
+    float2 smuv = mad(float2(0.5f, -0.5f), posinLVP.xy, float2(0.5f, 0.5f));\
 \
     float isInUVbuf = (step(smuv.x,1.f)) * (step(smuv.y,1.f)) * (step(0.f,smuv.x)) * (step(0.f,smuv.y));\
     float2 pix = float2(ligPixSize[ind].x * offset.x, ligPixSize[ind].y * offset.y);\
@@ -207,7 +207,7 @@ PSOutput_RMFog _PSMain_RMFog(PSInput_RMFog In)
 
 float GetViewZ(float depth)
 {
-    return (camFar*camNear)/((camFar-camNear)*depth-camFar);
+    return (camFar*camNear)*rcp(mad((camFar-camNear),depth,-camFar));
 }
 
 /*////////////////////////////////////////////////////
@@ -229,7 +229,7 @@ PSOutput_RMFog PSMain_RMFog(PSInput_RMFog In)
     float rayStep;
     {
         float gView = GetViewZ(gdepth)*-1.f;
-        rayStep = (gView)/RAY_COUNT;
+        rayStep = (gView)*rcp(RAY_COUNT);
     }
 
     float fogScale = 0.008f;
@@ -254,27 +254,27 @@ PSOutput_RMFog PSMain_RMFog(PSInput_RMFog In)
     for(int i=1;i<=RAY_COUNT;i++)
     {
         float rayLen = rayStep*(float)i;
-        rayPos = startPos+rayDir*rayLen;
+        rayPos = mad(rayDir, rayLen, startPos);
         float pernoise = 1.f-PerlinNoise3D(rayPos*fogScale);
-        float blend = (1.f-PerlinNoise3D(rayPos*blendScale))*concentration+disperse;
+        float blend = mad((1.f-PerlinNoise3D(rayPos*blendScale)),concentration,disperse);
 
-        float rlRate = 0.000311f;
-        float hrate = min(fogHeight / max(rayPos.y+50.f,0.0000001f)*3.8f,1.f) * min(rayLen*rlRate,1.f);//clamp(-pow((rayLen-5000.f),2.f)*0.00000001f+1.f,0.f,1.f);
-        hrate = clamp(hrate,0.f,1.f);
+        float rlRate = 0.003f;
+        float hrate = min(fogHeight * rcp(max(rayPos.y*2.f,0.0000001f)),1.f) * saturate(rayLen*rlRate);//clamp(-pow((rayLen-5000.f),2.f)*0.00000001f+1.f,0.f,1.f);
+        hrate = saturate(hrate);
         //float hrate = 1.f-clamp(abs(rayPos.y)/fogHeight,0.f,1.f);
-        float f = pernoise * blend;
-        f *= hrate;
+        float f = pernoise * blend * hrate;
+        //f *= hrate;
         float shadowDepth = (GetShadow(rayPos,0.f));
         volume += shadowDepth;
 
-        float3 rayPosLig = rayPos + mainLightDir*-5.f;
-        float ligblend = (1.f-PerlinNoise3D(rayPosLig*blendScale))*concentration+disperse;
-        hrate = min(fogHeight / max(rayPosLig.y+50.f,0.0000001f)*3.8f,1.f) * min(length(startPos-rayPosLig) * rlRate,1.f);
-        hrate = clamp(hrate,0.f,1.f);
+        float3 rayPosLig = mad(mainLightDir, -5.f, rayPos);
+        float ligblend = mad((1.f-PerlinNoise3D(rayPosLig*blendScale)),concentration,disperse);
+        hrate = min(fogHeight * rcp(max(rayPosLig.y*2.f,0.0000001f)),1.f) * saturate(length(startPos-rayPosLig) * rlRate);
+        hrate = saturate(hrate);
 
         foundation += (1.f-fog) * ligblend * hrate * f;
         fog += f;
-        fog = clamp(fog,0.f,1.f);
+        fog = saturate(fog);
     }
     //volume = clamp(volume,0.f,1.f);
     volume *= 0.05f;    // /20.f
@@ -286,10 +286,10 @@ PSOutput_RMFog PSMain_RMFog(PSInput_RMFog In)
     foundation *= step(0.01f,foundation)*2.5f;
 
     //col -= lerp(float3(0,0,0),(float3(1.f,1.f,1.f)-float3(0.5f, 0.45f, 0.55f))*1.3f,step(0.3f,foundation)*0.5f);
-    col = lerp(float3(0.95f,0.95f,0.95f),float3(0.5f, 0.45f, 0.55f)*1.f,foundation);
+    col = lerp(float3(0.95f,0.95f,0.95f),float3(0.5f, 0.45f, 0.55f),foundation);
 
     PSOutput_RMFog Out;
-    Out.fog = float4(col,min(fog*volume,1.f));
+    Out.fog = float4(col,saturate(fog*volume));
     //Out.volume = mainLightColor*0.03*volume*fog*0.5;
     //Out.volume.w *= fog*0.5;
     return Out;

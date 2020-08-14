@@ -48,7 +48,7 @@ void Alpha_process(PSInput In,out PSOutput_Alpha output)
     //float specular = specularMap.Sample(Sampler,In.TexCoord);
 
     //PSOutput_Alpha output;
-    output.OutColor = float4(DrawProcess(scene+color,In.Normal,0,0,depth,sceneUV).xyz,1.f);
+    output.OutColor = float4(DrawProcess_Forward(In.Pos,scene+color,In.Normal,0,0,depth).xyz,1.f);
     output.depth = float4(depth,0.f,0.f,1.f);
     output.normal = float4(In.Normal,1.f);
     output.specular = float4(0.5f,0,0,1);

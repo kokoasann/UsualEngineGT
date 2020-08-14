@@ -102,10 +102,10 @@ namespace UsualEngine
 		
 		D3D11_VIEWPORT vp[] = { { 0.f,0.f,m_rt.GetWidth(),m_rt.GetHeight() } };
 		dc->RSSetViewports(1, vp);
+
 		RenderTarget* rts[] = { &m_rt};
 		ge->OMSetRenderTarget(1, rts);
 		
-
 		m_cbData.campos = cam.GetPosition();
 		auto mainLight = ge->GetLightManager().GetMainLightDirection();
 		if(mainLight != nullptr)
@@ -152,6 +152,5 @@ namespace UsualEngine
 		//Œãˆ—B
 		dc->OMSetDepthStencilState(oldDS, oldIND);
 		dc->OMSetBlendState(oldbs[0], oldbf, oldbm);
-		
 	}
 }

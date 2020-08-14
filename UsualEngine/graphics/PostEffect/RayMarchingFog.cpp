@@ -41,6 +41,10 @@ namespace UsualEngine
 		auto lig = ge->GetLightManager().GetMainLightDirection();
 
 		shadowmap.Send2GPU();
+		{
+			auto depth = ge->GetPreRender().GetGBuffer().GetGBuffer(GBuffer::GB_Depth);
+			dc->PSSetShaderResources(enSkinModelSRVReg_GDepthMap, 1, &depth->GetSRV());
+		}
 		if (lig != nullptr)
 		{
 			m_cbData.mainLightDir = lig->GetDir();
@@ -70,15 +74,15 @@ namespace UsualEngine
 		dc->OMGetDepthStencilState(&oldDS, &oldIND);
 		dc->OMSetDepthStencilState(DepthStencilState::spriteRender, 0);
 
-		float ccolor_fog[] = { 1,1,1,0 };
+		float ccolor_fog[] = { 1.f,1.f,1.f,0.f };
 		float ccolor_vol[] = { 0,0,0,0 };
 		dc->ClearRenderTargetView(m_rtFog.GetRTV(), ccolor_fog);
 		dc->ClearRenderTargetView(m_rtVolume.GetRTV(), ccolor_vol);
 
 		RenderTarget* rts[] = { &m_rtFog,&m_rtVolume };
 		ge->OMSetRenderTarget(2, rts);
-		D3D11_VIEWPORT vp[] = { { 0.f,0.f,(FLOAT)rts[0]->GetWidth(),(FLOAT)rts[0]->GetHeight() } ,
-								{ 0.f,0.f,(FLOAT)rts[1]->GetWidth(),(FLOAT)rts[1]->GetHeight() } };
+		D3D11_VIEWPORT vp[] = { { 0.f,0.f,(FLOAT)rts[0]->GetWidth(),(FLOAT)rts[0]->GetHeight(),0.f,1.f } ,
+								{ 0.f,0.f,(FLOAT)rts[1]->GetWidth(),(FLOAT)rts[1]->GetHeight(),0.f,1.f } };
 
 		dc->RSSetViewports(2, vp);
 
@@ -96,10 +100,10 @@ namespace UsualEngine
 
 
 		//copy
-
 		rts[0] = { &pe->GetCurrentRenderTarget() };
 		ge->OMSetRenderTarget(1, rts);
-		vp[0] = { 0.f,0.f,(FLOAT)rts[0]->GetWidth(),(FLOAT)rts[0]->GetHeight() };
+
+		vp[0] = { 0.f,0.f,(FLOAT)rts[0]->GetWidth(),(FLOAT)rts[0]->GetHeight(),0.f,1.f };
 		dc->RSSetViewports(1, vp);
 
 		dc->PSSetShaderResources(0, 1, &blured);
@@ -110,7 +114,7 @@ namespace UsualEngine
 
 		pe->DrawPrimitive();
 
-
+#if 0
 		dc->OMSetBlendState(BlendState::add, 0, 0xFFFFFFFF);
 		dc->PSSetShaderResources(0, 1, &m_rtVolume.GetSRV());
 
@@ -119,6 +123,7 @@ namespace UsualEngine
 		dc->IASetInputLayout(ShaderSample::VS_Copy.GetInputLayout());
 
 		//pe->DrawPrimitive();
+#endif
 
 		dc->OMSetDepthStencilState(oldDS, oldIND);
 		dc->OMSetBlendState(oldbs[0], oldbf, oldbm);

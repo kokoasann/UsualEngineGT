@@ -12,6 +12,7 @@ namespace UsualEngine
 	struct SPointLight
 	{
 		CVector3 pos = CVector3::Zero();
+		CVector3 posInView = CVector3::Zero();
 		CVector4 color = CVector4::White();
 		float decay = 0.0;
 		float radius = 10.f;

@@ -120,7 +120,8 @@ namespace UsualEngine
 		const auto& viewMat = usualEngine()->GetMainCamera().GetViewMatrix();
 		for (auto& light : m_sPntLights)
 		{
-			viewMat.Mul(light.pos);
+			light.posInView = light.pos;
+			viewMat.Mul(light.posInView);
 		}
 
 		ID3D11DeviceContext* dc = usualEngine()->GetGraphicsEngine()->GetD3DDeviceContext();

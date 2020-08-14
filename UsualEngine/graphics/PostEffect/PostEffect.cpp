@@ -76,7 +76,7 @@ namespace UsualEngine
 			*GetCurrentRenderTarget().GetTexFormat()
 		);
 
-		//gEngine->GetLightManager().RenderPointLight();
+		gEngine->GetLightManager().RenderPointLight();
 		
 		
 		m_cloudPlane.Render(this);
