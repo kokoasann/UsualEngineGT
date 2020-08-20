@@ -14,7 +14,14 @@ namespace UsualEngine
 		};
 		DebugLog();
 		~DebugLog();
+		/// <summary>
+		/// 左上にstrを表示するよ。
+		/// </summary>
+		/// <param name="str"></param>
 		void Print(const wchar_t* str);
+		/// <summary>
+		/// 描画。
+		/// </summary>
 		void Render();
 	private:
 		Font m_font;												//フォント

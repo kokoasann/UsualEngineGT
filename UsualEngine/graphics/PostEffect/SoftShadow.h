@@ -3,6 +3,9 @@
 //#define SOFTSHADOW_GAUSS_MAX 
 namespace UsualEngine
 {
+	/// <summary>
+	/// (Žg‚Á‚Ä‚È‚¢)
+	/// </summary>
 	class SoftShadow
 	{
 	public:
