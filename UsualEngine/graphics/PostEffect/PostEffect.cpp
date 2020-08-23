@@ -81,7 +81,7 @@ namespace UsualEngine
 		
 		m_cloudPlane.Render(this);
 
-		static bool isAlphaRender = true;
+		static bool isAlphaRender = false;
 		if (isAlphaRender)
 			m_alphaModelRender.Render(this);
 
