@@ -278,7 +278,7 @@ PSOutput_RMFog PSMain_RMFog(PSInput_RMFog In)
     }
     //volume = clamp(volume,0.f,1.f);
     volume *= 0.05f;    // /20.f
-
+    fog *= 0.8f;
     //fog = clamp(fog,0.f,1.f);
     
     //foundation = clamp(foundation,0.f,1.f);
