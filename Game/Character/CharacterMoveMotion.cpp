@@ -44,13 +44,21 @@ void CharacterMoveMotion::OnDestroy()
 	Release();
 }
 
-void CharacterMoveMotion::InitBone(ue::Bone* footL, ue::Bone* footR)
+void CharacterMoveMotion::InitBone(ue::Bone* footL, ue::Bone* footR, bool isIKModeFoot)
 {
 	m_footL = footL;
 	m_footR = footR;
 	ue::Animation& anim = m_chara->GetAnimation();
-	anim.SetIKMode(ue::IK::enMode_Foot, footL);
-	anim.SetIKMode(ue::IK::enMode_Foot, footR);
+	if (isIKModeFoot)
+	{
+		anim.SetIKMode(ue::IK::enMode_Foot, footL);
+		anim.SetIKMode(ue::IK::enMode_Foot, footR);
+	}
+	else
+	{
+		anim.SetIKMode(ue::IK::enMode_Normal, footL);
+		anim.SetIKMode(ue::IK::enMode_Normal, footR);
+	}
 	m_footLIK = m_chara->GetFootRIK();
 }
 

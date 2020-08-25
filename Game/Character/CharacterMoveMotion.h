@@ -32,7 +32,7 @@ public:
 	/// </summary>
 	/// <param name="footL">ç∂</param>
 	/// <param name="footR">âE</param>
-	void InitBone(ue::Bone* footL, ue::Bone* footR);
+	void InitBone(ue::Bone* footL, ue::Bone* footR,bool isIKModeFoot = true);
 
 	void InitStartUpFoot(float upMax,float upspeed);
 	
