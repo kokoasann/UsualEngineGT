@@ -274,7 +274,8 @@ namespace UsualEngine
 		{
 			oldpos = m_target;
 		}
-		if ((newpos - oldpos).Length() <= FLT_EPSILON)
+		CVector3 o2n = (newpos - oldpos);
+		if (o2n.Length() <= 2.0e-5f)
 			return;
 
 		SweepResultIK sr;

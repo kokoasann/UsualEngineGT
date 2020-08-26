@@ -33,7 +33,7 @@ void PlayerMotion::Init(Player* player, Character* chara, ue::Camera* cam, ue::A
 	m_charaMove.InitBone(m_footL, m_footR,false);
 
 	m_charaRotate.Init(m_chara,CharacterRotateMotion::RM_Lerp,15.f);
-	m_chara->Init_JustFoot(2.f, 4.f, 0.04f, 0.05f);
+	m_chara->Init_JustFoot(2.f, 4.f, 30.4f, 35.5f);
 
 	//m_playerClimb.Init(m_chara, m_chara->GetFootLIK(), m_chara->GetFootRIK(), m_chara->GetIK(handL), m_chara->GetIK(handR));
 	//m_playerClimb.InitClimbSpec({ 0.5f,0.25f,0.1f,3.f,0.5f,{-7.55f,1.25f,-3},{-5.55f,3.25f,5} });
@@ -72,7 +72,6 @@ void PlayerMotion::Update()
 			{
 				m_charaMove.NextPlayAnim(PA_walk, m_walkSpeed, AM_Move);
 			}
-
 		}
 		else
 		{

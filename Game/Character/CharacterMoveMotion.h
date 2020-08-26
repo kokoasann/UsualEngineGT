@@ -133,6 +133,7 @@ private:
 	ue::Bone* m_footL = nullptr;			//左足のボーン
 	ue::Bone* m_footR = nullptr;			//右足のボーン
 	ue::IK* m_footLIK = nullptr;
+	ue::Bone* m_frontFoot = nullptr;		//前に出てる足
 	bool m_isJustFoot = false;							//justFootを行えるか？
 
 	bool m_isUpfoot = false;

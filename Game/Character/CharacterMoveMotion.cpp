@@ -194,11 +194,13 @@ void CharacterMoveMotion::Walk2Idle(float delTime)
 		float fc = anm.GetFrameNum();			//現在再生中のアニメーションのフレーム数。
 		float fn = anm.GetCurrentFrameNo();		//現在再生中のアニメーションのフレーム番号。
 		float fnRate = fn / fc;					//現在再生中のフレーム番号がフレーム数に対して何％なのか調べる。
+		
 		if (fnRate <= ANM_25PER)
 		{
 			float nfn = fc * ANM_75PER;
 			float len = nfn - fn;
 			m_animLug_2idle = len * FRAME_RATE;
+			m_frontFoot = m_footL;
 		}
 		else if (fnRate <= ANM_75PER)
 		{
@@ -206,6 +208,7 @@ void CharacterMoveMotion::Walk2Idle(float delTime)
 			m_animLug_2idle = len * FRAME_RATE;
 			float nfn = fc * ANM_25PER * FRAME_RATE;
 			m_animLug_2idle += nfn;
+			m_frontFoot = m_footR;
 		}
 		else
 		{
@@ -213,6 +216,7 @@ void CharacterMoveMotion::Walk2Idle(float delTime)
 			m_animLug_2idle = len * FRAME_RATE;
 			float nfn = fc * ANM_75PER * FRAME_RATE;
 			m_animLug_2idle += nfn;
+			m_frontFoot = m_footL;
 		}
 		if (m_animLug_2idle == 0.f)
 			return;
@@ -232,17 +236,41 @@ void CharacterMoveMotion::Walk2Idle(float delTime)
 		//m_isJustedStart = false;
 	//m_justTime = 0.f;
 	//m_isStartJustFoot = false;
-		m_chara->PlayAnim(m_idolNum, 1.f,0.f, AM_Move);
+		m_chara->PlayAnim(m_idolNum, 0.3f,0.f, AM_Move);
 		m_isJustFoot = true;
 	}
 	auto move = m_moved * ((m_time) / m_animLug_2idle);
 	//m_chara->SetIKOffset(move * delTime);
 	m_chara->SetMove(move);
-	m_time -= delTime;
+	//m_time -= delTime;
 	if (m_time <= 0.f)
 	{
 		
 	}
+	/*
+	ue::Bone* back;
+	if (m_frontFoot == m_footL)
+		back = m_footR;
+	else
+		back = m_footL;
+	auto ppos = m_chara->GetPos();
+	auto pdir = m_chara->GetDir();
+	auto bpos = back->GetWorldMatrix().GetTranslation();
+	auto fpos = m_frontFoot->GetWorldMatrix().GetTranslation();
+
+	ue::CVector3 pright;
+	pright.Cross(ue::CVector3::AxisZ(), pdir);
+	pright *= -1.f;
+	pright.Normalize();
+
+	auto f2b = bpos - fpos;
+	auto f2p = ppos - fpos;
+	f2b.Normalize();
+	f2p.Normalize();
+
+	float cta = pright.Dot(f2p);
+	if (cta > 0.95)*/
+		m_time = 0.f;
 }
 void CharacterMoveMotion::ChangePlayingAnim(PlayAnim pa)
 {

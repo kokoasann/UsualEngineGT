@@ -113,7 +113,7 @@ void PlayerCamera::Update()
 		ofs.Cross(axix);
 
 		campos = m_cannon->GetPos();
-		campos += ofs*-100.f;
+		campos += ofs*-10.f;
 		camtar = campos + m_cannonDir;
 		m_cannonDir.Normalize();
 		m_cannon->SetTarget(m_cannonDir);
