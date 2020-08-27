@@ -301,12 +301,12 @@ namespace UsualEngine
 			{
 				auto meri = tarbuf - sr.hitPos;
 				float rad = sr.hitNormal.Dot(meri);
-				auto ntarget = tarbuf + sr.hitNormal * -(rad + m_radius + 0.5f);
+				auto ntarget = tarbuf + sr.hitNormal * -(rad + m_radius + 0.f);
 				if (!m_isHit)
 				{
 					m_effectorBone->SetIsONGround(true);
 
-					target = sr.hitPos + sr.hitNormal * (m_radius);
+					target = sr.hitPos + sr.hitNormal * -(m_radius);
 					target.Lerp(m_rubbing, ntarget, target);
 					m_rubTarget = ntarget;
 				}
