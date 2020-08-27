@@ -16,6 +16,10 @@ void PlayerMotion::Init(Player* player, Character* chara, ue::Camera* cam, ue::A
 	//auto kneeR = m_chara->FindBone(L"Bone_R.002", BK_None, true, 1, 1.f);
 	m_footL = m_chara->FindBone(L"Bone_L.003", BK_FootL, true, 3, 1.f);
 	m_footR = m_chara->FindBone(L"Bone_R.003", BK_FootR, true, 3, 1.f);
+	auto footIKL = m_chara->GetIK(m_footL);
+	auto footIKR = m_chara->GetIK(m_footR);
+	footIKL->SetRubbing(0.f);
+	footIKR->SetRubbing(0.f);
 	
 	auto handL = m_chara->FindBone(L"Bone.003_L.004", BK_HandL, true, 3, 1.f);
 	auto handR = m_chara->FindBone(L"Bone.003_R.004", BK_HandR, true, 3, 1.f);
@@ -78,8 +82,7 @@ void PlayerMotion::Update()
 			m_charaMove.NextPlayAnim(PA_idol, 0, AM_None);
 		}
 
-		m_charaRotate.Update();
-		m_charaMove.Update();
+		UpdateMotion();
 	}
 	else
 	{
@@ -87,4 +90,15 @@ void PlayerMotion::Update()
 		m_playerClimb.Update();
 	}
 	return;
+}
+
+void PlayerMotion::UpdateMotion()
+{
+	m_charaRotate.Update();
+	m_charaMove.Update();
+}
+
+void PlayerMotion::ToIdole()
+{
+	m_charaMove.NextPlayAnim(PA_idol, 0, AM_None);
 }

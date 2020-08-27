@@ -36,6 +36,10 @@ public:
 
 	void Update()override;
 
+	void UpdateMotion();
+
+	void ToIdole();
+
 private:
 	Player* m_player = nullptr;
 	Character* m_chara = nullptr;					//ŠOgB

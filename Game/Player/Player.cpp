@@ -111,6 +111,8 @@ void Player::Update()
 			{
 				m_camera.CannonMode(sr.hitCannon);
 				m_isSettingCannon = true;
+				
+				m_motion.ToIdole();
 			}
 		}
 	}
@@ -121,6 +123,7 @@ void Player::Update()
 			m_camera.NormalMode();
 			m_isSettingCannon = false;
 		}
+		m_motion.UpdateMotion();
 		m_camera.Update();
 	}
 	else

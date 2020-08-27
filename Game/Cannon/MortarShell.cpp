@@ -57,7 +57,7 @@ void MortarShell::Init(ue::CVector3 pos, ue::CVector3 dir)
 	m_model->SetRot(rot);
 	m_rot = rot;
 
-	m_collider.Create(10);
+	m_collider.Create(1);
 	ue::RigidBodyInfo info;
 	info.collider = &m_collider;
 	info.mass = 0.f;
