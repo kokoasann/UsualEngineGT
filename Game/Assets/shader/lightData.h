@@ -15,6 +15,7 @@ StructuredBuffer<SDirectionLight> DirLights : register(t50);
 struct SPointLight
 {
 	float3 pos;
+	float3 posInView;
 	float4 color;
 	float decay;
 	float radius;

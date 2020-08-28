@@ -9,6 +9,8 @@ namespace UsualEngine
 		Font();
 		~Font();
 
+		void Init();
+
 		//ƒtƒHƒ“ƒg‚É‚Â‚¯‚éü‚è
 		enum FontDrawType
 		{

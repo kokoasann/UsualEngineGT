@@ -13,7 +13,8 @@ struct SweepResultCannon : public btCollisionWorld::ConvexResultCallback
 		{
 			return 0.0f;
 		}
-		hitCannon = (Cannon*)convexResult.m_hitCollisionObject->getUserPointer();
+		if(hitCannon == nullptr)
+			hitCannon = (Cannon*)convexResult.m_hitCollisionObject->getUserPointer();
 		isHit = true;
 		return 1.0f;
 	}
@@ -76,11 +77,11 @@ void Player::Update()
 	if (ue::GamePad(0).IsTrigger(ue::enButtonX))
 	{
 		bool isSetting = true;
-		auto newc = m_chara.GetPos() + (m_chara.GetDir() * 80.f);
+		auto newc = m_chara.GetPos() + (m_chara.GetDir() * 8.f);
 		for (auto c:m_cannons)
 		{
 			auto cp = c->GetPos();
-			if ((newc - cp).Length() < 250.f)
+			if ((newc - cp).Length() < 25.f)
 			{
 				isSetting = false;
 				break;
@@ -90,7 +91,7 @@ void Player::Update()
 		{
 			auto can = ue::NewGO<Cannon>(0);
 
-			can->Init(m_cannonMesh, m_chara.GetPos() + (m_chara.GetDir() * 80.f), m_chara.GetRot());
+			can->Init(m_cannonMesh, m_chara.GetPos() + (m_chara.GetDir() * 8.f), m_chara.GetRot());
 			can->SetDir(m_chara.GetDir());
 			m_cannons.push_back(can);
 		}
@@ -110,6 +111,8 @@ void Player::Update()
 			{
 				m_camera.CannonMode(sr.hitCannon);
 				m_isSettingCannon = true;
+				
+				m_motion.ToIdole();
 			}
 		}
 	}
@@ -120,6 +123,7 @@ void Player::Update()
 			m_camera.NormalMode();
 			m_isSettingCannon = false;
 		}
+		m_motion.UpdateMotion();
 		m_camera.Update();
 	}
 	else

@@ -4,6 +4,10 @@
 
 namespace UsualEngine
 {
+	/// <summary>
+	/// フォントをブラーする。
+	/// (スプライトとかもブラーかけれるよ！)
+	/// </summary>
 	class FontBlur
 	{
 	public:
@@ -72,7 +76,7 @@ namespace UsualEngine
 
 	private:
 		RenderTarget m_renderTarget;
-		RenderTarget* m_oldRenderTarget[7] = {0};
+		RenderTarget* m_oldRenderTarget[8] = {0};
 		int m_oldRenderNum = 0;
 		GaussianBlur m_gausBlur;
 		GaussianBlur m_gausBlur_mid;

@@ -6,12 +6,17 @@ namespace UsualEngine
 {
 	Font::Font()
 	{
-		auto ge = usualEngine()->GetGraphicsEngine();
-		m_spriteBatch = ge->GetSpriteBatch();
-		m_spriteFont = ge->GetSpriteFont();
+		
 	}
 	Font::~Font()
 	{
+	}
+
+	void Font::Init()
+	{
+		auto ge = usualEngine()->GetGraphicsEngine();
+		m_spriteBatch = ge->GetSpriteBatch();
+		m_spriteFont = ge->GetSpriteFont();
 	}
 
 	void Font::Begin()

@@ -32,7 +32,7 @@ public:
 	/// </summary>
 	/// <param name="footL">左</param>
 	/// <param name="footR">右</param>
-	void InitBone(ue::Bone* footL, ue::Bone* footR);
+	void InitBone(ue::Bone* footL, ue::Bone* footR,bool isIKModeFoot = true);
 
 	void InitStartUpFoot(float upMax,float upspeed);
 	
@@ -133,6 +133,7 @@ private:
 	ue::Bone* m_footL = nullptr;			//左足のボーン
 	ue::Bone* m_footR = nullptr;			//右足のボーン
 	ue::IK* m_footLIK = nullptr;
+	ue::Bone* m_frontFoot = nullptr;		//前に出てる足
 	bool m_isJustFoot = false;							//justFootを行えるか？
 
 	bool m_isUpfoot = false;

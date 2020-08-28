@@ -35,6 +35,10 @@ namespace UsualEngine
 				rtvs[i] = rtlist[i]->GetRTV();
 			}
 		}
+		else
+		{
+			ZeroMemory(m_nowRenderTargets, sizeof(RenderTarget*) * RTV_MAX);
+		}
 		m_pd3dDeviceContext->OMSetRenderTargets(targetCount, rtvs, dsv);
 		
 	}
@@ -142,6 +146,8 @@ namespace UsualEngine
 		m_postEffect.DrawPrimitive();
 
 		gb.UnSetGBuffer();
+
+		//m_lightManager.RenderPointLight();
 	}
 	void GraphicsEngine::Release()
 	{

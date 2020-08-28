@@ -36,8 +36,10 @@ void Cannon::Init(const ue::SkinModel& cannonMesh, const ue::CVector3& pos, cons
 	//body->setCollisionFlags(btCollisionObject::CF_KINEMATIC_OBJECT);
 	body->setUserIndex(ue::enCollisionAttr_NonHitIK | CollisionUserIndex::CUI_Cannon);
 	body->setUserPointer(this);
+	
 	//body->setActivationState(DISABLE_SIMULATION);
 	ue::Physics().AddRigidBody(m_rigidBody);
+	body->setGravity(btVector3(0, 0, 0));
 
 	m_cannon = ue::NewGO<ue::SkinModelRender>(0);
 	m_cannon->Init(L"Assets/model/Cannon.cmo", 0, 0, ue::enFbxUpAxisY);
@@ -93,6 +95,7 @@ void Cannon::Update_RigidBody()
 	trans.setRotation({ rot.x,rot.y,rot.z,rot.w });
 	auto p = m_dirBone->GetParent()->GetWorldMatrix().GetTranslation();
 	trans.setOrigin({ p.x ,p.y ,p.z });
+	
 }
 
 void Cannon::Fire()

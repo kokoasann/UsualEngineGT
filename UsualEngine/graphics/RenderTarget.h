@@ -58,6 +58,15 @@ namespace UsualEngine
 		}
 
 		/// <summary>
+		/// UAVを返す
+		/// </summary>
+		/// <returns></returns>
+		ID3D11UnorderedAccessView* GetUAV() const
+		{
+			return m_renderTargetUAV;
+		}
+
+		/// <summary>
 		/// レンダーターゲットを返す。
 		/// </summary>
 		/// <returns></returns>

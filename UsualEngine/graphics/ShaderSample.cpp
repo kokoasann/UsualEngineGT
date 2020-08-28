@@ -15,6 +15,7 @@ namespace UsualEngine
 
 	Shader ShaderSample::VS_Copy;
 	Shader ShaderSample::PS_Copy;
+	Shader ShaderSample::CS_Copy_1;
 
 	void ShaderSample::Init()
 	{
@@ -29,5 +30,6 @@ namespace UsualEngine
 
 		VS_Copy.Load("Assets/shader/Copy.fx", "VSMain", Shader::EnType::VS);
 		PS_Copy.Load("Assets/shader/Copy.fx", "PSMain", Shader::EnType::PS);
+		CS_Copy_1.Load("Assets/shader/Copy.fx", "CSMain_Copy", Shader::EnType::CS);
 	}
 }

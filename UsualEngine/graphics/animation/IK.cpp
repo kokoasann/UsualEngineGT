@@ -220,7 +220,7 @@ namespace UsualEngine
 		rbinfo.mass = 0.f;
 		rbinfo.collider = &m_collider;
 		m_rigidBody.Create(rbinfo);
-		m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_Character);
+		m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_Character|enCollisionAttr_NonHitIK);
 		m_rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
 		auto& rpos = m_rigidBody.GetBody()->getWorldTransform();
 		CMatrix base,tr;
@@ -274,7 +274,8 @@ namespace UsualEngine
 		{
 			oldpos = m_target;
 		}
-		if ((newpos - oldpos).Length() <= FLT_EPSILON)
+		CVector3 o2n = (newpos - oldpos);
+		if (o2n.Length() <= 2.0e-5f)
 			return;
 
 		SweepResultIK sr;
@@ -288,44 +289,57 @@ namespace UsualEngine
 		btTransform bstart, bend;
 		bstart.setIdentity();
 		bend.setIdentity();
-
 		bstart.setOrigin(btVector3(oldpos.x, oldpos.y, oldpos.z));
 		bend.setOrigin(btVector3(newpos.x, newpos.y, newpos.z));
-
-		
-		Physics().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), bstart, bend, sr);
-		if (sr.isHit)
+		bool isHit = false;
+		CVector3 tarbuf = newpos;
+		while(true)
 		{
-			auto norm = sr.hitNormal;
-			norm.Normalize();
-			auto meri = newpos - sr.hitPos;
-			if (!m_isHit)
-			{
-				m_effectorBone->SetIsONGround(true);
 
-				float rad = norm.Dot(meri);
-				auto ntarget = newpos + sr.hitNormal * (-rad + m_radius);
-				target = sr.hitPos + sr.hitNormal * (m_radius);
-				target.Lerp(m_rubbing, ntarget, target);
-				m_rubTarget = ntarget;
+			Physics().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), bstart, bend, sr);
+			if (sr.isHit)
+			{
+				auto meri = tarbuf - sr.hitPos;
+				float rad = sr.hitNormal.Dot(meri);
+				auto ntarget = tarbuf + sr.hitNormal * (-rad + m_radius + 0.2f);
+				if (!m_isHit)
+				{
+					m_effectorBone->SetIsONGround(true);
+
+					target = sr.hitPos + sr.hitNormal * (m_radius+0.2f);
+					target.Lerp(m_rubbing, ntarget, target);
+					m_rubTarget = ntarget;
+				}
+				else
+				{
+					target.Lerp(m_rubbing, ntarget, m_target);
+				}
+				auto t2t = (target - tarbuf);
+				float l = t2t.Length();
+				if (l < 2.0e-5f)
+					break;
+				auto o2t = (target - oldpos);
+				l = o2t.Length();
+				if (l < 2.0e-5f)
+					return;
+				isHit = true;
+				tarbuf = target;
+				bend.setOrigin(btVector3(target.x, target.y, target.z));
+				sr.dist = FLT_MAX;
 			}
 			else
 			{
-				float rad = norm.Dot(meri);
-				auto ntarget = newpos + sr.hitNormal * (-rad + m_radius);
-				target.Lerp(m_rubbing, ntarget, m_target);
-			}
-		}
-		else
-		{
-			m_effectorBone->SetIsONGround(false);
-			if (m_isHit)
-			{
-				m_effectorBone->SetMomentum(newpos - oldpos);
-			}
-			else
-			{
-				m_effectorBone->SetMomentum(CVector3::Zero());
+				if(!isHit)
+					m_effectorBone->SetIsONGround(false);
+				if (m_isHit)
+				{
+					m_effectorBone->SetMomentum(newpos - oldpos);
+				}
+				else
+				{
+					m_effectorBone->SetMomentum(CVector3::Zero());
+				}
+				break;
 			}
 		}
 
@@ -819,6 +833,7 @@ namespace UsualEngine
 		//m_nextTarget = p;
 		m_isSetNextTarget = false;
 		m_rubTarget = p;
-		UpdateRigidBody(p);
+		if(m_isUseRigidBody)
+			UpdateRigidBody(p);
 	}
 }

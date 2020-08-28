@@ -20,7 +20,7 @@ namespace UsualEngine
 			mate->SetPSShader(m_ps);
 		});
 		CMatrix mat;
-		mat.MakeScaling(CVector3::One()*10000.f);
+		mat.MakeScaling(CVector3::One()*20.f);
 		m_sky.UpdateWorldMatrix(mat);
 	}
 	void SkyRender::Release()

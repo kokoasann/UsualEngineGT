@@ -59,3 +59,15 @@ PSOutput_3 PSMain_Triple(PSInput In)
 	output.col3 = sceneTexture_3.Sample(Sampler, In.uv);
 	return output;
 }
+
+RWTexture2D<float4> outTexture_1 : register(u0);
+cbuffer CopyConstBuffer:register(b0)
+{
+	float4 whReciprocal;		//コピー先のテクスチャの幅高の逆数(w1,h1,w2,h2)
+}
+
+[numthreads(4,4,1)]
+void CSMain_Copy(uint3 id:SV_DispatchThreadID)
+{
+	outTexture_1[id.xy] = sceneTexture_1.SampleLevel(Sampler,float2(id.xy*whReciprocal.xy),0);
+}

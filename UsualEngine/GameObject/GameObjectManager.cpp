@@ -196,7 +196,7 @@ namespace UsualEngine
 		cap -= m_checkInCountList[prio];
 		return cap;
 	}
-	void GameObjectManager::ClearCapacity(int prio)
+	void GameObjectManager::CapacityShrink2Fit(int prio)
 	{
 		m_checkInCountList[prio] = 0;
 		m_gameObjectList[prio].shrink_to_fit();

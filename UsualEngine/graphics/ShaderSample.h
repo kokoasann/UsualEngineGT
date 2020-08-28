@@ -23,5 +23,7 @@ namespace UsualEngine
 
 		static Shader VS_Copy;			//コピーVS
 		static Shader PS_Copy;			//コピーPS
+
+		static Shader CS_Copy_1;		//コピーCS
 	};
 }

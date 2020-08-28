@@ -66,7 +66,8 @@ namespace UsualEngine
 												//衝突したときに呼ばれるコールバック関数。
 		virtual	btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
 		{
-			if (convexResult.m_hitCollisionObject == me) {
+			if (convexResult.m_hitCollisionObject == me) 
+			{
 				//自分に衝突した。or 地面に衝突した。
 				return 0.0f;
 			}
@@ -201,7 +202,7 @@ namespace UsualEngine
 					//押し返すベクトルは壁の法線に射影されためり込みベクトル+半径。
 					CVector3 vOffset;
 					vOffset = hitNormalXZ;
-					vOffset *= -fT0 + m_radius;
+					vOffset *= -fT0 + m_radius + 0.2f;
 					nextPosition += vOffset;
 					CVector3 currentDir;
 					currentDir = nextPosition - m_position;

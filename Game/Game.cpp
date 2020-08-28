@@ -226,7 +226,9 @@ bool Game::Start()
 	light->SetDir(ue::CVector3(1.f, 0.0f, 0.f));
 	light->SetCol({ 0.3f,0.0f,0.f,1.0f });*/
 	
-
+	//
+	//ポイントライト
+	//
 	static auto plig = ue::NewGO<ue::LightPoint>(0);
 	plig->SetPos({ 0,1,-100 });
 	auto col = ue::CVector3{ 0.6,0.25,0.08 };
@@ -235,6 +237,33 @@ bool Game::Start()
 	plig->SetDecay(0.001f);
 	plig->SetRadius(300.f);
 
+	auto plig2 = ue::NewGO<ue::LightPoint>(0);
+	plig2->SetPos({ 600,100,2700 });
+	col = ue::CVector3{ 0.6,0.25,0.08 };
+	col.Normalize();
+	plig2->SetCol(col * 5);
+	plig2->SetDecay(0.001f);
+	plig2->SetRadius(600.f);
+
+	auto plig3 = ue::NewGO<ue::LightPoint>(0);
+	plig3->SetPos({ -2800,800,-2300 });
+	col = ue::CVector3{ 0.6,0.25,0.08 };
+	col.Normalize();
+	plig3->SetCol(col * 5);
+	plig3->SetDecay(0.001f);
+	plig3->SetRadius(600.f);
+
+	auto plig4 = ue::NewGO<ue::LightPoint>(0);
+	plig4->SetPos({ 1900,300,-1700 });
+	col = ue::CVector3{ 0.6,0.25,0.08 };
+	col.Normalize();
+	plig4->SetCol(col * 5);
+	plig4->SetDecay(0.001f);
+	plig4->SetRadius(600.f);
+
+	//
+	//メインカメラの設定。
+	//
 	campos = { -240,52,-100 };
 	//campos = { 0,150,180 };
 	cam->SetPosition(campos);
@@ -309,6 +338,8 @@ bool Game::Start()
 	};
 	ue::DebugSwitchAddCheck(ue::DebugSwitchNewSwitch('P', 0, f));
 
+
+	m_font.Init();
 
 	// font blur の　設定。
 	m_fblur.SetSpeed(0.5f);

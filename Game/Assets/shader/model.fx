@@ -20,10 +20,10 @@ Texture2D<float4> albedoTexture : register(t0);
 #define GET_SHADOW(MAPIND)\
  \
     float4 posinLVP = mul(mLVP[ind], float4(wpos, 1)); \
-    posinLVP.xyz /= posinLVP.w;\
-    float depthbuf = min(posinLVP.z / posinLVP.w, 1.0f);\
+    posinLVP.xyz *= rcp(posinLVP.w);\
+    float depthbuf = saturate(posinLVP.z);\
 	\
-    float2 smuv = float2(0.5f, -0.5f) * posinLVP.xy + float2(0.5f, 0.5f);\
+    float2 smuv = mad(float2(0.5f, -0.5f), posinLVP.xy, float2(0.5f, 0.5f));\
 \
     float isInUVbuf = (step(smuv.x,1.f)) * (step(smuv.y,1.f)) * (step(0.f,smuv.x)) * (step(0.f,smuv.y));\
     float2 pix = float2(ligPixSize[ind].x * offset.x, ligPixSize[ind].y * offset.y);\

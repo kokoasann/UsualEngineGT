@@ -296,6 +296,9 @@
     <ClCompile Include="graphics\PostEffect\RayMarchingFog.cpp">
       <Filter>Graphics\PostEffect</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\PostEffect\FogEffectObject.cpp">
+      <Filter>Graphics\PostEffect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="character\CharacterController.h">
@@ -529,6 +532,9 @@
       <Filter>Graphics\PostEffect</Filter>
     </ClInclude>
     <ClInclude Include="graphics\PostEffect\RayMarchingFog.h">
+      <Filter>Graphics\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\PostEffect\FogEffectObject.h">
       <Filter>Graphics\PostEffect</Filter>
     </ClInclude>
   </ItemGroup>

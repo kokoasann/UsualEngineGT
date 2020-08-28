@@ -160,11 +160,11 @@ void Character::Init(ue::SkinModelRender* smr, float ccradius, float ccheight, c
 			vnew.Normalize();
 
 			float rad = vold.Dot(vnew);
-			rad = min(rad, 1);
+			rad = min(rad, 1.f);
 			rad = acos(rad);
 
 			ue::CQuaternion add;
-			add.SetRotation(ue::CVector3::AxisY(), rad * -1);
+			add.SetRotation(ue::CVector3::AxisY(), rad * -1.f);
 
 
 			auto fpos = m_waistR->GetWorldMatrix().GetTranslation();

@@ -17,10 +17,13 @@ namespace UsualEngine
 
 		void Release();
 
+		/// <summary>
+		/// NewGOされたもののデータ。
+		/// </summary>
 		struct NewGOData
 		{
-			GameObject* go = nullptr;
-			char prio = 0;
+			GameObject* go = nullptr;	//Newされたやつのポインタ
+			char prio = 0;				//プライオリティ
 		};
 		static GameObjectManager* Get()
 		{
@@ -29,6 +32,10 @@ namespace UsualEngine
 			return &ins;
 		}
 
+		/// <summary>
+		/// ゴミ箱に入ってるオブジェクトを取り出す。
+		/// </summary>
+		/// <returns></returns>
 		template<class T>
 		T* TakeTrash()
 		{
@@ -51,6 +58,13 @@ namespace UsualEngine
 			return t;
 		}
 
+		/// <summary>
+		/// オブジェクトを生成する。
+		/// </summary>
+		/// <param name="prio">プライオリティ</param>
+		/// <param name="name">名前</param>
+		/// <param name="isCheckIned">チェックインしてる？</param>
+		/// <returns></returns>
 		template<class T>
 		T* NewGameObject(int prio, const char* name,bool isCheckIned)
 		{
@@ -79,18 +93,61 @@ namespace UsualEngine
 			return go;
 		}
 
+		/// <summary>
+		/// オブジェクトを消す
+		/// オブジェクトが使いまわしできるようになっているものはデリートはされない。
+		/// </summary>
+		/// <param name="go">消すオブジェクト</param>
 		void DeleteGameObject(GameObject* go);
 
+		/// <summary>
+		/// 更新。
+		/// </summary>
 		void Update();
+		/// <summary>
+		/// Startを更新
+		/// </summary>
 		void UpdateStart();
+		/// <summary>
+		/// Updateを更新
+		/// </summary>
 		void UpdateUpdate();
+		/// <summary>
+		/// PreRenderを更新
+		/// </summary>
 		void UpdatePreRender();
+		/// <summary>
+		/// Renderを更新
+		/// </summary>
 		void UpdateRender();
+		/// <summary>
+		/// PostRenderを更新
+		/// </summary>
 		void UpdatePostRender();
 
+		/// <summary>
+		/// オブジェクトリストのキャパシティをadd分増やす
+		/// </summary>
+		/// <param name="prio">プライオリティ</param>
+		/// <param name="add">増やす数</param>
 		void AddReserved(int prio, int add);
+		/// <summary>
+		/// オブジェクトリストのキャパシティを返す
+		/// </summary>
+		/// <param name="prio">プライオリティ</param>
+		/// <returns></returns>
 		int Capacity(int prio);
-		void ClearCapacity(int prio);
+		/// <summary>
+		/// オブジェクトリストの余分を消す。
+		/// CheckINのカウントを0にする。
+		/// </summary>
+		/// <param name="prio">プライオリティ</param>
+		void CapacityShrink2Fit(int prio);
+		/// <summary>
+		/// チェックイン
+		/// </summary>
+		/// <param name="prio">プライオリティ</param>
+		/// <param name="count">カウント</param>
 		void CheckIN(int prio, int count);
 	private:
 		static const size_t m_maxSize = 32;					//priorityの最大値。
@@ -104,12 +161,24 @@ namespace UsualEngine
 		bool m_isReleaseProcess = false;					//全オブジェクトの開放処理中？
 	};
 
+	/// <summary>
+	/// オブジェクトを生成する
+	/// </summary>
+	/// <param name="prio">プライオリティ</param>
+	/// <param name="name">名前</param>
+	/// <param name="isTakeTrush">使いまわしする</param>
+	/// <returns></returns>
 	template<class T>
 	static T* NewGO(int prio, const char* name="",bool isTakeTrush=true)
 	{
 		return GameObjectManager::Get()->NewGameObject<T>(prio, name, isTakeTrush);
 	}
 	
+	/// <summary>
+	/// オブジェクトを消す
+	/// 使いまわしをする奴はデリートをしない
+	/// </summary>
+	/// <param name="obj">消すオブジェクト</param>
 	template<class T>
 	static void DeleteGO(T*& obj)
 	{
