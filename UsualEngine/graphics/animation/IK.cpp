@@ -220,7 +220,7 @@ namespace UsualEngine
 		rbinfo.mass = 0.f;
 		rbinfo.collider = &m_collider;
 		m_rigidBody.Create(rbinfo);
-		m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_Character);
+		m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_Character|enCollisionAttr_NonHitIK);
 		m_rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
 		auto& rpos = m_rigidBody.GetBody()->getWorldTransform();
 		CMatrix base,tr;
@@ -301,12 +301,12 @@ namespace UsualEngine
 			{
 				auto meri = tarbuf - sr.hitPos;
 				float rad = sr.hitNormal.Dot(meri);
-				auto ntarget = tarbuf + sr.hitNormal * -(rad + m_radius + 0.f);
+				auto ntarget = tarbuf + sr.hitNormal * (-rad + m_radius + 0.2f);
 				if (!m_isHit)
 				{
 					m_effectorBone->SetIsONGround(true);
 
-					target = sr.hitPos + sr.hitNormal * -(m_radius);
+					target = sr.hitPos + sr.hitNormal * (m_radius+0.2f);
 					target.Lerp(m_rubbing, ntarget, target);
 					m_rubTarget = ntarget;
 				}
@@ -316,15 +316,16 @@ namespace UsualEngine
 				}
 				auto t2t = (target - tarbuf);
 				float l = t2t.Length();
-				if (l < 1.0e-5f)
+				if (l < 2.0e-5f)
 					break;
 				auto o2t = (target - oldpos);
 				l = o2t.Length();
-				if (l < 1.0e-5f)
+				if (l < 2.0e-5f)
 					return;
 				isHit = true;
 				tarbuf = target;
 				bend.setOrigin(btVector3(target.x, target.y, target.z));
+				sr.dist = FLT_MAX;
 			}
 			else
 			{

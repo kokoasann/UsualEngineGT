@@ -202,7 +202,7 @@ namespace UsualEngine
 					//押し返すベクトルは壁の法線に射影されためり込みベクトル+半径。
 					CVector3 vOffset;
 					vOffset = hitNormalXZ;
-					vOffset *= -fT0 + m_radius;
+					vOffset *= -fT0 + m_radius + 0.2f;
 					nextPosition += vOffset;
 					CVector3 currentDir;
 					currentDir = nextPosition - m_position;
