@@ -15,7 +15,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	UsualEngine::Camera& MainCam = UsualEngine::usualEngine()->GetMainCamera();
 	MainCam.SetPosition({ 0,80,120 });
 	MainCam.SetTarget({ 0,80,0 });
-	MainCam.SetFar(100000000.f);
+	MainCam.SetFar(100000.f);
 	MainCam.Update();
 	
 	ue::NewGO<Game>(0);
