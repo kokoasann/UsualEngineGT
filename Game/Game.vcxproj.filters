@@ -46,6 +46,9 @@
     <ClCompile Include="Player\PlayerClimb.cpp">
       <Filter>Player</Filter>
     </ClCompile>
+    <ClCompile Include="Cannon\MortarShell_Explosion.cpp">
+      <Filter>Cannon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -98,6 +101,9 @@
     </ClInclude>
     <ClInclude Include="Player\PlayerClimb.h">
       <Filter>Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Cannon\MortarShell_Explosion.h">
+      <Filter>Cannon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

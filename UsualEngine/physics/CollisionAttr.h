@@ -12,6 +12,7 @@ namespace UsualEngine
 		enCollisionAttr_Ground = 1,
 		enCollisionAttr_Character = 2,
 		enCollisionAttr_NonHitIK = 4,
-		enCollisionAttr_User = 8
+		enCOllisionAttr_IK = 8,
+		enCollisionAttr_User = 16
 	};
 }

@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClCompile Include="Cannon\Cannon.cpp" />
     <ClCompile Include="Cannon\MortarShell.cpp" />
+    <ClCompile Include="Cannon\MortarShell_Explosion.cpp" />
     <ClCompile Include="Character\Character.cpp" />
     <ClCompile Include="Character\CharacterJustFoot.cpp" />
     <ClCompile Include="Character\CharacterMotionController.cpp" />
@@ -171,6 +172,7 @@
   <ItemGroup>
     <ClInclude Include="Cannon\Cannon.h" />
     <ClInclude Include="Cannon\MortarShell.h" />
+    <ClInclude Include="Cannon\MortarShell_Explosion.h" />
     <ClInclude Include="Character\CharacterConst.h" />
     <ClInclude Include="Character\CharacterJustFoot.h" />
     <ClInclude Include="Character\CharacterMotionController.h" />

@@ -109,7 +109,7 @@ public:
 		m_cannon->SetRot(rot);
 		m_stand->SetRot(rot);
 		m_rot = rot;
-		m_cannon->GetAnimation().SetIKNextTarget(m_dirBone->GetParent()->GetWorldMatrix().GetTranslation()+(dir*80.f), m_dirBone);
+		m_cannon->GetAnimation().SetIKNextTarget(m_dirBone->GetParent()->GetWorldMatrix().GetTranslation()+(dir*8.f), m_dirBone);
 		m_dir = dir;
 	}
 	/// <summary>

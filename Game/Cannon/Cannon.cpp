@@ -28,7 +28,7 @@ void Cannon::Init(const ue::SkinModel& cannonMesh, const ue::CVector3& pos, cons
 	m_meshCollider.CreateFromSkinModel(cannonMesh, &scam);
 	ue::RigidBodyInfo info;
 	info.collider = &m_meshCollider;
-	info.mass = 10.f;
+	info.mass = 0.f;
 	info.pos = pos;
 	info.rot = rot;
 	m_rigidBody.Create(info);
@@ -53,11 +53,16 @@ void Cannon::Init(const ue::SkinModel& cannonMesh, const ue::CVector3& pos, cons
 	m_stand->SetSca(sca);
 
 	m_dirBone = m_cannon->GetSkinModel().GetSkeleton().GetBone(2);
-	m_cannon->SetingIK(m_dirBone, m_dirBone->GetParent(), 10,false);
+	auto ik = m_cannon->SetingIK(m_dirBone, m_dirBone->GetParent(), 1,true);
+	//ik->SetIKMode(ue::IK::enMode_NoneHit);
 	m_cannon->GetAnimation().SetIKActive(false);
 	m_pos = pos;
 	m_rot = rot;
 	//m_collisionRot = rot;
+
+	auto dir = ue::CVector3::AxisZ();
+	rot.Multiply(dir);
+	SetTarget(dir);
 
 	m_rot.Multiply(m_dir);
 	m_isFirst = 0;

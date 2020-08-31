@@ -220,7 +220,7 @@ namespace UsualEngine
 		rbinfo.mass = 0.f;
 		rbinfo.collider = &m_collider;
 		m_rigidBody.Create(rbinfo);
-		m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_Character|enCollisionAttr_NonHitIK);
+		m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_Character|enCollisionAttr_NonHitIK|enCOllisionAttr_IK);
 		m_rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
 		auto& rpos = m_rigidBody.GetBody()->getWorldTransform();
 		CMatrix base,tr;
@@ -241,6 +241,8 @@ namespace UsualEngine
 			break;
 		case enMode_Foot:
 			UpdateTarget_Foot(worldMat);
+			break;
+		case enMode_NoneHit:
 			break;
 		}
 	}
@@ -558,6 +560,15 @@ namespace UsualEngine
 		m_oldNewTarget = orgpos;
 		m_offset = CVector3::Zero();
 
+		if (m_isUseRigidBody)
+			UpdateRigidBody(m_target);
+	}
+
+	void IK::UpdateTarget_NoneHit(const CMatrix& worldMat)
+	{
+		m_oldTarget = m_target;
+		if (m_isSetNextTarget)
+			m_target = m_nextTarget;
 		if (m_isUseRigidBody)
 			UpdateRigidBody(m_target);
 	}

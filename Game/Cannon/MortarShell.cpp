@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "MortarShell.h"
-
+#include "MortarShell_Explosion.h"
 
 struct SweepResultShell :public btCollisionWorld::ConvexResultCallback
 {
@@ -11,7 +11,7 @@ public:
 	virtual btScalar addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace) override
 	{
 		int ind = convexResult.m_hitCollisionObject->getUserIndex();
-		if (ind & CUI_Cannon)
+		if (ind & CUI_Cannon || ind & ue::enCOllisionAttr_IK)
 			return 0.f;
 		hitTag = ind;
 		isHit = true;
@@ -112,6 +112,9 @@ void MortarShell::Update()
 	}
 	else
 	{
+		auto explosion = ue::NewGO<MortarShell_Explosion>(0);
+		explosion->SetPos(m_pos);
+
 		auto thisptr = this;
 		ue::DeleteGO(thisptr);
 	}

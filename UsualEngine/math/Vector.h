@@ -577,6 +577,20 @@ namespace UsualEngine
 			DirectX::XMVECTOR xmv = DirectX::XMLoadFloat4(&vec);
 			return DirectX::XMVector4LengthSq(xmv).m128_f32[0];
 		}
+
+		void Lerp(float t,const CVector4& v1,const CVector4& v2)
+		{
+			auto res = DirectX::XMVectorLerp(DirectX::XMLoadFloat4(&v1.vec), DirectX::XMLoadFloat4(&v2.vec), t);
+			DirectX::XMStoreFloat4(&vec, res);
+		}
+
+		CVector4 Lerp(float t, const CVector4& v1)
+		{
+			CVector4 resv;
+			auto res = DirectX::XMVectorLerp(DirectX::XMLoadFloat4(&vec), DirectX::XMLoadFloat4(&v1.vec), t);
+			DirectX::XMStoreFloat4(&resv.vec, res);
+			return resv;
+		}
 		/*!
 		* @brief	ägëÂÅB
 		*/
@@ -689,7 +703,7 @@ namespace UsualEngine
 			DirectX::XMVECTOR xmv = DirectX::XMVector3Rotate(_v, *this);
 			DirectX::XMStoreFloat4(&_v.vec, xmv);
 		}
-		void Multiply(CVector3& _v)
+		void Multiply(CVector3& _v) const
 		{
 			DirectX::XMVECTOR xmv = DirectX::XMVector3Rotate(_v, *this);
 			DirectX::XMStoreFloat3(&_v.vec, xmv);

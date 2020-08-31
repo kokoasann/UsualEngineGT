@@ -12,6 +12,7 @@ namespace UsualEngine
 		{
 			enMode_Normal,
 			enMode_Foot,		//footIK
+			enMode_NoneHit,
 		};
 		/// <summary>
 		/// 使用するIKの種類。
@@ -39,6 +40,7 @@ namespace UsualEngine
 		void UpdateTarget(const CMatrix& worldMat);
 		void UpdateTarget_Normal(const CMatrix& worldMat);
 		void UpdateTarget_Foot(const CMatrix& worldMat);
+		void UpdateTarget_NoneHit(const CMatrix& worldMat);
 		/// <summary>
 		/// IKの更新。
 		/// </summary>

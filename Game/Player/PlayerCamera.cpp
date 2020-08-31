@@ -156,5 +156,6 @@ void PlayerCamera::CannonMode(Cannon* cn)
 	//rot.SetRotation(b->GetWorldMatrix());
 	m_cannonDir = ue::CVector3::AxisY();
 	rot.Multiply(m_cannonDir);
+	m_cannon->SetTarget(m_cannonDir);
 	m_cameraMode = CM_Cannon;
 }
