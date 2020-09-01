@@ -1,9 +1,11 @@
 #include "PreCompile.h"
 #include "FogEffectObject.h"
+#include "graphics/ShaderSample.h"
 
 UsualEngine::FogEffectObject::FogEffectObject()
 {
 	m_constBuffer.Create(nullptr, sizeof(m_cbData));
+	m_psMain.Load("Assets/shader/FogEffect.fx", "PSMain_FogEffect", Shader::EnType::PS);
 }
 
 UsualEngine::FogEffectObject::~FogEffectObject()
@@ -32,6 +34,9 @@ void UsualEngine::FogEffectObject::Render(RenderTarget* renderTarget)
 	
 	
 	//CVector3 center = m_cbData.pos;
+
+	m_cbData.mainLightDir = ge->GetLightManager().GetMainLightDirection()->GetDir();
+
 	m_cbData.pos = m_pos;
 	viewMat.Mul(m_cbData.pos);
 	CVector3 top = m_cbData.pos + CVector3(m_cbData.radius, m_cbData.radius, 0);
@@ -45,11 +50,18 @@ void UsualEngine::FogEffectObject::Render(RenderTarget* renderTarget)
 	{
 		return;
 	}
+
+	m_cbData.screenOffset = CVector2(clipTop.x, clipTop.y);
+	CVector2 vSize = { clipTop.x - clipBottom.x, clipTop.y - clipBottom.y };
+	m_cbData.screenSize = vSize;
+	vSize.x *= FRAME_BUFFER_W;
+	vSize.y *= FRAME_BUFFER_H;
+
 	clipTop.x *= FRAME_BUFFER_W;
 	clipTop.y *= FRAME_BUFFER_H;
 	clipBottom.x *= FRAME_BUFFER_W;
 	clipBottom.y *= FRAME_BUFFER_H;
-	CVector2 vSize = { clipTop.x - clipBottom.x, clipTop.y - clipBottom.y };
+	//CVector2 vSize = { clipTop.x - clipBottom.x, clipTop.y - clipBottom.y };
 	D3D11_VIEWPORT vp = { clipTop.x, clipBottom.y, vSize.x, vSize.y, 0, 1 };
 	dc->RSSetViewports(1, &vp);
 
@@ -59,6 +71,9 @@ void UsualEngine::FogEffectObject::Render(RenderTarget* renderTarget)
 	projMat.Mul(m_cbData.tip);
 
 	m_cbData.mProjI.Inverse(projMat);
+
+	dc->UpdateSubresource(m_constBuffer.GetBody(), 0, 0, &m_cbData, 0, 0);
+	dc->PSSetConstantBuffers(enSkinModelCBReg_Generic, 1, &m_constBuffer.GetBody());
 	
 	/*
 	for (int i = 0; i < 8; i++)
@@ -95,5 +110,9 @@ void UsualEngine::FogEffectObject::Render(RenderTarget* renderTarget)
 	gbuffer[0] = gbuf.GetGBuffer(GBuffer::GB_Depth);
 	
 	dc->PSSetShaderResources(enSkinModelSRVReg_GDepthMap, 1, &gbuffer[0]->GetSRV());
+	
+	dc->VSSetShader((ID3D11VertexShader*)ShaderSample::VS_Copy.GetBody(), nullptr, 0);
+	dc->PSSetShader((ID3D11PixelShader*)m_psMain.GetBody(), nullptr, 0);
+
 	
 }

@@ -47,7 +47,15 @@ namespace UsualEngine
 			
 			float attenuationY = 0.1f;			//Y減衰。
 			float attenuationXZ = 0.1f;			//XZ減衰。
-			float concentration = 0.95f;		//濃さ。
+			
+			float pConcentration = 0.4f;   //パーリンノイズの濃度。
+			float pDisperse = 0.2f;        //パーリンノイズの散乱具合。
+			float pScale = 0.1f;           //パーリンノイズのスケール。
+			float wConcentration = 0.2f;   //ウォーリーノイズの濃度。
+			float wDisperse = 0.1f;        //ウォーリーノイズの散乱具合。
+			float wScale = 0.1f;           //ウォーリーノイズのスケール。
+
+			CVector3 mainLightDir;
 
 			CVector2 screenOffset = { 0,0 };		//画面のオフセット
 			CVector2 screenSize = { 0,0 };
@@ -55,6 +63,7 @@ namespace UsualEngine
 		};
 		CBData m_cbData;				//定数バッファデータ
 		ConstantBuffer m_constBuffer;	//定数バッファ
+		Shader m_psMain;
 		
 		CVector3 m_pos;
 	};
