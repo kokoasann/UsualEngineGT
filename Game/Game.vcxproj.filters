@@ -173,6 +173,9 @@
     <Filter Include="Assets\Model\Test">
       <UniqueIdentifier>{84c98d2d-99cc-49e0-8a43-37cb8fcbf9a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Model\Primitive">
+      <UniqueIdentifier>{ec80a9d0-856d-4761-8de4-afffcf3b7ce3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\model.fx">
@@ -340,6 +343,9 @@
     </MeshContentTask>
     <MeshContentTask Include="Assets\model\AlphaModelTest\ANA.fbx">
       <Filter>Assets\Model\Test</Filter>
+    </MeshContentTask>
+    <MeshContentTask Include="Assets\model\Primitive\Sphere.fbx">
+      <Filter>Assets\Model\Primitive</Filter>
     </MeshContentTask>
   </ItemGroup>
 </Project>

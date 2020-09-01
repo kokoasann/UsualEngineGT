@@ -21,19 +21,50 @@ void UsualEngine::FogEffectObject::Render(RenderTarget* renderTarget)
 	const auto& projMat = cam.GetProjectionMatrix();
 	
 	CVector3 vert[8];//{{0.5, 0, 0.5},{-0.5, 0, 0.5},{0.5, 0, -0.5},{-0.5, 0, -0.5}, {0.5, 1, 0.5},{-0.5, 1, 0.5},{0.5, 1, -0.5},{-0.5, 1, -0.5}}
-	vert[0] = m_cbData.pos + CVector3{ m_cbData.size.x * 0.5f, 0.f, m_cbData.size.z * 0.5f };
+	/*vert[0] = m_cbData.pos + CVector3{ m_cbData.size.x * 0.5f, 0.f, m_cbData.size.z * 0.5f };
 	vert[1] = m_cbData.pos + CVector3{ m_cbData.size.x * -0.5f, 0.f, m_cbData.size.z * 0.5f };
 	vert[2] = m_cbData.pos + CVector3{ m_cbData.size.x * 0.5f, 0.f, m_cbData.size.z * -0.5f };
 	vert[3] = m_cbData.pos + CVector3{ m_cbData.size.x * -0.5f, 0.f, m_cbData.size.z * -0.5f };
 	vert[4] = m_cbData.pos + CVector3{ m_cbData.size.x * 0.5f, m_cbData.size.y, m_cbData.size.z * 0.5f };
 	vert[5] = m_cbData.pos + CVector3{ m_cbData.size.x * -0.5f, m_cbData.size.y, m_cbData.size.z * 0.5f };
 	vert[6] = m_cbData.pos + CVector3{ m_cbData.size.x * 0.5f, m_cbData.size.y, m_cbData.size.z * -0.5f };
-	vert[7] = m_cbData.pos + CVector3{ m_cbData.size.x * -0.5f, m_cbData.size.y, m_cbData.size.z * -0.5f };
+	vert[7] = m_cbData.pos + CVector3{ m_cbData.size.x * -0.5f, m_cbData.size.y, m_cbData.size.z * -0.5f };*/
+	
+	
+	//CVector3 center = m_cbData.pos;
+	m_cbData.pos = m_pos;
+	viewMat.Mul(m_cbData.pos);
+	CVector3 top = m_cbData.pos + CVector3(m_cbData.radius, m_cbData.radius, 0);
+	CVector3 bottom = m_cbData.pos - CVector3(m_cbData.radius, m_cbData.radius, 0);
 
+	CVector3 clipTop = top;
+	CVector3 clipBottom = bottom;
+	projMat.Mul(clipTop);
+	projMat.Mul(clipBottom);
+	if ((clipTop.x < 0.f && clipTop.y < 0.f) || (clipBottom.x > 1.f && clipBottom.y > 1.f))
+	{
+		return;
+	}
+	clipTop.x *= FRAME_BUFFER_W;
+	clipTop.y *= FRAME_BUFFER_H;
+	clipBottom.x *= FRAME_BUFFER_W;
+	clipBottom.y *= FRAME_BUFFER_H;
+	CVector2 vSize = { clipTop.x - clipBottom.x, clipTop.y - clipBottom.y };
+	D3D11_VIEWPORT vp = { clipTop.x, clipBottom.y, vSize.x, vSize.y, 0, 1 };
+	dc->RSSetViewports(1, &vp);
+
+	CVector3 snormal = m_cbData.pos;
+	snormal.Normalize();
+	m_cbData.tip = m_cbData.pos + snormal * m_cbData.radius;
+	projMat.Mul(m_cbData.tip);
+
+	m_cbData.mProjI.Inverse(projMat);
+	
+	/*
 	for (int i = 0; i < 8; i++)
 	{
 		viewMat.Mul(vert[i]);
-		projMat.Mul(vert[i]);
+		//projMat.Mul(vert[i]);
 	}
 	CVector3 vMax = { -FLT_MAX,-FLT_MAX ,-FLT_MAX };
 	CVector3 vMin = { FLT_MAX,FLT_MAX,FLT_MAX };
@@ -56,6 +87,7 @@ void UsualEngine::FogEffectObject::Render(RenderTarget* renderTarget)
 	CVector2 vSize = { vMax.x - vMin.x, vMax.y - vMin.y };
 	D3D11_VIEWPORT vp = { vMin.x, vMin.y, vSize.x, vSize.y, 0, 1 };
 	dc->RSSetViewports(1,&vp);
+	*/
 
 	ge->OMSetRenderTarget(1, &renderTarget);
 

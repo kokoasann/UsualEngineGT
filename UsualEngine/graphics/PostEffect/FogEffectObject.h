@@ -11,11 +11,11 @@ namespace UsualEngine
 
 		void SetPos(const CVector3& v)
 		{
-			m_cbData.pos = v;
+			m_pos = v;
 		}
-		void SetSize(const CVector3& v)
+		void SetSize(const float v)
 		{
-			m_cbData.size = v;
+			m_cbData.radius = v;
 		}
 		void SetColor(const CVector4& c)
 		{
@@ -41,7 +41,9 @@ namespace UsualEngine
 		{
 			CVector4 color = CVector4::White();	//色。
 			CVector3 pos = CVector3::Zero();	//位置。
-			CVector3 size = CVector3::One();	//サイズ
+			//CVector3 size = CVector3::One();	//サイズ
+			float radius = 1.f;
+			CVector3 tip = CVector3::Zero();
 			
 			float attenuationY = 0.1f;			//Y減衰。
 			float attenuationXZ = 0.1f;			//XZ減衰。
@@ -49,10 +51,11 @@ namespace UsualEngine
 
 			CVector2 screenOffset = { 0,0 };		//画面のオフセット
 			CVector2 screenSize = { 0,0 };
-			CMatrix mVPI;
+			CMatrix mProjI;
 		};
 		CBData m_cbData;				//定数バッファデータ
 		ConstantBuffer m_constBuffer;	//定数バッファ
 		
+		CVector3 m_pos;
 	};
 }

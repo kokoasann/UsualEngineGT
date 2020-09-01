@@ -32,6 +32,9 @@ Ene_Gib::Ene_Gib()
 	m_chara.SetBone(footL->GetParent()->GetParent()->GetParent(), BK_WaistL);
 	//m_chara.FindBone(L"Bone.007_R.004", Character::BK_None, true, 2, 10);
 	//m_chara.FindBone(L"Bone.007_L.004", Character::BK_None, true, 2, 10);
+	m_chara.FindBone(L"Bone.004", BK_None, true, 4, 6);
+	m_chara.FindBone(L"END_Bone.003_L.001", BK_None, true, 1, 10);
+	m_chara.FindBone(L"END_Bone.003_R.001", BK_None, true, 1, 10);
 	ue::Animation& anim = m_chara.GetAnimation();
 	float v = 2.55f;
 	anim.SetIKGravity(9.8f*v, footR);

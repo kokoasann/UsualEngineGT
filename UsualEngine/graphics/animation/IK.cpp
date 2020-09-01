@@ -66,7 +66,7 @@ namespace UsualEngine
 			norm.Set(convexResult.m_hitNormalLocal);
 			norm.Normalize();
 			auto rad = fabsf(acosf(norm.Dot(CVector3::Up())));
-			if (rad < CMath::PI * 0.3f)
+			if (rad < CMath::PI * 0.4f)
 			{
 				isHit = true;
 				CVector3 hitp = *(CVector3*)& convexResult.m_hitPointLocal;
@@ -110,7 +110,7 @@ namespace UsualEngine
 			norm.Set(convexResult.m_hitNormalLocal);
 			norm.Normalize();
 			auto rad = fabsf(acosf(norm.Dot(CVector3::Up())));
-			if (rad >= CMath::PI * 0.3f && rad < CMath::PI * 0.85f)
+			if (rad >= CMath::PI * 0.2f && rad < CMath::PI * 0.85f)
 			{
 				isHit = true;
 				CVector3 hitp = *(CVector3*)& convexResult.m_hitPointLocal;
