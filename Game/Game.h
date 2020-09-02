@@ -51,4 +51,6 @@ private:
 
 	ue::Font m_font;
 	ue::FontBlur m_fblur;
+
+	ue::FogEffectObject fog;
 };

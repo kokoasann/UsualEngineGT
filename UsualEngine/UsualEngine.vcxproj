@@ -188,6 +188,8 @@
     <ClCompile Include="graphics\LightStruct.cpp" />
     <ClCompile Include="graphics\PostEffect\AlphaModel.cpp" />
     <ClCompile Include="graphics\PostEffect\Bloom.cpp" />
+    <ClCompile Include="graphics\PostEffect\EffectObject.cpp" />
+    <ClCompile Include="graphics\PostEffect\EffectObjectManager.cpp" />
     <ClCompile Include="graphics\PostEffect\FogEffectObject.cpp" />
     <ClCompile Include="graphics\PostEffect\GaussianBlur.cpp" />
     <ClCompile Include="graphics\PostEffect\PostEffect.cpp" />
@@ -269,6 +271,8 @@
     <ClInclude Include="graphics\LightStruct.h" />
     <ClInclude Include="graphics\PostEffect\AlphaModel.h" />
     <ClInclude Include="graphics\PostEffect\Bloom.h" />
+    <ClInclude Include="graphics\PostEffect\EffectObject.h" />
+    <ClInclude Include="graphics\PostEffect\EffectObjectManager.h" />
     <ClInclude Include="graphics\PostEffect\FogEffectObject.h" />
     <ClInclude Include="graphics\PostEffect\GaussianBlur.h" />
     <ClInclude Include="graphics\PostEffect\PostEffect.h" />

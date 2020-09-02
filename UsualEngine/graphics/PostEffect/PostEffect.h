@@ -7,9 +7,10 @@
 #include "../CloudPlane.h"
 #include "RayMarchingFog.h"
 
+
 namespace UsualEngine
 {
-
+	class EffectObjectManager;
 	class PostEffect
 	{
 	public:
@@ -57,5 +58,6 @@ namespace UsualEngine
 
 		CloudPlane m_cloudPlane;
 		RayMarchingFog m_rmFog;
+		EffectObjectManager* m_effectObjectManager;
 	};
 }

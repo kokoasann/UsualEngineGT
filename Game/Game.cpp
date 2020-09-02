@@ -343,6 +343,9 @@ bool Game::Start()
 
 	// font blur ‚Ì@İ’èB
 	m_fblur.SetSpeed(0.5f);
+
+
+	
 	return true;
 }
 

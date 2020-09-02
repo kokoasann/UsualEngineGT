@@ -1,6 +1,7 @@
 #include "PreCompile.h"
 #include "PostEffect.h"
 #include "graphics/RenderState.h"
+#include "EffectObjectManager.h"
 
 namespace UsualEngine
 {
@@ -25,6 +26,8 @@ namespace UsualEngine
 
 		m_cloudPlane.Init();
 		m_rmFog.Init();
+
+		m_effectObjectManager = &EffectObjectManager::Get();
 	}
 	void PostEffect::InitRenderTarget()
 	{
@@ -85,10 +88,11 @@ namespace UsualEngine
 		if (isAlphaRender)
 			m_alphaModelRender.Render(this);
 
+		m_effectObjectManager->Render(this);
 		//m_rmFog.Render(this);
 		
 		//m_ssr.Render(this);
-		//m_bloom.Render(this);
+		m_bloom.Render(this);
 		
 		
 		devcon->OMSetBlendState(BlendState_Trans(), 0, 0xFFFFFFFF);			//”O‚Ì‚½‚ßtrans‚É‚µ‚Æ‚­

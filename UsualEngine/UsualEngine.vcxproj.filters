@@ -73,6 +73,9 @@
     <Filter Include="Graphics\2D\Font">
       <UniqueIdentifier>{b0ffadaa-8c69-4c82-bf08-cb2c0550db42}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\PostEffect\EffectObject">
+      <UniqueIdentifier>{291f9b7b-30d1-4dc1-bcec-630758100017}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="character\CharacterController.cpp">
@@ -296,8 +299,14 @@
     <ClCompile Include="graphics\PostEffect\RayMarchingFog.cpp">
       <Filter>Graphics\PostEffect</Filter>
     </ClCompile>
+    <ClCompile Include="graphics\PostEffect\EffectObject.cpp">
+      <Filter>Graphics\PostEffect\EffectObject</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\PostEffect\EffectObjectManager.cpp">
+      <Filter>Graphics\PostEffect\EffectObject</Filter>
+    </ClCompile>
     <ClCompile Include="graphics\PostEffect\FogEffectObject.cpp">
-      <Filter>Graphics\PostEffect</Filter>
+      <Filter>Graphics\PostEffect\EffectObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -534,8 +543,14 @@
     <ClInclude Include="graphics\PostEffect\RayMarchingFog.h">
       <Filter>Graphics\PostEffect</Filter>
     </ClInclude>
+    <ClInclude Include="graphics\PostEffect\EffectObject.h">
+      <Filter>Graphics\PostEffect\EffectObject</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\PostEffect\EffectObjectManager.h">
+      <Filter>Graphics\PostEffect\EffectObject</Filter>
+    </ClInclude>
     <ClInclude Include="graphics\PostEffect\FogEffectObject.h">
-      <Filter>Graphics\PostEffect</Filter>
+      <Filter>Graphics\PostEffect\EffectObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

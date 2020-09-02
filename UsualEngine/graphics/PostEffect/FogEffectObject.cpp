@@ -10,9 +10,10 @@ UsualEngine::FogEffectObject::FogEffectObject()
 
 UsualEngine::FogEffectObject::~FogEffectObject()
 {
+	
 }
 
-void UsualEngine::FogEffectObject::Render(RenderTarget* renderTarget)
+void UsualEngine::FogEffectObject::Render(PostEffect* pe)
 {
 	auto& cam = usualEngine()->GetMainCamera();
 	auto ge = usualEngine()->GetGraphicsEngine();
@@ -35,21 +36,47 @@ void UsualEngine::FogEffectObject::Render(RenderTarget* renderTarget)
 	
 	//CVector3 center = m_cbData.pos;
 
-	m_cbData.mainLightDir = ge->GetLightManager().GetMainLightDirection()->GetDir();
+	auto mainLight = ge->GetLightManager().GetMainLightDirection();
+	if (mainLight != nullptr)
+		m_cbData.mainLightDir = mainLight->GetDir();
+	else
+		m_cbData.mainLightDir = { 0,-1,0 };
 
+	CVector4 vpos = m_pos;
+	vpos.w = 1.f;
 	m_cbData.pos = m_pos;
-	viewMat.Mul(m_cbData.pos);
-	CVector3 top = m_cbData.pos + CVector3(m_cbData.radius, m_cbData.radius, 0);
-	CVector3 bottom = m_cbData.pos - CVector3(m_cbData.radius, m_cbData.radius, 0);
+	viewMat.Mul(vpos);
+	CVector4 top = vpos + CVector4(m_cbData.radius, m_cbData.radius, 0,0);
+	CVector4 bottom = vpos - CVector4(m_cbData.radius, m_cbData.radius, 0,0);
+	m_cbData.pos = CVector3(vpos.x, vpos.y, vpos.z);
 
-	CVector3 clipTop = top;
-	CVector3 clipBottom = bottom;
+	CVector4 clipTop = top;
+	CVector4 clipBottom = bottom;
+	//clipTop.w = 1.f;
+	//clipBottom.w = 1.f;
 	projMat.Mul(clipTop);
 	projMat.Mul(clipBottom);
+	clipTop = clipTop / clipTop.w;
+	clipBottom = clipBottom / clipBottom.w;
+
+	clipTop.x += 1.f;
+	clipTop.y += 1.f;
+	clipTop.z += 1.f;
+	clipBottom.x += 1.f;
+	clipBottom.y += 1.f;
+	clipBottom.z += 1.f;
+	clipTop = clipTop * 0.5f;
+	clipBottom = clipBottom * 0.5f;
 	if ((clipTop.x < 0.f && clipTop.y < 0.f) || (clipBottom.x > 1.f && clipBottom.y > 1.f))
 	{
 		return;
 	}
+
+	clipTop.x = min(clipTop.x, 1);
+	clipTop.y = min(clipTop.y, 1);
+	clipBottom.x = min(clipBottom.x, 1);
+	clipBottom.y = min(clipBottom.y, 1);
+	
 
 	m_cbData.screenOffset = CVector2(clipTop.x, clipTop.y);
 	CVector2 vSize = { clipTop.x - clipBottom.x, clipTop.y - clipBottom.y };
@@ -61,6 +88,7 @@ void UsualEngine::FogEffectObject::Render(RenderTarget* renderTarget)
 	clipTop.y *= FRAME_BUFFER_H;
 	clipBottom.x *= FRAME_BUFFER_W;
 	clipBottom.y *= FRAME_BUFFER_H;
+	
 	//CVector2 vSize = { clipTop.x - clipBottom.x, clipTop.y - clipBottom.y };
 	D3D11_VIEWPORT vp = { clipTop.x, clipBottom.y, vSize.x, vSize.y, 0, 1 };
 	dc->RSSetViewports(1, &vp);
@@ -104,7 +132,12 @@ void UsualEngine::FogEffectObject::Render(RenderTarget* renderTarget)
 	dc->RSSetViewports(1,&vp);
 	*/
 
-	ge->OMSetRenderTarget(1, &renderTarget);
+	RenderTarget* oldrt[8];
+	int oldrtnum;
+	ge->OMGetRenderTargets(oldrtnum, oldrt);
+
+	RenderTarget* rt = &pe->GetCurrentRenderTarget();
+	ge->OMSetRenderTarget(1, &rt);
 
 	RenderTarget* gbuffer[1];
 	gbuffer[0] = gbuf.GetGBuffer(GBuffer::GB_Depth);
@@ -114,5 +147,10 @@ void UsualEngine::FogEffectObject::Render(RenderTarget* renderTarget)
 	dc->VSSetShader((ID3D11VertexShader*)ShaderSample::VS_Copy.GetBody(), nullptr, 0);
 	dc->PSSetShader((ID3D11PixelShader*)m_psMain.GetBody(), nullptr, 0);
 
-	
+	pe->DrawPrimitive();
+
+
+	vp = { 0, 0, FRAME_BUFFER_W, FRAME_BUFFER_H, 0, 1 };
+	dc->RSSetViewports(1, &vp);
+	ge->OMSetRenderTarget(oldrtnum, oldrt);
 }

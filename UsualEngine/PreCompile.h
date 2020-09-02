@@ -101,6 +101,11 @@ static const int RTV_MAX = 8;
 #include "level/Level.h"
 #include "graphics/ShaderSample.h"
 
+
+//#include "graphics/PostEffect/EffectObjectManager.h"
+
+#include "graphics/PostEffect/FogEffectObject.h"
+
 #if DEBUG_FUNC
 //#include "Debug/DebugLog.h"
 
