@@ -20,7 +20,8 @@ cbuffer CBuffer:register(b7)
     float wScale            :packoffset(c4.z);           //ウォーリーノイズのスケール。
     //dummy
     float3 mainLightDir :packoffset(c5);
-    //dummy
+    
+    float projW :packoffset(c5.w);
     float2 screenOffset :packoffset(c6);
     float2 screenSize   :packoffset(c6.z);
     //dummy
@@ -43,8 +44,9 @@ float4 PSMain_FogEffect(PSInput In):SV_Target0
     float2 screenPos = mad(In.uv,screenSize,screenOffset)/float2(1280.f,720.f);
     float wdepth = gDepthMap.Sample(Sampler,screenPos).x;
 
-    float3 viewpos = mul(mProjI,float4(screenPos*float2(2.0f,-2.0f)+float2(-1.0f,1.0f),effectTip.z,1.f)).xyz;
-    float3 rayDir = normalize(viewpos);
+    float4 viewpos = mul(mProjI,float4(screenPos*float2(2.0f,-2.0f)+float2(-1.0f,1.0f),effectTip.z,1.f));
+    viewpos.xyz *= projW;
+    float3 rayDir = normalize(viewpos.xyz);
     
     float noiseRate = 0.f;
 
@@ -55,7 +57,7 @@ float4 PSMain_FogEffect(PSInput In):SV_Target0
     [unroll(RAY_COUNT)]
     for(int i = 0; i < RAY_COUNT; i++)
     {
-        float3 raypos = viewpos+rayDir*(rayStep*i);
+        float3 raypos = viewpos.xyz+rayDir*(rayStep*i);
         float len = length(raypos-effectPos);
         #if 0
         [branch]

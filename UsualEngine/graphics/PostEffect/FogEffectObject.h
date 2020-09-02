@@ -47,13 +47,14 @@ namespace UsualEngine
 			float pConcentration = 0.f;   //パーリンノイズの濃度。
 			float pDisperse = 0.f;        //パーリンノイズの散乱具合。
 			float pScale = 0.1f;           //パーリンノイズのスケール。
-			float wConcentration = 0.9f;   //ウォーリーノイズの濃度。
-			float wDisperse = 0.7f;        //ウォーリーノイズの散乱具合。
+			float wConcentration = 0.8f;   //ウォーリーノイズの濃度。
+			float wDisperse = 0.1f;        //ウォーリーノイズの散乱具合。
 			float wScale = 0.1f;           //ウォーリーノイズのスケール。
 
 			int dummy1;
 			CVector3 mainLightDir;
-			int dummy2;
+			
+			float projW;
 			CVector2 screenOffset = { 0,0 };		//画面のオフセット
 			CVector2 screenSize = { 0,0 };
 			int dummy3;

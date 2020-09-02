@@ -22,6 +22,8 @@ void UsualEngine::FogEffectObject::Render(PostEffect* pe)
 
 	const auto& viewMat = cam.GetViewMatrix();
 	const auto& projMat = cam.GetProjectionMatrix();
+
+	m_cbData.projW = viewMat.m[3][2];
 	
 	CVector3 vert[8];//{{0.5, 0, 0.5},{-0.5, 0, 0.5},{0.5, 0, -0.5},{-0.5, 0, -0.5}, {0.5, 1, 0.5},{-0.5, 1, 0.5},{0.5, 1, -0.5},{-0.5, 1, -0.5}}
 	/*vert[0] = m_cbData.pos + CVector3{ m_cbData.size.x * 0.5f, 0.f, m_cbData.size.z * 0.5f };
@@ -67,20 +69,30 @@ void UsualEngine::FogEffectObject::Render(PostEffect* pe)
 	clipBottom.z += 1.f;
 	clipTop = clipTop * 0.5f;
 	clipBottom = clipBottom * 0.5f;
-	if ((clipTop.x < 0.f && clipTop.y < 0.f) || (clipBottom.x > 1.f && clipBottom.y > 1.f))
-	{
-		return;
-	}
+	
 
 	clipTop.x = min(clipTop.x, 1);
 	clipTop.y = min(clipTop.y, 1);
 	clipBottom.x = min(clipBottom.x, 1);
 	clipBottom.y = min(clipBottom.y, 1);
-	
+
+	//clipTop.x = 1.f - clipTop.x;
+	clipTop.y = 1.f - clipTop.y;
+	//clipBottom.x = 1.f - clipBottom.x;
+	clipBottom.y = 1.f - clipBottom.y;
+
+	auto buf = clipTop.y;
+	clipTop.y = clipBottom.y;
+	clipBottom.y = buf;
+
+	if ((clipTop.x < 0.f && clipTop.y < 0.f) || (clipBottom.x > 1.f && clipBottom.y > 1.f) || clipTop.z > 1.f || clipBottom.z > 1.f)
+	{
+		return;
+	}
 
 	m_cbData.screenOffset = CVector2(clipTop.x, clipTop.y);
 	CVector2 vSize = { clipTop.x - clipBottom.x, clipTop.y - clipBottom.y };
-	m_cbData.screenSize = vSize;
+	
 	vSize.x *= FRAME_BUFFER_W;
 	vSize.y *= FRAME_BUFFER_H;
 
@@ -89,9 +101,13 @@ void UsualEngine::FogEffectObject::Render(PostEffect* pe)
 	clipBottom.x *= FRAME_BUFFER_W;
 	clipBottom.y *= FRAME_BUFFER_H;
 	
+	
 	//CVector2 vSize = { clipTop.x - clipBottom.x, clipTop.y - clipBottom.y };
-	D3D11_VIEWPORT vp = { clipTop.x, clipBottom.y, vSize.x, vSize.y, 0, 1 };
+	D3D11_VIEWPORT vp = { clipBottom.x, clipBottom.y, vSize.x, vSize.y, 0, 1 };
 	dc->RSSetViewports(1, &vp);
+
+	m_cbData.screenSize = vSize;
+	m_cbData.screenOffset = CVector2(clipBottom.x, clipBottom.y);
 
 	CVector3 snormal = m_cbData.pos;
 	snormal.Normalize();
