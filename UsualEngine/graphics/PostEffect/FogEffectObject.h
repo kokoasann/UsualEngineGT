@@ -32,7 +32,14 @@ namespace UsualEngine
 
 		void Render(PostEffect* pe);
 	private:
-		
+		struct VSCBData
+		{
+			CVector3 effectTip;
+			float projW;
+			CVector2 screenOffset;
+			CVector2 screenSize;
+			CMatrix mProjI;
+		};
 		struct CBData
 		{
 			CVector4 color = CVector4::White();	//色。
@@ -59,9 +66,13 @@ namespace UsualEngine
 			CVector2 screenSize = { 0,0 };
 			int dummy3;
 			CMatrix mProjI;
+			CMatrix mViewI;
 		};
+		//VSCBData m_vscbData;
+		ConstantBuffer m_vsconstBuffer;	//定数バッファ
 		CBData m_cbData;				//定数バッファデータ
 		ConstantBuffer m_constBuffer;	//定数バッファ
+		Shader m_vsMain;
 		Shader m_psMain;
 		
 		CVector3 m_pos;

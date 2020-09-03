@@ -2,6 +2,14 @@
 #include "PerlinNoise.fxh"
 #include "WorleyNoise.fxh"
 
+cbuffer VSCBuffer:register(b8)
+{
+    float3 effectTip_v;
+    float projW_v;
+    float2 screenOffset_v;
+    float2 screenSize_v;
+    float4x4 mProjI_v;
+}
 cbuffer CBuffer:register(b7)
 {
     float4 effectCol    :packoffset(c0);
@@ -26,28 +34,60 @@ cbuffer CBuffer:register(b7)
     float2 screenSize   :packoffset(c6.z);
     //dummy
     float4x4 mProjI     :packoffset(c7);
+    float4x4 mViewI     :packoffset(c11);
 };
 sampler Sampler : register(s0);
 Texture2D<float4> gDepthMap : register(t7);
 
-struct PSInput
+struct VSInput
 {
     float4 pos : SV_POSITION;
 	float2 uv  : TEXCOORD0;
 };
 
+struct PSInput
+{
+    float4 pos : SV_POSITION;
+	float2 uv  : TEXCOORD0;
+    float2 screenPos:TEXCOORD1;
+    float4 viewPos:TEXCOORD2;
+    float3 rayDir:TEXCOORD3;
+};
+
 #define RAY_COUNT 10
+
+
+PSInput VSMain(VSInput In)
+{
+    PSInput Out;
+    Out.pos = In.pos;
+    Out.uv = In.uv;
+
+    Out.screenPos = mad(In.uv,screenSize_v,screenOffset_v)/float2(1280.f,720.f);
+    Out.viewPos = mul(mProjI_v,float4(Out.screenPos*float2(2.0f,-2.0f)+float2(-1.0f,1.0f),1.f,1.f));
+    Out.viewPos.xyz *= projW;
+    Out.viewPos.z = effectTip_v.z;
+    Out.rayDir = normalize(Out.viewPos.xyz);
+
+    return Out;
+}
 
 
 float4 PSMain_FogEffect(PSInput In):SV_Target0
 {
-    float2 screenPos = mad(In.uv,screenSize,screenOffset)/float2(1280.f,720.f);
-    float wdepth = gDepthMap.Sample(Sampler,screenPos).x;
+    //float2 screenPos = In.screenPos;
+    //float4 viewpos = In.viewPos;
+    //float3 rayDir = In.rayDir;
 
+    float2 screenPos = mad(In.uv,screenSize,screenOffset)/float2(1280.f,720.f);
     float4 viewpos = mul(mProjI,float4(screenPos*float2(2.0f,-2.0f)+float2(-1.0f,1.0f),effectTip.z,1.f));
-    viewpos.xyz *= projW;
+    viewpos.z = effectTip.z;
+    float4 wpos = mul(mViewI,viewpos);
+    wpos.xyz *= rcp(wpos.w);
+    
     float3 rayDir = normalize(viewpos.xyz);
     
+    float wdepth = gDepthMap.Sample(Sampler,screenPos).x;
     float noiseRate = 0.f;
 
     float cloud = 0.f;
@@ -57,9 +97,10 @@ float4 PSMain_FogEffect(PSInput In):SV_Target0
     [unroll(RAY_COUNT)]
     for(int i = 0; i < RAY_COUNT; i++)
     {
-        float3 raypos = viewpos.xyz+rayDir*(rayStep*i);
+        //float3 raypos = viewpos.xyz+rayDir*(rayStep*i);
+        float3 raypos = wpos.xyz+rayDir*(rayStep*i);
         float len = length(raypos-effectPos);
-        #if 0
+        #if 1
         [branch]
         if(len>effectRadius)
         {

@@ -4,8 +4,10 @@
 
 UsualEngine::FogEffectObject::FogEffectObject()
 {
+	m_vsconstBuffer.Create(nullptr, sizeof(VSCBData));
 	m_constBuffer.Create(nullptr, sizeof(m_cbData));
 	m_psMain.Load("Assets/shader/FogEffect.fx", "PSMain_FogEffect", Shader::EnType::PS);
+	m_vsMain.Load("Assets/shader/FogEffect.fx", "VSMain", Shader::EnType::VS);
 }
 
 UsualEngine::FogEffectObject::~FogEffectObject()
@@ -23,9 +25,13 @@ void UsualEngine::FogEffectObject::Render(PostEffect* pe)
 	const auto& viewMat = cam.GetViewMatrix();
 	const auto& projMat = cam.GetProjectionMatrix();
 
+	VSCBData vcbData;
+	vcbData.projW = viewMat.m[3][2];
 	m_cbData.projW = viewMat.m[3][2];
+
+	m_cbData.mViewI.Inverse(viewMat);
 	
-	CVector3 vert[8];//{{0.5, 0, 0.5},{-0.5, 0, 0.5},{0.5, 0, -0.5},{-0.5, 0, -0.5}, {0.5, 1, 0.5},{-0.5, 1, 0.5},{0.5, 1, -0.5},{-0.5, 1, -0.5}}
+	//CVector3 vert[8];//{{0.5, 0, 0.5},{-0.5, 0, 0.5},{0.5, 0, -0.5},{-0.5, 0, -0.5}, {0.5, 1, 0.5},{-0.5, 1, 0.5},{0.5, 1, -0.5},{-0.5, 1, -0.5}}
 	/*vert[0] = m_cbData.pos + CVector3{ m_cbData.size.x * 0.5f, 0.f, m_cbData.size.z * 0.5f };
 	vert[1] = m_cbData.pos + CVector3{ m_cbData.size.x * -0.5f, 0.f, m_cbData.size.z * 0.5f };
 	vert[2] = m_cbData.pos + CVector3{ m_cbData.size.x * 0.5f, 0.f, m_cbData.size.z * -0.5f };
@@ -50,7 +56,7 @@ void UsualEngine::FogEffectObject::Render(PostEffect* pe)
 	viewMat.Mul(vpos);
 	CVector4 top = vpos + CVector4(m_cbData.radius, m_cbData.radius, 0,0);
 	CVector4 bottom = vpos - CVector4(m_cbData.radius, m_cbData.radius, 0,0);
-	m_cbData.pos = CVector3(vpos.x, vpos.y, vpos.z);
+	//m_cbData.pos = CVector3(vpos.x, vpos.y, vpos.z);
 
 	CVector4 clipTop = top;
 	CVector4 clipBottom = bottom;
@@ -90,7 +96,6 @@ void UsualEngine::FogEffectObject::Render(PostEffect* pe)
 		return;
 	}
 
-	m_cbData.screenOffset = CVector2(clipTop.x, clipTop.y);
 	CVector2 vSize = { clipTop.x - clipBottom.x, clipTop.y - clipBottom.y };
 	
 	vSize.x *= FRAME_BUFFER_W;
@@ -108,17 +113,26 @@ void UsualEngine::FogEffectObject::Render(PostEffect* pe)
 
 	m_cbData.screenSize = vSize;
 	m_cbData.screenOffset = CVector2(clipBottom.x, clipBottom.y);
+	vcbData.screenSize = vSize;
+	vcbData.screenOffset = CVector2(clipBottom.x, clipBottom.y);
+
 
 	CVector3 snormal = m_cbData.pos;
 	snormal.Normalize();
-	m_cbData.tip = m_cbData.pos + snormal * m_cbData.radius;
+	m_cbData.tip = m_cbData.pos + (snormal * -m_cbData.radius);
+	vcbData.effectTip = m_cbData.pos + (snormal * -m_cbData.radius);
+
 	projMat.Mul(m_cbData.tip);
+	projMat.Mul(vcbData.effectTip);
 
 	m_cbData.mProjI.Inverse(projMat);
+	vcbData.mProjI.Inverse(projMat);
 
 	dc->UpdateSubresource(m_constBuffer.GetBody(), 0, 0, &m_cbData, 0, 0);
 	dc->PSSetConstantBuffers(enSkinModelCBReg_Generic, 1, &m_constBuffer.GetBody());
 	
+	dc->UpdateSubresource(m_vsconstBuffer.GetBody(), 0, 0, &vcbData, 0, 0);
+	dc->VSSetConstantBuffers(enSkinModelCBReg_Generic+1, 1, &m_vsconstBuffer.GetBody());
 	/*
 	for (int i = 0; i < 8; i++)
 	{
@@ -160,7 +174,8 @@ void UsualEngine::FogEffectObject::Render(PostEffect* pe)
 	
 	dc->PSSetShaderResources(enSkinModelSRVReg_GDepthMap, 1, &gbuffer[0]->GetSRV());
 	
-	dc->VSSetShader((ID3D11VertexShader*)ShaderSample::VS_Copy.GetBody(), nullptr, 0);
+	dc->VSSetShader((ID3D11VertexShader*)m_vsMain.GetBody(), nullptr, 0);
+	dc->IASetInputLayout(m_vsMain.GetInputLayout());
 	dc->PSSetShader((ID3D11PixelShader*)m_psMain.GetBody(), nullptr, 0);
 
 	pe->DrawPrimitive();
