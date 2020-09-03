@@ -25,11 +25,16 @@ void UsualEngine::FogEffectObject::Render(PostEffect* pe)
 	const auto& viewMat = cam.GetViewMatrix();
 	const auto& projMat = cam.GetProjectionMatrix();
 
+	m_cbData.camPos = cam.GetPosition();
+
 	VSCBData vcbData;
 	vcbData.projW = viewMat.m[3][2];
 	m_cbData.projW = viewMat.m[3][2];
 
-	m_cbData.mViewI.Inverse(viewMat);
+	m_cbData.mViewI.Mul(viewMat,projMat);
+	m_cbData.mViewI.Inverse(m_cbData.mViewI);
+
+	m_cbData.pos = m_pos;
 	
 	//CVector3 vert[8];//{{0.5, 0, 0.5},{-0.5, 0, 0.5},{0.5, 0, -0.5},{-0.5, 0, -0.5}, {0.5, 1, 0.5},{-0.5, 1, 0.5},{0.5, 1, -0.5},{-0.5, 1, -0.5}}
 	/*vert[0] = m_cbData.pos + CVector3{ m_cbData.size.x * 0.5f, 0.f, m_cbData.size.z * 0.5f };
@@ -52,7 +57,7 @@ void UsualEngine::FogEffectObject::Render(PostEffect* pe)
 
 	CVector4 vpos = m_pos;
 	vpos.w = 1.f;
-	m_cbData.pos = m_pos;
+	
 	viewMat.Mul(vpos);
 	CVector4 top = vpos + CVector4(m_cbData.radius, m_cbData.radius, 0,0);
 	CVector4 bottom = vpos - CVector4(m_cbData.radius, m_cbData.radius, 0,0);
@@ -116,14 +121,28 @@ void UsualEngine::FogEffectObject::Render(PostEffect* pe)
 	vcbData.screenSize = vSize;
 	vcbData.screenOffset = CVector2(clipBottom.x, clipBottom.y);
 
+	//auto vpos3 = CVector3{ vpos.x,vpos.y ,vpos.z };
+	//CVector3 snormal = vpos3;
+	//snormal.Normalize();
+	
+	//snormal *= -m_cbData.radius;
+	//CVector4 tip = vpos + CVector4{ snormal.x,snormal.y,snormal.z,0.f };
+	//tip.w = 1.f;
 
-	CVector3 snormal = m_cbData.pos;
-	snormal.Normalize();
-	m_cbData.tip = m_cbData.pos + (snormal * -m_cbData.radius);
-	vcbData.effectTip = m_cbData.pos + (snormal * -m_cbData.radius);
 
-	projMat.Mul(m_cbData.tip);
-	projMat.Mul(vcbData.effectTip);
+	auto norm = m_cbData.camPos - m_pos;
+	norm.Normalize();
+	norm = m_pos + norm * m_cbData.radius;
+	CVector4 tip = CVector4{ norm.x,norm.y,norm.z,1.f };
+	viewMat.Mul(tip);
+
+	//m_cbData.tip = vpos3 + (snormal * -m_cbData.radius);
+	//vcbData.effectTip = vpos3 + (snormal * -m_cbData.radius);
+
+	projMat.Mul(tip);
+	//projMat.Mul(vcbData.effectTip);
+	tip = tip / tip.w;
+	m_cbData.tip = CVector3{ tip.x,tip.y,tip.z };
 
 	m_cbData.mProjI.Inverse(projMat);
 	vcbData.mProjI.Inverse(projMat);

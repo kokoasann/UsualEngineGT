@@ -33,8 +33,10 @@ cbuffer CBuffer:register(b7)
     float2 screenOffset :packoffset(c6);
     float2 screenSize   :packoffset(c6.z);
     //dummy
-    float4x4 mProjI     :packoffset(c7);
-    float4x4 mViewI     :packoffset(c11);
+    float3 camPos       :packoffset(c7);
+    //dummy
+    float4x4 mProjI     :packoffset(c8);
+    float4x4 mViewI     :packoffset(c12);
 };
 sampler Sampler : register(s0);
 Texture2D<float4> gDepthMap : register(t7);
@@ -81,11 +83,14 @@ float4 PSMain_FogEffect(PSInput In):SV_Target0
 
     float2 screenPos = mad(In.uv,screenSize,screenOffset)/float2(1280.f,720.f);
     float4 viewpos = mul(mProjI,float4(screenPos*float2(2.0f,-2.0f)+float2(-1.0f,1.0f),effectTip.z,1.f));
-    viewpos.z = effectTip.z;
-    float4 wpos = mul(mViewI,viewpos);
-    wpos.xyz *= rcp(wpos.w);
+    //viewpos.z = effectTip.z;
+    float3 wpos = GetWorldPosition(screenPos,effectTip.z,mViewI);
+    //wpos.xyz *= rcp(wpos.w);
+
     
-    float3 rayDir = normalize(viewpos.xyz);
+    
+    //float3 rayDir = normalize(viewpos.xyz);
+    float3 rayDir = normalize(wpos.xyz - camPos);
     
     float wdepth = gDepthMap.Sample(Sampler,screenPos).x;
     float noiseRate = 0.f;

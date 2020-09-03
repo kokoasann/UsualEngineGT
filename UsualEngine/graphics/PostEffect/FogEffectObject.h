@@ -64,6 +64,8 @@ namespace UsualEngine
 			float projW;
 			CVector2 screenOffset = { 0,0 };		//画面のオフセット
 			CVector2 screenSize = { 0,0 };
+			int dummy2;
+			CVector3 camPos;
 			int dummy3;
 			CMatrix mProjI;
 			CMatrix mViewI;
